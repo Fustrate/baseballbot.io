@@ -1,0 +1,14 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: fustrate
+  password: "not my real password"
+  pool: 5
+
+development:
+  <<: *default
+  database: fustrate
+
+test:
+  <<: *default
+  database: fustrate_test

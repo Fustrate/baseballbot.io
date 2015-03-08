@@ -1,0 +1,18 @@
+AllCops:
+  Include:
+    - Capfile
+    - config.ru
+    - Gemfile
+    - Guardfile
+    - Rakefile
+  Exclude:
+    - bin/**/*
+    - db/**/*
+    - db/schema.rb
+  RunRailsCops: true
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
