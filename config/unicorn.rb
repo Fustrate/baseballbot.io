@@ -1,4 +1,4 @@
-app_name = 'fustrate.com'
+app_name = 'baseballbot.io'
 app_dir = "/home/steven/apps/#{app_name}"
 
 # Set the working application directory
