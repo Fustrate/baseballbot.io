@@ -1,0 +1,25 @@
+# config valid only for current version of Capistrano
+lock '3.4.0'
+
+set :application, 'baseballbot.io'
+set :user, 'steven'
+
+set :scm, :git
+set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
+set :branch, ENV['REVISION'] || :master
+
+set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
+
+# Default value for :pty is false
+# set :pty, true
+
+set :linked_files, %w(config/secrets.yml config/database.yml)
+set :linked_dirs,  %w(log tmp/pids tmp/cache tmp/sockets public/system)
+
+set :default_env, path: '/opt/ruby/bin:$PATH'
+
+set :rbenv_ruby,
+    File.read(File.expand_path('../../.ruby-version', __FILE__)).strip
+set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} " \
+                   "#{fetch :rbenv_path}/bin/rbenv exec"
+set :rbenv_map_bins, %w(rake gem bundle ruby rails)
