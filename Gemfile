@@ -37,7 +37,6 @@ group :development do
   gem 'rubocop'
   gem 'letter_opener'
   gem 'bullet'
-  gem 'rubocop'
   gem 'web-console', '~> 2.0'
 
   # Deploy with Capistrano
