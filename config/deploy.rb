@@ -2,7 +2,7 @@
 lock '3.4.0'
 
 set :application, 'baseballbot.io'
-set :user, 'steven'
+set :user, 'baseballbot'
 
 set :scm, :git
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
