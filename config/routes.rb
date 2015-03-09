@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
   root to: 'home#home'
 
-  namespace :reddit do
+  namespace :accounts do
     get :authenticate
-
-    root action: :index
   end
 end

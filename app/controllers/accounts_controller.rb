@@ -1,4 +1,4 @@
-class RedditController < ApplicationController
+class AccountsController < ApplicationController
   # identity:  initially find the account name
   # edit:      update game chats
   # modconfig: update sidebar
@@ -24,6 +24,8 @@ class RedditController < ApplicationController
     end
   end
 
+  protected
+
   def finish_authentication
     fail 'Invalid state!' unless params[:state] == session[:state]
 
@@ -37,13 +39,6 @@ class RedditController < ApplicationController
     auth_url = reddit.auth_url session[:state], AUTH_SCOPE, :permanent
 
     redirect_to auth_url, status: 301
-  end
-
-  def reddit
-    @reddit ||= Redd.it :web,
-                        ENV['REDDIT_CLIENT_ID'],
-                        ENV['REDDIT_SECRET'],
-                        ENV['REDDIT_REDIRECT_URI']
   end
 
   def save_account(access)
