@@ -10,9 +10,6 @@ set :branch, ENV['REVISION'] || :master
 
 set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
-# Default value for :pty is false
-# set :pty, true
-
 set :linked_files, %w(config/secrets.yml config/database.yml)
 set :linked_dirs,  %w(log tmp/pids tmp/cache tmp/sockets public/system)
 
