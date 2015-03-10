@@ -1,12 +1,12 @@
 namespace :load do
   task :defaults do
     set :unicorn_roles, :app
-    set :unicorn_options, ''
+    set :unicorn_options, nil
+    set :unicorn_rackup, -> { "#{current_path}/config.ru" }
     set :unicorn_restart_sleep_time, 3
     set :unicorn_rack_env, 'deployment'
-    set :unicorn_pid, File.join(current_path, 'pids', 'unicorn.pid')
-    set :unicorn_config_path,
-        File.join(current_path, 'config', 'unicorn', "#{fetch :rails_env}.rb")
+    set :unicorn_pid, -> { "#{current_path}/tmp/pids/unicorn.pid" }
+    set :unicorn_config_path, -> { "#{current_path}/config/unicorn/#{fetch :stage}.rb" }
   end
 end
 
@@ -19,10 +19,16 @@ namespace :unicorn do
           info 'Unicorn is already running...'
         else
           with rails_env: fetch(:rails_env) do
+            options = [
+              "-c #{fetch :unicorn_config_path}",
+              "-E #{fetch :unicorn_rack_env}",
+              '-D',
+              fetch(:unicorn_options)
+            ]
+
             execute :bundle, :exec, :unicorn,
-                    "-c #{fetch :unicorn_config_path}" \
-                    "-E #{fetch :unicorn_rack_env}" \
-                    "-D #{fetch :unicorn_options}"
+                    options.compact.join(' '),
+                    fetch(:unicorn_rackup)
           end
         end
       end

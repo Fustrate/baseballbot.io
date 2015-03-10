@@ -20,3 +20,8 @@ set :rbenv_ruby,
 set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} " \
                    "#{fetch :rbenv_path}/bin/rbenv exec"
 set :rbenv_map_bins, %w(rake gem bundle ruby rails)
+
+namespace :deploy do
+  after :publishing, 'unicorn:restart'
+  after :finishing,  :cleanup
+end
