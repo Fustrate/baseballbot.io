@@ -1,6 +1,6 @@
 def reddit
   @reddit ||= Redd.it :web,
-                      ENV['REDDIT_CLIENT_ID'],
-                      ENV['REDDIT_SECRET'],
-                      ENV['REDDIT_REDIRECT_URI']
+                      Rails.application.secrets.reddit['client_id'],
+                      Rails.application.secrets.reddit['secret'],
+                      Rails.application.secrets.reddit['redirect_uri']
 end
