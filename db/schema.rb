@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150315233623) do
+ActiveRecord::Schema.define(version: 20150316045000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,13 +27,26 @@ ActiveRecord::Schema.define(version: 20150315233623) do
 
   create_table "gamechats", force: :cascade do |t|
     t.string   "gid"
-    t.string   "account"
-    t.string   "subreddit"
     t.datetime "post_at"
     t.datetime "starts_at"
     t.string   "status"
     t.string   "title"
     t.string   "post_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "subreddit_id", null: false
+  end
+
+  create_table "subreddits", force: :cascade do |t|
+    t.string  "name"
+    t.string  "team_code"
+    t.integer "account_id"
+  end
+
+  create_table "templates", force: :cascade do |t|
+    t.text     "body"
+    t.string   "type"
+    t.integer  "subreddit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
