@@ -8,7 +8,6 @@ class Account < ActiveRecord::Base
         client.refresh_access!
 
         update access_token: access_token,
-               refresh_token: refresh_token,
                expires_at: expires_at
       end
 
