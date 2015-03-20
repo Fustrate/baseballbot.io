@@ -7,7 +7,10 @@ class Baseballbot
       @id = id
       @name = name
       @account = account
-      @team = @bot.gameday.team(Baseballbot.subreddit_to_code name)
+
+      code = Baseballbot.subreddit_to_code name
+
+      @team = @bot.gameday.team(code) if code
     end
 
     def generate_sidebar
