@@ -3,7 +3,7 @@ class Baseballbot
     class Sidebar < Base
       HITTER_DATA_URL  = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=%{year}&sort_order='desc'&sort_column='avg'&stat_type=hitting&page_type=SortablePlayer&team_id=%{team_id}&game_type='%{type}'&player_pool=%{pool}&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50"
       PITCHER_DATA_URL = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=%{year}&sort_order='desc'&sort_column='era'&stat_type=pitching&page_type=SortablePlayer&team_id=%{team_id}&game_type='%{type}'&player_pool=%{pool}&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50"
-      CALENDAR_DATA_URL = 'http://mlb.mlb.com/gen/schedule/%{team_code}/%{year}_%{month}.json'
+      CALENDAR_DATA_URL = "http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?start_date='%{start_date}'&end_date='%{end_date}'&team_id=%{team_id}&season=%{year}&game_type='A'&game_type='E'&game_type='F'&game_type='D'&game_type='L'&game_type='W'&game_type='C'&game_type='S'"
       STANDINGS = "http://mlb.mlb.com/lookup/json/named.standings_schedule_date.bam?season=%Y&schedule_game_date.game_date='%Y/%m/%d'&sit_code='h0'&league_id=103&league_id=104&all_star_sw='N'&version=2"
 
       class << self
@@ -86,17 +86,20 @@ class Baseballbot
         self.class.divisions[@team.division.id]
       end
 
-      def calendar_cell(cnum, day, options = {})
+      def calendar_cell(cnum, games, options = {})
         str = "^#{cnum} "
 
-        return str.strip unless day[:opponent]
+        return str.strip if games.empty?
 
-        subreddit = subreddit day[:opponent].code
-        subreddit = subreddit.downcase if options[:downcase]
+        # Let's hope nobody plays a doubleheader against two different teams
+        subreddit = subreddit games.first[:opponent].code
+        subreddit.downcase! if options[:downcase]
 
-        str << link_to('', sub: subreddit, title: day[:status])
+        statuses = games.map { |game| game[:status] }
 
-        day[:home] ? (bold str) : (italic str)
+        str << link_to('', sub: subreddit, title: statuses.join(', '))
+
+        games.first[:home] ? (bold str) : (italic str)
       end
 
       # See #calendar for month options
@@ -114,7 +117,7 @@ class Baseballbot
                                    -1).day
 
         days.each do |cday, day|
-          str << calendar_cell(cday, day, downcase: options[:downcase])
+          str << calendar_cell(cday, day[:games], downcase: options[:downcase])
 
           if !day[:date].saturday?
             str << '|'
@@ -138,73 +141,80 @@ class Baseballbot
                  Date.today
                end
 
+        start_date = Date.civil(date.year, date.month, 1)
+        end_date = Date.civil(date.year, date.month, -1)
+
         data = JSON.load open_url(CALENDAR_DATA_URL,
-                                  month: date.month,
-                                  year: date.year)
+                                  year: date.year,
+                                  start_date: start_date.strftime('%Y/%m/%d'),
+                                  end_date: end_date.strftime('%Y/%m/%d'))
 
         days = {}
 
-        days_in_month = Date.civil(date.year, date.month, -1).day
+        days_in_month = end_date.day
 
         (1..days_in_month).each do |day|
           days[day] = {
-            date: Date.new(date.year, date.month, day)
+            date: Date.new(date.year, date.month, day),
+            games: []
           }
         end
 
-        data.each do |day|
+        games = data['schedule_team_sponsors']['schedule_team_complete']
+        games = games['queryResults']['row']
+
+        games.each do |day|
           next unless day['game_id']
 
-          over = %w(F C D).include? day['game_status']
+          # Things like the ASG
+          next unless day['team_file_code'] == @team.file_code
 
-          if day['home']['file_code'] == @team.file_code
-            home = true
-            date = Chronic.parse(day['home']['start_time_local'])
-            opponent = build_team(code: day['away']['display_code'],
-                                  name: day['away']['full'])
-            our_runs = day['home']['runs'].to_i
-            their_runs = day['away']['runs'].to_i
-            tv = day['home']['tv'].to_s
-          elsif day['away']['file_code'] == @team.file_code
-            home = false
-            date = Chronic.parse(day['away']['start_time_local'])
-            opponent = build_team(code: day['home']['display_code'],
-                                  name: day['home']['full'])
-            our_runs = day['away']['runs'].to_i
-            their_runs = day['home']['runs'].to_i
-            tv = day['away']['tv'].to_s
-          else
-            # Things like the ASG
-            next
-          end
+          date = Chronic.parse(day['team_game_time'])
 
-          status = if day['game_status'] == 'D'
-                     'Delayed'
-                   elsif over
-                     if our_runs > their_runs
-                       "Won #{our_runs}-#{their_runs}"
-                     else
-                       "Lost #{our_runs}-#{their_runs}"
-                     end
-                   elsif !tv.empty?
-                     date.strftime "%-I:%M, #{tv}"
-                   else
-                     date.strftime '%-I:%M'
-                   end
-
-          days[date.day] = {
+          days[date.day][:games] << {
             date: date,
-            home: home,
-            opponent: opponent,
-            over: over,
-            our_runs: our_runs,
-            their_runs: their_runs,
-            status: status,
-            won: over ? our_runs > their_runs : nil
+            home: day['home_away_sw'] == 'H',
+            opponent: build_team(code: day['opponent_abbrev'],
+                                 name: day['opponent_brief']),
+            over: %w(F C D FT).include?(day['game_status_ind']),
+            score: [day['team_score'].to_i, day['opponent_score'].to_i],
+            tv: day['team_tv'] || '',
+            status_code: day['game_status_ind']
           }
+
+          days[date.day][:games].each_with_index do |game, i|
+            if game[:over]
+              outcome = if game[:score][0] == game[:score][1]
+                          'Tied'
+                        elsif game[:score][0] > game[:score][1]
+                          'Won'
+                        else
+                          'Lost'
+                        end
+
+              days[date.day][:games][i][:outcome] = outcome
+            end
+
+            days[date.day][:games][i][:status] = calendar_game_status game
+          end
         end
 
+
         days
+      end
+
+      def calendar_game_status(game)
+        return 'Delayed' if game[:status_code] == 'D'
+
+        if !game[:over]
+          if game[:tv].empty?
+            game[:date].strftime '%-I:%M'
+          else
+            game[:date].strftime "%-I:%M, #{game[:tv]}"
+          end
+        else
+          "#{game[:outcome]} #{game[:score].join '-'}"
+        end
       end
 
       # TODO: This method only allows for one year+type to be loaded before
@@ -264,6 +274,45 @@ class Baseballbot
           end
 
           stats
+        end
+      end
+
+      def next_game
+        @next_game ||= begin
+                         date = Date.today - 1.day
+                         team = gameday.team 'ARI'
+
+                         10.times do
+                           date += 1.day
+
+                           begin
+                             games = gameday.find_games team: team, date: date
+                           rescue OpenURI::HTTPError => ex
+                             games = nil
+                           end
+
+                           next unless games
+
+                           games.each do |game|
+                             return game unless game.over?
+                           end
+                         end
+
+                         nil
+                       end
+      end
+
+      def next_game_str
+        game = next_game
+
+        return '???' unless game
+
+        game.date.strftime
+
+        if game.home_team.code == 'ARI'
+          game.date.strftime('%-m/%-d DBacks vs. ') + game.away_team.name + ' ' + game.home_start_time
+        else
+          game.date.strftime('%-m/%-d DBacks @ ') + game.home_team.name + ' ' + game.away_start_time
         end
       end
 
