@@ -277,42 +277,85 @@ class Baseballbot
         end
       end
 
-      def next_game
-        @next_game ||= begin
-                         date = Date.today - 1.day
-                         team = gameday.team 'ARI'
+      def last_game
+        return @last_game if @last_game
 
-                         10.times do
-                           date += 1.day
+        date = Date.today + (24 * 3600)
 
-                           begin
-                             games = gameday.find_games team: team, date: date
-                           rescue OpenURI::HTTPError => ex
-                             games = nil
-                           end
+        10.times do
+          date -= (24 * 3600)
 
-                           next unless games
+          begin
+            games = gameday.find_games team: @team, date: date
+          rescue OpenURI::HTTPError
+            games = nil
+          end
 
-                           games.each do |game|
-                             return game unless game.over?
-                           end
-                         end
+          next unless games
 
-                         nil
-                       end
+          games.each do |game|
+            next unless game.over?
+
+            @last_game = game
+
+            return @last_game
+          end
+        end
+
+        nil
       end
 
-      def next_game_str
+      def last_game_str(date_format: '%-m/%-d')
+        game = last_game
+
+        return '???' unless game
+
+        if game.home_team.code == @team.code
+          "#{game.date.strftime(date_format)} #{game.home_team.name} " \
+          "#{game.score[0]} #{game.away_team.name} #{game.score[1]}"
+        else
+          "#{game.date.strftime(date_format)} #{game.away_team.name} " \
+          "#{game.score[1]} #{game.home_team.name} #{game.score[0]}"
+        end
+      end
+
+      def next_game
+        return @next_game if @next_game
+
+        date = Date.today - (24 * 3600)
+
+        10.times do
+          date += (24 * 3600)
+
+          begin
+            games = gameday.find_games team: @team, date: date
+          rescue OpenURI::HTTPError
+            games = nil
+          end
+
+          next unless games
+
+          games.each do |game|
+            next if game.over?
+
+            @next_game = game
+
+            return @next_game
+          end
+        end
+      end
+
+      def next_game_str(date_format: '%-m/%-d')
         game = next_game
 
         return '???' unless game
 
-        game.date.strftime
-
-        if game.home_team.code == 'ARI'
-          game.date.strftime('%-m/%-d DBacks vs. ') + game.away_team.name + ' ' + game.home_start_time
+        if game.home_team.code == @team.code
+          "#{game.date.strftime(date_format)} #{game.home_team.name} vs. " \
+          "#{game.away_team.name} #{game.home_start_time}"
         else
-          game.date.strftime('%-m/%-d DBacks @ ') + game.home_team.name + ' ' + game.away_start_time
+          "#{game.date.strftime(date_format)} #{game.away_team.name} @ " \
+          "#{game.home_team.name} #{game.away_start_time}"
         end
       end
 
