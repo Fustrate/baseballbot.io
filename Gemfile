@@ -25,6 +25,7 @@ gem 'unicorn'
 
 # Reddit interaction
 gem 'redd', github: 'avidw/redd'
+gem 'mlb_gameday', '~> 0.1.0'
 
 group :development do
   gem 'quiet_assets'
