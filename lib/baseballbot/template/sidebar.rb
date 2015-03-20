@@ -410,11 +410,11 @@ class Baseballbot
       end
 
       def parse_player_data(data)
-        players = JSON.load(data)['stats_sortable_player']['queryResults']['row']
+        json = JSON.load(data)
+        players = json['stats_sortable_player']['queryResults']['row']
 
-        players = [players] if players.is_a? Hash
-
-        players
+        # Array(players) doesn't work because hashes have a #to_a method
+        players.is_a?(Hash) ? [players] : players
       end
 
       def build_team(code:, name:)
