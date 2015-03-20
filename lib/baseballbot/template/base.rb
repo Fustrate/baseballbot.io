@@ -30,7 +30,7 @@ class Baseballbot
 
       # Get the default subreddit for this team
       def subreddit(code)
-        Baseballbot.subreddits[code.upcase.to_sym]
+        Baseballbot.subreddits[code.upcase]
       end
 
       def link_to(text = '', options = {})

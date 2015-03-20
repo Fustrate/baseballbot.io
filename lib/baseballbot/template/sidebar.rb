@@ -4,6 +4,72 @@ class Baseballbot
       HITTER_DATA_URL  = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=%{year}&sort_order='desc'&sort_column='avg'&stat_type=hitting&page_type=SortablePlayer&team_id=%{team_id}&game_type='%{type}'&player_pool=%{pool}&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50"
       PITCHER_DATA_URL = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=%{year}&sort_order='desc'&sort_column='era'&stat_type=pitching&page_type=SortablePlayer&team_id=%{team_id}&game_type='%{type}'&player_pool=%{pool}&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50"
       CALENDAR_DATA_URL = 'http://mlb.mlb.com/gen/schedule/%{team_code}/%{year}_%{month}.json'
+      STANDINGS = "http://mlb.mlb.com/lookup/json/named.standings_schedule_date.bam?season=%Y&schedule_game_date.game_date='%Y/%m/%d'&sit_code='h0'&league_id=103&league_id=104&all_star_sw='N'&version=2"
+
+      class << self
+        def divisions
+          @divisions ||= begin
+            # Don't ask me, MLB was acting stupid one day
+            filename = (Time.now - 4 * 3600).strftime STANDINGS
+
+            standings = JSON.parse open(filename).read
+            standings = standings['standings_schedule_date']
+            standings = standings['standings_all_date_rptr']['standings_all_date']
+
+            teams = {}
+
+            standings.each do |league|
+              league['queryResults']['row'].each do |row|
+                teams[row['team_abbrev'].to_sym] = parse_standings_row(row)
+              end
+            end
+
+            divisions = Hash.new { |hash, key| hash[key] = [] }
+
+            teams.each do |_, team|
+              divisions[team[:division_id]] << team
+            end
+
+            divisions.each do |id, division|
+              divisions[id] = division.sort_by do |team|
+                # Sort by (in order) lowest losing %, most wins, least losses, code
+                [1.0 - team[:percent], 162 - team[:wins], team[:losses], team[:code]]
+              end
+            end
+
+            divisions
+          end
+        end
+
+        protected
+
+        def parse_standings_row(row)
+          {
+            code:           row['team_abbrev'],
+            wins:           row['w'].to_i,
+            losses:         row['l'].to_i,
+            games_back:     row['gb'].to_f,
+            percent:        row['pct'].to_f,
+            last_ten:       row['last_ten'],
+            streak:         row['streak'],
+            run_diff:       row['runs'].to_i - row['opp_runs'].to_i,
+            home:           row['home'],
+            road:           row['away'],
+            interleague:    row['interleague'],
+            wildcard:       row['gb_wildcard'],
+            wildcard_gb:    wildcard(row['gb_wildcard']),
+            elim:           row['elim'],
+            elim_wildcard:  row['elim_wildcard'],
+            division_champ: %w(y z).include?(row['playoffs_flag_mlb']),
+            wildcard_champ: %w(w x).include?(row['playoffs_flag_mlb']),
+            division_id:    row['division_id'].to_i
+          }
+        end
+
+        def wildcard(wcgb)
+          wcgb.to_f * (wcgb[0] == '+' ? -1 : 1)
+        end
+      end
 
       def initialize(body:, bot:, subreddit:)
         super(body: body, bot: bot)
@@ -12,8 +78,12 @@ class Baseballbot
         @team = @subreddit.team
       end
 
-      def division
-        []
+      def standings
+        self.class.divisions[@team.division.id].map do |team|
+          team[:team] = @bot.gameday.team(team[:code])
+        end
+
+        self.class.divisions[@team.division.id]
       end
 
       def calendar_cell(cnum, day)
@@ -253,8 +323,11 @@ class Baseballbot
       end
 
       def build_team(code:, name:)
-        @bot.gameday.team(code) ||
-          MLBGameday::Team.new(name: name, code: code)
+        @bot.gameday.team(code) || MLBGameday::Team.new(name: name, code: code)
+      end
+
+      def wildcard(wcgb)
+        wcgb.to_f * (wcgb[0] == '+' ? -1 : 1)
       end
 
       def open_url(url, interpolations = {})
