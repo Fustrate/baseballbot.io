@@ -35,7 +35,6 @@ group :development do
   gem 'guard-rails'
   gem 'ruby_gntp'
   gem 'rubocop'
-  gem 'letter_opener'
   gem 'bullet'
   gem 'web-console', '~> 2.0'
 
@@ -78,7 +77,7 @@ gem 'sorcery'
 gem 'authority'
 
 # Cron jobs
-gem 'whenever'
+gem 'whenever', require: false
 
 # Rails 4 stuff!
 gem 'activerecord-session_store'
