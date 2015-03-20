@@ -1,4 +1,4 @@
-set :output, '/home/baseballbot/apps/baseballbot.io/shared/log/'
+set :output, '/home/baseballbot/apps/baseballbot.io/shared/log/whenever.log'
 
 # every 2.minutes do
 # end
