@@ -81,6 +81,7 @@ class Baseballbot
       def standings
         self.class.divisions[@team.division.id].map do |team|
           team[:team] = @bot.gameday.team(team[:code])
+          team[:subreddit] = subreddit team[:code]
         end
 
         self.class.divisions[@team.division.id]
@@ -93,7 +94,9 @@ class Baseballbot
 
         # Let's hope nobody plays a doubleheader against two different teams
         subreddit = subreddit games.first[:opponent].code
-        subreddit.downcase! if options[:downcase]
+
+        # Spring training games sometimes are against colleges
+        subreddit.downcase! if subreddit && options[:downcase]
 
         statuses = games.map { |game| game[:status] }
 
@@ -286,7 +289,7 @@ class Baseballbot
           date -= (24 * 3600)
 
           begin
-            games = gameday.find_games team: @team, date: date
+            games = @bot.gameday.find_games team: @team, date: date
           rescue OpenURI::HTTPError
             games = nil
           end
@@ -328,7 +331,7 @@ class Baseballbot
           date += (24 * 3600)
 
           begin
-            games = gameday.find_games team: @team, date: date
+            games = @bot.gameday.find_games team: @team, date: date
           rescue OpenURI::HTTPError
             games = nil
           end
