@@ -14,4 +14,4 @@ bot = Baseballbot.new(
   }
 )
 
-bot.update_sidebars!
+bot.update_sidebars! codes: ARGV

@@ -1,6 +1,6 @@
 class Baseballbot
   class Account
-    attr_reader :access
+    attr_reader :access, :name
 
     def initialize(bot:, name:, access:)
       @bot = bot

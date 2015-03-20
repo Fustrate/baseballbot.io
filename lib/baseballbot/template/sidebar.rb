@@ -86,18 +86,21 @@ class Baseballbot
         self.class.divisions[@team.division.id]
       end
 
-      def calendar_cell(cnum, day)
+      def calendar_cell(cnum, day, options = {})
         str = "^#{cnum} "
 
         return str.strip unless day[:opponent]
 
-        str << link_to('', sub: subreddit(day[:opponent].code), title: day[:status])
+        subreddit = subreddit day[:opponent].code
+        subreddit = subreddit.downcase if options[:downcase]
+
+        str << link_to('', sub: subreddit, title: day[:status])
 
         day[:home] ? (bold str) : (italic str)
       end
 
       # See #calendar for month options
-      def month_calendar(month = nil)
+      def month_calendar(month = nil, options = {})
         days = calendar(month)
 
         first_day = days[days.keys.first]
@@ -111,7 +114,7 @@ class Baseballbot
                                    -1).day
 
         days.each do |cday, day|
-          str << calendar_cell(cday, day)
+          str << calendar_cell(cday, day, downcase: options[:downcase])
 
           if !day[:date].saturday?
             str << '|'

@@ -44,16 +44,22 @@ class Baseballbot
         'STL' => 'Cardinals'
       }.freeze
     end
+
+    def subreddit_to_code(name)
+      Hash[subreddits.invert.map { |k, v| [k.downcase, v] }][name]
+    end
   end
 
   def initialize(options = {})
-    @reddit = Redd.it(
-      :web,
-      options[:reddit][:client_id],
-      options[:reddit][:secret],
-      options[:reddit][:redirect_uri],
-      user_agent: options[:user_agent]
-    )
+    @clients = Hash.new do |hash, key|
+      hash[key] = Redd.it(
+        :web,
+        options[:reddit][:client_id],
+        options[:reddit][:secret],
+        options[:reddit][:redirect_uri],
+        user_agent: options[:user_agent]
+      )
+    end
 
     @db = PG::Connection.new options[:db]
 
@@ -63,9 +69,27 @@ class Baseballbot
     load_subreddits
   end
 
-  def update_sidebars!
+  def update_sidebars!(codes: [])
+    if codes.empty?
+      @db.exec(
+        "SELECT team_code
+        FROM subreddits
+        JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')"
+      ).each do |row|
+        update_sidebar! @subreddits[row['team_code']]
+      end
+
+      return
+    end
+
     # Only select teams that have a sidebar template
-    @db.exec('SELECT team_code FROM subreddits').each do |row|
+    @db.exec_params(
+      "SELECT team_code
+      FROM subreddits
+      JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')
+      WHERE team_code IN ($1)",
+      [codes]
+    ).each do |row|
       update_sidebar! @subreddits[row['team_code']]
     end
   end
@@ -77,7 +101,7 @@ class Baseballbot
   end
 
   def in_subreddit(subreddit, &block)
-    @reddit.with(subreddit.account.access) do |client|
+    @clients[subreddit.account.name].with(subreddit.account.access) do |client|
       client.refresh_access! if subreddit.account.access.expired?
 
       block.call client
