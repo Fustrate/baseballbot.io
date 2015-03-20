@@ -70,26 +70,13 @@ class Baseballbot
   end
 
   def update_sidebars!(codes: [])
-    if codes.empty?
-      @db.exec(
-        "SELECT team_code
-        FROM subreddits
-        JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')"
-      ).each do |row|
-        update_sidebar! @subreddits[row['team_code']]
-      end
-
-      return
-    end
-
-    # Only select teams that have a sidebar template
-    @db.exec_params(
+    @db.exec(
       "SELECT team_code
       FROM subreddits
-      JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')
-      WHERE team_code IN ($1)",
-      [codes]
+      JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')"
     ).each do |row|
+      next unless codes.empty? || codes.include?(row['team_code'])
+
       update_sidebar! @subreddits[row['team_code']]
     end
   end
