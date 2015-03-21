@@ -346,6 +346,8 @@ class Baseballbot
             return @next_game
           end
         end
+
+        nil
       end
 
       def next_game_str(date_format: '%-m/%-d')
