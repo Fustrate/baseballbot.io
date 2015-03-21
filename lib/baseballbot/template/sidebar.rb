@@ -6,71 +6,6 @@ class Baseballbot
       CALENDAR_DATA_URL = "http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?start_date='%{start_date}'&end_date='%{end_date}'&team_id=%{team_id}&season=%{year}&game_type='A'&game_type='E'&game_type='F'&game_type='D'&game_type='L'&game_type='W'&game_type='C'&game_type='S'"
       STANDINGS = "http://mlb.mlb.com/lookup/json/named.standings_schedule_date.bam?season=%Y&schedule_game_date.game_date='%Y/%m/%d'&sit_code='h0'&league_id=103&league_id=104&all_star_sw='N'&version=2"
 
-      class << self
-        def divisions
-          @divisions ||= begin
-            # Don't ask me, MLB was acting stupid one day
-            filename = (Time.now - 4 * 3600).strftime STANDINGS
-
-            standings = JSON.parse open(filename).read
-            standings = standings['standings_schedule_date']
-            standings = standings['standings_all_date_rptr']['standings_all_date']
-
-            teams = {}
-
-            standings.each do |league|
-              league['queryResults']['row'].each do |row|
-                teams[row['team_abbrev'].to_sym] = parse_standings_row(row)
-              end
-            end
-
-            divisions = Hash.new { |hash, key| hash[key] = [] }
-
-            teams.each do |_, team|
-              divisions[team[:division_id]] << team
-            end
-
-            divisions.each do |id, division|
-              divisions[id] = division.sort_by do |team|
-                # Sort by (in order) lowest losing %, most wins, least losses, code
-                [1.0 - team[:percent], 162 - team[:wins], team[:losses], team[:code]]
-              end
-            end
-
-            divisions
-          end
-        end
-
-        protected
-
-        def parse_standings_row(row)
-          {
-            code:           row['team_abbrev'],
-            wins:           row['w'].to_i,
-            losses:         row['l'].to_i,
-            games_back:     row['gb'].to_f,
-            percent:        row['pct'].to_f,
-            last_ten:       row['last_ten'],
-            streak:         row['streak'],
-            run_diff:       row['runs'].to_i - row['opp_runs'].to_i,
-            home:           row['home'],
-            road:           row['away'],
-            interleague:    row['interleague'],
-            wildcard:       row['gb_wildcard'],
-            wildcard_gb:    wildcard(row['gb_wildcard']),
-            elim:           row['elim'],
-            elim_wildcard:  row['elim_wildcard'],
-            division_champ: %w(y z).include?(row['playoffs_flag_mlb']),
-            wildcard_champ: %w(w x).include?(row['playoffs_flag_mlb']),
-            division_id:    row['division_id'].to_i
-          }
-        end
-
-        def wildcard(wcgb)
-          wcgb.to_f * (wcgb[0] == '+' ? -1 : 1)
-        end
-      end
-
       def initialize(body:, bot:, subreddit:)
         super(body: body, bot: bot)
 
@@ -78,14 +13,74 @@ class Baseballbot
         @team = @subreddit.team
       end
 
+      # ------------------------------------------------------------------------
+      # Standings
+      # ------------------------------------------------------------------------
+
+      def divisions
+        @divisions ||= begin
+          # Don't ask me, MLB started acting stupid one day
+          filename = (Time.now - 4 * 3600).strftime STANDINGS
+
+          standings = JSON.parse open(filename).read
+          standings = standings['standings_schedule_date']
+          standings = standings['standings_all_date_rptr']['standings_all_date']
+
+          teams = {}
+
+          standings.each do |league|
+            league['queryResults']['row'].each do |row|
+              teams[row['team_abbrev'].to_sym] = parse_standings_row(row)
+            end
+          end
+
+          divisions = Hash.new { |hash, key| hash[key] = [] }
+
+          teams.each do |_, team|
+            divisions[team[:division_id]] << team
+          end
+
+          divisions.each do |id, division|
+            divisions[id] = division.sort_by do |team|
+              # Sort by (in order) lowest losing %, most wins, least losses, code
+              [1.0 - team[:percent], 162 - team[:wins], team[:losses], team[:code]]
+            end
+          end
+
+          divisions
+        end
+      end
+
       def standings
-        self.class.divisions[@team.division.id].map do |team|
-          team[:team] = @bot.gameday.team(team[:code])
-          team[:subreddit] = subreddit team[:code]
+        divisions[@team.division.id]
+      end
+
+      def full_standings
+        return @full_standings if @full_standings
+
+        @full_standings = { nl: [], al: [] }
+
+        0.upto(4) do |i|
+          # West, Central, East
+          @full_standings[:nl] << [
+            divisions[203][i],
+            divisions[205][i],
+            divisions[204][i]
+          ]
+
+          @full_standings[:al] << [
+            divisions[200][i],
+            divisions[202][i],
+            divisions[201][i]
+          ]
         end
 
-        self.class.divisions[@team.division.id]
+        @full_standings
       end
+
+      # ------------------------------------------------------------------------
+      # Calendars
+      # ------------------------------------------------------------------------
 
       def calendar_cell(cnum, games, options = {})
         str = "^#{cnum} "
@@ -202,7 +197,6 @@ class Baseballbot
           end
         end
 
-
         days
       end
 
@@ -219,6 +213,94 @@ class Baseballbot
           "#{game[:outcome]} #{game[:score].join '-'}"
         end
       end
+
+      def previous_games(limit)
+        if @previous_games && @previous_games.count >= limit
+          return @previous_games.first(limit)
+        end
+
+        @previous_games = []
+
+        [:current, :previous].each do |month|
+          calendar(month).reverse.each do |_, day|
+            next if day[:date] > Date.today
+
+            day[:games].each do |game|
+              next unless game[:over]
+
+              @previous_games << game
+            end
+
+            break if @previous_games.count >= limit
+          end
+        end
+
+        @previous_games.first(limit)
+      end
+
+      def upcoming_games(limit)
+        if @upcoming_games && @upcoming_games.count >= limit
+          return @upcoming_games.first(limit)
+        end
+
+        @upcoming_games = []
+
+        [:current, :next].each do |month|
+          calendar(month).each do |_, day|
+            next if day[:date] < Date.today
+
+            day[:games].each do |game|
+              next if game[:over]
+
+              @upcoming_games << game
+            end
+
+            break if @upcoming_games.count >= limit
+          end
+        end
+
+        @upcoming_games.first(limit)
+      end
+
+      def next_game
+        upcoming_games(1)[0]
+      end
+
+      def next_game_str(date_format: '%-m/%-d')
+        game = next_game
+
+        return '???' unless game
+
+        if game.home_team.code == @team.code
+          "#{game.date.strftime(date_format)} #{game.home_team.name} vs. " \
+          "#{game.away_team.name} #{game.home_start_time}"
+        else
+          "#{game.date.strftime(date_format)} #{game.away_team.name} @ " \
+          "#{game.home_team.name} #{game.away_start_time}"
+        end
+      end
+
+      def last_game
+        previous_games(1)[0]
+      end
+
+      def last_game_str(date_format: '%-m/%-d')
+        game = last_game
+
+        return '???' unless game
+
+        if game.home_team.code == @team.code
+          "#{game.date.strftime(date_format)} #{game.home_team.name} " \
+          "#{game.score[0]} #{game.away_team.name} #{game.score[1]}"
+        else
+          "#{game.date.strftime(date_format)} #{game.away_team.name} " \
+          "#{game.score[1]} #{game.home_team.name} #{game.score[0]}"
+        end
+      end
+
+      # ------------------------------------------------------------------------
+      # Leaders
+      # ------------------------------------------------------------------------
 
       # TODO: This method only allows for one year+type to be loaded before
       # being memoized. Cache into a hash instead?
@@ -277,90 +359,6 @@ class Baseballbot
           end
 
           stats
-        end
-      end
-
-      def last_game
-        return @last_game if @last_game
-
-        date = Date.today + (24 * 3600)
-
-        10.times do
-          date -= (24 * 3600)
-
-          begin
-            games = @bot.gameday.find_games team: @team, date: date
-          rescue OpenURI::HTTPError
-            games = nil
-          end
-
-          next unless games
-
-          games.each do |game|
-            next unless game.over?
-
-            @last_game = game
-
-            return @last_game
-          end
-        end
-
-        nil
-      end
-
-      def last_game_str(date_format: '%-m/%-d')
-        game = last_game
-
-        return '???' unless game
-
-        if game.home_team.code == @team.code
-          "#{game.date.strftime(date_format)} #{game.home_team.name} " \
-          "#{game.score[0]} #{game.away_team.name} #{game.score[1]}"
-        else
-          "#{game.date.strftime(date_format)} #{game.away_team.name} " \
-          "#{game.score[1]} #{game.home_team.name} #{game.score[0]}"
-        end
-      end
-
-      def next_game
-        return @next_game if @next_game
-
-        date = Date.today - (24 * 3600)
-
-        10.times do
-          date += (24 * 3600)
-
-          begin
-            games = @bot.gameday.find_games team: @team, date: date
-          rescue OpenURI::HTTPError
-            games = nil
-          end
-
-          next unless games
-
-          games.each do |game|
-            next if game.over?
-
-            @next_game = game
-
-            return @next_game
-          end
-        end
-
-        nil
-      end
-
-      def next_game_str(date_format: '%-m/%-d')
-        game = next_game
-
-        return '???' unless game
-
-        if game.home_team.code == @team.code
-          "#{game.date.strftime(date_format)} #{game.home_team.name} vs. " \
-          "#{game.away_team.name} #{game.home_start_time}"
-        else
-          "#{game.date.strftime(date_format)} #{game.away_team.name} @ " \
-          "#{game.home_team.name} #{game.away_start_time}"
         end
       end
 
@@ -435,6 +433,31 @@ class Baseballbot
                               team_code: @subreddit.team.file_code
 
         open format(url, interpolations)
+      end
+
+      def parse_standings_row(row)
+        {
+          code:           row['team_abbrev'],
+          wins:           row['w'].to_i,
+          losses:         row['l'].to_i,
+          games_back:     row['gb'].to_f,
+          percent:        row['pct'].to_f,
+          last_ten:       row['last_ten'],
+          streak:         row['streak'],
+          run_diff:       row['runs'].to_i - row['opp_runs'].to_i,
+          home:           row['home'],
+          road:           row['away'],
+          interleague:    row['interleague'],
+          wildcard:       row['gb_wildcard'],
+          wildcard_gb:    wildcard(row['gb_wildcard']),
+          elim:           row['elim'],
+          elim_wildcard:  row['elim_wildcard'],
+          division_champ: %w(y z).include?(row['playoffs_flag_mlb']),
+          wildcard_champ: %w(w x).include?(row['playoffs_flag_mlb']),
+          division_id:    row['division_id'].to_i,
+          team:           @bot.gameday.team(row['team_abbrev']),
+          subreddit:      subreddit(row['team_abbrev'])
+        }
       end
     end
   end
