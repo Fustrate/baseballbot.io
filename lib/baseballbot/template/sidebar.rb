@@ -222,7 +222,7 @@ class Baseballbot
         @previous_games = []
 
         [:current, :previous].each do |month|
-          calendar(month).reverse.each do |_, day|
+          Hash[calendar(month).to_a.reverse].each do |_, day|
             next if day[:date] > Date.today
 
             day[:games].each do |game|
