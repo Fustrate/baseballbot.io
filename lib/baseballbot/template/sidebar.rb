@@ -271,12 +271,12 @@ class Baseballbot
 
         return '???' unless game
 
-        if game.home_team.code == @team.code
-          "#{game.date.strftime(date_format)} #{game.home_team.name} vs. " \
-          "#{game.away_team.name} #{game.home_start_time}"
+        if game[:home]
+          "#{game[:date].strftime(date_format)} #{@team.name} vs. " \
+          "#{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
         else
-          "#{game.date.strftime(date_format)} #{game.away_team.name} @ " \
-          "#{game.home_team.name} #{game.away_start_time}"
+          "#{game[:date].strftime(date_format)} #{@team.name} @ " \
+          "#{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
         end
       end
 
@@ -289,13 +289,8 @@ class Baseballbot
 
         return '???' unless game
 
-        if game.home_team.code == @team.code
-          "#{game.date.strftime(date_format)} #{game.home_team.name} " \
-          "#{game.score[0]} #{game.away_team.name} #{game.score[1]}"
-        else
-          "#{game.date.strftime(date_format)} #{game.away_team.name} " \
-          "#{game.score[1]} #{game.home_team.name} #{game.score[0]}"
-        end
+        "#{game[:date].strftime(date_format)} #{@team.name} " \
+        "#{game[:score][0]} #{game[:opponent].name} #{game[:score][1]}"
       end
 
       # ------------------------------------------------------------------------
