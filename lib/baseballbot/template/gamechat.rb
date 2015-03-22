@@ -36,7 +36,7 @@ class Baseballbot
       end
 
       def home
-        unless @game.started?
+        unless @game.started? && @game.boxscore
           {
             runs: 0,
             hits: 0,
@@ -54,7 +54,7 @@ class Baseballbot
       end
 
       def away
-        unless @game.started?
+        unless @game.started? && @game.boxscore
           {
             runs: 0,
             hits: 0,
@@ -72,9 +72,9 @@ class Baseballbot
       end
 
       def lines
-        return [[nil] * 9] * 2 unless @game.started?
-
         lines = [[nil] * 9, [nil] * 9]
+
+        return lines unless @game.started? && @game.boxscore
 
         bs = @game.boxscore
 
@@ -95,7 +95,7 @@ class Baseballbot
       end
 
       def batters
-        if @game.started?
+        if @game.started? && @game.boxscore
           bs = @game.boxscore
 
           home_batters = bs.xpath('//boxscore/batting[@team_flag="home"]/batter').to_a
@@ -113,7 +113,7 @@ class Baseballbot
       end
 
       def pitchers
-        if @game.started?
+        if @game.started? && @game.boxscore
           bs = @game.boxscore
 
           home_pitchers = bs.xpath('//boxscore/pitching[@team_flag="home"]/pitcher').to_a
@@ -171,15 +171,19 @@ class Baseballbot
       end
 
       def outs
-        if game.linescore.at_xpath('//game/@outs')
-          returngame.linescore.xpath('//game/@outs').text.to_i
+        return '' unless @game.started? && @game.linescore
+
+        if @game.linescore.at_xpath('//game/@outs')
+          return @game.linescore.xpath('//game/@outs').text.to_i
         end
 
         ''
       end
 
       def runners
-        rob = game.linescore.at_xpath '//game/@runner_on_base_status'
+        return '' unless @game.started? && @game.linescore
+
+        rob = @game.linescore.at_xpath '//game/@runner_on_base_status'
 
         if rob
           return [
