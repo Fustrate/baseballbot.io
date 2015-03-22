@@ -133,6 +133,8 @@ class Baseballbot
       def scoring_plays
         scoring_plays = []
 
+        return scoring_plays unless @game.started?
+
         data = Nokogiri::XML open Time.now.strftime(
           'http://gd2.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
           "gid_#{@game.gid}/inning/inning_Scores.xml"
@@ -154,6 +156,9 @@ class Baseballbot
         end
 
         scoring_plays
+      rescue OpenURI::HTTPError
+        # There's no inning_Scores.xml file right now
+        []
       end
 
       def innings
