@@ -9,7 +9,6 @@ class Baseballbot
       @account = account
 
       code = Baseballbot.subreddit_to_code name
-      code ||= 'LAD'
 
       @team = @bot.gameday.team(code) if code
     end
