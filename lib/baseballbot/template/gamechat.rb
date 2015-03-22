@@ -37,7 +37,7 @@ class Baseballbot
 
       def home
         unless @game.started? && @game.boxscore
-          {
+          return {
             runs: 0,
             hits: 0,
             errors: 0
@@ -55,7 +55,7 @@ class Baseballbot
 
       def away
         unless @game.started? && @game.boxscore
-          {
+          return {
             runs: 0,
             hits: 0,
             errors: 0
