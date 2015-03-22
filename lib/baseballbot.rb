@@ -83,6 +83,35 @@ class Baseballbot
     subreddit.update description: subreddit.generate_sidebar
   end
 
+  def post_gamechats!(codes: [])
+    unposted_gamechats.each do |row|
+      next unless codes.empty? || codes.include?(row['team_code'])
+
+      post_gamechat! id: row['id'],
+                     team: row['team_code'],
+                     gid: row['gid'],
+                     title: row['title']
+    end
+  end
+
+  def post_gamechat!(id:, team:, gid:, title:)
+    post = team_to_subreddit(team).post_gamechat(gid: gid, title: title)
+
+    puts post.inspect
+
+    @db.exec_params(
+      'UPDATE gamechats
+      SET post_id = $1, title = $2, status = $3
+      WHERE id = $4',
+      [
+        post[:id],
+        post[:title],
+        'In Progress',
+        id
+      ]
+    )
+  end
+
   def in_subreddit(subreddit, &block)
     @clients[subreddit.account.name].with(subreddit.account.access) do |client|
       client.refresh_access! if subreddit.account.access.expired?
@@ -92,6 +121,16 @@ class Baseballbot
   end
 
   protected
+
+  def unposted_gamechats
+    @db.exec_params(
+      "SELECT gamechats.id, gid, team_code, title
+      FROM gamechats
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status = 'Future' AND post_at <= $1",
+      [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
+    )
+  end
 
   def teams_with_sidebars
     @db.exec(
