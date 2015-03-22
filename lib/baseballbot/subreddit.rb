@@ -14,19 +14,7 @@ class Baseballbot
     end
 
     def generate_sidebar
-      result = @bot.db.exec_params(
-        "SELECT body
-        FROM templates
-        WHERE subreddit_id = $1 AND type = 'sidebar'",
-        [@id])
-
-      fail "#{@name} does not have a sidebar template." if result.count < 1
-
-      template = Template::Sidebar.new body: result[0]['body'],
-                                       bot: @bot,
-                                       subreddit: self
-
-      template.replace_in current_sidebar
+      sidebar_template.replace_in current_sidebar
     end
 
     def current_sidebar
@@ -45,6 +33,28 @@ class Baseballbot
       @bot.in_subreddit(self) do |client|
         client.subreddit_from_name(@name).admin_edit new_settings
       end
+    end
+
+    protected
+
+    def sidebar_template
+      Template::Sidebar.new body: template_body(type: 'sidebar'),
+                            bot: @bot,
+                            subreddit: self
+    end
+
+
+    def template_body(type:)
+      result = @bot.db.exec_params(
+        "SELECT body
+        FROM templates
+        WHERE subreddit_id = $1 AND type = $2",
+        [@id, type]
+      )
+
+      fail "#{@name} does not have a #{type} template." if result.count < 1
+
+      result[0]['body']
     end
   end
 end

@@ -10,7 +10,11 @@ class Baseballbot
         super(body: body, bot: bot)
 
         @subreddit = subreddit
-        @team = @subreddit.team
+        @team = subreddit.team
+      end
+
+      def inspect
+        %(#<Baseballbot::Template::Sidebar @team="#{@team.name}">)
       end
 
       # ------------------------------------------------------------------------

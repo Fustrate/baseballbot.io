@@ -70,11 +70,7 @@ class Baseballbot
   end
 
   def update_sidebars!(codes: [])
-    @db.exec(
-      "SELECT team_code
-      FROM subreddits
-      JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')"
-    ).each do |row|
+    teams_with_sidebars.each do |row|
       next unless codes.empty? || codes.include?(row['team_code'])
 
       update_sidebar! @subreddits[row['team_code']]
@@ -82,7 +78,7 @@ class Baseballbot
   end
 
   def update_sidebar!(team)
-    subreddit = team.is_a?(Subreddit) ? team : @subreddits[team]
+    subreddit = team_to_subreddit(team)
 
     subreddit.update description: subreddit.generate_sidebar
   end
@@ -96,6 +92,18 @@ class Baseballbot
   end
 
   protected
+
+  def teams_with_sidebars
+    @db.exec(
+      "SELECT team_code
+      FROM subreddits
+      JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')"
+    )
+  end
+
+  def team_to_subreddit(team)
+    team.is_a?(Subreddit) ? team : @subreddits[team]
+  end
 
   def load_accounts
     @accounts = {}

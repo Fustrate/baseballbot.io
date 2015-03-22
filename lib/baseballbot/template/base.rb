@@ -1,7 +1,29 @@
 class Baseballbot
   module Template
+    refine Numeric do
+      def ordinalize(number)
+        "#{number}#{ordinal(number)}"
+      end
+
+      def ordinal(number)
+        abs_number = number.to_i.abs
+
+        if (11..13).include?(abs_number % 100)
+          'th'
+        else
+          case abs_number % 10
+          when 1 then 'st'
+          when 2 then 'nd'
+          when 3 then 'rd'
+          else        'th'
+          end
+        end
+      end
+    end
+
     class Base
       def initialize(body:, bot:)
+        @body = body
         @template = ERB.new body, nil, '<>'
         @bot = bot
       end
@@ -26,6 +48,19 @@ class Baseballbot
         return '-' if games_back == 0
 
         games_back % 1.0 == 0 ? games_back.to_i : games_back
+      end
+
+      def time(zone: :Pacific)
+        case zone
+        when :Eastern, :eastern
+          Time.now + 10_800
+        when :Central, :central
+          Time.now + 7_200
+        when :Mountain, :mountain
+          Time.now + 3_600
+        else
+          Time.now
+        end
       end
 
       # Get the default subreddit for this team
