@@ -362,7 +362,9 @@ class Baseballbot
       end
 
       def team_stats
-        @team_stats ||= standings.select { |team| team[:code] == @team.code }
+        @team_stats ||= standings
+                        .select { |team| team[:code] == @team.code }
+                        .first
       end
 
       def [](stat)
