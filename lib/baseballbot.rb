@@ -69,6 +69,10 @@ class Baseballbot
     load_subreddits
   end
 
+  def inspect
+    %(#<Baseballbot>)
+  end
+
   def update_sidebars!(codes: [])
     teams_with_sidebars.each do |row|
       next unless codes.empty? || codes.include?(row['team_code'])

@@ -436,8 +436,8 @@ class Baseballbot
       end
 
       def open_url(url, interpolations = {})
-        interpolations.merge! team_id: @subreddit.team.id,
-                              team_code: @subreddit.team.file_code
+        interpolations.merge! team_id: @team.id,
+                              team_code: @team.file_code
 
         open format(url, interpolations)
       end
