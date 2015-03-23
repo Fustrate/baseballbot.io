@@ -101,8 +101,6 @@ class Baseballbot
   def post_gamechat!(id:, team:, gid:, title:)
     post = team_to_subreddit(team).post_gamechat(gid: gid, title: title)
 
-    puts post.inspect
-
     @db.exec_params(
       'UPDATE gamechats
       SET post_id = $1, title = $2, status = $3
