@@ -361,6 +361,14 @@ class Baseballbot
         end
       end
 
+      def team_stats
+        @team_stats ||= standings.select { |team| team[:code] == @team.code }
+      end
+
+      def [](stat)
+        team_stats[stat]
+      end
+
       protected
 
       def high_stat(key, players)
@@ -444,8 +452,8 @@ class Baseballbot
           last_ten:       row['last_ten'],
           streak:         row['streak'],
           run_diff:       row['runs'].to_i - row['opp_runs'].to_i,
-          home:           row['home'],
-          road:           row['away'],
+          home_record:    row['home'].split('-'),
+          road_record:    row['away'].split('-'),
           interleague:    row['interleague'],
           wildcard:       row['gb_wildcard'],
           wildcard_gb:    wildcard(row['gb_wildcard']),
