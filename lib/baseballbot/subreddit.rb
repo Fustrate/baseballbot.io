@@ -37,8 +37,23 @@ class Baseballbot
 
     def update(new_settings = {})
       @bot.in_subreddit(self) do |client|
-        client.subreddit_from_name(@name).admin_edit new_settings
+        response = client.subreddit_from_name(@name).admin_edit(new_settings)
+
+        log_errors response.body[:json][:errors]
       end
+    end
+
+    def log_errors(errors)
+      return unless errors && errors.count > 0
+
+      errors.each do |error|
+        log "#{error[0]}: #{error[1]} (#{error[2]})"
+      end
+    end
+
+    # TODO: Make this an actual logger, so we can log to something different
+    def log(message)
+      puts Time.now.strftime "[%Y-%m-%d %H:%M:%S] #{@name}: #{message}"
     end
 
     # Returns the post ID
