@@ -204,6 +204,14 @@ class Baseballbot
         days
       end
 
+      def month_games
+        calendar.each do |_, games|
+          games.each do |game|
+            yield game
+          end
+        end
+      end
+
       def calendar_game_status(game)
         return 'Delayed' if game[:status_code] == 'D'
 
