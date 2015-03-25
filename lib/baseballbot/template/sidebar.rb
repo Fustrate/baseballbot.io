@@ -205,11 +205,7 @@ class Baseballbot
       end
 
       def month_games
-        calendar.each do |_, games|
-          games.each do |game|
-            yield game
-          end
-        end
+        calendar.map { |_, games| games }.flatten(1)
       end
 
       def calendar_game_status(game)
