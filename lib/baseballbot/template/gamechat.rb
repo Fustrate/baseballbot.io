@@ -1,6 +1,8 @@
 class Baseballbot
   module Template
     class Gamechat < Base
+      using TemplateRefinements
+
       attr_reader :game, :title
 
       def initialize(body:, bot:, subreddit:, gid:, title:)
@@ -161,7 +163,7 @@ class Baseballbot
         []
       end
 
-      def innings
+      def inning
         return 'Postponed' if @game.postponed?
 
         return 'Final' if @game.over?
@@ -216,6 +218,22 @@ class Baseballbot
         50 + outs + (2 * [(outs / 3 - 4).floor, 0].max) + pitcher['so'].to_i -
           (2 * pitcher['h'].to_i) - (4 * earned) - (2 * unearned) -
           pitcher['bb'].to_i
+      end
+
+      def boxscore_status
+        if game.over?
+          'Final'
+        elsif runners.empty?
+          "#{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
+        else
+          "#{runners}, #{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
+        end
+      end
+
+      def timestamp(action, hour_offset: 0)
+        adjusted_time = Time.now + hour_offset * 3600
+
+        "*#{action} at #{adjusted_time.strftime '%-I:%M %p'}.*"
       end
 
       protected

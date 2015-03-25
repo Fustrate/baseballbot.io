@@ -114,6 +114,30 @@ class Baseballbot
     )
   end
 
+  def update_gamechats!(codes: [])
+    active_gamechats.each do |row|
+      next unless codes.empty? || codes.include?(row['team_code'])
+
+      update_gamechat! id: row['id'],
+                       team: row['team_code'],
+                       gid: row['gid'],
+                       post_id: row['post_id']
+    end
+  end
+
+  def update_gamechat!(id:, team:, gid:, post_id:)
+    over = team_to_subreddit(team).update_gamechat(gid: gid, post_id: post_id)
+
+    return unless over
+
+    @db.exec_params(
+      "UPDATE gamechats
+      SET status = 'Over'
+      WHERE id = $1",
+      [id]
+    )
+  end
+
   def in_subreddit(subreddit, &block)
     @clients[subreddit.account.name].with(subreddit.account.access) do |client|
       client.refresh_access! if subreddit.account.access.expired?
@@ -130,6 +154,16 @@ class Baseballbot
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future' AND post_at <= $1",
+      [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
+    )
+  end
+
+  def active_gamechats
+    @db.exec_params(
+      "SELECT gamechats.id, gid, team_code, post_id
+      FROM gamechats
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status = 'Posted' AND starts_at <= $1",
       [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
     )
   end

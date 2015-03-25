@@ -27,6 +27,21 @@ class Baseballbot
       submit template.title, text: template.result
     end
 
+    def update_gamechat(gid:, post_id:)
+      template = gamechat_update_template(gid: gid)
+      post = submission(id: post_id)
+
+      body = template.replace_in CGI.unescapeHTML(post[:selftext])
+
+      if template.game.over?
+        edit(id: post_id, body: body, sticky: false)
+      else
+        edit(id: post_id, body: body)
+      end
+
+      template.game.over?
+    end
+
     def settings
       return @settings if @settings
 
@@ -74,12 +89,18 @@ class Baseballbot
 
     def edit(id:, body: nil, sticky: nil)
       @bot.in_subreddit(self) do |client|
-        post = client.from_fullname("t3_#{id}")
+        post = client.from_fullname("t3_#{id}").first
 
         post.edit(body) if body
 
         post.set_sticky if sticky
         post.unset_sticky if sticky == false
+      end
+    end
+
+    def submission(id:)
+      @bot.in_subreddit(self) do |client|
+        return client.from_fullname("t3_#{id}").first
       end
     end
 
@@ -97,6 +118,14 @@ class Baseballbot
                              subreddit: self,
                              gid: gid,
                              title: title
+    end
+
+    def gamechat_update_template(gid:)
+      Template::Gamechat.new body: template_body(type: 'gamechat_update'),
+                             bot: @bot,
+                             subreddit: self,
+                             gid: gid,
+                             title: ''
     end
 
     def template_body(type:)

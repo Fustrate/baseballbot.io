@@ -1,27 +1,31 @@
-class Baseballbot
-  module Template
-    refine Numeric do
-      def ordinalize(number)
-        "#{number}#{ordinal(number)}"
-      end
+module TemplateRefinements
+  refine Numeric do
+    def ordinalize
+      "#{self}#{ordinal}"
+    end
 
-      def ordinal(number)
-        abs_number = number.to_i.abs
+    def ordinal
+      abs_number = to_i.abs
 
-        if (11..13).include?(abs_number % 100)
-          'th'
-        else
-          case abs_number % 10
-          when 1 then 'st'
-          when 2 then 'nd'
-          when 3 then 'rd'
-          else        'th'
-          end
+      if (11..13).include?(abs_number % 100)
+        'th'
+      else
+        case abs_number % 10
+        when 1 then 'st'
+        when 2 then 'nd'
+        when 3 then 'rd'
+        else        'th'
         end
       end
     end
+  end
+end
 
+class Baseballbot
+  module Template
     class Base
+      using TemplateRefinements
+
       def initialize(body:, bot:)
         @body = body
         @template = ERB.new body, nil, '<>'
@@ -94,7 +98,8 @@ class Baseballbot
       end
 
       def replace_in(text)
-        text.sub replace_regexp, "#{delimiter}\n#{result}\n#{delimiter}"
+        text.sub replace_regexp,
+                 "#{delimiter}\n#{result}\n#{delimiter close: true}"
       end
     end
   end
