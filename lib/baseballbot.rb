@@ -108,7 +108,7 @@ class Baseballbot
       [
         post[:id],
         post[:title],
-        'In Progress',
+        'Posted',
         id
       ]
     )
