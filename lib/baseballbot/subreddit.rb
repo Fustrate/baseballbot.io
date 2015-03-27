@@ -99,7 +99,7 @@ class Baseballbot
     def edit(id:, body: nil, sticky: nil)
       return unless body || !sticky.nil?
 
-      post = submission id
+      post = submission id: id
 
       post.edit(body) if body
 
