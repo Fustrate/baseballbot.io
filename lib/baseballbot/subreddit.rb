@@ -21,10 +21,10 @@ class Baseballbot
       CGI.unescapeHTML settings[:description]
     end
 
-    def post_gamechat(gid:, title:)
-      template = gamechat_template(gid: gid, title: title)
+    def post_gamechat(gid:)
+      template = gamechat_template(gid: gid)
 
-      submit template.title, text: template.result
+      submit template.title, text: template.result, sticky: true
     end
 
     def update_gamechat(gid:, post_id:)
@@ -107,13 +107,17 @@ class Baseballbot
     protected
 
     def sidebar_template
-      Template::Sidebar.new body: template_body(type: 'sidebar'),
+      body, _ = template_for('sidebar')
+
+      Template::Sidebar.new body: body,
                             bot: @bot,
                             subreddit: self
     end
 
-    def gamechat_template(gid:, title:)
-      Template::Gamechat.new body: template_body(type: 'gamechat'),
+    def gamechat_template(gid:)
+      body, title = template_for('gamechat')
+
+      Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
@@ -121,16 +125,19 @@ class Baseballbot
     end
 
     def gamechat_update_template(gid:)
-      Template::Gamechat.new body: template_body(type: 'gamechat_update'),
+      body, _ = template_for('gamechat_update')
+
+      Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
                              title: ''
     end
 
+    def postgame_template(gid:)
     def template_body(type:)
       result = @bot.db.exec_params(
-        "SELECT body
+        "SELECT body, title
         FROM templates
         WHERE subreddit_id = $1 AND type = $2",
         [@id, type]
@@ -138,7 +145,7 @@ class Baseballbot
 
       fail "#{@name} does not have a #{type} template." if result.count < 1
 
-      result[0]['body']
+      [result[0]['body'], result[0]['title']]
     end
   end
 end

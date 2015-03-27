@@ -93,13 +93,12 @@ class Baseballbot
 
       post_gamechat! id: row['id'],
                      team: row['team_code'],
-                     gid: row['gid'],
-                     title: row['title']
+                     gid: row['gid']
     end
   end
 
-  def post_gamechat!(id:, team:, gid:, title:)
-    post = team_to_subreddit(team).post_gamechat(gid: gid, title: title)
+  def post_gamechat!(id:, team:, gid:)
+    post = team_to_subreddit(team).post_gamechat(gid: gid)
 
     @db.exec_params(
       'UPDATE gamechats
@@ -150,7 +149,7 @@ class Baseballbot
 
   def unposted_gamechats
     @db.exec_params(
-      "SELECT gamechats.id, gid, team_code, title
+      "SELECT gamechats.id, gid, team_code
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future' AND post_at <= $1",

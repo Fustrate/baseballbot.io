@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150326042946) do
     t.integer  "subreddit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "title"
   end
 
 end
