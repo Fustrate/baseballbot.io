@@ -112,8 +112,10 @@ class Baseballbot
         if @game.started? && @game.boxscore
           bs = @game.boxscore
 
-          home_batters = bs.xpath('//boxscore/batting[@team_flag="home"]/batter').to_a
-          away_batters = bs.xpath('//boxscore/batting[@team_flag="away"]/batter').to_a
+          xpath = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
+
+          home_batters = bs.xpath(xpath % { flag: 'home' }).to_a
+          away_batters = bs.xpath(xpath % { flag: 'away' }).to_a
 
           batter_rows = [home_batters.length, away_batters.length].max
 
