@@ -2,11 +2,12 @@ class Baseballbot
   class Subreddit
     attr_reader :account, :name, :team
 
-    def initialize(bot:, id:, name:, account:)
+    def initialize(bot:, id:, name:, account:, options: {})
       @bot = bot
       @id = id
       @name = name
       @account = account
+      @options = options
 
       code = Baseballbot.subreddit_to_code name
 
@@ -27,6 +28,12 @@ class Baseballbot
       submit template.title, text: template.result, sticky: true
     end
 
+    def post_postgame(gid:)
+      template = postgame_template(gid: gid)
+
+      submit template.title, text: template.result, sticky: true
+    end
+
     def update_gamechat(gid:, post_id:)
       template = gamechat_update_template(gid: gid)
       post = submission(id: post_id)
@@ -35,6 +42,8 @@ class Baseballbot
 
       if template.game.over?
         edit(id: post_id, body: body, sticky: false)
+
+        post_postgame(gid: gid) if @options['postgame']['enabled']
       else
         edit(id: post_id, body: body)
       end
@@ -135,6 +144,15 @@ class Baseballbot
     end
 
     def postgame_template(gid:)
+      body, title = template_for('postgame')
+
+      Template::Gamechat.new body: body,
+                             bot: @bot,
+                             subreddit: self,
+                             gid: gid,
+                             title: title
+    end
+
     def template_body(type:)
       result = @bot.db.exec_params(
         "SELECT body, title

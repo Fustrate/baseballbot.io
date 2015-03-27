@@ -208,7 +208,8 @@ class Baseballbot
         bot: self,
         id: row['id'].to_i,
         name: row['name'],
-        account: @accounts[row['account_id']]
+        account: @accounts[row['account_id']],
+        options: JSON.load(row['options'])
       )
     end
   end
