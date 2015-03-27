@@ -7,7 +7,7 @@ require 'erb'
 Dir['baseballbot/**/*.rb'].each { |file| require_relative file }
 
 class Baseballbot
-  attr_reader :db, :gameday
+  attr_reader :db, :gameday, :clients
 
   class << self
     def subreddits

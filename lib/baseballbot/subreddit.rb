@@ -7,11 +7,19 @@ class Baseballbot
       @id = id
       @name = name
       @account = account
+      @submissions = {}
       @options = options
 
       code = Baseballbot.subreddit_to_code name
 
       @team = @bot.gameday.team(code) if code
+    end
+
+    def client
+      @client ||= @bot.clients[@account.name].tap do |c|
+        c.access = @account.access
+        c.refresh_access! if @account.access.expired?
+      end
     end
 
     def generate_sidebar
@@ -52,19 +60,13 @@ class Baseballbot
     end
 
     def settings
-      return @settings if @settings
-
-      @bot.in_subreddit(self) do |client|
-        @settings = client.subreddit_from_name(@name).to_h
-      end
+      @settings ||= client.subreddit_from_name(@name).to_h
     end
 
     def update(new_settings = {})
-      @bot.in_subreddit(self) do |client|
-        response = client.subreddit_from_name(@name).admin_edit(new_settings)
+      response = client.subreddit_from_name(@name).admin_edit(new_settings)
 
-        log_errors response.body[:json][:errors]
-      end
+      log_errors response.body[:json][:errors]
     end
 
     def log_errors(errors)
@@ -81,36 +83,32 @@ class Baseballbot
     end
 
     # Returns the post ID
-    def submit(title, text:, sticky: true)
-      @bot.in_subreddit(self) do |client|
-        subreddit = client.subreddit_from_name(@name)
+    def submit(title, text:, sticky: false)
+      subreddit = client.subreddit_from_name(@name)
 
-        thing = subreddit.submit(title, text: text, sendreplies: false)
+      thing = subreddit.submit(title, text: text, sendreplies: false)
 
-        # Why doesn't the redd gem just return a Redd::Objects::Submission?
-        post = client.from_fullname(thing[:name]).first
+      # Why doesn't the redd gem just return a Redd::Objects::Submission?
+      post = client.from_fullname(thing[:name]).first
 
-        post.set_sticky if sticky
+      post.set_sticky if sticky
 
-        return post
-      end
+      post
     end
 
     def edit(id:, body: nil, sticky: nil)
-      @bot.in_subreddit(self) do |client|
-        post = client.from_fullname("t3_#{id}").first
+      return unless body || !sticky.nil?
 
-        post.edit(body) if body
+      post = submission id
 
-        post.set_sticky if sticky
-        post.unset_sticky if sticky == false
-      end
+      post.edit(body) if body
+
+      post.set_sticky if sticky
+      post.unset_sticky if sticky == false
     end
 
     def submission(id:)
-      @bot.in_subreddit(self) do |client|
-        return client.from_fullname("t3_#{id}").first
-      end
+      @submissions[id] ||= client.from_fullname("t3_#{id}").first
     end
 
     protected
