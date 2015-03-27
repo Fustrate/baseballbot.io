@@ -240,8 +240,10 @@ class Baseballbot
 
       def format_title(title)
         title = Time.now.strftime title
+        game_number = @game.gamecenter.xpath('//game/@series-game-number').text
 
         format title,
+               game_number: game_number,
                home_city: @game.home_team.city,
                home_name: @game.home_team.name,
                home_record: @game.home_record.join('-'),
