@@ -151,7 +151,7 @@ class Baseballbot
                              title: title
     end
 
-    def template_body(type:)
+    def template_for(type)
       result = @bot.db.exec_params(
         "SELECT body, title
         FROM templates
