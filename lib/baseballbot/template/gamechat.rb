@@ -49,6 +49,14 @@ class Baseballbot
         home? == (home[:runs] < away[:runs])
       end
 
+      def team
+        @team ||= home? ? @game.home_team : @game.away_team
+      end
+
+      def opponent
+        @opponent ||= home? ? @game.away_team : @game.home_team
+      end
+
       def home
         unless @game.started? && @game.boxscore
           return {
