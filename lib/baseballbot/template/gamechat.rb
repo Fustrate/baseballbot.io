@@ -278,8 +278,12 @@ class Baseballbot
       def pitcher_row(pitcher)
         return ' ||||||||' unless pitcher
 
+        game_score = pitcher['game_score']
+
         [
-          "[#{pitcher['name']}](#{player_url pitcher['id']})",
+          link_to(pitcher['name'],
+                  url: player_url(pitcher['id']),
+                  title: game_score),
           "#{pitcher['out'].to_i / 3}.#{pitcher['out'].to_i % 3}",
           pitcher['h'],
           pitcher['r'],
