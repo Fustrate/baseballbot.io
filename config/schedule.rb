@@ -5,7 +5,7 @@ every 1.hour do
           'bundle exec ruby update_sidebars.rb'
 end
 
-every 10.minutes do
+every 5.minutes do
   command 'cd /home/baseballbot/apps/baseballbot.io/current/lib && ' \
           'bundle exec ruby post_gamechats.rb'
 end
