@@ -195,7 +195,7 @@ class Baseballbot
 
         data.xpath('//highlights/media').each do |media|
           highlights << {
-            team: media['team_id'] == team.id ? team : opponent,
+            team: media['team_id'].to_i == team.id ? team : opponent,
             headline: media.at_xpath('headline').text.strip,
             blurb: media.at_xpath('blurb').text.strip,
             duration: media.at_xpath('duration').text.strip,
