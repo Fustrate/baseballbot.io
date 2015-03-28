@@ -277,8 +277,8 @@ class Baseballbot
         url = link_to batter['name'], url: player_url(batter['id'])
 
         [
-          "#{spacer}#{url}",
           batter['pos'],
+          "#{spacer}#{url}",
           batter['ab'],
           batter['r'],
           batter['h'],
