@@ -174,6 +174,7 @@ class Baseballbot
 
           scoring_plays << {
             side:   play['top_inning'] == 'Y' ? 'T' : 'B',
+            team:   play['top_inning'] == 'Y' ? opponent : team,
             inning: play['inn'],
             event:  play.at_xpath('*[@des and @score="T"]')['des'],
             score:  score
