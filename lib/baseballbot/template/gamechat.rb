@@ -199,7 +199,7 @@ class Baseballbot
             team: media['team_id'].to_i == team.id ? team : opponent,
             headline: media.at_xpath('headline').text.strip,
             blurb: media.at_xpath('blurb').text.strip,
-            duration: media.at_xpath('duration').text.strip,
+            duration: media.at_xpath('duration').text.strip.gsub(/^00:0?/, ''),
             url: media.at_xpath('url').text.strip
           }
         end
