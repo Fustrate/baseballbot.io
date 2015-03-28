@@ -194,7 +194,7 @@ class Baseballbot
 
         data = Nokogiri::XML open_file('media/highlights.xml')
 
-        data.xpath('//highlights/media').each do |media|
+        data.xpath('//highlights/media').sort { |m| m['date'] }.each do |media|
           highlights << {
             team: media['team_id'].to_i == team.id ? team : opponent,
             headline: media.at_xpath('headline').text.strip,
