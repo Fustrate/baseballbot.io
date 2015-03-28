@@ -132,8 +132,10 @@ class Baseballbot
         if @game.started? && @game.boxscore
           bs = @game.boxscore
 
-          home_pitchers = bs.xpath('//boxscore/pitching[@team_flag="home"]/pitcher').to_a
-          away_pitchers = bs.xpath('//boxscore/pitching[@team_flag="away"]/pitcher').to_a
+          xpath = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
+
+          home_pitchers = bs.xpath(xpath % { flag: 'home' }).to_a
+          away_pitchers = bs.xpath(xpath % { flag: 'away' }).to_a
 
           pitcher_rows = [home_pitchers.length, away_pitchers.length].max
 
@@ -248,6 +250,40 @@ class Baseballbot
         adjusted_time = Time.now + hour_offset * 3600
 
         "*#{action} at #{adjusted_time.strftime '%-I:%M %p'}.*"
+      end
+
+      def batter_row(batter)
+        return ' ||||||||' unless batter
+
+        spacer = '[](/spacer)' if batter['bo'].to_i % 100 > 0
+
+        [
+          "#{spacer}[#{batter['name']}](#{player_url batter['id']})",
+          batter['pos'],
+          batter['ab'],
+          batter['r'],
+          batter['h'],
+          batter['rbi'],
+          batter['bb'],
+          batter['so'],
+          batter['avg']
+        ].join '|'
+      end
+
+      def pitcher_row(pitcher)
+        return ' ||||||||' unless pitcher
+
+        [
+          "[#{pitcher['name']}](#{player_url pitcher['id']})",
+          "#{pitcher['out'].to_i / 3}.#{pitcher['out'].to_i % 3}",
+          pitcher['h'],
+          pitcher['r'],
+          pitcher['er'],
+          pitcher['bb'],
+          pitcher['so'],
+          "#{pitcher['np']}-#{pitcher['s']}",
+          pitcher['era']
+        ].join '|'
       end
 
       protected
