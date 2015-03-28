@@ -161,10 +161,7 @@ class Baseballbot
 
         return scoring_plays unless @game.started?
 
-        data = Nokogiri::XML open Time.now.strftime(
-          'http://gd2.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
-          "gid_#{@game.gid}/inning/inning_Scores.xml"
-        )
+        data = Nokogiri::XML open_file('inning/inning_Scores.xml')
 
         data.xpath('//scores/score').each do |play|
           score = if play['top_inning'] == 'Y'
@@ -295,6 +292,14 @@ class Baseballbot
       end
 
       protected
+
+      def game_directory
+        "#{BASE_URL}/year_%Y/month_%m/day_%d/gid_#{@game.gid}"
+      end
+
+      def open_file(path)
+        open @game.date.strftime "#{game_directory}/#{path}"
+      end
 
       def format_title(title)
         title = Time.now.strftime title
