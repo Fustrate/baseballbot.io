@@ -3,6 +3,8 @@ class Baseballbot
     class Gamechat < Base
       using TemplateRefinements
 
+      BASE_URL = 'http://gd2.mlb.com/components/game/mlb'
+
       attr_reader :game, :title
 
       def initialize(body:, bot:, subreddit:, gid:, title:)
@@ -184,6 +186,29 @@ class Baseballbot
         []
       end
 
+      def highlights
+        highlights = []
+
+        return highlights unless @game.started?
+
+        data = Nokogiri::XML open_file('media/highlights.xml')
+
+        data.xpath('//highlights/media').each do |media|
+          highlights << {
+            team: media['team_id'] == team.id ? team : opponent,
+            headline: media.at_xpath('headline').text.strip,
+            blurb: media.at_xpath('blurb').text.strip,
+            duration: media.at_xpath('duration').text.strip,
+            url: media.at_xpath('url').text.strip
+          }
+        end
+
+        highlights
+      rescue OpenURI::HTTPError
+        # I guess the file isn't there yet
+        []
+      end
+
       def inning
         return 'Postponed' if @game.postponed?
 
@@ -229,18 +254,6 @@ class Baseballbot
         ''
       end
 
-      # I'm Bill James, bitch!
-      # http://en.wikipedia.org/wiki/Game_score
-      def game_score(pitcher)
-        outs = pitcher['out'].to_i
-        earned = pitcher['er'].to_i
-        unearned = pitcher['r'].to_i - earned
-
-        50 + outs + (2 * [(outs / 3 - 4).floor, 0].max) + pitcher['so'].to_i -
-          (2 * pitcher['h'].to_i) - (4 * earned) - (2 * unearned) -
-          pitcher['bb'].to_i
-      end
-
       def boxscore_status
         if game.over?
           'Final'
@@ -261,9 +274,10 @@ class Baseballbot
         return ' ||||||||' unless batter
 
         spacer = '[](/spacer)' if batter['bo'].to_i % 100 > 0
+        url = link_to batter['name'], url: player_url(batter['id'])
 
         [
-          "#{spacer}[#{batter['name']}](#{player_url batter['id']})",
+          "#{spacer}#{url}",
           batter['pos'],
           batter['ab'],
           batter['r'],
