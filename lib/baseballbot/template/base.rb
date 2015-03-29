@@ -54,19 +54,6 @@ class Baseballbot
         games_back % 1.0 == 0 ? games_back.to_i : games_back
       end
 
-      def time(zone: :Pacific)
-        case zone
-        when :Eastern, :eastern
-          Time.now + 10_800
-        when :Central, :central
-          Time.now + 7_200
-        when :Mountain, :mountain
-          Time.now + 3_600
-        else
-          Time.now
-        end
-      end
-
       # Get the default subreddit for this team
       def subreddit(code)
         Baseballbot.subreddits[code.upcase]
