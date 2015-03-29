@@ -4,6 +4,8 @@ class Baseballbot
       using TemplateRefinements
 
       BASE_URL = 'http://gd2.mlb.com/components/game/mlb'
+      BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
+      PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
 
       attr_reader :game, :title
 
@@ -118,44 +120,36 @@ class Baseballbot
         lines
       end
 
+      def home_batters
+        return [] unless @game.started? && @game.boxscore
+
+        @game.boxscore.xpath(BATTER_XPATH % { flag: 'home' }).to_a
+      end
+
+      def away_batters
+        return [] unless @game.started? && @game.boxscore
+
+        @game.boxscore.xpath(BATTER_XPATH % { flag: 'away' }).to_a
+      end
+
       def batters
-        if @game.started? && @game.boxscore
-          bs = @game.boxscore
+        home_batters.zip away_batters
+      end
 
-          xpath = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
+      def home_pitchers
+        return [] unless @game.started? && @game.boxscore
 
-          home_batters = bs.xpath(xpath % { flag: 'home' }).to_a
-          away_batters = bs.xpath(xpath % { flag: 'away' }).to_a
+        @game.boxscore.xpath(PITCHER_XPATH % { flat: 'home' }).to_a
+      end
 
-          batter_rows = [home_batters.length, away_batters.length].max
+      def away_pitchers
+        return [] unless @game.started? && @game.boxscore
 
-          home_batters += [nil] * (batter_rows - home_batters.length)
-          away_batters += [nil] * (batter_rows - away_batters.length)
-
-          home_batters.zip away_batters
-        else
-          []
-        end
+        @game.boxscore.xpath(PITCHER_XPATH % { flat: 'away' }).to_a
       end
 
       def pitchers
-        if @game.started? && @game.boxscore
-          bs = @game.boxscore
-
-          xpath = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
-
-          home_pitchers = bs.xpath(xpath % { flag: 'home' }).to_a
-          away_pitchers = bs.xpath(xpath % { flag: 'away' }).to_a
-
-          pitcher_rows = [home_pitchers.length, away_pitchers.length].max
-
-          home_pitchers += [nil] * (pitcher_rows - home_pitchers.length)
-          away_pitchers += [nil] * (pitcher_rows - away_pitchers.length)
-
-          home_pitchers.zip away_pitchers
-        else
-          []
-        end
+        home_pitchers.zip away_pitchers
       end
 
       def scoring_plays
