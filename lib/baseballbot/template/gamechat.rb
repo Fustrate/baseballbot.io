@@ -159,32 +159,49 @@ class Baseballbot
       end
 
       def scoring_plays
-        scoring_plays = []
+        plays = []
 
-        return scoring_plays unless @game.started?
+        return plays unless @game.started?
 
         data = Nokogiri::XML open_file('inning/inning_Scores.xml')
 
         data.xpath('//scores/score').each do |play|
-          score = if play['top_inning'] == 'Y'
-                    "#{play['home']}-#{bold play['away']}"
-                  else
-                    "#{bold play['home']}-#{play['away']}"
-                  end
-
-          scoring_plays << {
+          plays << {
             side:   play['top_inning'] == 'Y' ? 'T' : 'B',
             team:   play['top_inning'] == 'Y' ? opponent : team,
             inning: play['inn'],
             event:  play.at_xpath('*[@des and @score="T"]')['des'],
-            score:  score
+            score:  [play['home'].to_i, play['away'].to_i]
           }
         end
 
-        scoring_plays
+        plays
       rescue OpenURI::HTTPError
         # There's no inning_Scores.xml file right now
         []
+      end
+
+      def scoring_plays_table
+        table = [
+          'Inning|Event|Score',
+          ':-:|-|:-:'
+        ]
+
+        scoring_plays.each do |event|
+          score = if event[:side] == 'T'
+                    "#{ event[:score][0] }-#{ bold event[:score][1] }"
+                  else
+                    "#{ bold event[:score][0] }-#{ event[:score][1] }"
+                  end
+
+          table << [
+            "#{ event[:inning_side] }#{ event[:inning] }",
+            event[:event],
+            score
+          ].join('|')
+        end
+
+        table.join "\n"
       end
 
       def highlights
@@ -212,6 +229,20 @@ class Baseballbot
       rescue OpenURI::HTTPError
         # I guess the file isn't there yet
         []
+      end
+
+      def highlights_list
+        list = []
+
+        highlights.each do |highlight|
+          icon = link_to '', sub: subreddit(highlight[:team].code).downcase
+          link = link_to "#{highlight[:blurb]} (#{highlight[:duration]})",
+                         url: highlight[:url]
+
+          list << "- #{icon} #{link}"
+        end
+
+        list.join "\n"
       end
 
       def inning
