@@ -290,7 +290,7 @@ class Baseballbot
         ''
       end
 
-      def box_score
+      def line_score
         [
           " |#{ (1..(lines[0].count)).to_a.join('|') }|R|H|E",
           ":-:|#{ (':-:|' * lines[0].count) }:-:|:-:|:-:",
@@ -303,7 +303,7 @@ class Baseballbot
         ].join "\n"
       end
 
-      def box_score_status
+      def line_score_status
         if game.over?
           'Final'
         elsif runners.empty?
