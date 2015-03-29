@@ -140,13 +140,13 @@ class Baseballbot
       def home_pitchers
         return [] unless @game.started? && @game.boxscore
 
-        @game.boxscore.xpath(PITCHER_XPATH % { flat: 'home' }).to_a
+        @game.boxscore.xpath(PITCHER_XPATH % { flag: 'home' }).to_a
       end
 
       def away_pitchers
         return [] unless @game.started? && @game.boxscore
 
-        @game.boxscore.xpath(PITCHER_XPATH % { flat: 'away' }).to_a
+        @game.boxscore.xpath(PITCHER_XPATH % { flag: 'away' }).to_a
       end
 
       def pitchers
