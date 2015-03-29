@@ -7,7 +7,7 @@ class Baseballbot
       BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
       PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
 
-      attr_reader :game, :title, :post_id
+      attr_reader :game, :title, :post_id, :time
 
       def initialize(body:, bot:, subreddit:, gid:, title: '', post_id: nil)
         super(body: body, bot: bot)
@@ -17,14 +17,11 @@ class Baseballbot
         @game = bot.gameday.game gid
         @title = format_title title
         @post_id = post_id
+        @time = @subreddit.time
       end
 
       def inspect
         %(#<Baseballbot::Template::Gamechat @team="#{@team.name}" @gid="#{@game.gid}">)
-      end
-
-      def time
-        @subreddit.time
       end
 
       def player_url(id)
@@ -313,7 +310,7 @@ class Baseballbot
       end
 
       def timestamp(action)
-        italic "#{action} at #{time.strftime '%-I:%M %p'}."
+        italic "#{action} at #{time.strftime '%-I:%M %p %Z'}."
       end
 
       def batter_row(batter)

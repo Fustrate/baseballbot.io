@@ -6,11 +6,14 @@ class Baseballbot
       CALENDAR_DATA_URL = "http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?start_date='%{start_date}'&end_date='%{end_date}'&team_id=%{team_id}&season=%{year}&game_type='A'&game_type='E'&game_type='F'&game_type='D'&game_type='L'&game_type='W'&game_type='C'&game_type='S'"
       STANDINGS = "http://mlb.mlb.com/lookup/json/named.standings_schedule_date.bam?season=%Y&schedule_game_date.game_date='%Y/%m/%d'&sit_code='h0'&league_id=103&league_id=104&all_star_sw='N'&version=2"
 
+      attr_reader :time
+
       def initialize(body:, bot:, subreddit:)
         super(body: body, bot: bot)
 
         @subreddit = subreddit
         @team = subreddit.team
+        @time = subreddit.time
       end
 
       def inspect
@@ -373,6 +376,10 @@ class Baseballbot
 
       def [](stat)
         team_stats[stat]
+      end
+
+      def updated_with_link
+        "[Updated](/r/baseballbot) #{time.strftime '%-m/%-d at %-I:%M %p %Z'}"
       end
 
       protected
