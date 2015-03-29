@@ -13,11 +13,11 @@ class Baseballbot
         super(body: body, bot: bot)
 
         @subreddit = subreddit
+        @time = subreddit.time
         @team = subreddit.team
         @game = bot.gameday.game gid
         @title = format_title title
         @post_id = post_id
-        @time = @subreddit.time
       end
 
       def inspect
