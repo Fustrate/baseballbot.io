@@ -3,6 +3,7 @@ require 'pg'
 require 'chronic'
 require 'mlb_gameday'
 require 'erb'
+require 'tzinfo'
 
 Dir['baseballbot/**/*.rb'].each { |file| require_relative file }
 

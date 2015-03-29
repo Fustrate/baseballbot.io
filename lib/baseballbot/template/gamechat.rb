@@ -23,6 +23,10 @@ class Baseballbot
         %(#<Baseballbot::Template::Gamechat @team="#{@team.name}" @gid="#{@game.gid}">)
       end
 
+      def time
+        @subreddit.time
+      end
+
       def player_url(id)
         "http://mlb.mlb.com/team/player.jsp?player_id=#{id}"
       end
@@ -308,10 +312,8 @@ class Baseballbot
         end
       end
 
-      def timestamp(action, hour_offset: 0)
-        adjusted_time = Time.now + hour_offset * 3600
-
-        "*#{action} at #{adjusted_time.strftime '%-I:%M %p'}.*"
+      def timestamp(action)
+        italic "#{action} at #{time.strftime '%-I:%M %p'}."
       end
 
       def batter_row(batter)
@@ -364,7 +366,7 @@ class Baseballbot
       end
 
       def format_title(title)
-        title = Time.now.strftime title
+        title = time.strftime title
         game_number = @game.gamecenter.xpath('//game/@series-game-number').text
 
         format title,

@@ -1,6 +1,6 @@
 class Baseballbot
   class Subreddit
-    attr_reader :account, :name, :team
+    attr_reader :account, :name, :team, :time
 
     def initialize(bot:, id:, name:, account:, options: {})
       @bot = bot
@@ -9,6 +9,12 @@ class Baseballbot
       @account = account
       @submissions = {}
       @options = options
+
+      @time = begin
+        TZInfo::Timezone.get options['timezone']
+      rescue TZInfo::InvalidTimezoneIdentifier
+        TZInfo::Timezone.get 'America/Los_Angeles'
+      end
 
       code = Baseballbot.subreddit_to_code name
 
