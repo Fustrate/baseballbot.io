@@ -7,15 +7,16 @@ class Baseballbot
       BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
       PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
 
-      attr_reader :game, :title
+      attr_reader :game, :title, :post_id
 
-      def initialize(body:, bot:, subreddit:, gid:, title:)
+      def initialize(body:, bot:, subreddit:, gid:, title: '', post_id: nil)
         super(body: body, bot: bot)
 
         @subreddit = subreddit
         @team = subreddit.team
         @game = bot.gameday.game gid
         @title = format_title title
+        @post_id = post_id
       end
 
       def inspect

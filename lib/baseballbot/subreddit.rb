@@ -43,7 +43,7 @@ class Baseballbot
     end
 
     def update_gamechat(gid:, post_id:)
-      template = gamechat_update_template(gid: gid)
+      template = gamechat_update_template(gid: gid, post_id: post_id)
       post = submission(id: post_id)
 
       body = template.replace_in CGI.unescapeHTML(post[:selftext])
@@ -131,14 +131,14 @@ class Baseballbot
                              title: title
     end
 
-    def gamechat_update_template(gid:)
+    def gamechat_update_template(gid:, post_id:)
       body, _ = template_for('gamechat_update')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
-                             title: ''
+                             post_id: post_id
     end
 
     def postgame_template(gid:)
