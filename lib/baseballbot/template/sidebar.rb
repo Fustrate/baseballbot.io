@@ -205,7 +205,7 @@ class Baseballbot
       end
 
       def month_games
-        calendar.map { |_, games| games }.flatten(1)
+        calendar.map { |_, day| day[:games] }.flatten(1)
       end
 
       def calendar_game_status(game)
