@@ -124,13 +124,13 @@ class Baseballbot
       def home_batters
         return [] unless @game.started? && @game.boxscore
 
-        @game.boxscore.xpath(BATTER_XPATH % { flag: 'home' }).to_a
+        @game.boxscore.xpath(format(BATTER_XPATH, flag: 'home')).to_a
       end
 
       def away_batters
         return [] unless @game.started? && @game.boxscore
 
-        @game.boxscore.xpath(BATTER_XPATH % { flag: 'away' }).to_a
+        @game.boxscore.xpath(format(BATTER_XPATH, flag: 'away')).to_a
       end
 
       def batters
@@ -140,13 +140,13 @@ class Baseballbot
       def home_pitchers
         return [] unless @game.started? && @game.boxscore
 
-        @game.boxscore.xpath(PITCHER_XPATH % { flag: 'home' }).to_a
+        @game.boxscore.xpath(format(PITCHER_XPATH, flag: 'home')).to_a
       end
 
       def away_pitchers
         return [] unless @game.started? && @game.boxscore
 
-        @game.boxscore.xpath(PITCHER_XPATH % { flag: 'away' }).to_a
+        @game.boxscore.xpath(format(PITCHER_XPATH, flag: 'away')).to_a
       end
 
       def pitchers
