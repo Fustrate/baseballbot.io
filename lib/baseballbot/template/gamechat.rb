@@ -259,7 +259,20 @@ class Baseballbot
         ''
       end
 
-      def boxscore_status
+      def box_score
+        [
+          " |#{ (1..(lines[0].count)).to_a.join('|') }|R|H|E",
+          ":-:|#{ (':-:|' * lines[0].count) }:-:|:-:|:-:",
+          "[#{ game.away_team.code }](/#{ game.away_team.code })|" \
+            "#{ lines[0].join('|') }|#{ bold away[:runs] }|" \
+            "#{ bold away[:hits] }|#{ bold away[:errors] }",
+          "[#{ game.home_team.code }](/#{ game.home_team.code })|" \
+            "#{ lines[1].join('|') }|#{ bold home[:runs] }|" \
+            "#{ bold home[:hits] }|#{ bold home[:errors] }"
+        ].join "\n"
+      end
+
+      def box_score_status
         if game.over?
           'Final'
         elsif runners.empty?
