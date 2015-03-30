@@ -156,7 +156,8 @@ class Baseballbot
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future' AND post_at <= $1
-        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE",
+        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
+      ORDER BY post_at ASC, gid ASC",
       [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
     )
   end
@@ -167,7 +168,8 @@ class Baseballbot
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted' AND starts_at <= $1
-        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE",
+        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
+      ORDER BY post_id ASC",
       [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
     )
   end
@@ -176,7 +178,8 @@ class Baseballbot
     @db.exec(
       "SELECT team_code
       FROM subreddits
-      WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE"
+      WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE
+      ORDER BY id ASC"
     )
   end
 
