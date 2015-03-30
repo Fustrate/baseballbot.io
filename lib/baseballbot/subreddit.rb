@@ -21,6 +21,10 @@ class Baseballbot
       @team = @bot.gameday.team(code) if code
     end
 
+    def sticky_gamechats?
+      @options['gamechats']['sticky'] != false
+    end
+
     def client
       @client ||= @bot.clients[@account.name].tap do |c|
         c.access = @account.access
@@ -39,13 +43,13 @@ class Baseballbot
     def post_gamechat(gid:)
       template = gamechat_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: true
+      submit template.title, text: template.result, sticky: sticky_gamechats?
     end
 
     def post_postgame(gid:)
       template = postgame_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: true
+      submit template.title, text: template.result, sticky: sticky_gamechats?
     end
 
     def update_gamechat(gid:, post_id:)
@@ -55,7 +59,7 @@ class Baseballbot
       body = template.replace_in CGI.unescapeHTML(post[:selftext])
 
       if template.game.over?
-        edit(id: post_id, body: body, sticky: false)
+        edit(id: post_id, body: body, sticky: sticky_gamechats? ? false : nil)
 
         post_postgame(gid: gid) if @options['postgame']['enabled']
       else
