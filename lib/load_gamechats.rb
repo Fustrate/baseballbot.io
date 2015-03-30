@@ -55,6 +55,11 @@ end
 def load_schedule(subreddit_id, code, post_at, start_date, end_date)
   team = @api.team code
 
+  unless team
+    puts "Invalid team code: #{code}"
+    return
+  end
+
   adjusted_time = adjust_time_proc post_at
 
   schedule_url = format(URL,
