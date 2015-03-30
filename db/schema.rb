@@ -37,6 +37,8 @@ ActiveRecord::Schema.define(version: 20150326050408) do
     t.integer  "subreddit_id", null: false
   end
 
+  add_index "gamechats", ["gid", "subreddit_id"], name: "index_gamechats_on_gid_and_subreddit_id", unique: true, using: :btree
+
   create_table "subreddits", force: :cascade do |t|
     t.string  "name"
     t.string  "team_code"
