@@ -11,7 +11,8 @@ bot = Baseballbot.new(
     user: ENV['PG_USERNAME'],
     dbname: ENV['PG_DATABASE'],
     password: ENV['PG_PASSWORD']
-  }
+  },
+  user_agent: 'BaseballBot by /u/Fustrate'
 )
 
 bot.post_gamechats! codes: ARGV
