@@ -155,7 +155,8 @@ class Baseballbot
       "SELECT gamechats.id, gid, team_code
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status = 'Future' AND post_at <= $1",
+      WHERE status = 'Future' AND post_at <= $1
+        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE",
       [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
     )
   end
@@ -165,7 +166,8 @@ class Baseballbot
       "SELECT gamechats.id, gid, team_code, post_id
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status = 'Posted' AND starts_at <= $1",
+      WHERE status = 'Posted' AND starts_at <= $1
+        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE",
       [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
     )
   end
@@ -174,7 +176,7 @@ class Baseballbot
     @db.exec(
       "SELECT team_code
       FROM subreddits
-      JOIN templates ON (subreddit_id = subreddits.id AND type = 'sidebar')"
+      WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE"
     )
   end
 
