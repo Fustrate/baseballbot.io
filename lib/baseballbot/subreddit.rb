@@ -64,7 +64,9 @@ class Baseballbot
       if template.game.over?
         edit(id: post_id, body: body, sticky: sticky_gamechats? ? false : nil)
 
-        post_postgame(gid: gid) if @options['postgame']['enabled']
+        if @options['postgame'] && @options['postgame']['enabled']
+          post_postgame(gid: gid)
+        end
       else
         edit(id: post_id, body: body)
       end
