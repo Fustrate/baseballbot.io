@@ -36,7 +36,7 @@ URL = 'http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?' \
 
 def adjust_time_proc(post_at)
   if post_at =~ /\A\-?\d{1,2}\z/
-    -> (time) { time - Regexp.last_match[0].to_i * 3600 }
+    -> (time) { time + Regexp.last_match[0].to_i * 3600 }
   elsif post_at =~ /(1?[012]|\d)(:\d\d|) ?(am|pm)/i
     lambda do |time|
       hours = Regexp.last_match[1].to_i
