@@ -63,26 +63,10 @@ class Baseballbot
       end
 
       def full_standings
-        return @full_standings if @full_standings
-
-        @full_standings = { nl: [], al: [] }
-
-        0.upto(4) do |i|
-          # West, Central, East
-          @full_standings[:nl] << [
-            divisions[203][i],
-            divisions[205][i],
-            divisions[204][i]
-          ]
-
-          @full_standings[:al] << [
-            divisions[200][i],
-            divisions[202][i],
-            divisions[201][i]
-          ]
-        end
-
-        @full_standings
+        @full_standings ||= {
+          nl: divisions[203].zip(divisions[205], divisions[204]),
+          al: divisions[200].zip(divisions[202], divisions[201])
+        }
       end
 
       # ------------------------------------------------------------------------
