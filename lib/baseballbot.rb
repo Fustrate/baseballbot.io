@@ -138,6 +138,8 @@ class Baseballbot
       WHERE id = $1",
       [id]
     )
+  rescue StandardError
+    puts "Could not update #{post_id} for team #{team}."
   end
 
   def in_subreddit(subreddit, &block)

@@ -54,7 +54,10 @@ class Baseballbot
 
     def update_gamechat(gid:, post_id:)
       template = gamechat_update_template(gid: gid, post_id: post_id)
+
       post = submission(id: post_id)
+
+      fail "Could not load post with ID #{post_id}." unless post
 
       body = template.replace_in CGI.unescapeHTML(post[:selftext])
 
