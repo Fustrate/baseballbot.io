@@ -7,21 +7,28 @@ class Baseballbot
       BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
       PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
 
-      attr_reader :game, :title, :post_id, :time
+      attr_reader :game, :title, :post_id, :time, :team, :opponent
 
       def initialize(body:, bot:, subreddit:, gid:, title: '', post_id: nil)
         super(body: body, bot: bot)
 
         @subreddit = subreddit
         @time = subreddit.time
-        @team = subreddit.team
         @game = bot.gameday.game gid
+
+        @team = home? ? @game.home_team : @game.away_team
+        @opponent = home? ? @game.away_team : @game.home_team
+
         @title = format_title title
         @post_id = post_id
       end
 
       def inspect
-        %(#<Baseballbot::Template::Gamechat @team="#{@team.name}" @gid="#{@game.gid}">)
+        if @team
+          %(#<Baseballbot::Template::Gamechat @team="#{@team.name}" @gid="#{@game.gid}">)
+        else
+          %(#<Baseballbot::Template::Gamechat @gid="#{@game.gid}">)
+        end
       end
 
       def player_url(id)
@@ -40,7 +47,9 @@ class Baseballbot
       end
 
       def home?
-        @is_home ||= @game.home_team.code == @team.code
+        return true unless @subreddit.team
+
+        @is_home ||= @game.home_team.code == @subreddit.team.code
       end
 
       def won?
@@ -53,14 +62,6 @@ class Baseballbot
         return unless @game.over?
 
         home? == (home[:runs] < away[:runs])
-      end
-
-      def team
-        @team ||= home? ? @game.home_team : @game.away_team
-      end
-
-      def opponent
-        @opponent ||= home? ? @game.away_team : @game.home_team
       end
 
       def home
