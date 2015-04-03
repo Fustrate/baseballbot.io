@@ -317,11 +317,12 @@ class Baseballbot
       def batter_row(batter)
         return ' ||||||||' unless batter
 
-        spacer = '[](/spacer)' if batter['bo'].to_i % 100 > 0
+        is_replacement = batter['bo'].to_i % 100 > 0
+        spacer = '[](/spacer)' if is_replacement
         url = link_to batter['name'], url: player_url(batter['id'])
 
         [
-          "#{spacer}#{bold batter['pos']}",
+          is_replacement ? batter['pos'] : bold(batter['pos']),
           "#{spacer}#{url}",
           batter['ab'],
           batter['r'],
