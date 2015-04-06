@@ -1,14 +1,15 @@
 class Baseballbot
   class Subreddit
-    attr_reader :account, :name, :team, :time
+    attr_reader :account, :name, :team, :time, :code
 
-    def initialize(bot:, id:, name:, account:, options: {})
+    def initialize(bot:, id:, name:, code:, account:, options: {})
       @bot = bot
       @id = id
       @name = name
       @account = account
       @submissions = {}
       @options = options
+      @code = code
 
       @time = begin
         TZInfo::Timezone.get options['timezone']
@@ -16,9 +17,7 @@ class Baseballbot
         TZInfo::Timezone.get 'America/Los_Angeles'
       end
 
-      code = Baseballbot.subreddit_to_code name
-
-      @team = @bot.gameday.team(code) if code
+      @team = @bot.gameday.team(@code) if @code
     end
 
     def sticky_gamechats?

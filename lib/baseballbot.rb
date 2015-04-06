@@ -74,11 +74,11 @@ class Baseballbot
     %(#<Baseballbot>)
   end
 
-  def update_sidebars!(codes: [])
+  def update_sidebars!(names: [])
     teams_with_sidebars.each do |row|
-      next unless codes.empty? || codes.include?(row['team_code'])
+      next unless names.empty? || names.include?(row['name'])
 
-      update_sidebar! @subreddits[row['team_code']]
+      update_sidebar! @subreddits[row['name']]
     end
   end
 
@@ -88,12 +88,12 @@ class Baseballbot
     subreddit.update description: subreddit.generate_sidebar
   end
 
-  def post_gamechats!(codes: [])
+  def post_gamechats!(names: [])
     unposted_gamechats.each do |row|
-      next unless codes.empty? || codes.include?(row['team_code'])
+      next unless names.empty? || names.include?(row['name'])
 
       post_gamechat! id: row['id'],
-                     team: row['team_code'],
+                     team: row['name'],
                      gid: row['gid']
     end
   end
@@ -116,19 +116,20 @@ class Baseballbot
     )
   end
 
-  def update_gamechats!(codes: [])
+  def update_gamechats!(names: [])
     active_gamechats.each do |row|
-      next unless codes.empty? || codes.include?(row['team_code'])
+      next unless names.empty? || names.include?(row['name'])
 
       update_gamechat! id: row['id'],
-                       team: row['team_code'],
+                       subreddit: row['name'],
                        gid: row['gid'],
                        post_id: row['post_id']
     end
   end
 
-  def update_gamechat!(id:, team:, gid:, post_id:)
-    over = team_to_subreddit(team).update_gamechat(gid: gid, post_id: post_id)
+  def update_gamechat!(id:, subreddit:, gid:, post_id:)
+    over = team_to_subreddit(subreddit).update_gamechat(gid: gid,
+                                                        post_id: post_id)
 
     return unless over
 
@@ -154,7 +155,7 @@ class Baseballbot
 
   def unposted_gamechats
     @db.exec_params(
-      "SELECT gamechats.id, gid, team_code
+      "SELECT gamechats.id, gid, subreddits.name
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future' AND post_at <= $1
@@ -166,7 +167,7 @@ class Baseballbot
 
   def active_gamechats
     @db.exec_params(
-      "SELECT gamechats.id, gid, team_code, post_id
+      "SELECT gamechats.id, gid, subreddits.name, post_id
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted' AND starts_at <= $1
@@ -178,7 +179,7 @@ class Baseballbot
 
   def teams_with_sidebars
     @db.exec(
-      "SELECT team_code
+      "SELECT name
       FROM subreddits
       WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE
       ORDER BY id ASC"
@@ -214,10 +215,11 @@ class Baseballbot
       FROM subreddits
       LEFT JOIN accounts ON (account_id = accounts.id)'
     ).each do |row|
-      @subreddits[row['team_code']] = Subreddit.new(
+      @subreddits[row['name']] = Subreddit.new(
         bot: self,
         id: row['id'].to_i,
         name: row['name'],
+        code: row['team_code'],
         account: @accounts[row['account_id']],
         options: JSON.load(row['options'])
       )

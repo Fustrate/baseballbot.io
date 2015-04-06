@@ -15,4 +15,4 @@ bot = Baseballbot.new(
   user_agent: 'BaseballBot by /u/Fustrate'
 )
 
-bot.update_sidebars! codes: ARGV
+bot.update_sidebars! names: ARGV
