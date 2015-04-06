@@ -93,13 +93,13 @@ class Baseballbot
       next unless names.empty? || names.include?(row['name'])
 
       post_gamechat! id: row['id'],
-                     team: row['name'],
+                     subreddit: row['name'],
                      gid: row['gid']
     end
   end
 
-  def post_gamechat!(id:, team:, gid:)
-    post = team_to_subreddit(team).post_gamechat(gid: gid)
+  def post_gamechat!(id:, subreddit:, gid:)
+    post = @subreddits[subreddit].post_gamechat(gid: gid)
 
     post.edit CGI.unescapeHTML(post[:selftext]).gsub('#ID#', post[:id])
 
@@ -128,8 +128,7 @@ class Baseballbot
   end
 
   def update_gamechat!(id:, subreddit:, gid:, post_id:)
-    over = team_to_subreddit(subreddit).update_gamechat(gid: gid,
-                                                        post_id: post_id)
+    over = @subreddits[subreddit].update_gamechat(gid: gid, post_id: post_id)
 
     return unless over
 
