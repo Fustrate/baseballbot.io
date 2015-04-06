@@ -121,7 +121,7 @@ start_date = Chronic.parse "#{month}/1/#{year}"
 end_date = Chronic.parse("#{month.to_i + 1}/1/#{year}") - 86_400
 
 result = @conn.exec(
-  "SELECT id, team_code, options#>>'{gamechats,post_at}' AS post_at
+  "SELECT id, name, team_code, options#>>'{gamechats,post_at}' AS post_at
   FROM subreddits
   WHERE (options#>>'{gamechats,enabled}')::boolean IS TRUE"
 )
