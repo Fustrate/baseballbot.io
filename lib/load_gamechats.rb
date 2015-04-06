@@ -104,14 +104,14 @@ end
 
 if ARGV.count == 2
   month, year = ARGV[1].split(/[-\/]/).map(&:to_i)
-  names = ARGV[0].split(/[+\/,]/)
+  names = ARGV[0].split(/[+\/,]/).map(&:downcase)
 elsif ARGV.count == 1
   if ARGV[0] =~ /(\d+)\/(\d+)/
     _, month, year = Regexp.last_match.to_a
     names = []
   else
     month, year = [Time.now.month, Time.now.year]
-    names = ARGV[0].split(/[+\/,]/)
+    names = ARGV[0].split(/[+\/,]/).map(&:downcase)
   end
 else
   fail 'Please pass 2 arguments: ruby load_schedule.rb LAD+BOS 6/2015'
@@ -127,7 +127,7 @@ result = @conn.exec(
 )
 
 result.each do |row|
-  next unless names.empty? || names.include?(row['name'])
+  next unless names.empty? || names.include?(row['name'].downcase)
 
   load_schedule row['id'],
                 row['team_code'],

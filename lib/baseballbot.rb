@@ -75,8 +75,10 @@ class Baseballbot
   end
 
   def update_sidebars!(names: [])
+    names = names.map(&:downcase)
+
     teams_with_sidebars.each do |row|
-      next unless names.empty? || names.include?(row['name'])
+      next unless names.empty? || names.include?(row['name'].downcase)
 
       update_sidebar! @subreddits[row['name']]
     end
@@ -89,17 +91,21 @@ class Baseballbot
   end
 
   def post_gamechats!(names: [])
+    names = names.map(&:downcase)
+
     unposted_gamechats.each do |row|
-      next unless names.empty? || names.include?(row['name'])
+      next unless names.empty? || names.include?(row['name'].downcase)
 
       post_gamechat! id: row['id'],
-                     subreddit: row['name'],
+                     team: row['name'],
                      gid: row['gid']
     end
   end
 
-  def post_gamechat!(id:, subreddit:, gid:)
-    post = @subreddits[subreddit].post_gamechat(gid: gid)
+  def post_gamechat!(id:, team:, gid:)
+    subreddit = team_to_subreddit(team)
+
+    post = subreddit.post_gamechat(gid: gid)
 
     post.edit CGI.unescapeHTML(post[:selftext]).gsub('#ID#', post[:id])
 
@@ -117,18 +123,22 @@ class Baseballbot
   end
 
   def update_gamechats!(names: [])
+    names = names.map(&:downcase)
+
     active_gamechats.each do |row|
-      next unless names.empty? || names.include?(row['name'])
+      next unless names.empty? || names.include?(row['name'].downcase)
 
       update_gamechat! id: row['id'],
-                       subreddit: row['name'],
+                       team: row['name'],
                        gid: row['gid'],
                        post_id: row['post_id']
     end
   end
 
-  def update_gamechat!(id:, subreddit:, gid:, post_id:)
-    over = @subreddits[subreddit].update_gamechat(gid: gid, post_id: post_id)
+  def update_gamechat!(id:, team:, gid:, post_id:)
+    subreddit = team_to_subreddit(team)
+
+    over = subreddit.update_gamechat(gid: gid, post_id: post_id)
 
     return unless over
 
@@ -186,7 +196,7 @@ class Baseballbot
   end
 
   def team_to_subreddit(team)
-    team.is_a?(Subreddit) ? team : @subreddits[team]
+    team.is_a?(Subreddit) ? team : @subreddits[team.downcase]
   end
 
   def load_accounts
@@ -214,7 +224,7 @@ class Baseballbot
       FROM subreddits
       LEFT JOIN accounts ON (account_id = accounts.id)'
     ).each do |row|
-      @subreddits[row['name']] = Subreddit.new(
+      @subreddits[row['name'].downcase] = Subreddit.new(
         bot: self,
         id: row['id'].to_i,
         name: row['name'],
