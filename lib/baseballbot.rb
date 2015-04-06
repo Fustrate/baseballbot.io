@@ -152,14 +152,6 @@ class Baseballbot
     puts "Could not update #{post_id} for team #{team}."
   end
 
-  def in_subreddit(subreddit, &block)
-    @clients[subreddit.account.name].with(subreddit.account.access) do |client|
-      client.refresh_access! if subreddit.account.access.expired?
-
-      block.call client
-    end
-  end
-
   protected
 
   def unposted_gamechats
