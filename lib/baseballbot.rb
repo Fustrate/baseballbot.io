@@ -152,6 +152,23 @@ class Baseballbot
     puts "Could not update #{post_id} for team #{team}."
   end
 
+  def refresh_client!(client)
+    puts client.access.access_token
+
+    client.refresh_access!
+
+    @db.exec_params(
+      'UPDATE accounts
+      SET access_token = $1, expires_at = $2
+      WHERE refresh_token = $3',
+      [
+        client.access.access_token,
+        client.access.expires_at.strftime('%Y-%m-%d %H:%M:%S'),
+        client.access.refresh_token
+      ]
+    )
+  end
+
   protected
 
   def unposted_gamechats
