@@ -1,3 +1,27 @@
+module Redd
+  module Objects
+    class Subreddit < Thing
+      def submit(
+        title, captcha = nil, identifier = nil, text: nil, url: nil,
+        resubmit: false, sendreplies: true
+      )
+
+        params = {
+          extension: 'json', title: title, sr: display_name,
+          resubmit: resubmit, sendreplies: sendreplies
+        }
+
+        params.merge!(captcha: captcha, iden: identifier) if captcha
+        params[:kind], params[:text] = :self, text if text
+        params[:kind], params[:url] = :link, url if url
+
+        response = post('/api/submit', params)
+        Objects::Thing.new(self, response.body[:json][:data])
+      end
+    end
+  end
+end
+
 class Baseballbot
   class Subreddit
     attr_reader :account, :name, :team, :time, :code
@@ -100,7 +124,22 @@ class Baseballbot
     def submit(title, text:, sticky: false)
       subreddit = client.subreddit_from_name(@name)
 
-      thing = subreddit.submit(title, text: text, sendreplies: false)
+      begin
+        thing = subreddit.submit(title, text: text, sendreplies: false)
+      rescue Redd::Error::InvalidCaptcha => captcha
+        raise captcha unless ENV['CAPTCHA']
+
+        captcha_id = captcha.body[:json][:captcha]
+
+        puts "http://www.reddit.com/captcha/#{captcha_id}.png"
+
+        response = gets.chomp
+        puts "Got #{captcha}"
+
+        thing = subreddit.submit(title, response, captcha_id,
+                                 text: text,
+                                 sendreplies: false)
+      end
 
       # Why doesn't the redd gem just return a Redd::Objects::Submission?
       post = client.from_fullname(thing[:name]).first
