@@ -158,8 +158,6 @@ class Baseballbot
   end
 
   def refresh_client!(client)
-    puts client.access.access_token
-
     client.refresh_access!
 
     @db.exec_params(
