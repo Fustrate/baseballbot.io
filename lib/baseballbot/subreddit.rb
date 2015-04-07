@@ -66,7 +66,15 @@ class Baseballbot
     def post_gamechat(gid:)
       template = gamechat_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: sticky_gamechats?
+      post = submit template.title,
+                    text: template.result,
+                    sticky: sticky_gamechats?
+
+      @bot.redis.hset template.game.gid,
+                      @name.downcase,
+                      post[:id]
+
+      post
     end
 
     def post_postgame(gid:)

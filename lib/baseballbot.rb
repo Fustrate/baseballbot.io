@@ -4,11 +4,12 @@ require 'chronic'
 require 'mlb_gameday'
 require 'erb'
 require 'tzinfo'
+require 'redis'
 
 Dir['baseballbot/**/*.rb'].each { |file| require_relative file }
 
 class Baseballbot
-  attr_reader :db, :gameday, :clients
+  attr_reader :db, :gameday, :clients, :redis
 
   class << self
     def subreddits
@@ -63,7 +64,7 @@ class Baseballbot
     end
 
     @db = PG::Connection.new options[:db]
-
+    @redis = Redis.new
     @gameday = MLBGameday::API.new
 
     load_accounts
