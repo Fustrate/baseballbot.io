@@ -1,3 +1,7 @@
+require_relative 'template/base'
+require_relative 'template/gamechat'
+require_relative 'template/sidebar'
+
 module Redd
   module Objects
     class Subreddit < Thing

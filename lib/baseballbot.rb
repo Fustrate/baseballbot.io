@@ -6,7 +6,11 @@ require 'erb'
 require 'tzinfo'
 require 'redis'
 
-Dir['baseballbot/**/*.rb'].each { |file| require_relative file }
+require_relative 'baseballbot/subreddit'
+require_relative 'baseballbot/account'
+require_relative 'baseballbot/template/base'
+require_relative 'baseballbot/template/gamechat'
+require_relative 'baseballbot/template/sidebar'
 
 class Baseballbot
   attr_reader :db, :gameday, :clients, :redis

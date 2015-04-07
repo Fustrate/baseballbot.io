@@ -1,6 +1,10 @@
 class Baseballbot
   module Template
     class Gamechat < Base
+      Dir[File.join(File.dirname(__FILE__), 'gamechat', '*.rb')].each do |file|
+        require file
+      end
+
       using TemplateRefinements
 
       BASE_URL = 'http://gd2.mlb.com/components/game/mlb'
