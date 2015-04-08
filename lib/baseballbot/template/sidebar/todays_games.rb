@@ -65,6 +65,9 @@ class Baseballbot
           when 'In Progress'
             (game.xpath('@top_inning').text == 'Y' ? 'T' : 'B') +
               game.xpath('@inning').text
+          when 'Game Over'
+            innings = game.xpath('@inning').text
+            italic(innings == '9' ? 'F' : "F/#{innings}")
           when 'Final', 'Postponed'
             italic game.xpath('@ind').text
           when 'Warmup', 'Pre-Game'
