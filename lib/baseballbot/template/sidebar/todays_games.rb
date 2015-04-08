@@ -66,7 +66,7 @@ class Baseballbot
           when 'Game Over'
             innings = game.xpath('@inning').text
           when 'Final', 'Postponed'
-            link_to italic(innings == '9' ? 'F' : "F/#{innings}"),
+            link_to innings == '9' ? 'F' : "F/#{innings}",
                     url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
             italic game.xpath('@ind').text
           when 'Warmup'
