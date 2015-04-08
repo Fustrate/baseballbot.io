@@ -63,7 +63,7 @@ class Baseballbot
           when 'In Progress'
             (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
               bold(game.xpath('@inning').text)
-          when 'Game Over'
+          when 'Game Over', 'Final'
             innings = game.xpath('@inning').text
             link_to innings == '9' ? 'F' : "F/#{innings}",
                     url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
