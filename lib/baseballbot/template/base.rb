@@ -44,6 +44,10 @@ class Baseballbot
         "*#{text}*"
       end
 
+      def sup(text)
+        "^(#{text})"
+      end
+
       def pct(percent)
         format('%0.3f', percent).sub(/\A0+/, '')
       end
