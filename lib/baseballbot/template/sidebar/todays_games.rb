@@ -30,7 +30,7 @@ class Baseballbot
                                   subreddit: away_subreddit,
                                   gid: gid),
               away_runs: started ? game.xpath('@away_team_runs').text : '',
-              status: status_for_game(game),
+              status: status_for_game(game, gid),
               free: game.xpath('game_media/media[@free="ALL"]').any?
             }.tap do |data|
               if data[:home_runs].empty?
@@ -58,15 +58,16 @@ class Baseballbot
 
         protected
 
-        def status_for_game(game)
+        def status_for_game(game, gid)
           case game.xpath('@status').text
           when 'In Progress'
             (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
               bold(game.xpath('@inning').text)
           when 'Game Over'
             innings = game.xpath('@inning').text
-            italic(innings == '9' ? 'F' : "F/#{innings}")
           when 'Final', 'Postponed'
+            link_to italic(innings == '9' ? 'F' : "F/#{innings}"),
+                    url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
             italic game.xpath('@ind').text
           when 'Warmup'
             'Warmup'
