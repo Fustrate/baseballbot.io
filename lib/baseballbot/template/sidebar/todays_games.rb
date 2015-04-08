@@ -46,6 +46,8 @@ class Baseballbot
           end
         end
 
+        protected
+
         def link_for_team(code:, subreddit:, gid:)
           gamechat = @gamechats["#{gid}_#{subreddit}".downcase]
 
@@ -56,8 +58,6 @@ class Baseballbot
           end
         end
 
-        protected
-
         def status_for_game(game, gid)
           case game.xpath('@status').text
           when 'In Progress'
@@ -65,9 +65,9 @@ class Baseballbot
               bold(game.xpath('@inning').text)
           when 'Game Over'
             innings = game.xpath('@inning').text
-          when 'Final', 'Postponed'
             link_to innings == '9' ? 'F' : "F/#{innings}",
                     url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
+          when 'Postponed'
             italic game.xpath('@ind').text
           when 'Warmup'
             'Warmup'
