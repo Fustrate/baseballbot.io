@@ -59,19 +59,17 @@ class Baseballbot
         protected
 
         def status_for_game(game)
-          status_text = game.xpath('@status').text
-
-          case status_text
+          case game.xpath('@status').text
           when 'In Progress'
-            (game.xpath('@top_inning').text == 'Y' ? 'T' : 'B') +
-              game.xpath('@inning').text
+            (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
+              bold(game.xpath('@inning').text)
           when 'Game Over'
             innings = game.xpath('@inning').text
             italic(innings == '9' ? 'F' : "F/#{innings}")
           when 'Final', 'Postponed'
             italic game.xpath('@ind').text
-          when 'Warmup', 'Pre-Game'
-            status_text
+          when 'Warmup'
+            'Warmup'
           else
             game.xpath('@time').text
           end
