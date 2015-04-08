@@ -69,6 +69,8 @@ class Baseballbot
                     url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
           when 'Postponed'
             italic game.xpath('@ind').text
+          when 'Delayed Start'
+            'Delay'
           when 'Warmup'
             'Warmup'
           else
