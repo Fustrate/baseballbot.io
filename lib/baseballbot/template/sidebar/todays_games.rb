@@ -18,16 +18,31 @@ class Baseballbot
 
             gid = game.xpath('@gameday_link').text
 
+            started = !%w(Warmup Pre-Game).include?(game.xpath('@status').text)
+
             {
-              gid: game.xpath('@gameday_link').text,
-              time: game.xpath('@time').text,
+              gid: gid,
               home: link_for_team(code: home_code,
                                   subreddit: home_subreddit,
                                   gid: gid),
+              home_runs: started ? game.xpath('@home_team_runs').text : '',
               away: link_for_team(code: away_code,
                                   subreddit: away_subreddit,
-                                  gid: gid)
-            }
+                                  gid: gid),
+              away_runs: started ? game.xpath('@away_team_runs').text : '',
+              status: status_for_game(game),
+              free: game.xpath('game_media/media[@free="ALL"]').any?
+            }.tap do |data|
+              if data[:home_runs].empty?
+                # Do nothing, the game hasn't started
+              elsif data[:home_runs].to_i > data[:away_runs].to_i
+                data[:home] = bold data[:home]
+                data[:home_runs] = bold data[:home_runs]
+              elsif data[:home_runs].to_i < data[:away_runs].to_i
+                data[:away] = bold data[:away]
+                data[:away_runs] = bold data[:away_runs]
+              end
+            end
           end
         end
 
@@ -42,6 +57,22 @@ class Baseballbot
         end
 
         protected
+
+        def status_for_game(game)
+          status_text = game.xpath('@status').text
+
+          case status_text
+          when 'In Progress'
+            (game.xpath('@top_inning').text == 'Y' ? 'T' : 'B') +
+              game.xpath('@inning').text
+          when 'Final', 'Postponed'
+            italic game.xpath('@ind').text
+          when 'Warmup', 'Pre-Game'
+            status_text
+          else
+            game.xpath('@time').text
+          end
+        end
 
         def load_gamechats
           @gamechats = {}
