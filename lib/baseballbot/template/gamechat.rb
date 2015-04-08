@@ -380,12 +380,14 @@ class Baseballbot
                home_pitcher: @game.linescore.xpath(
                  '//game/home_probable_pitcher/@last_name'
                ).text,
+               home_runs: @game.score[0],
                away_city: @game.away_team.city,
                away_name: @game.away_team.name,
                away_record: @game.away_record.join('-'),
                away_pitcher: @game.linescore.xpath(
                  '//game/away_probable_pitcher/@last_name'
                ).text,
+               away_runs: @game.score[1],
                start_time: home? ? @game.home_start_time : @game.away_start_time
       end
     end
