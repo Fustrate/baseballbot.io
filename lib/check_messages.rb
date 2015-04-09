@@ -15,6 +15,8 @@ bot = Baseballbot.new(
   user_agent: 'BaseballBot by /u/Fustrate - Messages'
 )
 
+GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
+
 client = bot.clients['BaseballBot']
 account = bot.accounts.select { |_, a| a.name == 'BaseballBot' }.values.first
 
@@ -29,7 +31,7 @@ client.my_messages('unread', false, limit: 10).each do |pm|
 
   submission = client.from_fullname("t3_#{post_id}").first
 
-  if submission[:selftext] =~ /gid_(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
+  if submission[:selftext] =~ GID
     subreddit = submission[:subreddit].downcase
     gid = Regexp.last_match[1]
 
