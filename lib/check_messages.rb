@@ -36,7 +36,7 @@ client.my_messages('unread', false, limit: 10).each do |pm|
     gid = Regexp.last_match[1]
 
     bot.redis.hset gid, subreddit, post_id
-  end
 
-  pm.mark_as_read
+    pm.mark_as_read
+  end
 end
