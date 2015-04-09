@@ -63,23 +63,31 @@ class Baseballbot
         def status_for_game(game, gid)
           case game.xpath('@status').text
           when 'In Progress'
-            (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
-              bold(game.xpath('@inning').text)
+            game_inning game
           when 'Game Over', 'Final'
             innings = game.xpath('@inning').text
             link_to innings == '9' ? 'F' : "F/#{innings}",
                     url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
           when 'Postponed'
             italic game.xpath('@ind').text
-          when 'Delayed Start', 'Delayed'
-            reason = game.xpath('@reason').text
-
-            reason == 'Rain' ? '☂' : 'Delay'
+          when 'Delayed Start'
+            delay_type game
+          when 'Delayed'
+            "#{delay_type game} #{game_inning game}"
           when 'Warmup'
             'Warmup'
           else
             game.xpath('@time').text
           end
+        end
+
+        def delay_type(game)
+          game.xpath('@reason').text == 'Rain' ? '☂' : 'Delay'
+        end
+
+        def game_inning(game)
+          (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
+            bold(game.xpath('@inning').text)
         end
 
         def load_gamechats(date)
