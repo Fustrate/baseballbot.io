@@ -6,10 +6,10 @@ class Baseballbot
                          'month_%m/day_%d/miniscoreboard.xml'
 
         def todays_games
-          time_pacific = time.now - 10_800
-          games = Nokogiri::XML open time_pacific.strftime SCOREBOARD_URL
+          date = time.now - 10_800
+          games = Nokogiri::XML open date.strftime SCOREBOARD_URL
 
-          load_gamechats
+          load_gamechats date
 
           games.xpath('//games/game').map do |game|
             home_code = game.xpath('@home_name_abbrev').text
@@ -80,7 +80,7 @@ class Baseballbot
           end
         end
 
-        def load_gamechats
+        def load_gamechats(date)
           @gamechats = {}
 
           # bots = {
@@ -105,7 +105,7 @@ class Baseballbot
           #
           # queries = ['selftext:hellobaseballbot self:yes']
 
-          @bot.redis.keys(time.now.strftime '%Y_%m_%d_*').each do |gid|
+          @bot.redis.keys(date.strftime '%Y_%m_%d_*').each do |gid|
             @bot.redis.hgetall(gid).each do |subreddit, link_id|
               @gamechats["#{gid}_#{subreddit}".downcase] = link_id
               # bots.delete subreddit.to_sym
