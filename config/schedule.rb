@@ -20,3 +20,8 @@ every 2.minutes do
   command 'cd /home/baseballbot/apps/baseballbot.io/current/lib && ' \
           'bundle exec ruby update_gamechats.rb'
 end
+
+every 15.minutes do
+  command 'cd /home/baseballbot/apps/baseballbot.io/current/lib && ' \
+          'bundle exec ruby check_messages.rb'
+end

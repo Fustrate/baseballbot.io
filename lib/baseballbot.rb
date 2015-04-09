@@ -13,7 +13,7 @@ require_relative 'baseballbot/template/gamechat'
 require_relative 'baseballbot/template/sidebar'
 
 class Baseballbot
-  attr_reader :db, :gameday, :clients, :redis
+  attr_reader :db, :gameday, :clients, :accounts, :redis
 
   class << self
     def subreddits
