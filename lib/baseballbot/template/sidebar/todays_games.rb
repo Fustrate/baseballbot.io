@@ -4,8 +4,10 @@ class Baseballbot
       module TodaysGames
         SCOREBOARD_URL = 'http://gd2.mlb.com/components/game/mlb/year_%Y/' \
                          'month_%m/day_%d/miniscoreboard.xml'
+
         def todays_games
-          games = Nokogiri::XML open time.now.strftime SCOREBOARD_URL
+          time_pacific = time.now - 10_800
+          games = Nokogiri::XML open time_pacific.strftime SCOREBOARD_URL
 
           load_gamechats
 
