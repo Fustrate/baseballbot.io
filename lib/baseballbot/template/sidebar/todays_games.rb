@@ -71,8 +71,10 @@ class Baseballbot
                     url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
           when 'Postponed'
             italic game.xpath('@ind').text
-          when 'Delayed Start'
-            'Delay'
+          when 'Delayed Start', 'Delayed'
+            reason = game.xpath('@reason').text
+
+            reason == 'Rain' ? '☂' : 'Delay'
           when 'Warmup'
             'Warmup'
           else
