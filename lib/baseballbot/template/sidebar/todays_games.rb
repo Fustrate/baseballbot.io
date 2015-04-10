@@ -5,53 +5,55 @@ class Baseballbot
         SCOREBOARD_URL = 'http://gd2.mlb.com/components/game/mlb/year_%Y/' \
                          'month_%m/day_%d/miniscoreboard.xml'
 
+        PREGAME_STATUSES = ['Warmup', 'Pre-Game', 'Delayed Start']
+        POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed']
+
         def todays_games
           date = time.now - 10_800
-          games = Nokogiri::XML open date.strftime SCOREBOARD_URL
 
           load_gamechats date
 
-          games.xpath('//games/game').map do |game|
-            home_code = game.xpath('@home_name_abbrev').text
-            home_subreddit = subreddit home_code
-
-            away_code = game.xpath('@away_name_abbrev').text
-            away_subreddit = subreddit away_code
-
-            gid = game.xpath('@gameday_link').text
-
-            started = !%w(Warmup Pre-Game).include?(game.xpath('@status').text)
-
-            {
-              gid: gid,
-              home: link_for_team(code: home_code,
-                                  subreddit: home_subreddit,
-                                  gid: gid),
-              home_runs: started ? game.xpath('@home_team_runs').text : '',
-              away: link_for_team(code: away_code,
-                                  subreddit: away_subreddit,
-                                  gid: gid),
-              away_runs: started ? game.xpath('@away_team_runs').text : '',
-              status: status_for_game(game, gid),
-              free: game.xpath('game_media/media[@free="ALL"]').any?
-            }.tap do |data|
-              if data[:home_runs].empty?
-                # Do nothing, the game hasn't started
-              elsif data[:home_runs].to_i > data[:away_runs].to_i
-                data[:home] = bold data[:home]
-                data[:home_runs] = bold data[:home_runs]
-              elsif data[:home_runs].to_i < data[:away_runs].to_i
-                data[:away] = bold data[:away]
-                data[:away_runs] = bold data[:away_runs]
-              end
-            end
-          end
+          Nokogiri::XML(open(date.strftime SCOREBOARD_URL))
+            .xpath('//games/game')
+            .map { |game| process_game game }
         end
 
         protected
 
-        def link_for_team(code:, subreddit:, gid:)
-          gamechat = @gamechats["#{gid}_#{subreddit}".downcase]
+        def process_game(game)
+          status = game.xpath('@status').text
+          gid = game.xpath('@gameday_link').text
+
+          started = !PREGAME_STATUSES.include?(status)
+          # over = POSTGAME_STATUSES.include?(status)
+
+          home_score = started ? game.xpath('@home_team_runs').text.to_i : ''
+          away_score = started ? game.xpath('@away_team_runs').text.to_i : ''
+          winner = (home_score > away_score ? :home : :away) if started
+
+          {
+            home: {
+              team: link_for_team(code: game.xpath('@home_name_abbrev').text,
+                                  gid: gid),
+              score: home_score
+            },
+            away: {
+              team: link_for_team(code: game.xpath('@away_name_abbrev').text,
+                                  gid: gid),
+              score: away_score
+            },
+            status: status_for_game(game, gid),
+            free: game.xpath('game_media/media[@free="ALL"]').any?
+          }.tap do |data|
+            if started
+              data[winner][:team] = bold data[winner][:team]
+              data[winner][:score] = bold data[winner][:score]
+            end
+          end
+        end
+
+        def link_for_team(code:, gid:)
+          gamechat = @gamechats["#{gid}_#{subreddit code}".downcase]
 
           if gamechat
             "[#{code} ^★](/#{gamechat} \"team-#{code.downcase}\")"
@@ -65,9 +67,7 @@ class Baseballbot
           when 'In Progress'
             game_inning game
           when 'Game Over', 'Final'
-            innings = game.xpath('@inning').text
-            link_to innings == '9' ? 'F' : "F/#{innings}",
-                    url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
+            gameday_link innings: game.xpath('@inning').text, gid: gid
           when 'Postponed'
             italic game.xpath('@ind').text
           when 'Delayed Start'
@@ -88,6 +88,11 @@ class Baseballbot
         def game_inning(game)
           (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
             bold(game.xpath('@inning').text)
+        end
+
+        def gameday_link(innings:, gid:)
+          link_to innings == '9' ? 'F' : "F/#{innings}",
+                  url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
         end
 
         def load_gamechats(date)
