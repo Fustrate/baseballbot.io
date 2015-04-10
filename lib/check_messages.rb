@@ -15,6 +15,8 @@ bot = Baseballbot.new(
   user_agent: 'BaseballBot by /u/Fustrate - Messages'
 )
 
+TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
+LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
 GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
 
 client = bot.clients['BaseballBot']
@@ -24,19 +26,18 @@ client.access = account.access
 bot.refresh_client!(client) if account.access.expired?
 
 client.my_messages('unread', false, limit: 10).each do |pm|
-  next unless pm.subject =~ /(?:game ?(?:thread|chat|day)|gdt)/i
-  next unless pm.body =~ %r{(?:redd\.it|/comments)/([a-z0-9]{6})}
+  next unless pm.subject =~ TITLE && pm.body =~ LINK
 
   post_id = Regexp.last_match[1]
 
   submission = client.from_fullname("t3_#{post_id}").first
 
-  if submission[:selftext] =~ GID
-    subreddit = submission[:subreddit].downcase
-    gid = Regexp.last_match[1]
+  next unless submission[:selftext] =~ GID
 
-    bot.redis.hset gid, subreddit, post_id
+  subreddit = submission[:subreddit].downcase
+  gid = Regexp.last_match[1]
 
-    pm.mark_as_read
-  end
+  bot.redis.hset gid, subreddit, post_id
+
+  pm.mark_as_read
 end
