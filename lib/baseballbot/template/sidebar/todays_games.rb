@@ -59,9 +59,9 @@ class Baseballbot
           gamechat = @gamechats["#{gid}_#{subreddit code}".downcase]
 
           if gamechat
-            "[#{code} ^★](/#{gamechat} \"team-#{code.downcase}\")"
+            "[^★](/#{gamechat} \"team-#{code.downcase}\")"
           else
-            "[#{code}][#{code}]"
+            "[][#{code}]"
           end
         end
 
