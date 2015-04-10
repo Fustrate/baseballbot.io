@@ -29,6 +29,7 @@ class Baseballbot
 
           home_score = started ? game.xpath('@home_team_runs').text.to_i : ''
           away_score = started ? game.xpath('@away_team_runs').text.to_i : ''
+
           winner = (home_score > away_score ? :home : :away) if started
 
           {
@@ -99,15 +100,10 @@ class Baseballbot
           @gamechats = {}
 
           # bots = {
-          #   astros:           'astrosbot',
-          #   nyyankees:        'yankeebot',
           #   phillies:         'philsbot',
           #   azdiamondbacks:   'snakebot',
           #   minnesotatwins:   'twinsgameday',
-          #   motorcitykitties: 'tigersbot',
           #   kcroyals:         'royalsbot',
-          #   padres:           'friarbot',
-          #   orioles:          'osgamethreads',
           #   newyorkmets:      'metsbot',
           #   whitesox:         'chisoxbot',
           #   # Uses their own account
