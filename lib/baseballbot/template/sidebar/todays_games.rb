@@ -30,7 +30,9 @@ class Baseballbot
           home_score = started ? game.xpath('@home_team_runs').text.to_i : ''
           away_score = started ? game.xpath('@away_team_runs').text.to_i : ''
 
-          winner = (home_score > away_score ? :home : :away) if started
+          leading_team = if started && home_score != away_score
+                           (home_score > away_score ? :home : :away)
+                         end
 
           {
             home: {
@@ -46,9 +48,9 @@ class Baseballbot
             status: status_for_game(game, gid),
             free: game.xpath('game_media/media[@free="ALL"]').any?
           }.tap do |data|
-            if started
-              data[winner][:team] = bold data[winner][:team]
-              data[winner][:score] = bold data[winner][:score]
+            if started && leading_team
+              data[leading_team][:team] = bold data[leading_team][:team]
+              data[leading_team][:score] = bold data[leading_team][:score]
             end
           end
         end
