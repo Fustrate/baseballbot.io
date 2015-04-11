@@ -91,4 +91,14 @@ def load_possible_games
   games
 end
 
-client.my_messages('unread', false, limit: 5).each { |msg| process_message msg }
+begin
+  client.my_messages('unread', false, limit: 5)
+    .each { |msg| process_message msg }
+rescue Redd::Error::ServiceUnavailable
+  puts 'Service unavailable: waiting 30 seconds to retry.'
+
+  sleep 30
+
+  client.my_messages('unread', false, limit: 5)
+    .each { |msg| process_message msg }
+end
