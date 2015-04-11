@@ -93,6 +93,18 @@ class Baseballbot
     subreddit = team_to_subreddit(team)
 
     subreddit.update description: subreddit.generate_sidebar
+  rescue Redd::Error::InvalidOAuth2Credentials
+    client = clients[subreddit.account.name]
+
+    puts "Could not update #{subreddit.name} due to invalid credentials:"
+    puts "\tExpires: #{client.access.expires_at.strftime '%F %T'}"
+    puts "\tCurrent: #{Time.now.strftime '%F %T'}"
+
+    refresh_client!(client)
+
+    puts "\tExpires: #{client.access.expires_at.strftime '%F %T'}"
+
+    subreddit.update description: subreddit.generate_sidebar
   end
 
   def post_gamechats!(names: [])
@@ -153,8 +165,8 @@ class Baseballbot
       WHERE id = $1",
       [id]
     )
-  rescue StandardError
-    puts "Could not update #{post_id} for team #{team}."
+  rescue StandardError => e
+    puts "#{e.class}: Could not update #{post_id} for team #{team}."
   end
 
   def refresh_client!(client)
@@ -170,6 +182,8 @@ class Baseballbot
         client.access.refresh_token
       ]
     )
+
+    client
   end
 
   protected
