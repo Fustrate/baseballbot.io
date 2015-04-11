@@ -93,7 +93,7 @@ class Baseballbot
             bold(game.xpath('@inning').text)
         end
 
-        def gameday_link(text, gid:)
+        def gameday_link(text, gid)
           link_to text, url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
         end
 
