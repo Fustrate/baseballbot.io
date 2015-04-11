@@ -41,7 +41,7 @@ class Baseballbot
                                   gid: gid),
               score: away_score
             },
-            status: status_for_game(game, gid),
+            status: gameday_link(game_status(game), gid),
             free: game.xpath('game_media/media[@free="ALL"]').any?
           }.tap do |data|
             if started && home_score != away_score
@@ -63,12 +63,14 @@ class Baseballbot
           end
         end
 
-        def status_for_game(game, gid)
+        def game_status(game)
           case game.xpath('@status').text
           when 'In Progress'
             game_inning game
           when 'Game Over', 'Final'
-            gameday_link innings: game.xpath('@inning').text, gid: gid
+            innings = game.xpath('@inning').text
+
+            innings == '9' ? 'F' : "F/#{innings}"
           when 'Postponed'
             italic game.xpath('@ind').text
           when 'Delayed Start'
@@ -91,9 +93,8 @@ class Baseballbot
             bold(game.xpath('@inning').text)
         end
 
-        def gameday_link(innings:, gid:)
-          link_to innings == '9' ? 'F' : "F/#{innings}",
-                  url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
+        def gameday_link(text, gid:)
+          link_to text, url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
         end
 
         def load_gamechats(date)
