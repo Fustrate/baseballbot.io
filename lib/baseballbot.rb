@@ -236,8 +236,8 @@ class Baseballbot
           access_token: row['access_token'],
           refresh_token: row['refresh_token'],
           scope: row['scope'][1..-2].split(','),
-          # Remove 5 minutes so we don't run into invalid credentials
-          expires_at: Chronic.parse(row['expires_at']) - 300
+          # Remove 2 minutes so we don't run into invalid credentials
+          expires_at: Chronic.parse(row['expires_at']) - 120
         }
       )
     end
