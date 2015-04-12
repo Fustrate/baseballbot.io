@@ -53,7 +53,7 @@ def process_message(message)
 end
 
 def find_possible_game(subreddit, post_id)
-  gids = possible_games[@bot.subreddit_to_code subreddit]
+  gids = possible_games[Baseballbot.subreddit_to_code subreddit]
   possibilities = []
 
   # Remove GIDs that have already been sent to us
