@@ -77,7 +77,7 @@ def possible_games
 end
 
 def load_possible_games
-  games = Hash.new []
+  games = Hash.new { |h, k| h[k] = [] }
 
   Nokogiri::XML(open(Time.now.strftime SCOREBOARD_URL))
     .xpath('//games/game')
