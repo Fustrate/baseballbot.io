@@ -67,8 +67,8 @@ class Baseballbot
       CGI.unescapeHTML settings[:description]
     end
 
-    def post_gamechat(gid:)
-      template = gamechat_template(gid: gid)
+    def post_gamechat(gid:, title:)
+      template = gamechat_template(gid: gid, title: title)
 
       post = submit template.title,
                     text: template.result,
@@ -184,8 +184,10 @@ class Baseballbot
                             subreddit: self
     end
 
-    def gamechat_template(gid:)
-      body, title = template_for('gamechat')
+    def gamechat_template(gid:, title:)
+      body, default_title = template_for('gamechat')
+
+      title = title && !title.empty? ? title : default_title
 
       Template::Gamechat.new body: body,
                              bot: @bot,

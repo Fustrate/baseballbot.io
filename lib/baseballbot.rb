@@ -115,14 +115,15 @@ class Baseballbot
 
       post_gamechat! id: row['id'],
                      team: row['name'],
-                     gid: row['gid']
+                     gid: row['gid'],
+                     title: row['title']
     end
   end
 
-  def post_gamechat!(id:, team:, gid:)
+  def post_gamechat!(id:, team:, gid:, title:)
     subreddit = team_to_subreddit(team)
 
-    post = subreddit.post_gamechat(gid: gid)
+    post = subreddit.post_gamechat(gid: gid, title: title)
 
     post.edit CGI.unescapeHTML(post[:selftext]).gsub('#ID#', post[:id])
 
@@ -190,7 +191,7 @@ class Baseballbot
 
   def unposted_gamechats
     @db.exec_params(
-      "SELECT gamechats.id, gid, subreddits.name
+      "SELECT gamechats.id, gid, subreddits.name, title
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future' AND post_at <= $1
