@@ -156,7 +156,7 @@ class Baseballbot
       end
 
       # Why doesn't the redd gem just return a Redd::Objects::Submission?
-      submission(thing[:id]).tap { |post| post.set_sticky if sticky }
+      submission(id: thing[:id]).tap { |post| post.set_sticky if sticky }
     end
 
     def edit(id:, body: nil, sticky: nil)
