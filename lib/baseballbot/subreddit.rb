@@ -109,12 +109,16 @@ class Baseballbot
       template.game.over?
     end
 
+    def subreddit
+      @subreddit ||= client.subreddit_from_name(@name)
+    end
+
     def settings
-      @settings ||= client.subreddit_from_name(@name).to_h
+      @settings ||= subreddit.to_h
     end
 
     def update(new_settings = {})
-      response = client.subreddit_from_name(@name).admin_edit(new_settings)
+      response = subreddit.admin_edit(new_settings)
 
       log_errors response.body[:json][:errors]
     end
@@ -134,8 +138,6 @@ class Baseballbot
 
     # Returns the post ID
     def submit(title, text:, sticky: false)
-      subreddit = client.subreddit_from_name(@name)
-
       begin
         thing = subreddit.submit(title, text: text, sendreplies: false)
       rescue Redd::Error::InvalidCaptcha => captcha
