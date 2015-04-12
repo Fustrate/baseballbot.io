@@ -66,7 +66,7 @@ def find_possible_game(subreddit, post_id)
       break
     end
 
-    possibilities << gid if existing_id
+    possibilities << gid unless existing_id
   end
 
   possibilities.first
