@@ -20,6 +20,8 @@ gem 'uglifier', '>= 2.6.0'
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 
+gem 'sprockets', '~> 2.0'
+
 # Use Unicorn as the app server
 gem 'unicorn'
 
