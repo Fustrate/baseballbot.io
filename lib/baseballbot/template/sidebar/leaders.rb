@@ -58,7 +58,7 @@ class Baseballbot
               { name: s[0], value: s[1] }
             end
 
-            stats['avg'] = high_stat('avg', qualifying, count: count).map do |s|
+            stats['avg'] = low_stat('avg', qualifying, count: count).map do |s|
               { name: s[0], value: pct(s[1]) }
             end
 
