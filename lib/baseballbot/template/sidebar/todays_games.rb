@@ -6,7 +6,8 @@ class Baseballbot
                          'month_%m/day_%d/miniscoreboard.xml'
 
         PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game', 'Delayed Start']
-        POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed']
+        POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed',
+                             'Completed Early']
 
         def todays_games
           date = time.now - 10_800
