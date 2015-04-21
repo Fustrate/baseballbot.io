@@ -68,7 +68,7 @@ class Baseballbot
           case game.xpath('@status').text
           when 'In Progress'
             game_inning game
-          when 'Game Over', 'Final'
+          when 'Game Over', 'Final', 'Completed Early'
             innings = game.xpath('@inning').text
 
             innings == '9' ? 'F' : "F/#{innings}"
