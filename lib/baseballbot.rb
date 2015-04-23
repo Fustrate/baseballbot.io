@@ -43,7 +43,7 @@ class Baseballbot
         'NYM' => 'NewYorkMets',
         'PHI' => 'Phillies',
         'WSH' => 'Nationals',
-        'CHC' => 'Cubs',
+        'CHC' => 'CHICubs',
         'CIN' => 'Reds',
         'MIL' => 'Brewers',
         'PIT' => 'Buccos',
