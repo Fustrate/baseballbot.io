@@ -1,7 +1,6 @@
 require_relative 'baseballbot'
 
-SCOREBOARD_URL = 'http://gd2.mlb.com/components/game/mlb/year_%Y/month_%m/' \
-                 'day_%d/miniscoreboard.xml'
+SCOREBOARD = "#{Baseballbot::GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
 @bot = Baseballbot.new(
   reddit: {
@@ -79,7 +78,7 @@ end
 def load_possible_games
   games = Hash.new { |h, k| h[k] = [] }
 
-  Nokogiri::XML(open(Time.now.strftime SCOREBOARD_URL))
+  Nokogiri::XML(open(Time.now.strftime SCOREBOARD))
     .xpath('//games/game')
     .map do |game|
       gid = game.xpath('@gameday_link').text

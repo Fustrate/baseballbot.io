@@ -7,9 +7,10 @@ class Baseballbot
 
       using TemplateRefinements
 
-      BASE_URL = 'http://gd2.mlb.com/components/game/mlb'
-      BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
-      PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
+      include Template::Gamechat::LineScore
+      include Template::Gamechat::BoxScore
+      include Template::Gamechat::Highlights
+      include Template::Gamechat::ScoringPlays
 
       attr_reader :game, :title, :post_id, :time, :team, :opponent
 
@@ -68,184 +69,6 @@ class Baseballbot
         home? == (home[:runs] < away[:runs])
       end
 
-      def home
-        unless @game.started? && @game.boxscore
-          return {
-            runs: 0,
-            hits: 0,
-            errors: 0
-          }
-        end
-
-        rhe = @game.boxscore.at_xpath '//boxscore/linescore'
-
-        {
-          runs: rhe['home_team_runs'].to_i,
-          hits: rhe['home_team_hits'].to_i,
-          errors: rhe['home_team_errors'].to_i
-        }
-      end
-
-      def away
-        unless @game.started? && @game.boxscore
-          return {
-            runs: 0,
-            hits: 0,
-            errors: 0
-          }
-        end
-
-        rhe = @game.boxscore.at_xpath '//boxscore/linescore'
-
-        {
-          runs: rhe['away_team_runs'].to_i,
-          hits: rhe['away_team_hits'].to_i,
-          errors: rhe['away_team_errors'].to_i
-        }
-      end
-
-      def lines
-        lines = [[nil] * 9, [nil] * 9]
-
-        return lines unless @game.started? && @game.boxscore
-
-        bs = @game.boxscore
-
-        bs.xpath('//boxscore/linescore/inning_line_score').each do |inning|
-          if inning['away'] && !inning['away'].empty?
-            lines[0][inning['inning'].to_i - 1] = inning['away']
-
-            # In case of extra innings
-            lines[1][inning['inning'].to_i - 1] = nil
-          end
-
-          if inning['home'] && !inning['home'].empty?
-            lines[1][inning['inning'].to_i - 1] = inning['home']
-          end
-        end
-
-        lines
-      end
-
-      def home_batters
-        return [] unless @game.started? && @game.boxscore
-
-        @game.boxscore.xpath(format(BATTER_XPATH, flag: 'home')).to_a
-      end
-
-      def away_batters
-        return [] unless @game.started? && @game.boxscore
-
-        @game.boxscore.xpath(format(BATTER_XPATH, flag: 'away')).to_a
-      end
-
-      def batters
-        home_batters.zip away_batters
-      end
-
-      def home_pitchers
-        return [] unless @game.started? && @game.boxscore
-
-        @game.boxscore.xpath(format(PITCHER_XPATH, flag: 'home')).to_a
-      end
-
-      def away_pitchers
-        return [] unless @game.started? && @game.boxscore
-
-        @game.boxscore.xpath(format(PITCHER_XPATH, flag: 'away')).to_a
-      end
-
-      def pitchers
-        home_pitchers.zip away_pitchers
-      end
-
-      def scoring_plays
-        plays = []
-
-        return plays unless @game.started?
-
-        data = Nokogiri::XML open_file('inning/inning_Scores.xml')
-
-        data.xpath('//scores/score').each do |play|
-          plays << {
-            side:   play['top_inning'] == 'Y' ? 'T' : 'B',
-            team:   play['top_inning'] == 'Y' ? opponent : team,
-            inning: play['inn'],
-            event:  play.at_xpath('*[@des and @score="T"]')['des'],
-            score:  [play['home'].to_i, play['away'].to_i]
-          }
-        end
-
-        plays
-      rescue OpenURI::HTTPError
-        # There's no inning_Scores.xml file right now
-        []
-      end
-
-      def scoring_plays_table
-        table = [
-          'Inning|Event|Score',
-          ':-:|-|:-:'
-        ]
-
-        scoring_plays.each do |event|
-          score = if event[:side] == 'T'
-                    "#{ event[:score][0] }-#{ bold event[:score][1] }"
-                  else
-                    "#{ bold event[:score][0] }-#{ event[:score][1] }"
-                  end
-
-          table << [
-            "#{ event[:inning_side] }#{ event[:inning] }",
-            event[:event],
-            score
-          ].join('|')
-        end
-
-        table.join "\n"
-      end
-
-      def highlights
-        highlights = []
-
-        return highlights unless @game.started?
-
-        data = Nokogiri::XML open_file('media/highlights.xml')
-
-        data.xpath('//highlights/media')
-          .sort { |a, b| a['date'] <=> b['date'] }
-          .each do |media|
-            highlights << {
-              team: media['team_id'].to_i == team.id ? team : opponent,
-              headline: media.at_xpath('headline').text.strip,
-              blurb: media.at_xpath('blurb').text.strip
-                .gsub(/^[A-Z@]+: /, ''),
-              duration: media.at_xpath('duration').text.strip
-                .gsub(/^00:0?/, ''),
-              url: media.at_xpath('url').text.strip
-            }
-          end
-
-        highlights
-      rescue OpenURI::HTTPError
-        # I guess the file isn't there yet
-        []
-      end
-
-      def highlights_list
-        list = []
-
-        highlights.each do |highlight|
-          icon = link_to '', sub: subreddit(highlight[:team].code).downcase
-          link = link_to "#{highlight[:blurb]} (#{highlight[:duration]})",
-                         url: highlight[:url]
-
-          list << "- #{icon} #{link}"
-        end
-
-        list.join "\n"
-      end
-
       def inning
         return 'Postponed' if @game.postponed?
 
@@ -291,77 +114,10 @@ class Baseballbot
         ''
       end
 
-      def line_score
-        [
-          " |#{ (1..(lines[0].count)).to_a.join('|') }|R|H|E",
-          ":-:|#{ (':-:|' * lines[0].count) }:-:|:-:|:-:",
-          "[#{ game.away_team.code }](/#{ game.away_team.code })|" \
-            "#{ lines[0].join('|') }|#{ bold away[:runs] }|" \
-            "#{ bold away[:hits] }|#{ bold away[:errors] }",
-          "[#{ game.home_team.code }](/#{ game.home_team.code })|" \
-            "#{ lines[1].join('|') }|#{ bold home[:runs] }|" \
-            "#{ bold home[:hits] }|#{ bold home[:errors] }"
-        ].join "\n"
-      end
-
-      def line_score_status
-        if game.over?
-          'Final'
-        elsif runners.empty?
-          "#{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
-        else
-          "#{runners}, #{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
-        end
-      end
-
-      def timestamp(action)
-        italic "#{action} at #{time.strftime '%-I:%M %p %Z'}."
-      end
-
-      def batter_row(batter)
-        return ' ||||||||' unless batter
-
-        is_replacement = batter['bo'].to_i % 100 > 0
-        spacer = '[](/spacer)' if is_replacement
-        url = link_to batter['name'], url: player_url(batter['id'])
-
-        [
-          "#{spacer}#{is_replacement ? batter['pos'] : bold(batter['pos'])}",
-          "#{spacer}#{url}",
-          batter['ab'],
-          batter['r'],
-          batter['h'],
-          batter['rbi'],
-          batter['bb'],
-          batter['so'],
-          batter['avg']
-        ].join '|'
-      end
-
-      def pitcher_row(pitcher)
-        return ' ||||||||' unless pitcher
-
-        game_score = pitcher['game_score']
-
-        [
-          link_to(pitcher['name'],
-                  url: player_url(pitcher['id']),
-                  title: game_score),
-          "#{pitcher['out'].to_i / 3}.#{pitcher['out'].to_i % 3}",
-          pitcher['h'],
-          pitcher['r'],
-          pitcher['er'],
-          pitcher['bb'],
-          pitcher['so'],
-          "#{pitcher['np']}-#{pitcher['s']}",
-          pitcher['era']
-        ].join '|'
-      end
-
       protected
 
       def game_directory
-        "#{BASE_URL}/year_%Y/month_%m/day_%d/gid_#{@game.gid}"
+        "#{GD2}/year_%Y/month_%m/day_%d/gid_#{@game.gid}"
       end
 
       def open_file(path)

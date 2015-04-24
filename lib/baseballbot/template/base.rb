@@ -92,6 +92,12 @@ class Baseballbot
         text.sub replace_regexp,
                  "#{delimiter}\n#{result}\n#{delimiter close: true}"
       end
+
+      def timestamp(action = nil)
+        return time.strftime '%-I:%M %p %Z' unless action
+
+        italic "#{action} at #{time.strftime '%-I:%M %p %Z'}."
+      end
     end
   end
 end
