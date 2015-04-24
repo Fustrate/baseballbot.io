@@ -30,6 +30,7 @@ class Baseballbot
         @body = body
         @template = ERB.new body, nil, '<>'
         @bot = bot
+        @subreddits = {}
       end
 
       def result
@@ -58,9 +59,17 @@ class Baseballbot
         games_back % 1.0 == 0 ? games_back.to_i : games_back
       end
 
+      # Change the subreddit to use for a team, only in this template
+      #   <% subreddits LAD: 'Dodgers', SF: 'WTF %>'
+      def subreddits(mapping = {})
+        normalized = mapping.map { |code, name| [code.to_s.upcase, name.to_s] }
+
+        @subreddits.merge! Hash[normalized]
+      end
+
       # Get the default subreddit for this team
       def subreddit(code)
-        Baseballbot.subreddits[code.upcase]
+        @subreddits[code.upcase] || Baseballbot.subreddits[code.upcase]
       end
 
       def link_to(text = '', options = {})
