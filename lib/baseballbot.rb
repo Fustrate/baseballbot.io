@@ -15,8 +15,6 @@ require_relative 'baseballbot/template/sidebar'
 class Baseballbot
   attr_reader :db, :gameday, :clients, :accounts, :redis
 
-  GD2 = 'http://gd2.mlb.com/components/game/mlb'
-
   class << self
     def subreddits
       {

@@ -1,6 +1,7 @@
 require_relative 'baseballbot'
 
-SCOREBOARD = "#{Baseballbot::GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+GD2 = 'http://gd2.mlb.com/components/game/mlb'
+SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
 @bot = Baseballbot.new(
   reddit: {

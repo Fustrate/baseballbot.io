@@ -2,8 +2,10 @@ class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-        SCOREBOARD_URL = "#{Baseballbot::GD2}/year_%Y/month_%m/day_%d/" \
-                         'miniscoreboard.xml'
+
+        GD2 = 'http://gd2.mlb.com/components/game/mlb'
+
+        SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
         PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game', 'Delayed Start']
         POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed',
