@@ -168,6 +168,8 @@ class Baseballbot
     )
   rescue StandardError => e
     puts "#{e.class}: Could not update #{post_id} for team #{team}."
+    puts "\t#{e.message}"
+    puts "\t#{e.backtrace}"
   end
 
   def refresh_client!(client)
