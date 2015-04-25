@@ -5,6 +5,8 @@ class Baseballbot
         require file
       end
 
+      GD2 = 'http://gd2.mlb.com/components/game/mlb'
+
       using TemplateRefinements
 
       include Template::Gamechat::LineScore
