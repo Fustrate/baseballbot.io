@@ -96,7 +96,7 @@ class Baseballbot
               home: day['home_away_sw'] == 'H',
               opponent: build_team(code: day['opponent_abbrev'],
                                    name: day['opponent_brief']),
-              over: %w(F C D FT).include?(day['game_status_ind']),
+              over: %w(F C D FT FR).include?(day['game_status_ind']),
               score: [day['team_score'].to_i, day['opponent_score'].to_i],
               tv: day['team_tv'] || '',
               status_code: day['game_status_ind']
