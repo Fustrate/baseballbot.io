@@ -23,6 +23,15 @@ module Redd
         Objects::Thing.new(self, response.body[:json][:data])
       end
     end
+
+    class Submission < Thing
+      # suggested_sort should be one of:
+      # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
+      # 'random', 'qa']
+      def set_suggested_sort(suggested_sort)
+        post('/api/set_suggested_sort', id: fullname, sort: suggested_sort)
+      end
+    end
   end
 end
 
@@ -72,7 +81,8 @@ class Baseballbot
 
       post = submit template.title,
                     text: template.result,
-                    sticky: sticky_gamechats?
+                    sticky: sticky_gamechats?,
+                    sort: 'new'
 
       @bot.redis.hset template.game.gid,
                       @name.downcase,
@@ -137,7 +147,7 @@ class Baseballbot
     end
 
     # Returns the post ID
-    def submit(title, text:, sticky: false)
+    def submit(title, text:, sticky: false, sort: '')
       begin
         thing = subreddit.submit(title, text: text, sendreplies: false)
       rescue Redd::Error::InvalidCaptcha => captcha
@@ -156,7 +166,10 @@ class Baseballbot
       end
 
       # Why doesn't the redd gem just return a Redd::Objects::Submission?
-      submission(id: thing[:id]).tap { |post| post.set_sticky if sticky }
+      submission(id: thing[:id]).tap do |post|
+        post.set_sticky if sticky
+        post.set_suggested_sort sort unless sort == ''
+      end
     end
 
     def edit(id:, body: nil, sticky: nil)
