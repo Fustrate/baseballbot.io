@@ -9,7 +9,7 @@ gem 'sass'
 gem 'jquery-rails'
 gem 'coffee-rails'
 gem 'haml-rails'
-gem 'bourbon'
+gem 'foundation-rails'
 gem 'modernizr-rails'
 
 gem 'execjs'

@@ -1,3 +1,18 @@
-Home page!
+.row
+  .small-12.columns
+    %h4 Today's Game Threads
 
-= link_to 'authenticate', accounts_authenticate_path
+    %table
+      %thead
+        %tr
+          %th GID
+          %th Title
+          %th Subreddit
+          %th Status
+      %tbody
+        - @gamechats.each do |gamechat|
+          %tr
+            %td= gamechat.gid
+            %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
+            %td= gamechat.subreddit_id
+            %td= gamechat.status

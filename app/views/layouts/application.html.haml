@@ -1,10 +1,28 @@
 !!!
+%html{ lang: :en }
 %head
-  %title baseballbot.io
-  = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-  = javascript_include_tag 'application', 'data-turbolinks-track' => true
+  %title= content_for?(:title) ? yield(:title) : 'baseballbot.io'
+  %meta{ charset: 'utf-8' }
+  %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
+  = stylesheet_link_tag    :application, media: :all, 'data-turbolinks-track' => true
+  = javascript_include_tag :application, 'data-turbolinks-track' => true
+  = javascript_include_tag :modernizr, 'data-turbolinks-track' => true
   = csrf_meta_tags
 %body
+  .contain-to-grid.fixed
+    %nav.top-bar{ 'data-topbar' => true, role: 'navigation' }
+      %ul.title-area
+        %li.name
+          %h1= link_to 'Baseballbot.io', root_path
+
+      %section.top-bar-section
+        %ul.right
+          %li.has-form= link_to 'Authenticate', accounts_authenticate_path, class: 'button'
+        %ul.left
+          %li= link_to 'Game Threads', '#'
+          %li= link_to 'Subreddits', '#'
+          %li= link_to 'Templates', '#'
+
   - unless flash.empty?
     - flash.each do |type, message|
       %div.alert-box{ class: type }

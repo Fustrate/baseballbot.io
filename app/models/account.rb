@@ -1,4 +1,6 @@
 class Account < ActiveRecord::Base
+  has_many :subreddits
+
   # Use this method to make sure we refresh expired tokens and save the new ones
   def with_access
     return unless block_given?
