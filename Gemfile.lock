@@ -1,13 +1,3 @@
-GIT
-  remote: git://github.com/avidw/redd.git
-  revision: 62233d4eeca0b2164bf24f55503076904206bf1c
-  specs:
-    redd (0.7.6)
-      faraday (~> 0.9.1)
-      fastimage (~> 1.6.6)
-      hashie (~> 3.4.0)
-      multi_json (~> 1.10.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -267,6 +257,11 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    redd (0.7.6)
+      faraday (~> 0.9.1)
+      fastimage (~> 1.6.6)
+      hashie (~> 3.4.0)
+      multi_json (~> 1.10.1)
     redis (3.2.1)
     request_store (1.1.0)
     responders (2.1.0)
@@ -399,7 +394,7 @@ DEPENDENCIES
   pg
   quiet_assets
   rails (= 4.2.0)
-  redd!
+  redd (~> 0.7.6)
   redis
   responders (~> 2.0)
   rspec (~> 3.0)

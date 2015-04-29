@@ -26,7 +26,7 @@ gem 'sprockets', '~> 2.0'
 gem 'unicorn'
 
 # Reddit interaction
-gem 'redd', github: 'avidw/redd'
+gem 'redd', '~> 0.7.6'
 gem 'mlb_gameday', '~> 0.1.0'
 
 group :development do
