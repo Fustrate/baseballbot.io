@@ -8,11 +8,15 @@
           %th GID
           %th Title
           %th Subreddit
+          %th Post At
+          %th Starts At
           %th Status
       %tbody
         - @gamechats.each do |gamechat|
           %tr
             %td= gamechat.gid
             %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
-            %td= gamechat.subreddit_id
+            %td= link_to gamechat.subreddit.name, "http://reddit.com/r/#{gamechat.subreddit.name}"
+            %td= gamechat.post_at.strftime '%-I:%M %p'
+            %td= gamechat.starts_at.strftime '%-I:%M %p'
             %td= gamechat.status
