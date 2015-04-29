@@ -17,6 +17,8 @@
             %td= gamechat.gid
             %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
             %td= link_to gamechat.subreddit.name, "http://reddit.com/r/#{gamechat.subreddit.name}"
-            %td= gamechat.post_at.strftime '%-I:%M %p'
-            %td= gamechat.starts_at.strftime '%-I:%M %p'
-            %td= gamechat.status
+            %td.no-wrap= gamechat.post_at.strftime '%-I:%M %p'
+            %td.no-wrap= gamechat.starts_at.strftime '%-I:%M %p'
+            %td{ class: ('error' if gamechat.post_at.past? && gamechat.status == 'Future') }= gamechat.status
+
+    %p All times are Pacific.
