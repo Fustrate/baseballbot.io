@@ -30,7 +30,7 @@ gem 'redd', '~> 0.7.6'
 gem 'mlb_gameday', '~> 0.1.0'
 
 group :production do
-  gem 'skylight'
+  # gem 'skylight'
 end
 
 group :development do
