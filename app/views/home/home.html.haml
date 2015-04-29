@@ -21,10 +21,10 @@
             %td.no-wrap= gamechat.starts_at.strftime '%-I:%M %p'
             %td
               - if gamechat.post_at.past? && gamechat.status == 'Future'
-                %span.label.radius.gamechat.error= gamechat.status
+                %span.label.radius.fw.gamechat.error Error
               - elsif gamechat.starts_at.past? && gamechat.status == 'Posted'
-                %span.label.radius.gamechat.current Live
+                %span.label.radius.fw.gamechat.current Live
               - else
-                %span.label.radius.gamechat{ class: gamechat.status.downcase }= gamechat.status
+                %span.label.radius.fw.gamechat{ class: gamechat.status.downcase }= gamechat.status
 
     %p All times are Pacific.

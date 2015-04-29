@@ -11,14 +11,18 @@ body
 .no-wrap
   white-space: nowrap
 
-.label.gamechat
-  &.error
-    +label-style($bg: $alert-color)
-  &.current
-    +label-style($bg: $success-color)
-  &.posted
-    +label-style($bg: $info-color)
-  &.future
-    +label-style($bg: $primary-color)
-  &.over
-    +label-style($bg: $secondary-color)
+.label
+  &.fw
+    display: block
+
+  &.gamechat
+    &.error
+      +label-style($bg: $alert-color)
+    &.current
+      +label-style($bg: $success-color)
+    &.posted
+      +label-style($bg: $info-color)
+    &.future
+      +label-style($bg: $primary-color)
+    &.over
+      +label-style($bg: $secondary-color)
