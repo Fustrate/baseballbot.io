@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.2.1'
-gem 'rails', '4.2.0'
+ruby '2.2.2'
+gem 'rails', '4.2.1'
 
 gem 'pg'
 
@@ -28,6 +28,10 @@ gem 'unicorn'
 # Reddit interaction
 gem 'redd', '~> 0.7.6'
 gem 'mlb_gameday', '~> 0.1.0'
+
+group :production do
+  gem 'skylight'
+end
 
 group :development do
   gem 'quiet_assets'
@@ -90,5 +94,3 @@ gem 'chronic'
 gem 'draper', '>= 1.4.0'
 gem 'chartkick'
 gem 'redis'
-
-gem 'skylight'
