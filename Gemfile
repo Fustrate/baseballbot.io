@@ -90,3 +90,5 @@ gem 'chronic'
 gem 'draper', '>= 1.4.0'
 gem 'chartkick'
 gem 'redis'
+
+gem 'skylight'
