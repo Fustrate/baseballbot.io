@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   namespace :accounts do
     get :authenticate
   end
+
+  resources :subreddits, only: %i(index)
 end
