@@ -36,10 +36,10 @@ class Baseballbot
 
           highlights.each do |highlight|
             icon = link_to '', url: "/#{highlight[:team].code}"
-            link = link_to "#{highlight[:blurb]} (#{highlight[:duration]})",
-                           url: highlight[:url]
+            text = "#{highlight[:blurb]} (#{highlight[:duration]})"
+            url = highlight[:url]
 
-            list << "- #{icon} #{link}"
+            list << "- #{icon} #{url ? link_to(text, url) : text}"
           end
 
           list.join "\n"
