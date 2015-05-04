@@ -12,6 +12,8 @@ class Baseballbot
           data.xpath('//highlights/media')
             .sort { |a, b| a['date'] <=> b['date'] }
             .each do |media|
+              url = media.at_xpath('url')
+
               highlights << {
                 team: media['team_id'].to_i == team.id ? team : opponent,
                 headline: media.at_xpath('headline').text.strip,
@@ -19,7 +21,7 @@ class Baseballbot
                   .gsub(/^[A-Z@]+: /, ''),
                 duration: media.at_xpath('duration').text.strip
                   .gsub(/^00:0?/, ''),
-                url: media.at_xpath('url').text.strip
+                url: (url.text.strip if url)
               }
             end
 
