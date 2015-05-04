@@ -130,20 +130,25 @@ class Baseballbot
     def update(new_settings = {})
       response = subreddit.admin_edit(new_settings)
 
-      log_errors response.body[:json][:errors]
+      log_errors response.body[:json][:errors], new_settings
     end
 
-    def log_errors(errors)
+    def log_errors(errors, new_settings)
       return unless errors && errors.count > 0
 
       errors.each do |error|
         log "#{error[0]}: #{error[1]} (#{error[2]})"
+
+        if error[0] == 'TOO_LONG' && message =~ /\Amax: \d+/
+          puts "New length is #{new_settings[error[2].to_sym].length}"
+        end
       end
     end
 
     # TODO: Make this an actual logger, so we can log to something different
     def log(message)
       puts Time.now.strftime "[%Y-%m-%d %H:%M:%S] #{@name}: #{message}"
+
     end
 
     # Returns the post ID
