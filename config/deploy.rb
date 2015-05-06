@@ -10,7 +10,8 @@ set :branch, ENV['REVISION'] || :master
 
 set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
-set :linked_files, %w(config/secrets.yml config/database.yml)
+set :linked_files, %w(config/secrets.yml config/database.yml
+                      config/skylight.yml)
 set :linked_dirs,  %w(log tmp/pids tmp/cache tmp/sockets public/system)
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
