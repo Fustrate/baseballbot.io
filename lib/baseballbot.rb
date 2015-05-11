@@ -167,7 +167,8 @@ class Baseballbot
       [id]
     )
   rescue StandardError => e
-    puts "#{e.class}: Could not update #{post_id} for team #{team}."
+    puts "[#{Time.now.strftime '%Y-%m-%d %H:%M:%S'}] #{e.class}: " \
+         "Could not update #{post_id} for team #{team}."
     puts "\t#{e.message}"
     puts "\t#{e.backtrace}"
   end
