@@ -191,7 +191,13 @@ class Baseballbot
     end
 
     def submission(id:)
-      @submissions[id] ||= client.from_fullname("t3_#{id}").first
+      return @submissions[id] if @submissions[id]
+
+      submissions = client.from_fullname "t3_#{id}"
+
+      fail "Unable to load post #{id}." unless submissions
+
+      @submissions[id] = submissions.first
     end
 
     protected
