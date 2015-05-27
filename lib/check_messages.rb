@@ -102,13 +102,13 @@ end
 def check_messages(retry: true)
   unread_messages(client).each { |msg| process_message msg }
 rescue Redd::Error::ServiceUnavailable
-  return unless retry
+  if retry
+    puts 'Service unavailable: waiting 30 seconds to retry.'
 
-  puts 'Service unavailable: waiting 30 seconds to retry.'
+    sleep 30
 
-  sleep 30
-
-  check_messages(retry: false)
+    check_messages(retry: false)
+  end
 end
 
 check_messages
