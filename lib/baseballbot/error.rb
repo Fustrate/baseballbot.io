@@ -1,4 +1,4 @@
-module Baseballbot
+class Baseballbot
   module Error
     class NoSidebarText < StandardError; end
   end
