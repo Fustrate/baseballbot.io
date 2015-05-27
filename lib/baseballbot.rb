@@ -52,7 +52,7 @@ class Baseballbot
     end
 
     def subreddit_to_code(name)
-      Hash[subreddits.invert.map { |k, v| [k.downcase, v] }][name]
+      Hash[subreddits.invert.map { |k, v| [k.downcase, v] }][name.downcase]
     end
   end
 
