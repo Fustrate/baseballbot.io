@@ -73,6 +73,8 @@ class Baseballbot
     end
 
     def current_sidebar
+      raise Baseballbot::Error::NoSidebarText unless settings[:description]
+
       CGI.unescapeHTML settings[:description]
     end
 

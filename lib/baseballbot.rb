@@ -6,6 +6,7 @@ require 'erb'
 require 'tzinfo'
 require 'redis'
 
+require_relative 'baseballbot/error'
 require_relative 'baseballbot/subreddit'
 require_relative 'baseballbot/account'
 require_relative 'baseballbot/template/base'
