@@ -4,26 +4,6 @@ require_relative 'template/sidebar'
 
 module Redd
   module Objects
-    class Subreddit < Thing
-      def submit(
-        title, captcha = nil, identifier = nil, text: nil, url: nil,
-        resubmit: false, sendreplies: true
-      )
-
-        params = {
-          extension: 'json', title: title, sr: display_name,
-          resubmit: resubmit, sendreplies: sendreplies
-        }
-
-        params.merge!(captcha: captcha, iden: identifier) if captcha
-        params[:kind], params[:text] = :self, text if text
-        params[:kind], params[:url] = :link, url if url
-
-        response = post('/api/submit', params)
-        Objects::Thing.new(self, response.body[:json][:data])
-      end
-    end
-
     class Submission < Thing
       # suggested_sort should be one of:
       # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
