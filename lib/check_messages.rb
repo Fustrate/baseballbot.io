@@ -37,7 +37,11 @@ def process_message(message)
 
   post_id = Regexp.last_match[1]
 
-  submission = client.from_fullname("t3_#{post_id}").first
+  submissions = client.from_fullname("t3_#{post_id}")
+
+  return unless submissions
+
+  submission = submissions.first
 
   subreddit = submission[:subreddit].downcase
 
@@ -91,14 +95,20 @@ def load_possible_games
   games
 end
 
-begin
-  client.my_messages('unread', false, limit: 5)
-    .each { |msg| process_message msg }
+def unread_messages(client)
+  client.my_messages('unread', false, limit: 5) || []
+end
+
+def check_messages(retry: true)
+  unread_messages(client).each { |msg| process_message msg }
 rescue Redd::Error::ServiceUnavailable
+  return unless retry
+
   puts 'Service unavailable: waiting 30 seconds to retry.'
 
   sleep 30
 
-  client.my_messages('unread', false, limit: 5)
-    .each { |msg| process_message msg }
+  check_messages(retry: false)
 end
+
+check_messages

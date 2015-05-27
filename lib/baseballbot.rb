@@ -166,6 +166,10 @@ class Baseballbot
       WHERE id = $1",
       [id]
     )
+  rescue Redd::Error::ServiceUnavailable, Redd::Error::InternalServerError,
+         Faraday::TimeoutError
+    # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
+    nil
   rescue StandardError => e
     puts "[#{Time.now.strftime '%Y-%m-%d %H:%M:%S'}] #{e.class}: " \
          "Could not update #{post_id} for team #{team}."
