@@ -20,5 +20,5 @@
             %td= subreddit.account.name
             %td.text-center= '✓' if update_sidebar?
             %td.text-center= '✓' if post_gamechats?
-            %td.text-center= '✓' if post_pregame?
-            %td.text-center{ title: subreddit.options['postgame']['post_at'] if post_pregame? }= '✓' if post_postgame?
+            %td.text-center{ title: subreddit.options['postgame']['post_at'] if post_pregame? }= '✓' if post_pregame?
+            %td.text-center= '✓' if post_postgame?
