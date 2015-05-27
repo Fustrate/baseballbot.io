@@ -7,18 +7,18 @@ class Subreddit < ActiveRecord::Base
   end
 
   def update_sidebar?
-    @update_sidebar ||= subreddit.options['sidebar'].try(:[], 'enabled')
+    @update_sidebar ||= options['sidebar'].try(:[], 'enabled')
   end
 
   def post_gamechats?
-    @post_gamechats ||= subreddit.options['gamechats'].try(:[], 'enabled')
+    @post_gamechats ||= options['gamechats'].try(:[], 'enabled')
   end
 
   def post_pregame?
-    @post_pregame ||= subreddit.options['pregame'].try(:[], 'enabled')
+    @post_pregame ||= options['pregame'].try(:[], 'enabled')
   end
 
   def post_postgame?
-    @post_postgame ||= subreddit.options['postgame'].try(:[], 'enabled')
+    @post_postgame ||= options['postgame'].try(:[], 'enabled')
   end
 end
