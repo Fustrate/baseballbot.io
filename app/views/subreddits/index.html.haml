@@ -18,7 +18,7 @@
             %td= link_to subreddit.name, subreddit.url
             %td= subreddit.team_code
             %td= subreddit.account.name
-            %td.text-center= '✓' if update_sidebar?
-            %td.text-center= '✓' if post_gamechats?
-            %td.text-center{ title: subreddit.options['pregame']['post_at'] if post_pregame? }= '✓' if post_pregame?
-            %td.text-center= '✓' if post_postgame?
+            %td.text-center= '✓' if subreddit.update_sidebar?
+            %td.text-center= '✓' if subreddit.post_gamechats?
+            %td.text-center{ title: subreddit.options['pregame']['post_at'] if subreddit.post_pregame? }= '✓' if subreddit.post_pregame?
+            %td.text-center= '✓' if subreddit.post_postgame?
