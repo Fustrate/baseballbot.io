@@ -108,6 +108,32 @@ class Baseballbot
     subreddit.update description: subreddit.generate_sidebar
   end
 
+  def post_pregames!(names: [])
+    names = names.map(&:downcase)
+
+    unposted_pregames.each do |row|
+      next unless names.empty? || names.include?(row['name'].downcase)
+
+      post_pregame! id: row['id'],
+                     team: row['name'],
+                     gid: row['gid']
+    end
+  end
+
+  def post_pregame!(id:, team:, gid:)
+    team_to_subreddit(team).post_pregame(gid: gid)
+
+    @db.exec_params(
+      'UPDATE gamechats
+      SET status = $1
+      WHERE id = $2',
+      [
+        'Pregame',
+        id
+      ]
+    )
+  end
+
   def post_gamechats!(names: [])
     names = names.map(&:downcase)
 
@@ -197,27 +223,39 @@ class Baseballbot
 
   protected
 
+  def unposted_pregames
+    @db.exec(
+      "SELECT gamechats.id, gid, subreddits.name
+      FROM gamechats
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status = 'Future'
+        AND (options#>>'{pregame,enabled}')::boolean IS TRUE
+        AND (DATE(starts_at) + (options#>>'{pregame,post_at}')::interval) < NOW() AT TIME ZONE (options->>'timezone')
+      ORDER BY post_at ASC, gid ASC"
+    )
+  end
+
   def unposted_gamechats
-    @db.exec_params(
+    @db.exec(
       "SELECT gamechats.id, gid, subreddits.name, title
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status = 'Future' AND post_at <= $1
+      WHERE status IN ('Pregame', 'Future')
+        AND post_at <= NOW()
         AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
-      ORDER BY post_at ASC, gid ASC",
-      [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
+      ORDER BY post_at ASC, gid ASC"
     )
   end
 
   def active_gamechats
-    @db.exec_params(
+    @db.exec(
       "SELECT gamechats.id, gid, subreddits.name, post_id
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status = 'Posted' AND starts_at <= $1
+      WHERE status = 'Posted'
+        AND starts_at <= NOW()
         AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
-      ORDER BY post_id ASC",
-      [Time.now.strftime('%Y-%m-%d %H:%M:%S')]
+      ORDER BY post_id ASC"
     )
   end
 

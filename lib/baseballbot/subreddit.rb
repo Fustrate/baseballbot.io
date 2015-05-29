@@ -73,6 +73,10 @@ class Baseballbot
       post
     end
 
+    def post_pregame(gid:)
+      template = pregame_template(gid: gid)
+    end
+
     def post_postgame(gid:)
       template = postgame_template(gid: gid)
 
@@ -212,6 +216,16 @@ class Baseballbot
                              subreddit: self,
                              gid: gid,
                              post_id: post_id
+    end
+
+    def pregame_template(gid:)
+      body, title = template_for('pregame')
+
+      Template::Gamechat.new body: body,
+                             bot: @bot,
+                             subreddit: self,
+                             gid: gid,
+                             title: title
     end
 
     def postgame_template(gid:)
