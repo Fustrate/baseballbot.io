@@ -75,6 +75,8 @@ class Baseballbot
 
     def post_pregame(gid:)
       template = pregame_template(gid: gid)
+
+      submit template.title, text: template.result, sticky: sticky_gamechats?
     end
 
     def post_postgame(gid:)
