@@ -94,6 +94,10 @@ class Baseballbot
     subreddit = team_to_subreddit(team)
 
     subreddit.update description: subreddit.generate_sidebar
+  rescue Redd::Error::ServiceUnavailable, Redd::Error::InternalServerError,
+         Faraday::TimeoutError, OpenURI::HTTPError, Redd::Error::TimedOut
+    # do nothing, it's not the end of the world
+    nil
   rescue Redd::Error::InvalidOAuth2Credentials
     client = clients[subreddit.account.name]
 
@@ -115,8 +119,8 @@ class Baseballbot
       next unless names.empty? || names.include?(row['name'].downcase)
 
       post_pregame! id: row['id'],
-                     team: row['name'],
-                     gid: row['gid']
+                    team: row['name'],
+                    gid: row['gid']
     end
   end
 
@@ -194,7 +198,7 @@ class Baseballbot
       [id]
     )
   rescue Redd::Error::ServiceUnavailable, Redd::Error::InternalServerError,
-         Faraday::TimeoutError
+         Faraday::TimeoutError, OpenURI::HTTPError, Redd::Error::TimedOut
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
     nil
   rescue StandardError => e

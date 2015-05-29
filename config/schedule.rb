@@ -3,6 +3,8 @@ set :output, '/home/baseballbot/apps/baseballbot.io/shared/log/whenever.log'
 every 1.hour do
   command 'cd /home/baseballbot/apps/baseballbot.io/current/lib && ' \
           'bundle exec ruby update_sidebars.rb'
+  command 'cd /home/baseballbot/apps/baseballbot.io/current/lib && ' \
+          'bundle exec ruby post_pregames.rb'
 end
 
 every 5.minutes do
