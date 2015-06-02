@@ -104,7 +104,7 @@ class Baseballbot
         edit(id: post_id, body: body)
       end
 
-      template.game.over?
+      template.game.over? || template.game.postponed?
     end
 
     def subreddit
