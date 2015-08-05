@@ -21,17 +21,19 @@ class Baseballbot
               end
             end
 
+            determine_wildcards teams
+
             divisions = Hash.new { |hash, key| hash[key] = [] }
 
             teams.each do |_, team|
+              # Sort by (in order) lowest losing %, most wins, least losses, code
+              team[:sort_order] = [1.0 - team[:percent], 162 - team[:wins], team[:losses], team[:code]]
+
               divisions[team[:division_id]] << team
             end
 
             divisions.each do |id, division|
-              divisions[id] = division.sort_by do |team|
-                # Sort by (in order) lowest losing %, most wins, least losses, code
-                [1.0 - team[:percent], 162 - team[:wins], team[:losses], team[:code]]
-              end
+              divisions[id] = division.sort_by { |team| team[:sort_order] }
             end
 
             divisions
@@ -47,6 +49,40 @@ class Baseballbot
             nl: divisions[203].zip(divisions[205], divisions[204]),
             al: divisions[200].zip(divisions[202], divisions[201])
           }
+        end
+
+        def determine_wildcards(teams)
+          determine_league_wildcards teams, [203, 204, 205]
+          determine_league_wildcards teams, [200, 201, 202]
+        end
+
+        def determine_league_wildcards(teams, division_ids)
+          all_teams = teams.select do |code, team|
+                        division_ids.include?(team[:division_id])
+                      end.map { |ary| ary[1] }
+
+          in_first, not_in_first = all_teams.partition { |team| team[:games_back] == 0 }
+
+          number_of_spots = 5 - in_first.count
+
+          return if number_of_spots == 0
+
+          in_order = not_in_first.sort_by { |team| team[:wildcard_gb] }
+
+          in_first = in_order.select { |team| team[:wildcard_gb] == in_order[0][:wildcard_gb] }
+
+          in_first.each do |team|
+            teams[team[:code].to_sym][:wildcard_position] = 1
+          end
+
+          # Only add the second wildcard(s) under certain conditions
+          return unless in_first.count == 1 && number_of_spots == 2
+
+          in_order.each do |team|
+            next unless team[:wildcard_gb] == in_order[1][:wildcard_gb]
+
+            teams[team[:code].to_sym][:wildcard_position] = 2
+          end
         end
 
         def team_stats
