@@ -97,7 +97,7 @@ class Baseballbot
         end
 
         def gameday_link(text, gid)
-          link_to text, url: "//mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
+          link_to text, url: "http://mlb.com/r/game?gid=#{gid}"
         end
 
         def load_gamechats(date)
