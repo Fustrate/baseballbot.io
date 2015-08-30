@@ -63,7 +63,7 @@ class Baseballbot
           @leagues ||= {
             nl: divisions[203] + divisions[204] + divisions[205],
             al: divisions[200] + divisions[201] + divisions[202]
-          }.each { |_, teams| teams.sort_by! { |team| team[:sort_order] } }
+          }
         end
 
         def draft_order
