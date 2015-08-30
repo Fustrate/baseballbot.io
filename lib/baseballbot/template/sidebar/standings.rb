@@ -66,6 +66,13 @@ class Baseballbot
           }.each { |_, teams| teams.sort_by! { |team| team[:sort_order] } }
         end
 
+        def draft_order
+          divisions.values
+            .flatten(1)
+            .each { |_, teams| teams.sort_by! { |team| team[:sort_order] } }
+            .reverse
+        end
+
         def determine_wildcards(teams)
           determine_league_wildcards teams, [203, 204, 205]
           determine_league_wildcards teams, [200, 201, 202]
