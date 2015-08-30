@@ -208,7 +208,7 @@ class Baseballbot
         end
 
         def add_days_to_calendar(days, calendar, options = {})
-          days_in_month = first_day.days_in_month
+          days_in_month = days.keys.last
 
           days.each do |cday, day|
             calendar << cell(cday, day[:games], downcase: options[:downcase])
