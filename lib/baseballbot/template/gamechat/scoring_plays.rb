@@ -3,23 +3,11 @@ class Baseballbot
     class Gamechat
       module ScoringPlays
         def scoring_plays
-          plays = []
+          return [] unless @game.started?
 
-          return plays unless @game.started?
-
-          data = Nokogiri::XML open_file('inning/inning_Scores.xml')
-
-          data.xpath('//scores/score').each do |play|
-            plays << {
-              side:   play['top_inning'] == 'Y' ? 'T' : 'B',
-              team:   play['top_inning'] == 'Y' ? opponent : team,
-              inning: play['inn'],
-              event:  play.at_xpath('*[@des and @score="T"]')['des'],
-              score:  [play['home'].to_i, play['away'].to_i]
-            }
-          end
-
-          plays
+          Nokogiri::XML(open_file('inning/inning_Scores.xml'))
+            .xpath('//scores/score')
+            .map { |play| format_play(play) }
         rescue OpenURI::HTTPError
           # There's no inning_Scores.xml file right now
           []
@@ -31,21 +19,35 @@ class Baseballbot
             ':-:|-|:-:'
           ]
 
-          scoring_plays.each do |event|
-            score = if event[:side] == 'T'
-                      "#{ event[:score][0] }-#{ bold event[:score][1] }"
-                    else
-                      "#{ bold event[:score][0] }-#{ event[:score][1] }"
-                    end
-
+          scoring_plays.each do |play|
             table << [
-              "#{ event[:inning_side] }#{ event[:inning] }",
-              event[:event],
-              score
+              "#{play[:inning_side]}#{play[:inning]}",
+              play[:event],
+              event_score(play)
             ].join('|')
           end
 
           table.join "\n"
+        end
+
+        protected
+
+        def format_play(play)
+          {
+            side:   play['top_inning'] == 'Y' ? 'T' : 'B',
+            team:   play['top_inning'] == 'Y' ? opponent : team,
+            inning: play['inn'],
+            event:  play.at_xpath('*[@des and @score="T"]')['des'],
+            score:  [play['home'].to_i, play['away'].to_i]
+          }
+        end
+
+        def event_score(play)
+          if play[:side] == 'T'
+            "#{play[:score][0]}-#{bold play[:score][1]}"
+          else
+            "#{bold play[:score][0]}-#{play[:score][1]}"
+          end
         end
       end
     end
