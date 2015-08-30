@@ -121,7 +121,7 @@ class Baseballbot
 
         def sort_teams_into_divisions(teams)
           Hash.new { |hash, key| hash[key] = [] }.tap do |divisions|
-            teams.each { |team| divisions[team[:division_id]] << team }
+            teams.each { |_, team| divisions[team[:division_id]] << team }
           end
         end
 
