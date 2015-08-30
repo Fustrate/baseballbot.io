@@ -2,25 +2,16 @@ class Baseballbot
   module Template
     class Sidebar
       module Calendar
-        CALENDAR_DATA_URL = "http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?start_date='%{start_date}'&end_date='%{end_date}'&team_id=%{team_id}&season=%{year}&game_type='R'&game_type='A'&game_type='E'&game_type='F'&game_type='D'&game_type='L'&game_type='W'&game_type='C'&game_type='S'"
+        # Date#days_in_month
+        using TemplateRefinements
 
-        def calendar_cell(cnum, games, options = {})
-          str = "^#{cnum} "
-
-          return str.strip if games.empty?
-
-          # Let's hope nobody plays a doubleheader against two different teams
-          subreddit = subreddit games.first[:opponent].code
-
-          # Spring training games sometimes are against colleges
-          subreddit.downcase! if subreddit && options[:downcase]
-
-          statuses = games.map { |game| game[:status] }
-
-          str << link_to('', sub: subreddit, title: statuses.join(', '))
-
-          games.first[:home] ? (bold str) : (italic str)
-        end
+        CALENDAR_DATA_URL = 'http://mlb.mlb.com/lookup/json/named.schedule_' \
+                            "team_sponsors.bam?start_date='%{start_date}'&" \
+                            "end_date='%{end_date}'&team_id=%{team_id}&" \
+                            "season=%{year}&game_type='R'&game_type='A'&" \
+                            "game_type='E'&game_type='F'&game_type='D'&" \
+                            "game_type='L'&game_type='W'&game_type='C'&" \
+                            "game_type='S'"
 
         # See #calendar for month options
         def month_calendar(month = nil, options = {})
@@ -32,160 +23,76 @@ class Baseballbot
           str << ":-:|:-:|:-:|:-:|:-:|:-:|:-:\n"
           str << ' |' * first_day[:date].wday
 
-          days_in_month = Date.civil(first_day[:date].year,
-                                     first_day[:date].month,
-                                     -1).day
-
-          days.each do |cday, day|
-            str << calendar_cell(cday, day[:games], downcase: options[:downcase])
-
-            if !day[:date].saturday?
-              str << '|'
-            elsif day[:date].day != days_in_month
-              str << "\n"
-            end
-          end
+          add_days_to_calendar(days, str, options)
 
           str
         end
 
         # Options are :last, :next, a Date, or nil (the current month)
         def calendar(month = nil)
-          date = if month == :last
-                   Date.today.last_month
-                 elsif month == :next
-                   Date.today.next_month
-                 elsif month.is_a? Date
-                   month
-                 else
-                   Date.today
-                 end
-
-          start_date = Date.civil(date.year, date.month, 1)
-          end_date = Date.civil(date.year, date.month, -1)
-
-          data = JSON.load open_url(CALENDAR_DATA_URL,
-                                    year: date.year,
-                                    start_date: start_date.strftime('%Y/%m/%d'),
-                                    end_date: end_date.strftime('%Y/%m/%d'))
+          date = date_for_month(month)
 
           days = {}
 
-          days_in_month = end_date.day
-
-          (1..days_in_month).each do |day|
+          1.upto(end_date.day).each do |day|
             days[day] = {
               date: Date.new(date.year, date.month, day),
               games: []
             }
           end
 
-          games = data['schedule_team_sponsors']['schedule_team_complete']
-          games = games['queryResults']['row']
-
-          games.each do |day|
-            next unless day['game_id']
+          calendar_games(date).each do |game|
+            next unless game['game_id']
 
             # Things like the ASG
-            next unless day['team_file_code'] == @team.file_code
+            next unless game['team_file_code'] == @team.file_code
 
-            date = Chronic.parse(day['team_game_time'])
+            date = Chronic.parse(game['team_game_time'])
 
-            days[date.day][:games] << {
-              date: date,
-              home: day['home_away_sw'] == 'H',
-              opponent: build_team(code: day['opponent_abbrev'],
-                                   name: day['opponent_brief']),
-              over: %w(F C D FT FR).include?(day['game_status_ind']),
-              score: [day['team_score'].to_i, day['opponent_score'].to_i],
-              tv: day['team_tv'] || '',
-              status_code: day['game_status_ind']
-            }
-
-            days[date.day][:games].each_with_index do |game, i|
-              if game[:over]
-                outcome = if game[:score][0] == game[:score][1]
-                            'Tied'
-                          elsif game[:score][0] > game[:score][1]
-                            'Won'
-                          else
-                            'Lost'
-                          end
-
-                days[date.day][:games][i][:outcome] = outcome
-              end
-
-              days[date.day][:games][i][:status] = calendar_game_status game
-            end
+            days[date.day][:games] << process_game(game, date)
           end
 
           days
         end
 
         def month_games
-          calendar.map { |_, day| day[:games] }.flatten(1)
-        end
-
-        def calendar_game_status(game)
-          return 'Delayed' if game[:status_code] == 'D'
-
-          if !game[:over]
-            if game[:tv].empty?
-              game[:date].strftime '%-I:%M'
-            else
-              game[:date].strftime "%-I:%M, #{game[:tv]}"
-            end
-          else
-            "#{game[:outcome]} #{game[:score].join '-'}"
-          end
+          calendar.flat_map { |_, day| day[:games] }
         end
 
         def previous_games(limit)
-          if @previous_games && @previous_games.count >= limit
-            return @previous_games.first(limit)
-          end
+          return @previous.first(limit) if @previous && @previous.count >= limit
 
-          @previous_games = []
+          @previous = []
 
           [:current, :previous].each do |month|
             Hash[calendar(month).to_a.reverse].each do |_, day|
               next if day[:date] > Date.today
 
-              day[:games].each do |game|
-                next unless game[:over]
+              day[:games].each { |game| @previous << game if game[:over] }
 
-                @previous_games << game
-              end
-
-              break if @previous_games.count >= limit
+              break if @previous.count >= limit
             end
           end
 
-          @previous_games.first(limit)
+          @previous.first(limit)
         end
 
         def upcoming_games(limit)
-          if @upcoming_games && @upcoming_games.count >= limit
-            return @upcoming_games.first(limit)
-          end
+          return @upcoming.first(limit) if @upcoming && @upcoming.count >= limit
 
-          @upcoming_games = []
+          @upcoming = []
 
           [:current, :next].each do |month|
             calendar(month).each do |_, day|
               next if day[:date] < Date.today
 
-              day[:games].each do |game|
-                next if game[:over]
+              day[:games].each { |game| @upcoming << game unless game[:over] }
 
-                @upcoming_games << game
-              end
-
-              break if @upcoming_games.count >= limit
+              break if @upcoming.count >= limit
             end
           end
 
-          @upcoming_games.first(limit)
+          @upcoming.first(limit)
         end
 
         def next_game
@@ -221,8 +128,107 @@ class Baseballbot
 
         protected
 
+        def cell(cnum, games, options = {})
+          str = "^#{cnum} "
+
+          return str.strip if games.empty?
+
+          # Let's hope nobody plays a doubleheader against two different teams
+          subreddit = subreddit games.first[:opponent].code
+
+          # Spring training games sometimes are against colleges
+          subreddit.downcase! if subreddit && options[:downcase]
+
+          statuses = games.map { |game| game[:status] }
+
+          str << link_to('', sub: subreddit, title: statuses.join(', '))
+
+          games[0][:home] ? (bold str) : (italic str)
+        end
+
         def build_team(code:, name:)
-          @bot.gameday.team(code) || MLBGameday::Team.new(name: name, code: code)
+          @bot.gameday.team(code) ||
+            MLBGameday::Team.new(name: name, code: code)
+        end
+
+        def date_for_month(month)
+          if month == :last
+            Date.today.last_month
+          elsif month == :next
+            Date.today.next_month
+          elsif month.is_a? Date
+            month
+          else
+            Date.today
+          end
+        end
+
+        def outcome(game)
+          return 'Tied' if game[:score][0] == game[:score][1]
+
+          return 'Won' if game[:score][0] > game[:score][1]
+
+          'Lost'
+        end
+
+        def process_game(game, date)
+          post_process_game(
+            date: date,
+            home: game['home_away_sw'] == 'H',
+            opponent: build_team(code: game['opponent_abbrev'],
+                                 name: game['opponent_brief']),
+            over: %w(F C D FT FR).include?(game['game_status_ind']),
+            score: [game['team_score'].to_i, game['opponent_score'].to_i],
+            tv: game['team_tv'] || '',
+            status_code: game['game_status_ind']
+          )
+        end
+
+        # Values that depend on other values in the hash
+        def post_process_game(game)
+          game[:outcome] = outcome(game) if game[:over]
+          game[:status] = calendar_game_status game
+
+          game
+        end
+
+        def calendar_games(date)
+          calendar_data(date)['schedule_team_sponsors'] \
+            ['schedule_team_complete']['queryResults']['row']
+        end
+
+        def calendar_data(date)
+          start_date = Date.civil(date.year, date.month, 1).strftime('%Y/%m/%d')
+          end_date = Date.civil(date.year, date.month, -1).strftime('%Y/%m/%d')
+
+          JSON.load open_url(CALENDAR_DATA_URL,
+                             year: date.year,
+                             start_date: start_date,
+                             end_date: end_date)
+        end
+
+        def add_days_to_calendar(days, calendar, options = {})
+          days_in_month = first_day.days_in_month
+
+          days.each do |cday, day|
+            calendar << cell(cday, day[:games], downcase: options[:downcase])
+
+            if !day[:date].saturday?
+              calendar << '|'
+            elsif day[:date].day != days_in_month
+              calendar << "\n"
+            end
+          end
+        end
+
+        def calendar_game_status(game)
+          return 'Delayed' if game[:status_code] == 'D'
+
+          return "#{game[:outcome]} #{game[:score].join '-'}" if game[:over]
+
+          return game[:date].strftime '%-I:%M' if game[:tv].empty?
+
+          game[:date].strftime "%-I:%M, #{game[:tv]}"
         end
       end
     end

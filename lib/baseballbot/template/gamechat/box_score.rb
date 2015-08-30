@@ -45,7 +45,7 @@ class Baseballbot
           url = link_to batter['name'], url: player_url(batter['id'])
 
           [
-            "#{spacer}#{is_replacement ? batter['pos'] : batter['pos'].bold}",
+            "#{spacer}#{is_replacement ? batter['pos'] : (bold batter['pos'])}",
             "#{spacer}#{url}",
             batter['ab'],
             batter['r'],

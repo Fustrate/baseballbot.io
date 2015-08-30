@@ -14,20 +14,15 @@ class Baseballbot
         end
 
         def scoring_plays_table
-          table = [
-            'Inning|Event|Score',
-            ':-:|-|:-:'
-          ]
-
-          scoring_plays.each do |play|
-            table << [
+          rows = scoring_plays.map do |play|
+            [
               "#{play[:inning_side]}#{play[:inning]}",
               play[:event],
               event_score(play)
             ].join('|')
           end
 
-          table.join "\n"
+          "Inning|Event|Score\n:-:|-|:-:\n#{rows.join("\n")}"
         end
 
         protected

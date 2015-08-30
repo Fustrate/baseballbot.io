@@ -109,7 +109,7 @@ class Baseballbot
             'First and second',
             'First and third',
             'Second and third',
-            'Bases loaded',
+            'Bases loaded'
           ][rob.text.to_i]
         end
 

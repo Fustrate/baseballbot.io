@@ -191,12 +191,7 @@ class Baseballbot
 
     return unless over
 
-    @db.exec_params(
-      "UPDATE gamechats
-      SET status = 'Over'
-      WHERE id = $1",
-      [id]
-    )
+    @db.exec_params %(UPDATE gamechats SET status = 'Over' WHERE id = $1), [id]
   rescue Redd::Error::ServiceUnavailable, Redd::Error::InternalServerError,
          Faraday::TimeoutError, OpenURI::HTTPError, Redd::Error::TimedOut
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
@@ -280,19 +275,21 @@ class Baseballbot
   def load_accounts
     @accounts = {}
 
-    @db.exec('SELECT * FROM accounts').each do |row|
-      @accounts[row['id']] = Account.new(
-        bot: self,
-        name: row['name'],
-        access: {
-          access_token: row['access_token'],
-          refresh_token: row['refresh_token'],
-          scope: row['scope'][1..-2].split(','),
-          # Remove 2 minutes so we don't run into invalid credentials
-          expires_at: Chronic.parse(row['expires_at']) - 120
-        }
-      )
-    end
+    @db.exec('SELECT * FROM accounts').each { |row| add_account row }
+  end
+
+  def add_account(row)
+    @accounts[row['id']] = Account.new(
+      bot: self,
+      name: row['name'],
+      access: {
+        access_token: row['access_token'],
+        refresh_token: row['refresh_token'],
+        scope: row['scope'][1..-2].split(','),
+        # Remove 2 minutes so we don't run into invalid credentials
+        expires_at: Chronic.parse(row['expires_at']) - 120
+      }
+    )
   end
 
   def load_subreddits
@@ -302,15 +299,17 @@ class Baseballbot
       'SELECT subreddits.*
       FROM subreddits
       LEFT JOIN accounts ON (account_id = accounts.id)'
-    ).each do |row|
-      @subreddits[row['name'].downcase] = Subreddit.new(
-        bot: self,
-        id: row['id'].to_i,
-        name: row['name'],
-        code: row['team_code'],
-        account: @accounts[row['account_id']],
-        options: JSON.load(row['options'])
-      )
-    end
+    ).each { |row| add_subreddit row }
+  end
+
+  def add_subreddit(row)
+    @subreddits[row['name'].downcase] = Subreddit.new(
+      bot: self,
+      id: row['id'].to_i,
+      name: row['name'],
+      code: row['team_code'],
+      account: @accounts[row['account_id']],
+      options: JSON.load(row['options'])
+    )
   end
 end

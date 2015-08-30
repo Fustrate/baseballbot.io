@@ -1,11 +1,7 @@
 module TemplateRefinements
-  refine String do
-    def bold
-      "**#{self}**"
-    end
-
-    def italic
-      "*#{self}*"
+  refine Date do
+    def days_in_month
+      Date.civil(year, month, -1).day
     end
   end
 
@@ -48,11 +44,11 @@ class Baseballbot
       end
 
       def bold(text)
-        text.to_s.bold
+        "**#{text}**"
       end
 
       def italic(text)
-        text.to_s.italic
+        "*#{text}*"
       end
 
       def sup(text)
