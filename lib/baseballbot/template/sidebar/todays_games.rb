@@ -17,12 +17,12 @@ class Baseballbot
 
           Nokogiri::XML(open(date.strftime SCOREBOARD_URL))
             .xpath('//games/game')
-            .map { |game| process_game game }
+            .map { |game| process_todays_game game }
         end
 
         protected
 
-        def process_game(game)
+        def process_todays_game(game)
           status = game.xpath('@status').text
           gid = game.xpath('@gameday_link').text
 
