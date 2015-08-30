@@ -71,7 +71,7 @@ class Baseballbot
 
           number_of_spots = 5 - in_first.count
 
-          return if number_of_spots == 0
+          return if number_of_spots < 1
 
           in_order = not_in_first.sort_by { |team| team[:wildcard_gb] }
 
