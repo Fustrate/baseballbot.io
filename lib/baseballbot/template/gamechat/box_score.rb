@@ -45,7 +45,7 @@ class Baseballbot
           url = link_to batter['name'], url: player_url(batter['id'])
 
           [
-            "#{spacer}#{is_replacement ? batter['pos'] : bold(batter['pos'])}",
+            "#{spacer}#{is_replacement ? batter['pos'] : batter['pos'].bold}",
             "#{spacer}#{url}",
             batter['ab'],
             batter['r'],
@@ -60,12 +60,10 @@ class Baseballbot
         def pitcher_row(pitcher)
           return ' ||||||||' unless pitcher
 
-          game_score = pitcher['game_score']
-
           [
             link_to(pitcher['name'],
                     url: player_url(pitcher['id']),
-                    title: game_score),
+                    title: "Game Score: #{pitcher['game_score']}"),
             "#{pitcher['out'].to_i / 3}.#{pitcher['out'].to_i % 3}",
             pitcher['h'],
             pitcher['r'],

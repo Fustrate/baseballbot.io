@@ -1,4 +1,14 @@
 module TemplateRefinements
+  refine String do
+    def bold
+      "**#{self}**"
+    end
+
+    def italic
+      "*#{self}*"
+    end
+  end
+
   refine Numeric do
     def ordinalize
       "#{self}#{ordinal}"
@@ -38,11 +48,11 @@ class Baseballbot
       end
 
       def bold(text)
-        "**#{text}**"
+        text.to_s.bold
       end
 
       def italic(text)
-        "*#{text}*"
+        text.to_s.italic
       end
 
       def sup(text)
