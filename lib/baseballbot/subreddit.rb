@@ -8,7 +8,7 @@ module Redd
       # suggested_sort should be one of:
       # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
       # 'random', 'qa']
-      def set_suggested_sort(suggested_sort)
+      def suggested_sort=(suggested_sort)
         post('/api/set_suggested_sort', id: fullname, sort: suggested_sort)
       end
     end
@@ -53,7 +53,7 @@ class Baseballbot
     end
 
     def current_sidebar
-      raise Baseballbot::Error::NoSidebarText unless settings[:description]
+      fail Baseballbot::Error::NoSidebarText unless settings[:description]
 
       CGI.unescapeHTML settings[:description]
     end
@@ -85,6 +85,7 @@ class Baseballbot
       submit template.title, text: template.result, sticky: sticky_gamechats?
     end
 
+    # Returns a boolean to indicate if the game is (effectively) over
     def update_gamechat(gid:, post_id:)
       template = gamechat_update_template(gid: gid, post_id: post_id)
 
@@ -130,6 +131,8 @@ class Baseballbot
         log "#{error[0]}: #{error[1]} (#{error[2]})"
 
         if error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
+          # TODO: Message the moderators of the subreddit to tell them their
+          # sidebar is X characters too long.
           puts "New length is #{new_settings[error[2].to_sym].length}"
         end
       end
@@ -138,7 +141,6 @@ class Baseballbot
     # TODO: Make this an actual logger, so we can log to something different
     def log(message)
       puts Time.now.strftime "[%Y-%m-%d %H:%M:%S] #{@name}: #{message}"
-
     end
 
     # Returns the post ID
@@ -163,7 +165,7 @@ class Baseballbot
       # Why doesn't the redd gem just return a Redd::Objects::Submission?
       submission(id: thing[:id]).tap do |post|
         post.set_sticky if sticky
-        post.set_suggested_sort sort unless sort == ''
+        post.suggested_sort = sort unless sort == ''
       end
     end
 
@@ -191,7 +193,7 @@ class Baseballbot
     protected
 
     def sidebar_template
-      body, _ = template_for('sidebar')
+      body = template_for('sidebar')[0]
 
       Template::Sidebar.new body: body,
                             bot: @bot,
@@ -211,7 +213,7 @@ class Baseballbot
     end
 
     def gamechat_update_template(gid:, post_id:)
-      body, _ = template_for('gamechat_update')
+      body = template_for('gamechat_update')[0]
 
       Template::Gamechat.new body: body,
                              bot: @bot,
