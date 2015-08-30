@@ -34,7 +34,7 @@ class Baseballbot
 
           days = {}
 
-          1.upto(end_date.day).each do |day|
+          1.upto(date.days_in_month).each do |day|
             days[day] = {
               date: Date.new(date.year, date.month, day),
               games: []
