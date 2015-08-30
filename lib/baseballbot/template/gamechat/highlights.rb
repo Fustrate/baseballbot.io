@@ -21,7 +21,7 @@ class Baseballbot
               text = "#{highlight[:blurb]} (#{highlight[:duration]})"
               url = highlight[:url]
 
-              list << "- #{icon} #{url ? link_to(text, url: url) : text}"
+              "- #{icon} #{url ? link_to(text, url: url) : text}"
             end
             .join "\n"
         end
