@@ -126,7 +126,7 @@ class Baseballbot
         end
 
         def teams_in_divisions(teams, ids)
-          teams.values.keep_if { |_, team| ids.include?(team[:division_id]) }
+          teams.values.keep_if { |team| ids.include?(team[:division_id]) }
         end
 
         def first_and_second_wildcards(eligible)
