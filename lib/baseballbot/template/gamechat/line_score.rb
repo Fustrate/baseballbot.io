@@ -4,40 +4,12 @@ class Baseballbot
       module LineScore
         BLANK_RHE = { runs: 0, hits: 0, errors: 0 }
 
-        def home
-          return BLANK_RHE unless @game.started? && @game.boxscore
-
-          rhe_for_side 'home'
-        end
-
-        def away
-          return BLANK_RHE unless @game.started? && @game.boxscore
-
-          rhe_for_side 'away'
-        end
-
-        def lines
-          lines = [[nil] * 9, [nil] * 9]
-
-          return lines unless @game.started? && @game.boxscore
-
-          @game.boxscore
-            .xpath('//boxscore/linescore/inning_line_score')
-            .each { |inning| add_inning_to_line_score(inning, lines: lines) }
-
-          lines
-        end
-
         def line_score
           [
             " |#{(1..(lines[0].count)).to_a.join('|')}|R|H|E",
             ":-:|#{(':-:|' * lines[0].count)}:-:|:-:|:-:",
-            "[#{game.away_team.code}](/#{game.away_team.code})|" \
-              "#{lines[0].join('|')}|#{bold away[:runs]}|" \
-              "#{bold away[:hits]}|#{bold away[:errors]}",
-            "[#{game.home_team.code}](/#{game.home_team.code})|" \
-              "#{lines[1].join('|')}|#{bold home[:runs]}|" \
-              "#{bold home[:hits]}|#{bold home[:errors]}"
+            line_for_team(:away),
+            line_for_team(:home)
           ].join "\n"
         end
 
@@ -52,6 +24,32 @@ class Baseballbot
         end
 
         protected
+
+        def home_rhe
+          return BLANK_RHE unless @game.started? && @game.boxscore
+
+          rhe_for_side 'home'
+        end
+
+        def away_rhe
+          return BLANK_RHE unless @game.started? && @game.boxscore
+
+          rhe_for_side 'away'
+        end
+
+        def lines
+          @lines ||= begin
+            lines = [[nil] * 9, [nil] * 9]
+
+            return lines unless @game.started? && @game.boxscore
+
+            @game.boxscore
+            .xpath('//boxscore/linescore/inning_line_score')
+            .each { |inning| add_inning_to_line_score(inning, lines: lines) }
+
+            lines
+          end
+        end
 
         def rhe_for_side(side)
           @rhe ||= @game.boxscore.at_xpath '//boxscore/linescore'
@@ -74,6 +72,15 @@ class Baseballbot
           return unless inning['home'] && !inning['home'].empty?
 
           lines[1][inning['inning'].to_i - 1] = inning['home']
+        end
+
+        def line_for_team(team)
+          team = team == :home ? game.home_team : game.away_team
+          line = team == :home ? lines[1] : lines[0]
+          rhe = team == :home ? home_rhe : away_rhe
+
+          "[#{team.code}](/#{team.code})|#{line.join('|')}|" \
+            "#{bold rhe[:runs]}|#{bold rhe[:hits]}|#{bold rhe[:errors]}"
         end
       end
     end
