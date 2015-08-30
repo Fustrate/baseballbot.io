@@ -2,7 +2,6 @@ class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-
         GD2 = 'http://gd2.mlb.com/components/game/mlb'
 
         SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
