@@ -2,7 +2,10 @@ class Baseballbot
   module Template
     class Sidebar
       module Standings
-        STANDINGS = "http://mlb.mlb.com/lookup/json/named.standings_schedule_date.bam?season=%Y&schedule_game_date.game_date='%Y/%m/%d'&sit_code='h0'&league_id=103&league_id=104&all_star_sw='N'&version=2"
+        STANDINGS = 'http://mlb.mlb.com/lookup/json/named.standings_schedule_' \
+                    'date.bam?season=%Y&schedule_game_date.game_date=\'' \
+                    '%Y/%m/%d\'&sit_code=\'h0\'&league_id=103&league_id=104' \
+                    '&all_star_sw=\'N\'&version=2'
 
         def divisions
           @divisions ||= begin
@@ -11,7 +14,8 @@ class Baseballbot
 
             standings = JSON.parse open(filename).read
             standings = standings['standings_schedule_date']
-            standings = standings['standings_all_date_rptr']['standings_all_date']
+            standings = standings['standings_all_date_rptr']
+            standings = standings['standings_all_date']
 
             teams = {}
 
@@ -26,8 +30,12 @@ class Baseballbot
             divisions = Hash.new { |hash, key| hash[key] = [] }
 
             teams.each do |_, team|
-              # Sort by (in order) lowest losing %, most wins, least losses, code
-              team[:sort_order] = [1.0 - team[:percent], 162 - team[:wins], team[:losses], team[:code]]
+              team[:sort_order] = [
+                1.0 - team[:percent], # Lowest losing %
+                162 - team[:wins], # Most wins
+                team[:losses], # Least losses
+                team[:code]
+              ]
 
               divisions[team[:division_id]] << team
             end
@@ -57,11 +65,9 @@ class Baseballbot
         end
 
         def determine_league_wildcards(teams, division_ids)
-          all_teams = teams.select do |code, team|
-                        division_ids.include?(team[:division_id])
-                      end.map { |ary| ary[1] }
+          all_teams = teams_in_divisions(teams, division_ids)
 
-          in_first, not_in_first = all_teams.partition { |team| team[:games_back] == 0 }
+          in_first, not_in_first = separate_wildcard_teams all_teams
 
           number_of_spots = 5 - in_first.count
 
@@ -69,26 +75,20 @@ class Baseballbot
 
           in_order = not_in_first.sort_by { |team| team[:wildcard_gb] }
 
-          in_first = in_order.select { |team| team[:wildcard_gb] == in_order[0][:wildcard_gb] }
+          first_wildcards = teams_tied_with in_order, in_order[0]
 
-          in_first.each do |team|
-            teams[team[:code].to_sym][:wildcard_position] = 1
-          end
+          mark_teams teams, first_wildcards, wildcard_position: 1
 
           # Only add the second wildcard(s) under certain conditions
-          return unless in_first.count == 1 && number_of_spots == 2
+          return unless first_wildcards.count == 1 && number_of_spots == 2
 
-          in_order.each do |team|
-            next unless team[:wildcard_gb] == in_order[1][:wildcard_gb]
+          second_wildcards = teams_tied_with in_order, in_order[1]
 
-            teams[team[:code].to_sym][:wildcard_position] = 2
-          end
+          mark_teams teams, second_wildcards, wildcard_position: 2
         end
 
         def team_stats
-          @team_stats ||= standings
-                          .select { |team| team[:code] == @team.code }
-                          .first
+          @team_stats ||= standings.find { |team| team[:code] == @team.code }
         end
 
         def [](stat)
@@ -120,6 +120,24 @@ class Baseballbot
             team:           @bot.gameday.team(row['team_abbrev']),
             subreddit:      subreddit(row['team_abbrev'])
           }
+        end
+
+        def teams_in_divisions(teams, division_ids)
+          teams
+            .select { |_, team| division_ids.include?(team[:division_id]) }
+            .map { |ary| ary[1] }
+        end
+
+        def separate_wildcard_teams(teams)
+          teams.partition { |team| team[:games_back] == 0 }
+        end
+
+        def teams_tied_with(teams, tied_with)
+          teams.select { |team| team[:wildcard_gb] == tied_with[:wildcard_gb] }
+        end
+
+        def mark_teams(teams, which, attributes = {})
+          which.each { |team| teams[team[:code].to_sym].merge!(attributes) }
         end
       end
     end
