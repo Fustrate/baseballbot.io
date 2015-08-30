@@ -87,7 +87,7 @@ def load_schedule(subreddit_id, code, post_at, start_date, end_date)
         VALUES
         ($1, $2, $3, $4, $5, $6, $7)',
         [
-          game['game_id'].gsub(/[\/\-]/, '_'),
+          game['game_id'].gsub(%r{[/\-]}, '_'),
           post_at.strftime('%Y-%m-%d %H:%M:%S'),
           gametime.strftime('%Y-%m-%d %H:%M:%S'),
           'Future',
@@ -103,15 +103,15 @@ def load_schedule(subreddit_id, code, post_at, start_date, end_date)
 end
 
 if ARGV.count == 2
-  month, year = ARGV[1].split(/[-\/]/).map(&:to_i)
-  names = ARGV[0].split(/[+\/,]/).map(&:downcase)
+  month, year = ARGV[1].split(%r{[-/]}).map(&:to_i)
+  names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
 elsif ARGV.count == 1
-  if ARGV[0] =~ /(\d+)\/(\d+)/
+  if ARGV[0] =~ %r{(\d+)/(\d+)}
     _, month, year = Regexp.last_match.to_a
     names = []
   else
     month, year = [Time.now.month, Time.now.year]
-    names = ARGV[0].split(/[+\/,]/).map(&:downcase)
+    names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
   end
 else
   fail 'Please pass 2 arguments: ruby load_schedule.rb LAD+BOS 6/2015'

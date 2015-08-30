@@ -234,7 +234,8 @@ class Baseballbot
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future'
         AND (options#>>'{pregame,enabled}')::boolean IS TRUE
-        AND (DATE(starts_at) + (options#>>'{pregame,post_at}')::interval) < NOW() AT TIME ZONE (options->>'timezone')
+        AND (DATE(starts_at) + (options#>>'{pregame,post_at}')::interval) <
+             NOW() AT TIME ZONE (options->>'timezone')
       ORDER BY post_at ASC, gid ASC"
     )
   end
