@@ -67,10 +67,10 @@ class Baseballbot
         end
 
         def draft_order
-          divisions.values
-            .flatten(1)
-            .each { |_, teams| teams.sort_by! { |team| team[:sort_order] } }
-            .reverse
+          @draft_order ||= divisions.values
+                           .flatten(1)
+                           .sort_by! { |team| team[:sort_order] }
+                           .reverse
         end
 
         def determine_wildcards(teams)
