@@ -67,7 +67,7 @@ class Baseballbot
 
           first_and_second_wildcards(eligible)
             .each_with_index do |teams_in_spot, position|
-              teams_in_spot.each do |_, team|
+              teams_in_spot.each do |team|
                 teams[team[:code].to_sym][:wildcard_position] = position + 1
               end
             end
