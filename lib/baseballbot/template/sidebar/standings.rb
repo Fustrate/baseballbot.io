@@ -129,11 +129,16 @@ class Baseballbot
           teams.values.keep_if { |team| ids.include?(team[:division_id]) }
         end
 
+        # Take the eligible teams, remove all teams who aren't at least tied
+        # with the team in 5th place, remove teams in first place, and then
+        # split between teams ahead of the second spot
+        #
+        # This might put two teams tied for second instead of tied for first
         def first_and_second_wildcards(eligible)
           eligible
             .reject { |team| team[:wildcard_gb] > eligible[4][:wildcard_gb] }
             .reject { |team| team[:games_back] == 0 }
-            .partition { |team| team[:wildcard_gb] == 0 }
+            .partition { |team| team[:wildcard_gb] < 0 }
         end
 
         def load_teams_from_remote
