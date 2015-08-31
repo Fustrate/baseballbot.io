@@ -74,10 +74,10 @@ class Baseballbot
           lines[1][inning['inning'].to_i - 1] = inning['home']
         end
 
-        def line_for_team(team)
-          team = team == :home ? game.home_team : game.away_team
-          line = team == :home ? lines[1] : lines[0]
-          rhe = team == :home ? home_rhe : away_rhe
+        def line_for_team(line_team)
+          team = line_team == :home ? game.home_team : game.away_team
+          line = line_team == :home ? lines[1] : lines[0]
+          rhe = line_team == :home ? home_rhe : away_rhe
 
           "[#{team.code}](/#{team.code})|#{line.join('|')}|" \
             "#{bold rhe[:runs]}|#{bold rhe[:hits]}|#{bold rhe[:errors]}"
