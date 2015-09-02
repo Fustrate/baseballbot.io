@@ -23,8 +23,6 @@ class Baseballbot
           "#{runners}, #{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
         end
 
-        protected
-
         def home_rhe
           return BLANK_RHE unless @game.started? && @game.boxscore
 
@@ -36,6 +34,8 @@ class Baseballbot
 
           rhe_for_side 'away'
         end
+
+        protected
 
         def lines
           @lines ||= begin
