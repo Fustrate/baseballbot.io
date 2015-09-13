@@ -130,11 +130,11 @@ class Baseballbot
       errors.each do |error|
         log "#{error[0]}: #{error[1]} (#{error[2]})"
 
-        if error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
-          # TODO: Message the moderators of the subreddit to tell them their
-          # sidebar is X characters too long.
-          puts "New length is #{new_settings[error[2].to_sym].length}"
-        end
+        next unless error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
+
+        # TODO: Message the moderators of the subreddit to tell them their
+        # sidebar is X characters too long.
+        puts "New length is #{new_settings[error[2].to_sym].length}"
       end
     end
 
