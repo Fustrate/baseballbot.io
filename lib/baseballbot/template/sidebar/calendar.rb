@@ -41,7 +41,17 @@ class Baseballbot
             }
           end
 
-          calendar_games(date).each do |game|
+          games = calendar_games(date)
+
+          unless games
+            puts format(CALENDAR_DATA_URL,
+                        year: date.year,
+                        start_date: start_date,
+                        end_date: end_date)
+            return
+          end
+
+          games.each do |game|
             next unless game['game_id']
 
             # Things like the ASG
