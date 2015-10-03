@@ -45,9 +45,9 @@ class Baseballbot
 
           unless games
             puts format(CALENDAR_DATA_URL,
-                        year: date.year,
-                        start_date: start_date,
-                        end_date: end_date)
+                        year: 2015,
+                        start_date: '2015/10/01',
+                        end_date: '2015/10/31')
             return
           end
 
