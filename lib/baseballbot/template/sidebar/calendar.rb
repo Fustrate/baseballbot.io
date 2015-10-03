@@ -47,7 +47,9 @@ class Baseballbot
             puts format(CALENDAR_DATA_URL,
                         year: 2015,
                         start_date: '2015/10/01',
-                        end_date: '2015/10/31')
+                        end_date: '2015/10/31',
+                        team_id: @team.id,
+                        team_code: @team.file_code)
             return
           end
 
