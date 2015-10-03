@@ -43,19 +43,8 @@ class Baseballbot
 
           games = calendar_games(date)
 
-          unless games
-            start_date = Date.civil(date.year, date.month, 1).strftime('%Y/%m/%d')
-            end_date = Date.civil(date.year, date.month, -1).strftime('%Y/%m/%d')
-
-            puts format(CALENDAR_DATA_URL,
-                        year: 2015,
-                        start_date: start_date,
-                        end_date: end_date,
-                        team_id: @team.id,
-                        team_code: @team.file_code)
-
-            return {}
-          end
+          # At the end of the season, "next X games" starts looking at November
+          return {} unless games
 
           games.each do |game|
             next unless game['game_id']
@@ -218,16 +207,6 @@ class Baseballbot
           end_date = Date.civil(date.year, date.month, -1).strftime('%Y/%m/%d')
 
           JSON.load open_url(CALENDAR_DATA_URL,
-                             year: date.year,
-                             start_date: start_date,
-                             end_date: end_date)
-        end
-
-        def calendar_url(date)
-          start_date = Date.civil(date.year, date.month, 1).strftime('%Y/%m/%d')
-          end_date = Date.civil(date.year, date.month, -1).strftime('%Y/%m/%d')
-
-          format(CALENDAR_DATA_URL,
                              year: date.year,
                              start_date: start_date,
                              end_date: end_date)
