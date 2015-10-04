@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
-gem 'rails', '4.2.3'
+ruby '2.2.3'
+gem 'rails', '4.2.4'
 
 gem 'pg'
 
-gem 'sass'
+gem 'sass-rails', github: 'rails/sass-rails', ref: '8e68c'
 gem 'jquery-rails'
 gem 'coffee-rails'
 gem 'haml-rails'
@@ -66,7 +66,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'launchy'
-  gem 'database_cleaner', '~> 1.4'
+  gem 'database_cleaner', '~> 1.5'
 
   gem 'byebug'
 
