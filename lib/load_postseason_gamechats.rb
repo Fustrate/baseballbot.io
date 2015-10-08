@@ -22,8 +22,8 @@ def game_title(row)
            "#{row['home_team_name']} - #{row['first_pitch_et']} PM ET"
   end
 
-  "Game Thread: #{row['description']} ⚾ #{row['away_team_name']} (0) " \
-  " @ #{row['home_team_name']} (0) - #{row['first_pitch_et']} PM ET"
+  'Game Thread: %{series_game} ⚾ %{away_name} (%{away_wins}) @ %{home_name} ' \
+  '(%{home_wins}) - %{start_time_et} PM ET'
 end
 
 def load_schedule
@@ -35,22 +35,21 @@ def load_schedule
     # If the team is undetermined, their division will be blank
     next if game['home_division'] == '' || game['away_division'] == ''
 
-    gametime = Chronic.parse(" #{game['original_date']} #{game['first_pitch_et']} PM") - 10_800
-    post_at = Time.new(gametime.year, gametime.month, gametime.day, 6, 0, 0)
+    gametime = Chronic.parse("#{game['original_date']} #{game['first_pitch_et']} PM") - 10_800
 
-    next if post_at < Time.now
+    next if gametime < Time.now
 
     @attempts += 1
 
     begin
-      insert_game game['gameday'], post_at, gametime, game_title(game)
+      insert_game game['gameday'], gametime, game_title(game)
     rescue PG::UniqueViolation
       @failures += 1
     end
   end
 end
 
-def insert_game(gid, post_at, gametime, title)
+def insert_game(gid, gametime, title)
   @conn.exec_params(
     'INSERT INTO gamechats (
       gid, post_at, starts_at, status, created_at, updated_at, subreddit_id,
@@ -59,7 +58,7 @@ def insert_game(gid, post_at, gametime, title)
     ($1, $2, $3, \'Future\', $4, $5, 15, $6)',
     [
       gid,
-      post_at.strftime('%Y-%m-%d %H:%M:%S'),
+      (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
       gametime.strftime('%Y-%m-%d %H:%M:%S'),
       @right_now,
       @right_now,

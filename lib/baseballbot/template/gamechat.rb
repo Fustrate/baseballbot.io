@@ -128,25 +128,31 @@ class Baseballbot
 
       def format_title(title)
         title = time.strftime title
-        game_number = @game.gamecenter.xpath('//game/@series-game-number').text
+        local_start_time = home? ? @game.home_start_time : @game.away_start_time
+        linescore = @game.linescore
 
         format title,
-               game_number: game_number,
                home_city: @game.home_team.city,
                home_name: @game.home_team.name,
                home_record: @game.home_record.join('-'),
-               home_pitcher: @game.linescore.xpath(
+               home_pitcher: linescore.xpath(
                  '//game/home_probable_pitcher/@last_name'
                ).text,
                home_runs: @game.score[0],
                away_city: @game.away_team.city,
                away_name: @game.away_team.name,
                away_record: @game.away_record.join('-'),
-               away_pitcher: @game.linescore.xpath(
+               away_pitcher: linescore.xpath(
                  '//game/away_probable_pitcher/@last_name'
                ).text,
                away_runs: @game.score[1],
-               start_time: home? ? @game.home_start_time : @game.away_start_time
+               start_time: local_start_time,
+               # /r/baseball always displays ET
+               start_time_et: linescore.xpath('//game/@first_pitch_et').text,
+               # Postseason
+               series_game: linescore.xpath('//game/@description').text,
+               home_wins: linescore.xpath('//game/@home_wins').text,
+               away_wins: linescore.xpath('//game/@away_wins').text
       end
     end
   end
