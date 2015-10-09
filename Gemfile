@@ -50,6 +50,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rbenv', '~> 2.0'
+  gem 'airbrussh', require: false
 end
 
 group :test do
