@@ -73,6 +73,8 @@ def load_schedule(subreddit_id, code, post_at, start_date, end_date)
   games = schedule['queryResults']['row']
 
   games.each do |game|
+    next if game['game_time_et'][11..15] == '03:33'
+
     gametime = Chronic.parse(game['game_time_et']) - 10_800
     post_at = adjusted_time.call(gametime)
 
