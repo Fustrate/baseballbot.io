@@ -22,8 +22,8 @@ def game_title(row)
            "#{row['home_team_name']} - #{row['first_pitch_et']} PM ET"
   end
 
-  'Game Thread: %{series_game} ⚾ %{away_name} (%{away_wins}) @ %{home_name} ' \
-  '(%{home_wins}) - %{start_time_et} PM ET'
+  'Game Thread: %{series_game} ⚾ %{away_name} (%{away_record}) @ ' \
+  '%{home_name} (%{home_record}) - %{start_time_et} PM ET'
 end
 
 def load_schedule
@@ -35,7 +35,9 @@ def load_schedule
     # If the team is undetermined, their division will be blank
     next if game['home_division'] == '' || game['away_division'] == ''
 
-    gametime = Chronic.parse("#{game['original_date']} #{game['first_pitch_et']} PM") - 10_800
+    gametime = Chronic.parse(
+      "#{game['original_date']} #{game['first_pitch_et']} PM"
+    ) - 10_800
 
     next if gametime < Time.now
 
