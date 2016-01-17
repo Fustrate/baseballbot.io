@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 ruby '2.2.3'
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5'
 
 gem 'pg'
 
@@ -9,7 +9,7 @@ gem 'sass-rails', github: 'rails/sass-rails', ref: '8e68c'
 gem 'jquery-rails'
 gem 'coffee-rails'
 gem 'haml-rails'
-gem 'foundation-rails'
+gem 'foundation-rails', '~> 5.0'
 gem 'modernizr-rails'
 
 gem 'execjs'
@@ -43,10 +43,10 @@ group :development do
   gem 'ruby_gntp'
   gem 'rubocop'
   gem 'bullet'
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '~> 3.0'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.3', require: false
+  gem 'capistrano', '~> 3.4', require: false
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rbenv', '~> 2.0'
