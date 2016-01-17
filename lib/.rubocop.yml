@@ -1,5 +1,8 @@
 AllCops:
-  RunRailsCops: false
+  TargetRubyVersion: 2.3
+
+Rails:
+  Enabled: false
 
 Metrics/AbcSize:
   Enabled: false

@@ -5,11 +5,15 @@ AllCops:
     - Gemfile
     - Guardfile
     - Rakefile
+    - app/views/**/*.jbuilder
   Exclude:
     - bin/**/*
     - db/**/*
     - db/schema.rb
-  RunRailsCops: true
+  TargetRubyVersion: 2.3
+
+Rails:
+  Enabled: true
 
 Metrics/AbcSize:
   Enabled: false
