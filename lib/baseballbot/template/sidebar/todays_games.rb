@@ -1,23 +1,25 @@
+# frozen_string_literal: true
+
 class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-        GD2 = 'http://gd2.mlb.com/components/game/mlb'
+        GD2 = 'http://gd2.mlb.com/components/game/mlb'.freeze
 
-        SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+        SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml".freeze
 
-        PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game', 'Delayed Start']
+        PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game', 'Delayed Start'].freeze
         POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed',
-                             'Completed Early']
+                             'Completed Early'].freeze
 
         def todays_games
           date = time.now - 10_800
 
           load_gamechats date
 
-          Nokogiri::XML(open(date.strftime SCOREBOARD_URL))
-            .xpath('//games/game')
-            .map { |game| process_todays_game game }
+          Nokogiri::XML(open(date.strftime(SCOREBOARD_URL)))
+                  .xpath('//games/game')
+                  .map { |game| process_todays_game game }
         end
 
         protected
@@ -102,7 +104,7 @@ class Baseballbot
         def load_gamechats(date)
           @gamechats = {}
 
-          @bot.redis.keys(date.strftime '%Y_%m_%d_*').each do |gid|
+          @bot.redis.keys(date.strftime('%Y_%m_%d_*')).each do |gid|
             @bot.redis.hgetall(gid).each do |subreddit, link_id|
               @gamechats["#{gid}_#{subreddit}".downcase] = link_id
             end

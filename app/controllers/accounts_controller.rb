@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   # submit:    post game chats
   # wikiread:  read settings from a sub's /wiki/baseballbot
   AUTH_SCOPE = %i(identity edit modconfig modflair modposts read submit
-                  wikiread)
+                  wikiread).freeze
 
   def index
   end

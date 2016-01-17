@@ -6,14 +6,15 @@ namespace :load do
     set :unicorn_restart_sleep_time, 3
     set :unicorn_rack_env, 'deployment'
     set :unicorn_pid, -> { "#{current_path}/tmp/pids/unicorn.pid" }
-    set :unicorn_config_path, -> { "#{current_path}/config/unicorn/#{fetch :stage}.rb" }
+    set :unicorn_config_path,
+        -> { "#{current_path}/config/unicorn/#{fetch(:stage)}.rb" }
   end
 end
 
 namespace :unicorn do
   desc 'Start Unicorn'
   task :start do
-    on(roles(fetch :unicorn_roles), in: :sequence) do
+    on(roles(fetch(:unicorn_roles)), in: :sequence) do
       within current_path do
         if test("[ -e #{fetch :unicorn_pid} ] && kill -0 #{pid}")
           info 'Unicorn is already running...'
@@ -37,7 +38,7 @@ namespace :unicorn do
 
   desc 'Stop Unicorn (QUIT)'
   task :stop do
-    on(roles(fetch :unicorn_roles), in: :sequence) do
+    on(roles(fetch(:unicorn_roles)), in: :sequence) do
       within current_path do
         if test("[ -e #{fetch :unicorn_pid} ]")
           if test("kill -0 #{pid}")
@@ -58,7 +59,7 @@ namespace :unicorn do
   task :reload do
     invoke 'unicorn:start'
 
-    on(roles(fetch :unicorn_roles), in: :sequence) do
+    on(roles(fetch(:unicorn_roles)), in: :sequence) do
       within current_path do
         info 'Reloading Unicorn'
         execute :kill, '-s HUP', pid
@@ -70,7 +71,7 @@ namespace :unicorn do
   task :restart do
     invoke 'unicorn:start'
 
-    on(roles(fetch :unicorn_roles), in: :sequence) do
+    on(roles(fetch(:unicorn_roles)), in: :sequence) do
       within current_path do
         info 'Restarting Unicorn'
         execute :kill, '-s USR2', pid
@@ -85,7 +86,7 @@ namespace :unicorn do
 
   desc 'Add a Unicorn worker (TTIN)'
   task :add_worker do
-    on(roles(fetch :unicorn_roles), in: :sequence) do
+    on(roles(fetch(:unicorn_roles)), in: :sequence) do
       within current_path do
         info 'Adding Unicorn worker'
         execute :kill, '-s TTIN', pid
@@ -95,7 +96,7 @@ namespace :unicorn do
 
   desc 'Remove a Unicorn worker (TTOU)'
   task :remove_worker do
-    on(roles(fetch :unicorn_roles), in: :sequence) do
+    on(roles(fetch(:unicorn_roles)), in: :sequence) do
       within current_path do
         info 'Removing Unicorn worker'
         execute :kill, '-s TTOU', pid

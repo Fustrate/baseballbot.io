@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Baseballbot
   module Template
     class Sidebar
@@ -11,7 +13,7 @@ class Baseballbot
                             "season=%{year}&game_type='R'&game_type='A'&" \
                             "game_type='E'&game_type='F'&game_type='D'&" \
                             "game_type='L'&game_type='W'&game_type='C'&" \
-                            "game_type='S'"
+                            "game_type='S'".freeze
 
         # See #calendar for month options
         def month_calendar(month = nil, options = {})

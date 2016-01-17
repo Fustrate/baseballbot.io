@@ -6,9 +6,9 @@ class Baseballbot
           return [] unless @game.started?
 
           Nokogiri::XML(open_file('media/highlights.xml'))
-            .xpath('//highlights/media')
-            .sort { |a, b| a['date'] <=> b['date'] }
-            .map { |media| process_media(media) }
+                  .xpath('//highlights/media')
+                  .sort { |a, b| a['date'] <=> b['date'] }
+                  .map { |media| process_media(media) }
         rescue OpenURI::HTTPError
           # I guess the file isn't there yet
           []

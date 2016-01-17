@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require_relative 'baseballbot'
 
-GD2 = 'http://gd2.mlb.com/components/game/mlb'
-SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+GD2 = 'http://gd2.mlb.com/components/game/mlb'.freeze
+SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml".freeze
 
 @bot = Baseballbot.new(
   reddit: {
@@ -45,11 +47,11 @@ def process_message(message)
 
   subreddit = submission[:subreddit].downcase
 
-  if submission[:selftext] =~ GID
-    gid = Regexp.last_match[1]
-  else
-    gid = find_possible_game(subreddit, post_id)
-  end
+  gid = if submission[:selftext] =~ GID
+          Regexp.last_match[1]
+        else
+          find_possible_game(subreddit, post_id)
+        end
 
   @bot.redis.hset gid, subreddit, post_id if gid
 
@@ -83,14 +85,14 @@ end
 def load_possible_games
   games = Hash.new { |h, k| h[k] = [] }
 
-  Nokogiri::XML(open(Time.now.strftime SCOREBOARD))
-    .xpath('//games/game')
-    .map do |game|
-      gid = game.xpath('@gameday_link').text
+  Nokogiri::XML(open(Time.now.strftime(SCOREBOARD)))
+          .xpath('//games/game')
+          .map do |game|
+            gid = game.xpath('@gameday_link').text
 
-      games[game.xpath('@home_name_abbrev').text] << gid
-      games[game.xpath('@away_name_abbrev').text] << gid
-    end
+            games[game.xpath('@home_name_abbrev').text] << gid
+            games[game.xpath('@away_name_abbrev').text] << gid
+          end
 
   games
 end

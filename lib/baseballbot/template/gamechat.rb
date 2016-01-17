@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Baseballbot
   module Template
     class Gamechat < Base
@@ -5,7 +7,7 @@ class Baseballbot
         require file
       end
 
-      GD2 = 'http://gd2.mlb.com/components/game/mlb'
+      GD2 = 'http://gd2.mlb.com/components/game/mlb'.freeze
 
       using TemplateRefinements
 

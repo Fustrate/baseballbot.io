@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Baseballbot
   module Template
     class Gamechat
       module LineScore
-        BLANK_RHE = { runs: 0, hits: 0, errors: 0 }
+        BLANK_RHE = { runs: 0, hits: 0, errors: 0 }.freeze
 
         def line_score
           [
@@ -44,8 +46,10 @@ class Baseballbot
             return lines unless @game.started? && @game.boxscore
 
             @game.boxscore
-            .xpath('//boxscore/linescore/inning_line_score')
-            .each { |inning| add_inning_to_line_score(inning, lines: lines) }
+                 .xpath('//boxscore/linescore/inning_line_score')
+                 .each do |inning|
+                   add_inning_to_line_score(inning, lines: lines)
+                 end
 
             lines
           end

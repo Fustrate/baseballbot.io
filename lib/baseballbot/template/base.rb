@@ -13,7 +13,7 @@ module TemplateRefinements
     def ordinal
       abs_number = to_i.abs
 
-      if (11..13).include?(abs_number % 100)
+      if (11..13).cover?(abs_number % 100)
         'th'
       else
         case abs_number % 10

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file really needs to be cleaned up, as does the entire /lib/ directory.
 
 require 'pg'
@@ -21,7 +23,7 @@ URL = 'http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?' \
       'start_date=\'%{start}\'&end_date=\'%{end}\'&team_id=%{team_id}&' \
       'season=%{year}&game_type=\'R\'&game_type=\'A\'&game_type=\'E\'&' \
       'game_type=\'F\'&game_type=\'D\'&game_type=\'L\'&game_type=\'W\'&' \
-      'game_type=\'C\'&game_type=\'S\''
+      'game_type=\'C\'&game_type=\'S\''.freeze
 
 # Game types:
 #   R: Regular Season
@@ -40,7 +42,7 @@ def adjust_time_proc(post_at)
   elsif post_at =~ /(1?[012]|\d)(:\d\d|) ?(am|pm)/i
     lambda do |time|
       hours = Regexp.last_match[1].to_i
-      hours += 12 if hours != 12 && Regexp.last_match[3].downcase == 'pm'
+      hours += 12 if hours != 12 && Regexp.last_match[3].casecmp('pm') == 0
       minutes = Regexp.last_match[1] || ':00'
       minutes = minutes[1..2].to_i
 
@@ -112,7 +114,8 @@ elsif ARGV.count == 1
     _, month, year = Regexp.last_match.to_a
     names = []
   else
-    month, year = [Time.now.month, Time.now.year]
+    month = Time.now.month
+    year = Time.now.year
     names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
   end
 else

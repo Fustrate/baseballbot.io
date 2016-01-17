@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Baseballbot
   module Template
     class Sidebar
@@ -5,7 +7,7 @@ class Baseballbot
         STANDINGS = 'http://mlb.mlb.com/lookup/json/named.standings_schedule_' \
                     'date.bam?season=%Y&schedule_game_date.game_date=\'' \
                     '%Y/%m/%d\'&sit_code=\'h0\'&league_id=103&league_id=104' \
-                    '&all_star_sw=\'N\'&version=2'
+                    '&all_star_sw=\'N\'&version=2'.freeze
 
         def divisions
           @divisions ||= begin
@@ -43,9 +45,9 @@ class Baseballbot
 
         def draft_order
           @draft_order ||= divisions.values
-                           .flatten(1)
-                           .sort_by! { |team| team[:sort_order] }
-                           .reverse
+                                    .flatten(1)
+                                    .sort_by! { |team| team[:sort_order] }
+                                    .reverse
         end
 
         def wildcards_in_league(league)
