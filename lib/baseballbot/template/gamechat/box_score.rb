@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-
 class Baseballbot
   module Template
     class Gamechat
       module BoxScore
-        BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'.freeze
-        PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'.freeze
+        BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
+        PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
 
         def home_batters
           return [] unless @game.started? && @game.boxscore

@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-
 require_relative 'baseballbot'
 
-GD2 = 'http://gd2.mlb.com/components/game/mlb'.freeze
-SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml".freeze
+GD2 = 'http://gd2.mlb.com/components/game/mlb'
+SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
 @bot = Baseballbot.new(
   reddit: {

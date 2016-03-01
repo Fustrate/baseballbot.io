@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Baseballbot
   module Template
     class Sidebar
@@ -7,7 +6,7 @@ class Baseballbot
         STANDINGS = 'http://mlb.mlb.com/lookup/json/named.standings_schedule_' \
                     'date.bam?season=%Y&schedule_game_date.game_date=\'' \
                     '%Y/%m/%d\'&sit_code=\'h0\'&league_id=103&league_id=104' \
-                    '&all_star_sw=\'N\'&version=2'.freeze
+                    '&all_star_sw=\'N\'&version=2'
 
         def divisions
           @divisions ||= begin

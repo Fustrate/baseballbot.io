@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Baseballbot
   module Template
     class Sidebar
@@ -9,10 +8,10 @@ class Baseballbot
                            '&page_type=SortablePlayer&team_id=%{team_id}' \
                            '&game_type=\'%{type}\'&player_pool=%{pool}' \
                            '&season_type=ANY&sport_code=\'mlb\'&results=1000' \
-                           '&recSP=1&recPP=50'.freeze
+                           '&recSP=1&recPP=50'
 
-        HITTER_URL  = "#{LEADERS_BASE_URL}&sort_column='avg'&stat_type=hitting".freeze
-        PITCHER_URL = "#{LEADERS_BASE_URL}&sort_column='era'&stat_type=pitching".freeze
+        HITTER_URL  = "#{LEADERS_BASE_URL}&sort_column='avg'&stat_type=hitting"
+        PITCHER_URL = "#{LEADERS_BASE_URL}&sort_column='era'&stat_type=pitching"
 
         # TODO: This method only allows for one year+type to be loaded before
         # being memoized. Cache into a hash instead?

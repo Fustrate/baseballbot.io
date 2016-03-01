@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'template/base'
 require_relative 'template/gamechat'
 require_relative 'template/sidebar'
@@ -53,7 +54,7 @@ class Baseballbot
     end
 
     def current_sidebar
-      fail Baseballbot::Error::NoSidebarText unless settings[:description]
+      raise Baseballbot::Error::NoSidebarText unless settings[:description]
 
       CGI.unescapeHTML settings[:description]
     end
@@ -91,7 +92,7 @@ class Baseballbot
 
       post = submission(id: post_id)
 
-      fail "Could not load post with ID #{post_id}." unless post
+      raise "Could not load post with ID #{post_id}." unless post
 
       body = template.replace_in CGI.unescapeHTML(post[:selftext])
 
@@ -185,7 +186,7 @@ class Baseballbot
 
       submissions = client.from_fullname "t3_#{id}"
 
-      fail "Unable to load post #{id}." unless submissions
+      raise "Unable to load post #{id}." unless submissions
 
       @submissions[id] = submissions.first
     end
@@ -250,7 +251,7 @@ class Baseballbot
         [@id, type]
       )
 
-      fail "#{@name} does not have a #{type} template." if result.count < 1
+      raise "#{@name} does not have a #{type} template." if result.count < 1
 
       [result[0]['body'], result[0]['title']]
     end

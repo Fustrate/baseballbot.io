@@ -16,7 +16,7 @@ require 'chronic'
                            dbname: ENV['PG_DATABASE'],
                            password: ENV['PG_PASSWORD']
 
-URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_2015/postseason_scoreboard.json'.freeze
+URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_2015/postseason_scoreboard.json'
 
 def game_title(row)
   if row['game_type'] == 'F'

@@ -23,7 +23,7 @@ URL = 'http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?' \
       'start_date=\'%{start}\'&end_date=\'%{end}\'&team_id=%{team_id}&' \
       'season=%{year}&game_type=\'R\'&game_type=\'A\'&game_type=\'E\'&' \
       'game_type=\'F\'&game_type=\'D\'&game_type=\'L\'&game_type=\'W\'&' \
-      'game_type=\'C\'&game_type=\'S\''.freeze
+      'game_type=\'C\'&game_type=\'S\''
 
 # Game types:
 #   R: Regular Season
@@ -119,7 +119,7 @@ elsif ARGV.count == 1
     names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
   end
 else
-  fail 'Please pass 2 arguments: ruby load_schedule.rb LAD+BOS 6/2015'
+  raise 'Please pass 2 arguments: ruby load_schedule.rb LAD+BOS 6/2015'
 end
 
 start_date = Chronic.parse "#{month}/1/#{year}"

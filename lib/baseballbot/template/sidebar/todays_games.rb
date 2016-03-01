@@ -1,14 +1,14 @@
 # frozen_string_literal: true
-
 class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-        GD2 = 'http://gd2.mlb.com/components/game/mlb'.freeze
+        GD2 = 'http://gd2.mlb.com/components/game/mlb'
 
-        SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml".freeze
+        SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
-        PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game', 'Delayed Start'].freeze
+        PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game',
+                            'Delayed Start'].freeze
         POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed',
                              'Completed Early'].freeze
 
