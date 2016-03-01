@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Baseballbot
   module Template
     class Sidebar
@@ -13,7 +12,7 @@ class Baseballbot
                             "season=%{year}&game_type='R'&game_type='A'&" \
                             "game_type='E'&game_type='F'&game_type='D'&" \
                             "game_type='L'&game_type='W'&game_type='C'&" \
-                            "game_type='S'".freeze
+                            "game_type='S'"
 
         # See #calendar for month options
         def month_calendar(month = nil, options = {})
@@ -21,13 +20,15 @@ class Baseballbot
 
           first_day = days[days.keys.first]
 
-          str = "S|M|T|W|T|F|S\n"
-          str << ":-:|:-:|:-:|:-:|:-:|:-:|:-:\n"
-          str << ' |' * first_day[:date].wday
+          parts = [
+            "S|M|T|W|T|F|S\n",
+            ":-:|:-:|:-:|:-:|:-:|:-:|:-:\n",
+            ' |' * first_day[:date].wday
+          ]
 
-          add_days_to_calendar(days, str, options)
+          add_days_to_calendar(days, parts, options)
 
-          str
+          parts.join ''
         end
 
         # Options are :last, :next, a Date, or nil (the current month)
@@ -136,7 +137,7 @@ class Baseballbot
         protected
 
         def cell(cnum, games, options = {})
-          str = "^#{cnum} "
+          num = "^#{cnum} "
 
           return str.strip if games.empty?
 
@@ -148,9 +149,9 @@ class Baseballbot
 
           statuses = games.map { |game| game[:status] }
 
-          str << link_to('', sub: subreddit, title: statuses.join(', '))
+          link = link_to '', sub: subreddit, title: statuses.join(', ')
 
-          games[0][:home] ? (bold str) : (italic str)
+          games[0][:home] ? (bold "#{num}#{link}") : (italic "#{num}#{link}")
         end
 
         def build_team(code:, name:)
