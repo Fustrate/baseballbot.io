@@ -137,9 +137,9 @@ class Baseballbot
         protected
 
         def cell(cnum, games, options = {})
-          num = "^#{cnum} "
+          num = "^#{cnum}"
 
-          return str.strip if games.empty?
+          return num if games.empty?
 
           # Let's hope nobody plays a doubleheader against two different teams
           subreddit = subreddit games.first[:opponent].code
@@ -151,7 +151,7 @@ class Baseballbot
 
           link = link_to '', sub: subreddit, title: statuses.join(', ')
 
-          games[0][:home] ? (bold "#{num}#{link}") : (italic "#{num}#{link}")
+          games[0][:home] ? (bold "#{num} #{link}") : (italic "#{num} #{link}")
         end
 
         def build_team(code:, name:)
