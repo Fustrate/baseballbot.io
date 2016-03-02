@@ -145,7 +145,7 @@ class Baseballbot
           subreddit = subreddit games.first[:opponent].code
 
           # Spring training games sometimes are against colleges
-          subreddit.downcase! if subreddit && options[:downcase]
+          subreddit = subreddit.downcase if subreddit && options[:downcase]
 
           statuses = games.map { |game| game[:status] }
 
