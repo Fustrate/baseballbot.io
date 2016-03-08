@@ -119,7 +119,7 @@ elsif ARGV.count == 1
     names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
   end
 else
-  raise 'Please pass 2 arguments: ruby load_schedule.rb LAD+BOS 6/2015'
+  raise 'Please pass 2 arguments: ruby load_schedule.rb mariners,dodgers 6/2015'
 end
 
 start_date = Chronic.parse "#{month}/1/#{year}"
