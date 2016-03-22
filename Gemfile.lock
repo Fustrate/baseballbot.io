@@ -196,7 +196,7 @@ GEM
     mime-types (2.99.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
-    mlb_gameday (0.1.4)
+    mlb_gameday (0.1.6)
       chronic (~> 0.10)
       httparty (~> 0.13)
       nokogiri (~> 1.6)
