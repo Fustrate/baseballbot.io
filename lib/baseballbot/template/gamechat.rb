@@ -128,6 +128,9 @@ class Baseballbot
       end
 
       def format_title(title)
+        # No interpolations? Great!
+        return title unless title =~ '%{'
+
         title = time.strftime title
         local_start_time = home? ? @game.home_start_time : @game.away_start_time
         linescore = @game.linescore
