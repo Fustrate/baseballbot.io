@@ -25,7 +25,7 @@
 
   - unless flash.empty?
     - flash.each do |type, message|
-      %div.alert-box{ class: type }
+      .alert-box{ class: type }
         %a.close{ href: '#' } &times;
         = message
     - flash.clear
