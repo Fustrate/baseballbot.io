@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 ruby '2.3.0'
-gem 'rails', '4.2.5.2'
+gem 'rails', '4.2.6'
 
 gem 'pg'
 
@@ -27,8 +27,8 @@ gem 'sprockets', '~> 2.0'
 gem 'unicorn'
 
 # Reddit interaction
-gem 'redd', '~> 0.7.6'
-gem 'mlb_gameday', '~> 0.1.0'
+gem 'redd', '~> 0.7.8'
+gem 'mlb_gameday', '~> 0.1.9'
 
 group :production do
   gem 'skylight'
