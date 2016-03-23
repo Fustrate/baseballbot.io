@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def reddit
   @reddit ||= Redd.it :web,
                       Rails.application.secrets.reddit['client_id'],

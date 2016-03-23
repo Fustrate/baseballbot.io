@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Gamechat < ActiveRecord::Base
   belongs_to :subreddit
 

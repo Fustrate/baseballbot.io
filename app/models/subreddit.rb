@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Subreddit < ActiveRecord::Base
   has_many :gamechats
   belongs_to :account

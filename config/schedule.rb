@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 set :output, '/home/baseballbot/apps/baseballbot.io/shared/log/whenever.log'
 
 every 1.hour do
