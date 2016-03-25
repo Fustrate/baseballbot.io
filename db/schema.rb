@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323232626) do
+ActiveRecord::Schema.define(version: 20160325162206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,14 @@ ActiveRecord::Schema.define(version: 20160323232626) do
   end
 
   add_index "gamechats", ["gid", "subreddit_id"], name: "index_gamechats_on_gid_and_subreddit_id", unique: true, using: :btree
+
+  create_table "scheduled_posts", force: :cascade do |t|
+    t.datetime "next_post_at"
+    t.string   "title"
+    t.text     "body"
+    t.integer  "subreddit_id", null: false
+    t.json     "options"
+  end
 
   create_table "subreddits", force: :cascade do |t|
     t.string  "name"
