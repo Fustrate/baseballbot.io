@@ -175,7 +175,11 @@ class Baseballbot
 
       # Why doesn't the redd gem just return a Redd::Objects::Submission?
       submission(id: thing[:id]).tap do |post|
-        post.set_sticky if sticky && !post[:stickied]
+        begin
+          post.set_sticky if sticky && !post[:stickied]
+        rescue Redd::Error::Conflict
+          # It was already stickied
+        end
 
         post.suggested_sort = sort unless sort == ''
       end
@@ -187,8 +191,13 @@ class Baseballbot
       post = submission id: id
 
       post.edit(body) if body
-      post.set_sticky if sticky && !post[:stickied]
-      post.unset_sticky if sticky == false && post[:stickied]
+
+      begin
+        post.set_sticky if sticky && !post[:stickied]
+        post.unset_sticky if sticky == false && post[:stickied]
+      rescue Redd::Error::Conflict
+        # It was already stickied
+      end
     end
 
     def submission(id:)
