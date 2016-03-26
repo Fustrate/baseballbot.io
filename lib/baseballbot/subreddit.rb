@@ -14,6 +14,16 @@ module Redd
       end
     end
   end
+
+  module Clients
+    class Base
+      module Read
+        def from_fullname(*fnames)
+          request_object(:get, "/by_id/#{fnames.join(',')}", {})
+        end
+      end
+    end
+  end
 end
 
 class Baseballbot
