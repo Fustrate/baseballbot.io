@@ -206,9 +206,7 @@ class Baseballbot
     def sidebar_template
       body = template_for('sidebar')[0]
 
-      Template::Sidebar.new body: body,
-                            bot: @bot,
-                            subreddit: self
+      Template::Sidebar.new body: body, bot: @bot, subreddit: self
     end
 
     def gamechat_template(gid:, title:)
