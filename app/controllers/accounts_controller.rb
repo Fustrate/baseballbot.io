@@ -47,6 +47,7 @@ class AccountsController < ApplicationController
       client.refresh_access! if access.expired?
 
       Account.create(
+        id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
         name: client.me.name,
         scope: AUTH_SCOPE,
         access_token: access.access_token,
