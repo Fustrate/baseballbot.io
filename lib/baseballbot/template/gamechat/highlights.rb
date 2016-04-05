@@ -6,7 +6,7 @@ class Baseballbot
         def highlights
           return [] unless @game.started?
 
-          Nokogiri::XML(open_file('media/highlights.xml'))
+          Nokogiri::XML(open_file('media/mobile.xml'))
                   .xpath('//highlights/media')
                   .sort { |a, b| a['date'] <=> b['date'] }
                   .map { |media| process_media(media) }
@@ -30,7 +30,7 @@ class Baseballbot
         protected
 
         def process_media(media)
-          url = media.at_xpath('url')
+          url = media.at_xpath('url[@playback-scenario="FLASH_1200K_640X360"]')
 
           {
             team: media['team_id'].to_i == team.id ? team : opponent,
