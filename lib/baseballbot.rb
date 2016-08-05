@@ -14,6 +14,18 @@ require_relative 'baseballbot/template/base'
 require_relative 'baseballbot/template/gamechat'
 require_relative 'baseballbot/template/sidebar'
 
+module Redd
+  module Response
+    class ParseJson < Faraday::Response::Middleware
+      def on_complete(env)
+        env[:body] = MultiJson.load(env[:body], symbolize_keys: true)
+      rescue MultiJson::ParseError
+        raise ::Redd::Error::JSONError.new(env), env[:body]
+      end
+    end
+  end
+end
+
 class Baseballbot
   attr_reader :db, :gameday, :clients, :accounts, :redis
 
@@ -229,9 +241,12 @@ class Baseballbot
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future'
-        AND (options#>>'{pregame,enabled}')::boolean IS TRUE
-        AND (DATE(starts_at) + (options#>>'{pregame,post_at}')::interval) <
-             NOW() AT TIME ZONE (options->>'timezone')
+        AND (options#>>'{pregame,enabled}')::boolean IS FALSE
+        AND (
+          CASE WHEN substr(options#>>'{pregame,post_at}', 1, 1) = '-'
+            THEN (starts_at::timestamp + (CONCAT(options#>>'{pregame,post_at}', ' hours'))::interval)
+            ELSE (DATE(starts_at) + (options#>>'{pregame,post_at}')::interval)
+          END) < NOW() AT TIME ZONE (options->>'timezone')
       ORDER BY post_at ASC, gid ASC"
     )
   end
