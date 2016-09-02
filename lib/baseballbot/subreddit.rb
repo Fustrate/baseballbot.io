@@ -12,6 +12,12 @@ module Redd
       def suggested_sort=(suggested_sort)
         post('/api/set_suggested_sort', id: fullname, sort: suggested_sort)
       end
+
+      def flair_template_id=(flair_template_id)
+        post('/api/selectflair',
+             link: fullname,
+             flair_template_id: flair_template_id)
+      end
     end
   end
 
@@ -183,7 +189,8 @@ class Baseballbot
         end
 
         post.suggested_sort = sort unless sort == ''
-        subreddit.set_flairtemplate(post, flair_template_id: flair) if flair
+        puts "Setting flair to #{flair}"
+        puts post.flair_template_id = flair if flair
       end
     end
 
