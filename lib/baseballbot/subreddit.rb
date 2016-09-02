@@ -189,7 +189,7 @@ class Baseballbot
         end
 
         post.suggested_sort = sort unless sort == ''
-        puts post.flair_template_id = flair if flair
+        post.flair_template_id = flair if flair
       end
     end
 
