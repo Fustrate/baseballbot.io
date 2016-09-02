@@ -69,13 +69,14 @@ class Baseballbot
       CGI.unescapeHTML settings[:description]
     end
 
-    def post_gamechat(gid:, title:)
+    def post_gamechat(gid:, title:, flair: nil)
       template = gamechat_template(gid: gid, title: title)
 
       post = submit template.title,
                     text: template.result,
                     sticky: sticky_gamechats?,
-                    sort: 'new'
+                    sort: 'new',
+                    flair: flair
 
       @bot.redis.hset template.game.gid,
                       @name.downcase,
@@ -84,16 +85,16 @@ class Baseballbot
       post
     end
 
-    def post_pregame(gid:)
+    def post_pregame(gid:, flair: nil)
       template = pregame_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: sticky_gamechats?
+      submit template.title, text: template.result, sticky: sticky_gamechats?, flair: flair
     end
 
-    def post_postgame(gid:)
+    def post_postgame(gid:, flair: nil)
       template = postgame_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: sticky_gamechats?
+      submit template.title, text: template.result, sticky: sticky_gamechats?, flair: flair
     end
 
     # Returns a boolean to indicate if the game is (effectively) over
@@ -110,7 +111,7 @@ class Baseballbot
         edit(id: post_id, body: body, sticky: sticky_gamechats? ? false : nil)
 
         if @options['postgame'] && @options['postgame']['enabled']
-          post_postgame(gid: gid)
+          post_postgame(gid: gid, flair: @options['postgame']['flair'])
         end
       else
         edit(id: post_id, body: body)
@@ -136,7 +137,7 @@ class Baseballbot
     end
 
     def log_errors(errors, new_settings)
-      return unless errors && errors.count > 0
+      return unless errors && errors.count.positive?
 
       errors.each do |error|
         log "#{error[0]}: #{error[1]} (#{error[2]})"
@@ -155,7 +156,7 @@ class Baseballbot
     end
 
     # Returns the post ID
-    def submit(title, text:, sticky: false, sort: '')
+    def submit(title, text:, sticky: false, sort: '', flair: nil)
       begin
         thing = subreddit.submit(title, text: text, sendreplies: false)
       rescue Redd::Error::InvalidCaptcha => captcha
@@ -182,6 +183,7 @@ class Baseballbot
         end
 
         post.suggested_sort = sort unless sort == ''
+        subreddit.set_flairtemplate(post, flair_template_id: flair) if flair
       end
     end
 

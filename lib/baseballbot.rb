@@ -24,6 +24,18 @@ module Redd
       end
     end
   end
+
+  module Objects
+    class Subreddit < Thing
+      def set_flairtemplate(thing, flair_template_id = nil)
+        post(
+          "/r/#{display_name}/api/flair",
+          link: client.property(thing, :fullname),
+          flair_template_id: flair_template_id
+        )
+      end
+    end
+  end
 end
 
 class Baseballbot
@@ -133,12 +145,13 @@ class Baseballbot
 
       post_pregame! id: row['id'],
                     team: row['name'],
-                    gid: row['gid']
+                    gid: row['gid'],
+                    flair: row['flair']
     end
   end
 
-  def post_pregame!(id:, team:, gid:)
-    team_to_subreddit(team).post_pregame(gid: gid)
+  def post_pregame!(id:, team:, gid:, flair: nil)
+    team_to_subreddit(team).post_pregame(gid: gid, flair: flair)
 
     @db.exec_params(
       'UPDATE gamechats
@@ -160,14 +173,15 @@ class Baseballbot
       post_gamechat! id: row['id'],
                      team: row['name'],
                      gid: row['gid'],
-                     title: row['title']
+                     title: row['title'],
+                     flair: row['flair']
     end
   end
 
-  def post_gamechat!(id:, team:, gid:, title:)
+  def post_gamechat!(id:, team:, gid:, title:, flair: nil)
     subreddit = team_to_subreddit(team)
 
-    post = subreddit.post_gamechat(gid: gid, title: title)
+    post = subreddit.post_gamechat(gid: gid, title: title, flair: flair)
 
     post.edit CGI.unescapeHTML(post[:selftext]).gsub('#ID#', post[:id])
 
@@ -237,7 +251,8 @@ class Baseballbot
 
   def unposted_pregames
     @db.exec(
-      "SELECT gamechats.id, gid, subreddits.name
+      "SELECT gamechats.id, gid, subreddits.name,
+        (options#>>'{pregame,flair}') AS flair
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future'
@@ -253,7 +268,8 @@ class Baseballbot
 
   def unposted_gamechats
     @db.exec(
-      "SELECT gamechats.id, gid, subreddits.name, title
+      "SELECT gamechats.id, gid, subreddits.name, title,
+        (options#>>'{gamechats,flair}') AS flair
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status IN ('Pregame', 'Future')
