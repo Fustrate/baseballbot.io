@@ -47,7 +47,7 @@ group :development do
   gem 'web-console', '~> 3.0'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.4.0', require: false
+  gem 'capistrano', '~> 3.6.0', require: false
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rbenv', '~> 2.0'
