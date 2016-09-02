@@ -24,18 +24,6 @@ module Redd
       end
     end
   end
-
-  module Objects
-    class Subreddit < Thing
-      def set_flairtemplate(thing, flair_template_id = nil)
-        post(
-          "/r/#{display_name}/api/flair",
-          link: client.property(thing, :fullname),
-          flair_template_id: flair_template_id
-        )
-      end
-    end
-  end
 end
 
 class Baseballbot
