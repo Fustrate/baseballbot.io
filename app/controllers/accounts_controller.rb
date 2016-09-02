@@ -3,13 +3,14 @@ class AccountsController < ApplicationController
   # identity:  initially find the account name
   # edit:      update game chats
   # modconfig: update sidebar
-  # modflair:  manage flair templates (unused)
+  # modflair:  manage flair templates
+  # flair:     assign flair to self and own submissions
   # modposts:  sticky, flair game chats
   # read:      used for updating game chats
   # submit:    post game chats
   # wikiread:  read settings from a sub's /wiki/baseballbot
   AUTH_SCOPE = %i(identity edit modconfig modflair modposts read submit
-                  wikiread).freeze
+                  wikiread flair).freeze
 
   def index
   end

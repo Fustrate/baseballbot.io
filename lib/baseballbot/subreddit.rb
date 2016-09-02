@@ -189,7 +189,6 @@ class Baseballbot
         end
 
         post.suggested_sort = sort unless sort == ''
-        puts "Setting flair to #{flair}"
         puts post.flair_template_id = flair if flair
       end
     end
