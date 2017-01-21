@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 source 'https://rubygems.org'
 
-ruby '2.3.1'
-gem 'rails', '4.2.6'
+ruby '2.4.0'
+gem 'rails', '5.0.1'
 
 gem 'pg'
 
-gem 'sass-rails', github: 'rails/sass-rails', ref: '8e68c'
-gem 'jquery-rails'
 gem 'coffee-rails'
-gem 'haml-rails'
 gem 'foundation-rails', '~> 5.0'
+gem 'haml-rails'
+gem 'jquery-rails'
 gem 'modernizr-rails'
 
 gem 'execjs'
@@ -21,54 +20,48 @@ gem 'uglifier', '>= 2.6.0'
 # Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 
-gem 'sprockets', '~> 2.0'
-
 # Use Unicorn as the app server
 gem 'unicorn'
 
 # Reddit interaction
-gem 'redd', '~> 0.7.8'
 gem 'mlb_gameday', '~> 0.1.9'
+gem 'redd', '~> 0.7.8'
 
 group :production do
   gem 'skylight'
 end
 
 group :development do
-  gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'guard-rspec', require: false
+  gem 'bullet'
   gem 'guard-bundler', require: false
   gem 'guard-rails'
-  gem 'ruby_gntp'
+  gem 'guard-rspec', require: false
   gem 'rubocop'
-  gem 'bullet'
+  gem 'ruby_gntp'
   gem 'web-console', '~> 3.0'
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.6.0', require: false
-  gem 'capistrano-rails'
   gem 'capistrano-bundler'
+  gem 'capistrano-rails'
   gem 'capistrano-rbenv', '~> 2.0'
-  gem 'airbrussh', require: false
 end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webkit'
-  gem 'timecop'
   gem 'mock_redis'
   gem 'simplecov', require: false
 end
 
 group :development, :test do
+  gem 'database_cleaner', '~> 1.5'
+  gem 'factory_girl_rails'
+  gem 'launchy'
   gem 'rspec', '~> 3.0'
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'launchy'
-  gem 'database_cleaner', '~> 1.5'
 
   gem 'byebug'
 
@@ -82,17 +75,14 @@ gem 'active_link_to'
 gem 'will_paginate', '~> 3.0'
 
 # Authentication and permissions
-gem 'sorcery'
 gem 'authority'
+gem 'sorcery'
 
 # Cron jobs
 gem 'whenever', require: false
 
 # Rails 4 stuff!
 gem 'activerecord-session_store'
-gem 'responders', '~> 2.0'
 
 gem 'chronic'
-gem 'draper', '>= 1.4.0'
-gem 'chartkick'
 gem 'redis'
