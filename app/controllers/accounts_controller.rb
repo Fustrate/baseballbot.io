@@ -31,7 +31,7 @@ class AccountsController < ApplicationController
   def finish_authentication
     raise 'Invalid state!' unless params[:state] == session[:state]
 
-    save_account reddit.authorize! params[:code]
+    save_account
 
     redirect_to :root
   end
@@ -51,33 +51,40 @@ class AccountsController < ApplicationController
     redirect_to auth_url, status: 301
   end
 
-  def save_account(access)
-    reddit.with(access) do |client|
-      client.refresh_access! if access.expired?
+  def save_account
+    client = Redd.it(
+      code: params[:code],
+      client_id: Rails.application.secrets.reddit['client_id'],
+      secret: Rails.application.secrets.reddit['secret'],
+      redirect_uri: Rails.application.secrets.reddit['redirect_uri']
+    )
 
-      username = client.me.name
+    client.refresh if client.access.expired?
 
-      existing = Account.where('LOWER(name) = ?', username.downcase).first
+    session = Redd::Models::Session.new(client)
 
-      if existing
-        existing.update(
-          scope: AUTH_SCOPE,
-          access_token: access.access_token,
-          refresh_token: access.refresh_token,
-          expires_at: access.expires_at
-        )
+    username = session.me.name
 
-        existing
-      else
-        Account.create(
-          id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
-          name: username,
-          scope: AUTH_SCOPE,
-          access_token: access.access_token,
-          refresh_token: access.refresh_token,
-          expires_at: access.expires_at
-        )
-      end
+    existing = Account.where('LOWER(name) = ?', username.downcase).first
+
+    if existing
+      existing.update(
+        scope: AUTH_SCOPE,
+        access_token: client.access.access_token,
+        refresh_token: client.access.refresh_token,
+        expires_at: client.access.expires_at
+      )
+
+      existing
+    else
+      Account.create(
+        id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
+        name: username,
+        scope: AUTH_SCOPE,
+        access_token: client.access.access_token,
+        refresh_token: client.access.refresh_token,
+        expires_at: client.access.expires_at
+      )
     end
   end
 end
