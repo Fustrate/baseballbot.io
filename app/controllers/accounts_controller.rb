@@ -61,7 +61,7 @@ class AccountsController < ApplicationController
       redirect_uri: Rails.application.secrets.reddit['redirect_uri']
     )
 
-    session.client.refresh if session.client.access.expired?
+    # session.client.refresh if session.client.access.expired?
 
     name = session.me.name
     expires_in = session.client.access.expires_in
