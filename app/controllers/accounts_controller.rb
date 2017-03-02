@@ -82,8 +82,8 @@ class AccountsController < ApplicationController
         id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
         name: name,
         scope: AUTH_SCOPE,
-        access_token: client.access.access_token,
-        refresh_token: client.access.refresh_token,
+        access_token: session.client.access.access_token,
+        refresh_token: session.client.access.refresh_token,
         expires_at: Time.zone.now + expires_in - 10.seconds
       )
     end
