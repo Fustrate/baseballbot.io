@@ -61,27 +61,28 @@ class AccountsController < ApplicationController
 
     session.client.refresh if session.client.access.expired?
 
-    username = session.me.name
+    name = session.me.name
+    expires_in = session.client.access.expires_in
 
-    existing = Account.where('LOWER(name) = ?', username.downcase).first
+    existing = Account.where('LOWER(name) = ?', name.downcase).first
 
     if existing
       existing.update(
         scope: AUTH_SCOPE,
         access_token: session.client.access.access_token,
         refresh_token: session.client.access.refresh_token,
-        expires_at: session.client.access.expires_at
+        expires_at: Time.zone.now + expires_in - 10.seconds
       )
 
       existing
     else
       Account.create(
         id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
-        name: username,
+        name: name,
         scope: AUTH_SCOPE,
         access_token: client.access.access_token,
         refresh_token: client.access.refresh_token,
-        expires_at: client.access.expires_at
+        expires_at: Time.zone.now + expires_in - 10.seconds
       )
     end
   end
