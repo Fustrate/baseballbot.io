@@ -17,7 +17,11 @@ require_relative 'baseballbot'
 )
 
 @client = @bot.clients['BaseballBot']
-@access = @bot.accounts.select { |_, a| a.name == 'BaseballBot' }.values.first.access
+@access = @bot.accounts
+              .select { |_, a| a.name == 'BaseballBot' }
+              .values
+              .first
+              .access
 
 @counts = Hash.new { |h, k| h[k] = 0 }
 
@@ -39,10 +43,8 @@ def load_flairs(after: nil)
   end
 end
 
-
 @client.with(@access) do
   @subreddit = @client.subreddit_from_name('baseball')
 
   load_flairs
 end
-

@@ -27,7 +27,11 @@ end
 )
 
 @client = @bot.clients['BaseballBot']
-@access = @bot.accounts.select { |_, a| a.name == 'BaseballBot' }.values.first.access
+@access = @bot.accounts
+              .select { |_, a| a.name == 'BaseballBot' }
+              .values
+              .first
+              .access
 @delete = %w(MIN-wagon).freeze
 
 def load_flairs(after: nil)
@@ -37,22 +41,22 @@ def load_flairs(after: nil)
 
   flairs.each do |flair|
     next unless @delete.include?(flair.flair_css_class)
-    
-    puts "\tDeleting #{flair.user}'s flair ('#{flair.flair_css_class}', '#{flair.flair_text}')"
+
+    puts "\tDeleting #{flair.user}'s flair " \
+         "('#{flair.flair_css_class}', '#{flair.flair_text}')"
+
     @subreddit.delete_flair(flair.user)
   end
 
-  if flairs.after
-    sleep 3
-    #puts "AFTER: #{flairs.after}"
-    load_flairs after: flairs.after
-  end
-end
+  return unless flairs.after
 
+  sleep 3
+  # puts "AFTER: #{flairs.after}"
+  load_flairs after: flairs.after
+end
 
 @client.with(@access) do
   @subreddit = @client.subreddit_from_name('baseball')
 
   load_flairs
 end
-

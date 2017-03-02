@@ -61,9 +61,9 @@ class Baseballbot
       end
 
       def gb(games_back)
-        return '-' if games_back == 0
+        return '-' if games_back.zero?
 
-        games_back % 1.0 == 0 ? games_back.to_i : games_back
+        (games_back % 1.0).zero? ? games_back.to_i : games_back
       end
 
       # Change the subreddit to use for a team, only in this template

@@ -41,7 +41,7 @@ class Baseballbot
         def batter_row(batter)
           return ' ||||||||' unless batter
 
-          is_replacement = batter['bo'].to_i % 100 > 0
+          is_replacement = (batter['bo'].to_i % 100).positive?
           spacer = '[](/spacer)' if is_replacement
           url = link_to batter['name'], url: player_url(batter['id'])
 

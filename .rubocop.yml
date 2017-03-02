@@ -12,11 +12,21 @@ AllCops:
     - db/schema.rb
   TargetRubyVersion: 2.4
 
+Metrics/AbcSize:
+  Enabled: false
+
 Rails:
   Enabled: true
 
-Metrics/AbcSize:
+# Ya, no...
+Rails/FilePath:
   Enabled: false
 
 Style/Documentation:
   Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented

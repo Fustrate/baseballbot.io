@@ -29,7 +29,7 @@ class AccountsController < ApplicationController
   protected
 
   def finish_authentication
-    fail 'Invalid state!' unless params[:state] == session[:state]
+    raise 'Invalid state!' unless params[:state] == session[:state]
 
     save_account reddit.authorize! params[:code]
 
@@ -47,14 +47,29 @@ class AccountsController < ApplicationController
     reddit.with(access) do |client|
       client.refresh_access! if access.expired?
 
-      Account.create(
-        id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
-        name: client.me.name,
-        scope: AUTH_SCOPE,
-        access_token: access.access_token,
-        refresh_token: access.refresh_token,
-        expires_at: access.expires_at
-      )
+      username = client.me.name
+
+      existing = Account.where(name: username).first
+
+      if existing
+        existing.update(
+          scope: AUTH_SCOPE,
+          access_token: access.access_token,
+          refresh_token: access.refresh_token,
+          expires_at: access.expires_at
+        )
+
+        existing
+      else
+        Account.create(
+          id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
+          name: username,
+          scope: AUTH_SCOPE,
+          access_token: access.access_token,
+          refresh_token: access.refresh_token,
+          expires_at: access.expires_at
+        )
+      end
     end
   end
 end

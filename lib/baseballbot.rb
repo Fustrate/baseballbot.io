@@ -329,7 +329,7 @@ class Baseballbot
       name: row['name'],
       code: row['team_code'],
       account: @accounts[row['account_id']],
-      options: JSON.load(row['options'])
+      options: JSON.parse(row['options'])
     )
   end
 end

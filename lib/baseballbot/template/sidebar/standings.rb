@@ -50,7 +50,7 @@ class Baseballbot
         end
 
         def wildcards_in_league(league)
-          wildcard_order(league).reject { |team| team[:games_back] == 0 }
+          wildcard_order(league).reject { |team| team[:games_back].zero? }
         end
 
         def wildcard_order(league)
@@ -138,8 +138,8 @@ class Baseballbot
         def first_and_second_wildcards(eligible)
           eligible
             .reject { |team| team[:wildcard_gb] > eligible[4][:wildcard_gb] }
-            .reject { |team| team[:games_back] == 0 }
-            .partition { |team| team[:wildcard_gb] < 0 }
+            .reject { |team| team[:games_back].zero? }
+            .partition { |team| team[:wildcard_gb].negative? }
         end
 
         def load_teams_from_remote
@@ -149,7 +149,7 @@ class Baseballbot
 
           JSON.parse(open(filename).read)['standings_schedule_date'] \
             ['standings_all_date_rptr']['standings_all_date']
-            .flat_map { |league| league['queryResults']['row'] }
+              .flat_map { |league| league['queryResults']['row'] }
         end
       end
     end

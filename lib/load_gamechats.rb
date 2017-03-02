@@ -38,11 +38,11 @@ URL = 'http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?' \
 
 def adjust_time_proc(post_at)
   if post_at =~ /\A\-?\d{1,2}\z/
-    -> (time) { time + Regexp.last_match[0].to_i * 3600 }
+    ->(time) { time + Regexp.last_match[0].to_i * 3600 }
   elsif post_at =~ /(1?[012]|\d)(:\d\d|) ?(am|pm)/i
     lambda do |time|
       hours = Regexp.last_match[1].to_i
-      hours += 12 if hours != 12 && Regexp.last_match[3].casecmp('pm') == 0
+      hours += 12 if hours != 12 && Regexp.last_match[3].casecmp('pm').zero?
       minutes = Regexp.last_match[1] || ':00'
       minutes = minutes[1..2].to_i
 
@@ -50,7 +50,7 @@ def adjust_time_proc(post_at)
     end
   else
     # Default to 3 hours before game time
-    -> (time) { time - 3 * 3600 }
+    ->(time) { time - 3 * 3600 }
   end
 end
 

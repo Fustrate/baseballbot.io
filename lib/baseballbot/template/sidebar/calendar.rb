@@ -209,10 +209,10 @@ class Baseballbot
           start_date = Date.civil(date.year, date.month, 1).strftime('%Y/%m/%d')
           end_date = Date.civil(date.year, date.month, -1).strftime('%Y/%m/%d')
 
-          JSON.load open_url(CALENDAR_DATA_URL,
-                             year: date.year,
-                             start_date: start_date,
-                             end_date: end_date)
+          JSON.parse open_url(CALENDAR_DATA_URL,
+                              year: date.year,
+                              start_date: start_date,
+                              end_date: end_date)
         end
 
         def add_days_to_calendar(days, calendar, options = {})

@@ -17,7 +17,11 @@ require_relative 'baseballbot'
 )
 
 @client = @bot.clients['BaseballBot']
-@access = @bot.accounts.select { |_, a| a.name == 'BaseballBot' }.values.first.access
+@access = @bot.accounts
+              .select { |_, a| a.name == 'BaseballBot' }
+              .values
+              .first
+              .access
 
 @remove_flairs = %w(NYY-wagon HOU-wagon)
 
@@ -28,22 +32,20 @@ def load_flairs(after: nil)
 
   flairs.each do |flair|
     next unless @remove_flairs.include?(flair.flair_css_class)
-    
+
     puts "\tChanging #{flair.user} from #{flair.flair_css_class} to CHAOS"
     @subreddit.set_flair(flair.user, :user, 'Team Chaos', 'CHAOS-wagon')
   end
 
-  if flairs.after
-    sleep 5
+  return unless flairs.after
 
-    load_flairs after: flairs.after
-  end
+  sleep 5
+
+  load_flairs after: flairs.after
 end
-
 
 @client.with(@access) do
   @subreddit = @client.subreddit_from_name('baseball')
 
   load_flairs after: 't2_cordb'
 end
-
