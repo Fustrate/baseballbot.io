@@ -52,16 +52,14 @@ class AccountsController < ApplicationController
   end
 
   def save_account
-    client = Redd.it(
+    session = Redd.it(
       code: params[:code],
       client_id: Rails.application.secrets.reddit['client_id'],
       secret: Rails.application.secrets.reddit['secret'],
       redirect_uri: Rails.application.secrets.reddit['redirect_uri']
     )
 
-    client.refresh if client.access.expired?
-
-    session = Redd::Models::Session.new(client)
+    session.client.refresh if session.client.access.expired?
 
     username = session.me.name
 
@@ -70,9 +68,9 @@ class AccountsController < ApplicationController
     if existing
       existing.update(
         scope: AUTH_SCOPE,
-        access_token: client.access.access_token,
-        refresh_token: client.access.refresh_token,
-        expires_at: client.access.expires_at
+        access_token: session.client.access.access_token,
+        refresh_token: session.client.access.refresh_token,
+        expires_at: session.client.access.expires_at
       )
 
       existing
