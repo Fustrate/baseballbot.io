@@ -33,6 +33,8 @@ class AccountsController < ApplicationController
 
     save_account
 
+    flash[:success] = 'Your account is now active for use with BaseballBot.'
+
     redirect_to :root
   end
 
