@@ -25,7 +25,7 @@ gem 'unicorn'
 
 # Reddit interaction
 gem 'mlb_gameday', '~> 0.1'
-gem 'redd', '~> 0.7.10'
+gem 'redd'
 
 group :production do
   gem 'skylight'

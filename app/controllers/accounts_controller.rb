@@ -38,7 +38,15 @@ class AccountsController < ApplicationController
 
   def redirect_to_reddit
     session[:state] = SecureRandom.urlsafe_base64
-    auth_url = reddit.auth_url session[:state], AUTH_SCOPE, :permanent
+
+    auth_url = Redd.url(
+      client_id: Rails.application.secrets.reddit['client_id'],
+      redirect_uri: Rails.application.secrets.reddit['redirect_uri'],
+      state: session[:state],
+      scope: AUTH_SCOPE,
+      response_type: 'code',
+      duration: 'permanent'
+    )
 
     redirect_to auth_url, status: 301
   end
@@ -49,7 +57,7 @@ class AccountsController < ApplicationController
 
       username = client.me.name
 
-      existing = Account.where(name: username).first
+      existing = Account.where('LOWER(name) = ?', username.downcase).first
 
       if existing
         existing.update(
