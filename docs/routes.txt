@@ -1,0 +1,4 @@
+               Prefix Verb URI Pattern                      Controller#Action
+                 root GET  /                                home#home
+accounts_authenticate GET  /accounts/authenticate(.:format) accounts#authenticate
+           subreddits GET  /subreddits(.:format)            subreddits#index
