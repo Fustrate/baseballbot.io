@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 # config valid only for current version of Capistrano
-lock '3.6.1'
+lock '3.7.2'
 
 set :application, 'baseballbot.io'
 set :user, 'baseballbot'
 
-set :scm, :git
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
 set :branch, ENV['REVISION'] || :master
 
