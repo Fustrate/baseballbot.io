@@ -2,7 +2,7 @@
 source 'https://rubygems.org'
 
 ruby '2.4.0'
-gem 'rails', '5.0.1'
+gem 'rails', '5.0.2'
 
 gem 'pg'
 
@@ -24,8 +24,8 @@ gem 'turbolinks'
 gem 'unicorn'
 
 # Reddit interaction
-gem 'mlb_gameday', '~> 0.1.9'
-gem 'redd', '~> 0.7.8'
+gem 'mlb_gameday', '~> 0.1'
+gem 'redd', '~> 0.7'
 
 group :production do
   gem 'skylight'
@@ -43,7 +43,7 @@ group :development do
   gem 'web-console', '~> 3.0'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.6.0', require: false
+  gem 'capistrano', '~> 3.6', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv', '~> 2.0'
