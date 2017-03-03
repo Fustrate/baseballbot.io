@@ -95,7 +95,7 @@ class Baseballbot
   end
 
   def use_account(name)
-    account = @accounts.select { |_, acct| acct.name == name }.first
+    account = @accounts.values.select { |acct| acct.name == name }.first
 
     @client.access = account.access
 
