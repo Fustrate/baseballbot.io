@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 require_relative 'baseballbot'
 
-module Redd
-  module Objects
-    class Subreddit < Thing
-      def delete_flair(username)
-        post("/r/#{display_name}/api/deleteflair", name: username)
-      end
-    end
-  end
-end
+# module Redd
+#   module Objects
+#     class Subreddit < Thing
+#       def delete_flair(username)
+#         post("/r/#{display_name}/api/deleteflair", name: username)
+#       end
+#     end
+#   end
+# end
 
 @bot = Baseballbot.new(
   reddit: {

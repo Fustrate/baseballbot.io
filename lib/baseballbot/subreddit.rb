@@ -3,34 +3,34 @@ require_relative 'template/base'
 require_relative 'template/gamechat'
 require_relative 'template/sidebar'
 
-module Redd
-  module Objects
-    class Submission < Thing
-      # suggested_sort should be one of:
-      # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
-      # 'random', 'qa']
-      def suggested_sort=(suggested_sort)
-        post('/api/set_suggested_sort', id: fullname, sort: suggested_sort)
-      end
-
-      def flair_template_id=(flair_template_id)
-        post('/api/selectflair',
-             link: fullname,
-             flair_template_id: flair_template_id)
-      end
-    end
-  end
-
-  module Clients
-    class Base
-      module Read
-        def from_fullname(*fnames)
-          request_object(:get, "/by_id/#{fnames.join(',')}", {})
-        end
-      end
-    end
-  end
-end
+# module Redd
+#   module Objects
+#     class Submission < Thing
+#       # suggested_sort should be one of:
+#       # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
+#       # 'random', 'qa']
+#       def suggested_sort=(suggested_sort)
+#         post('/api/set_suggested_sort', id: fullname, sort: suggested_sort)
+#       end
+#
+#       def flair_template_id=(flair_template_id)
+#         post('/api/selectflair',
+#              link: fullname,
+#              flair_template_id: flair_template_id)
+#       end
+#     end
+#   end
+#
+#   module Clients
+#     class Base
+#       module Read
+#         def from_fullname(*fnames)
+#           request_object(:get, "/by_id/#{fnames.join(',')}", {})
+#         end
+#       end
+#     end
+#   end
+# end
 
 class Baseballbot
   class Subreddit
