@@ -24,13 +24,9 @@ LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
 GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
 
 def client
-  baseballbot = @bot.clients['BaseballBot']
-  account = @bot.accounts.select { |_, a| a.name == 'BaseballBot' }.values.first
+  @bot.use_account('BaseballBot')
 
-  baseballbot.access = account.access
-  @bot.refresh_client!(baseballbot) if account.access.expired?
-
-  baseballbot
+  @bot.client
 end
 
 def process_message(message)

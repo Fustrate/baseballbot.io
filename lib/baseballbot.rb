@@ -94,6 +94,14 @@ class Baseballbot
     %(#<Baseballbot>)
   end
 
+  def use_account(name)
+    account = @accounts.select { |_, acct| acct.name == name }.first
+
+    @client.access = account.access
+
+    refresh_access! if account.access.expired?
+  end
+
   def update_sidebars!(names: [])
     names = names.map(&:downcase)
 
@@ -119,7 +127,7 @@ class Baseballbot
     puts "\tExpires: #{client.access.expires_at.strftime '%F %T'}"
     puts "\tCurrent: #{Time.now.strftime '%F %T'}"
 
-    refresh_client!(client)
+    refresh_access!
 
     puts "\tExpires: #{client.access.expires_at.strftime '%F %T'}"
 
@@ -219,17 +227,19 @@ class Baseballbot
     puts "\t#{e.backtrace}"
   end
 
-  def refresh_client!(client)
-    client.refresh_access!
+  def refresh_access!
+    @client.refresh
+
+    new_expiration = Time.now + @client.access.expires_in.seconds
 
     @db.exec_params(
       'UPDATE accounts
       SET access_token = $1, expires_at = $2
       WHERE refresh_token = $3',
       [
-        client.access.access_token,
-        client.access.expires_at.strftime('%Y-%m-%d %H:%M:%S'),
-        client.access.refresh_token
+        @client.access.access_token,
+        new_expiration.strftime('%Y-%m-%d %H:%M:%S'),
+        @client.access.refresh_token
       ]
     )
 
@@ -315,12 +325,6 @@ class Baseballbot
         expires_at: Chronic.parse(row['expires_at']) - 60
       }
     )
-  end
-
-  def use_account(name)
-    account = @accounts.select { |acct| acct.name == name }.first
-
-    @client.access = account.access
   end
 
   def load_subreddits

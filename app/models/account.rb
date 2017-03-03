@@ -10,8 +10,7 @@ class Account < ActiveRecord::Base
       if access.expired?
         client.refresh_access!
 
-        update access_token: access_token,
-               expires_at: expires_at
+        update access_token: access_token, expires_at: expires_at
       end
 
       yield client

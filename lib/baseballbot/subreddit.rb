@@ -61,7 +61,7 @@ class Baseballbot
     def client
       @client ||= @bot.clients[@account.name].tap do |c|
         c.access = @account.access
-        @bot.refresh_client!(c) if @account.access.expired?
+        @bot.refresh_access! if @account.access.expired?
       end
     end
 

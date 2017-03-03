@@ -17,7 +17,7 @@ require_relative 'baseballbot'
 )
 
 @client = @bot.client
-@bot.client.use_account('BaseballBot')
+@bot.use_account('BaseballBot')
 
 @subreddit = @bot.session.subreddit('baseball')
 
