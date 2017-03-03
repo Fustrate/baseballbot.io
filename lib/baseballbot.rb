@@ -14,20 +14,20 @@ require_relative 'baseballbot/template/base'
 require_relative 'baseballbot/template/gamechat'
 require_relative 'baseballbot/template/sidebar'
 
-module Redd
-  module Response
-    class ParseJson < Faraday::Response::Middleware
-      def on_complete(env)
-        env[:body] = MultiJson.load(env[:body], symbolize_keys: true)
-      rescue MultiJson::ParseError
-        raise ::Redd::Error::JSONError.new(env), env[:body]
-      end
-    end
-  end
-end
+# module Redd
+#   module Response
+#     class ParseJson < Faraday::Response::Middleware
+#       def on_complete(env)
+#         env[:body] = MultiJson.load(env[:body], symbolize_keys: true)
+#       rescue MultiJson::ParseError
+#         raise ::Redd::Error::JSONError.new(env), env[:body]
+#       end
+#     end
+#   end
+# end
 
 class Baseballbot
-  attr_reader :db, :gameday, :clients, :accounts, :redis
+  attr_reader :db, :gameday, :client, :session, :accounts, :redis
 
   class << self
     def subreddits
@@ -71,15 +71,16 @@ class Baseballbot
   end
 
   def initialize(options = {})
-    @clients = Hash.new do |hash, key|
-      hash[key] = Redd.it(
-        :web,
-        options[:reddit][:client_id],
-        options[:reddit][:secret],
-        options[:reddit][:redirect_uri],
+    @client = Redd::APIClient.new(
+      Redd::AuthStrategies::Web.new(
+        client_id: options[:reddit][:client_id],
+        secret: options[:reddit][:secret],
+        redirect_uri: options[:reddit][:redirect_uri],
         user_agent: options[:user_agent]
-      )
-    end
+      ),
+      limit_time: 0
+    )
+    @session = Redd::Models::Session.new(@client)
 
     @db = PG::Connection.new options[:db]
     @redis = Redis.new
@@ -247,8 +248,12 @@ class Baseballbot
         AND (options#>>'{pregame,enabled}')::boolean IS TRUE
         AND (
           CASE WHEN substr(options#>>'{pregame,post_at}', 1, 1) = '-'
-            THEN (starts_at::timestamp + (CONCAT(options#>>'{pregame,post_at}', ' hours'))::interval) < NOW()
-            ELSE (DATE(starts_at) + (options#>>'{pregame,post_at}')::interval) < NOW() AT TIME ZONE (options->>'timezone')
+            THEN (starts_at::timestamp + (
+              CONCAT(options#>>'{pregame,post_at}', ' hours')
+            )::interval) < NOW()
+            ELSE (
+              DATE(starts_at) + (options#>>'{pregame,post_at}')::interval
+            ) < NOW() AT TIME ZONE (options->>'timezone')
           END)
       ORDER BY post_at ASC, gid ASC"
     )
@@ -306,10 +311,18 @@ class Baseballbot
         access_token: row['access_token'],
         refresh_token: row['refresh_token'],
         scope: row['scope'][1..-2].split(','),
-        # Remove 2 minutes so we don't run into invalid credentials
-        expires_at: Chronic.parse(row['expires_at']) - 120
+        # Remove 60 seconds so we don't run into invalid credentials
+        expires_at: Chronic.parse(row['expires_at']) - 60
       }
     )
+  end
+
+  def use_account(name)
+    @client.access = @accounts.select { |account| account.name == name }.first
+  end
+
+  def account(name)
+    @accounts.select { |account| account.name == name }.first
   end
 
   def load_subreddits

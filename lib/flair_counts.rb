@@ -16,35 +16,31 @@ require_relative 'baseballbot'
   user_agent: 'BaseballBot by /u/Fustrate - Flairs'
 )
 
-@client = @bot.clients['BaseballBot']
-@access = @bot.accounts
-              .select { |_, a| a.name == 'BaseballBot' }
-              .values
-              .first
-              .access
+@client = @bot.client
+@bot.client.use_account('BaseballBot')
+
+@subreddit = @bot.session.subreddit('baseball')
 
 @counts = Hash.new { |h, k| h[k] = 0 }
 
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
 
-  flairs = @subreddit.get_flairlist(limit: 1000, after: after)
+  flairs = @subreddit.flair_listing(limit: 1000, after: after)
 
-  flairs.each do |flair|
-    @counts[flair.flair_css_class] += 1
-  end
+  puts flairs.inspect
 
-  if flairs.after
-    sleep 5
-
-    load_flairs after: flairs.after
-  else
-    puts @counts.inspect
-  end
+  # flairs.each do |flair|
+  #   @counts[flair.flair_css_class] += 1
+  # end
+  #
+  # if flairs.after
+  #   sleep 5
+  #
+  #   load_flairs after: flairs.after
+  # else
+  #   puts @counts.inspect
+  # end
 end
 
-@client.with(@access) do
-  @subreddit = @client.subreddit_from_name('baseball')
-
-  load_flairs
-end
+load_flairs
