@@ -7,7 +7,7 @@ class Baseballbot
       @bot = bot
       @name = name
 
-      @access = Redd::Access.new(
+      @access = Redd::Models::Access.new(
         access_token: access[:access_token],
         refresh_token: access[:refresh_token],
         scope: access[:scope].join(','),

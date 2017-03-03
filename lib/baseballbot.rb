@@ -318,11 +318,9 @@ class Baseballbot
   end
 
   def use_account(name)
-    @client.access = @accounts.select { |account| account.name == name }.first
-  end
+    account = @accounts.select { |acct| acct.name == name }.first
 
-  def account(name)
-    @accounts.select { |account| account.name == name }.first
+    @client.access = account.access
   end
 
   def load_subreddits
