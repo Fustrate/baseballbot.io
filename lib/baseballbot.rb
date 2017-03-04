@@ -317,13 +317,13 @@ class Baseballbot
     @accounts[row['id']] = Account.new(
       bot: self,
       name: row['name'],
-      access: {
+      access: Redd::Models::Access.new(
         access_token: row['access_token'],
         refresh_token: row['refresh_token'],
         scope: row['scope'][1..-2].split(','),
         # Remove 60 seconds so we don't run into invalid credentials
         expires_at: Chronic.parse(row['expires_at']) - 60
-      }
+      )
     )
   end
 

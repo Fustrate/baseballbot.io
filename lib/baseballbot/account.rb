@@ -6,13 +6,7 @@ class Baseballbot
     def initialize(bot:, name:, access:)
       @bot = bot
       @name = name
-
-      @access = Redd::Models::Access.new(
-        access_token: access[:access_token],
-        refresh_token: access[:refresh_token],
-        scope: access[:scope].join(','),
-        expires_at: access[:expires_at].to_i
-      )
+      @access = access
     end
   end
 end
