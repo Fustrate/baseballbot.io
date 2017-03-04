@@ -16,7 +16,6 @@ require_relative 'baseballbot'
   user_agent: 'BaseballBot by /u/Fustrate - Flairs'
 )
 
-@client = @bot.client
 @bot.use_account('BaseballBot')
 
 @subreddit = @bot.session.subreddit('baseball')

@@ -318,6 +318,7 @@ class Baseballbot
       bot: self,
       name: row['name'],
       access: Redd::Models::Access.new(
+        @client,
         access_token: row['access_token'],
         refresh_token: row['refresh_token'],
         scope: row['scope'][1..-2].split(','),
