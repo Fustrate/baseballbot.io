@@ -230,7 +230,7 @@ class Baseballbot
   def refresh_access!
     @client.refresh
 
-    new_expiration = Time.now + @client.access.expires_in.seconds
+    new_expiration = Time.now + @client.access.expires_in
 
     @db.exec_params(
       'UPDATE accounts
