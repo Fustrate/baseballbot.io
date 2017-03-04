@@ -26,6 +26,20 @@ require_relative 'baseballbot/template/sidebar'
 #   end
 # end
 
+module Redd
+  module AuthStrategies
+    # The API client for authentication to reddit.
+    class AuthStrategy < Client
+      private
+
+      def request_access(grant_type, options = {})
+        response = post('/api/v1/access_token', { grant_type: grant_type }.merge(options))
+        Models::Access.new(self, options.merge(response.body))
+      end
+    end
+  end
+end
+
 class Baseballbot
   attr_reader :db, :gameday, :client, :session, :accounts, :redis
 
