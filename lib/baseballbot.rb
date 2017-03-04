@@ -326,7 +326,7 @@ class Baseballbot
         scope: row['scope'][1..-2].split(','),
         # Remove 60 seconds so we don't run into invalid credentials
         expires_at: expires_at - 60,
-        expires_in: Time.now - expires_at
+        expires_in: expires_at - Time.now
       )
     )
   end
