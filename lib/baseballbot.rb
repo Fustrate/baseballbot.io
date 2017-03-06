@@ -67,7 +67,8 @@ module Redd
 end
 
 class Baseballbot
-  attr_reader :db, :gameday, :client, :session, :accounts, :redis
+  attr_reader :db, :gameday, :client, :session, :accounts, :redis,
+              :current_account
 
   class << self
     def subreddits
@@ -135,11 +136,13 @@ class Baseballbot
   end
 
   def use_account(name)
-    account = @accounts.values.select { |acct| acct.name == name }.first
+    unless @current_account&.name == name
+      @current_account = @accounts.values.find { |acct| acct.name == name }
 
-    @client.access = account.access
+      @client.access = @current_account.access
+    end
 
-    refresh_access! if account.access.expired?
+    refresh_access! if @current_account.access.expired?
   end
 
   def update_sidebars!(names: [])
