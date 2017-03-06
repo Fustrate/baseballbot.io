@@ -3,6 +3,9 @@ require_relative 'baseballbot'
 
 GD2 = 'http://gd2.mlb.com/components/game/mlb'
 SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
+LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
+GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
 
 @bot = Baseballbot.new(
   reddit: {
@@ -19,22 +22,14 @@ SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
   user_agent: 'BaseballBot by /u/Fustrate - Messages'
 )
 
-TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
-LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
-GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
-
-def client
-  @bot.use_account('BaseballBot')
-
-  @bot.client
-end
+@bot.use_account('BaseballBot')
 
 def process_message(message)
   return unless message.subject =~ TITLE && message.body =~ LINK
 
   post_id = Regexp.last_match[1]
 
-  submissions = client.from_fullname("t3_#{post_id}")
+  submissions = @bot.session.from_ids("t3_#{post_id}")
 
   return unless submissions
 
@@ -92,12 +87,12 @@ def load_possible_games
   games
 end
 
-def unread_messages(client)
-  client.my_messages('unread', false, limit: 5) || []
+def unread_messages
+  @bot.session.my_messages('unread', mark: false, limit: 5) || []
 end
 
 def check_messages(retry_on_failure: true)
-  unread_messages(client).each { |msg| process_message msg }
+  unread_messages.each { |msg| process_message msg }
 rescue Redd::Error::ServiceUnavailable
   return unless retry_on_failure
 

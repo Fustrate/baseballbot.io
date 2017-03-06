@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 require_relative 'baseballbot'
 
-# module Redd
-#   module Objects
-#     class Subreddit < Thing
-#       def delete_flair(username)
-#         post("/r/#{display_name}/api/deleteflair", name: username)
-#       end
-#     end
-#   end
-# end
+@delete = %w(CHC-wagon SEA-wagon CHAOS-wagon).freeze
 
 @bot = Baseballbot.new(
   reddit: {
@@ -26,37 +18,30 @@ require_relative 'baseballbot'
   user_agent: 'BaseballBot by /u/Fustrate - Flairs'
 )
 
-@client = @bot.clients['BaseballBot']
-@access = @bot.accounts
-              .select { |_, a| a.name == 'BaseballBot' }
-              .values
-              .first
-              .access
-@delete = %w(MIN-wagon).freeze
+@bot.use_account('BaseballBot')
+@subreddit = @bot.session.subreddit('baseball')
 
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
 
-  flairs = @subreddit.get_flairlist(limit: 1000, after: after)
+  flairs = @subreddit.flair_listing(limit: 1000, after: after)
 
-  flairs.each do |flair|
-    next unless @delete.include?(flair.flair_css_class)
-
-    puts "\tDeleting #{flair.user}'s flair " \
-         "('#{flair.flair_css_class}', '#{flair.flair_text}')"
-
-    @subreddit.delete_flair(flair.user)
-  end
+  flairs.each { |flair| process_flair(flair) }
 
   return unless flairs.after
 
-  sleep 3
-  # puts "AFTER: #{flairs.after}"
+  sleep 5
+
   load_flairs after: flairs.after
 end
 
-@client.with(@access) do
-  @subreddit = @client.subreddit_from_name('baseball')
+def process_flair(flair)
+  return unless @delete.include? flair[:flair_css_class]
 
-  load_flairs
+  puts "\tDeleting #{flair[:user]}'s flair " \
+       "('#{flair[:flair_css_class]}', '#{flair[:flair_text]}')"
+
+  @subreddit.delete_flair flair[:user]
 end
+
+load_flairs

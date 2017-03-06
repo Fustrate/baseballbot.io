@@ -14,27 +14,53 @@ require_relative 'baseballbot/template/base'
 require_relative 'baseballbot/template/gamechat'
 require_relative 'baseballbot/template/sidebar'
 
-# module Redd
-#   module Response
-#     class ParseJson < Faraday::Response::Middleware
-#       def on_complete(env)
-#         env[:body] = MultiJson.load(env[:body], symbolize_keys: true)
-#       rescue MultiJson::ParseError
-#         raise ::Redd::Error::JSONError.new(env), env[:body]
-#       end
-#     end
-#   end
-# end
-
 module Redd
+  module Utilities
+    # Unmarshals hashes into objects.
+    class Unmarshaller
+      def unmarshal(response)
+        if response[:json] && response[:json][:data]
+          if response[:json][:data][:things]
+            Models::Listing.new(@client, children: response[:json][:data][:things])
+          else
+            Models::BasicModel.new(@client, response[:json][:data])
+          end
+        elsif MAPPING.key?(response[:kind])
+          MAPPING[response[:kind]].new(@client, response[:data])
+        elsif !response[:kind]
+          response
+        else
+          raise "unknown type to unmarshal: #{response[:kind].inspect}"
+        end
+      end
+    end
+  end
+
   module AuthStrategies
-    # The API client for authentication to reddit.
     class AuthStrategy < Client
       private
 
       def request_access(grant_type, options = {})
         response = post('/api/v1/access_token', { grant_type: grant_type }.merge(options))
         Models::Access.new(self, options.merge(response.body))
+      end
+    end
+  end
+
+  module Models
+    # A subreddit.
+    class Subreddit < LazyModel
+      def delete_flair(username, type: :user)
+        params = if type == :user
+                   { name: username }
+                 else
+                   { link: thing }
+                 end
+
+        @client.post(
+          "/r/#{get_attribute(:display_name)}/api/deleteflair",
+          params
+        )
       end
     end
   end

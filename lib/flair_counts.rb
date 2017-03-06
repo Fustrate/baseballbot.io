@@ -17,7 +17,6 @@ require_relative 'baseballbot'
 )
 
 @bot.use_account('BaseballBot')
-
 @subreddit = @bot.session.subreddit('baseball')
 
 @counts = Hash.new { |h, k| h[k] = 0 }
@@ -27,19 +26,17 @@ def load_flairs(after: nil)
 
   flairs = @subreddit.flair_listing(limit: 1000, after: after)
 
-  puts flairs.inspect
+  flairs.each do |flair|
+    @counts[flair[:flair_css_class]] += 1
+  end
 
-  # flairs.each do |flair|
-  #   @counts[flair.flair_css_class] += 1
-  # end
-  #
-  # if flairs.after
-  #   sleep 5
-  #
-  #   load_flairs after: flairs.after
-  # else
-  #   puts @counts.inspect
-  # end
+  if flairs.after
+    sleep 5
+
+    load_flairs after: flairs.after
+  else
+    puts @counts.inspect
+  end
 end
 
 load_flairs

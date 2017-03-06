@@ -17,12 +17,9 @@ require_relative 'baseballbot'
 )
 
 @after = 't2_b5fby'
-@client = @bot.clients['BaseballBot']
-@access = @bot.accounts
-              .select { |_, a| a.name == 'BaseballBot' }
-              .values
-              .first
-              .access
+
+@bot.use_account('BaseballBot')
+@subreddit = @bot.session.subreddit('baseball')
 
 @changes = {
   'loser' => 'K-MLBmisc',
@@ -33,19 +30,18 @@ require_relative 'baseballbot'
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
 
-  flairs = @subreddit.get_flairlist(limit: 1000, after: after)
+  flairs = @subreddit.flair_listing(limit: 1000, after: after)
 
   flairs.each do |flair|
-    next unless @changes[flair.flair_css_class]
+    next unless @changes[flair[:flair_css_class]]
 
-    puts "\tChanging #{flair.user} from #{flair.flair_css_class} " \
-         "to #{@changes[flair.flair_css_class]}"
+    puts "\tChanging #{flair[:user]} from #{flair[:flair_css_class]} " \
+         "to #{@changes[flair[:flair_css_class]]}"
 
     @subreddit.set_flair(
-      flair.user,
-      :user,
-      flair.flair_text,
-      @changes[flair.flair_css_class]
+      Redd::Models::User.new(nil, name: flair[:user]),
+      flair[:flair_text],
+      css_class: @changes[flair[:flair_css_class]]
     )
   end
 
@@ -56,8 +52,4 @@ def load_flairs(after: nil)
   load_flairs after: flairs.after
 end
 
-@client.with(@access) do
-  @subreddit = @client.subreddit_from_name('baseball')
-
-  load_flairs after: @after
-end
+load_flairs after: @after
