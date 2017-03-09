@@ -54,10 +54,6 @@ class Baseballbot
       @options['gamechats']['sticky'] != false
     end
 
-    def client
-      @bot.use_account(@account.name)
-    end
-
     def generate_sidebar
       sidebar_template.replace_in current_sidebar
     end
@@ -69,6 +65,8 @@ class Baseballbot
     end
 
     def post_gamechat(gid:, title:, flair: nil)
+      @bot.use_account(@account.name)
+
       template = gamechat_template(gid: gid, title: title)
 
       post = submit template.title,
@@ -83,6 +81,8 @@ class Baseballbot
     end
 
     def post_pregame(gid:, flair: nil)
+      @bot.use_account(@account.name)
+
       template = pregame_template(gid: gid)
 
       submit(
@@ -94,6 +94,8 @@ class Baseballbot
     end
 
     def post_postgame(gid:, flair: nil)
+      @bot.use_account(@account.name)
+
       template = postgame_template(gid: gid)
 
       submit(
@@ -106,6 +108,8 @@ class Baseballbot
 
     # Returns a boolean to indicate if the game is (effectively) over
     def update_gamechat(gid:, post_id:)
+      @bot.use_account(@account.name)
+
       template = gamechat_update_template(gid: gid, post_id: post_id)
 
       post = submission(id: post_id)
@@ -136,6 +140,8 @@ class Baseballbot
     end
 
     def update(new_settings = {})
+      @bot.use_account(@account.name)
+
       response = subreddit.admin_edit(new_settings)
 
       log_errors response.body[:json][:errors], new_settings
@@ -164,6 +170,8 @@ class Baseballbot
 
     # Returns the post ID
     def submit(title, text:, sticky: false, sort: '', flair: nil)
+      @bot.use_account(@account.name)
+
       begin
         submission = subreddit.submit(title, text: text, sendreplies: false)
       rescue Redd::Error::InvalidCaptcha => captcha
@@ -191,6 +199,8 @@ class Baseballbot
     def edit(id:, body: nil, sticky: nil)
       return unless body || !sticky.nil?
 
+      @bot.use_account(@account.name)
+
       post = submission id: id
 
       post.edit(body) if body
@@ -205,6 +215,8 @@ class Baseballbot
 
     def submission(id:)
       return @submissions[id] if @submissions[id]
+
+      @bot.use_account(@account.name)
 
       submissions = @bot.session.from_ids "t3_#{id}"
 
