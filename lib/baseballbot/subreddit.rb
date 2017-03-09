@@ -3,34 +3,30 @@ require_relative 'template/base'
 require_relative 'template/gamechat'
 require_relative 'template/sidebar'
 
-# module Redd
-#   module Objects
-#     class Submission < Thing
-#       # suggested_sort should be one of:
-#       # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
-#       # 'random', 'qa']
-#       def suggested_sort=(suggested_sort)
-#         post('/api/set_suggested_sort', id: fullname, sort: suggested_sort)
-#       end
-#
-#       def flair_template_id=(flair_template_id)
-#         post('/api/selectflair',
-#              link: fullname,
-#              flair_template_id: flair_template_id)
-#       end
-#     end
-#   end
-#
-#   module Clients
-#     class Base
-#       module Read
-#         def from_fullname(*fnames)
-#           request_object(:get, "/by_id/#{fnames.join(',')}", {})
-#         end
-#       end
-#     end
-#   end
-# end
+module Redd
+  module Models
+    class Submission < LazyModel
+      # sort_value should be one of:
+      # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
+      # 'random', 'qa']
+      def suggested_sort(sort_value)
+        @client.post(
+          '/api/set_suggested_sort',
+          id: get_attribute(:id),
+          sort: sort_value
+        )
+      end
+
+      def flair_template_id(template_id)
+        @client.post(
+          '/api/selectflair',
+          link: fullname,
+          flair_template_id: template_id
+        )
+      end
+    end
+  end
+end
 
 class Baseballbot
   class Subreddit
@@ -59,10 +55,7 @@ class Baseballbot
     end
 
     def client
-      @client ||= @bot.clients[@account.name].tap do |c|
-        c.access = @account.access
-        @bot.refresh_access! if @account.access.expired?
-      end
+      @bot.use_account(@account.name)
     end
 
     def generate_sidebar
@@ -84,9 +77,7 @@ class Baseballbot
                     sort: 'new',
                     flair: flair
 
-      @bot.redis.hset template.game.gid,
-                      @name.downcase,
-                      post[:id]
+      @bot.redis.hset(template.game.gid, @name.downcase, post[:id])
 
       post
     end
@@ -94,13 +85,23 @@ class Baseballbot
     def post_pregame(gid:, flair: nil)
       template = pregame_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: sticky_gamechats?, flair: flair
+      submit(
+        template.title,
+        text: template.result,
+        sticky: sticky_gamechats?,
+        flair: flair
+      )
     end
 
     def post_postgame(gid:, flair: nil)
       template = postgame_template(gid: gid)
 
-      submit template.title, text: template.result, sticky: sticky_gamechats?, flair: flair
+      submit(
+        template.title,
+        text: template.result,
+        sticky: sticky_gamechats?,
+        flair: flair
+      )
     end
 
     # Returns a boolean to indicate if the game is (effectively) over
@@ -127,7 +128,7 @@ class Baseballbot
     end
 
     def subreddit
-      @subreddit ||= client.subreddit_from_name(@name)
+      @subreddit ||= @bot.session.subreddit(@name)
     end
 
     def settings
@@ -164,7 +165,7 @@ class Baseballbot
     # Returns the post ID
     def submit(title, text:, sticky: false, sort: '', flair: nil)
       begin
-        thing = subreddit.submit(title, text: text, sendreplies: false)
+        submission = subreddit.submit(title, text: text, sendreplies: false)
       rescue Redd::Error::InvalidCaptcha => captcha
         raise captcha unless ENV['CAPTCHA']
 
@@ -175,22 +176,16 @@ class Baseballbot
         response = gets.chomp
         puts "Got #{captcha}"
 
-        thing = subreddit.submit(title, response, captcha_id,
-                                 text: text,
-                                 sendreplies: false)
+        submission = subreddit.submit(
+          title, response, captcha_id,
+          text: text,
+          sendreplies: false
+        )
       end
 
-      # Why doesn't the redd gem just return a Redd::Objects::Submission?
-      submission(id: thing[:id]).tap do |post|
-        begin
-          post.set_sticky if sticky && !post[:stickied]
-        rescue Redd::Error::Conflict
-          # It was already stickied
-        end
-
-        post.suggested_sort = sort unless sort == ''
-        post.flair_template_id = flair if flair
-      end
+      submission.make_sticky if sticky
+      submission.suggested_sort(sort) unless sort == ''
+      submission.flair_template_id(flair) if flair
     end
 
     def edit(id:, body: nil, sticky: nil)
@@ -201,8 +196,8 @@ class Baseballbot
       post.edit(body) if body
 
       begin
-        post.set_sticky if sticky && !post[:stickied]
-        post.unset_sticky if sticky == false && post[:stickied]
+        post.make_sticky if sticky && !post.stickied
+        post.remove_sticky if sticky == false && post.stickied
       rescue Redd::Error::Conflict
         # It was already stickied
       end
@@ -211,7 +206,7 @@ class Baseballbot
     def submission(id:)
       return @submissions[id] if @submissions[id]
 
-      submissions = client.from_fullname "t3_#{id}"
+      submissions = @bot.session.from_ids "t3_#{id}"
 
       raise "Unable to load post #{id}." unless submissions
 
