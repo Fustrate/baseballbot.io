@@ -125,7 +125,7 @@ class Baseballbot
 
       raise "Could not load post with ID #{post_id}." unless post
 
-      body = template.replace_in CGI.unescapeHTML(post.selftext_html)
+      body = template.replace_in CGI.unescapeHTML(post.selftext)
 
       if template.game.over?
         edit(id: post_id, body: body, sticky: sticky_gamechats? ? false : nil)
