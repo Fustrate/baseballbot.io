@@ -220,15 +220,15 @@ class Baseballbot
 
     post = subreddit.post_gamechat(gid: gid, title: title, flair: flair)
 
-    post.edit CGI.unescapeHTML(post[:selftext]).gsub('#ID#', post[:id])
+    post.edit CGI.unescapeHTML(post.selftext_html).gsub('#ID#', post.id)
 
     @db.exec_params(
       'UPDATE gamechats
       SET post_id = $1, title = $2, status = $3
       WHERE id = $4',
       [
-        post[:id],
-        post[:title],
+        post.id,
+        post.title,
         'Posted',
         id
       ]
