@@ -204,6 +204,8 @@ class Baseballbot
       submission.suggested_sort(sort) unless sort == ''
 
       subreddit.set_flair_template(submission, flair) if flair
+
+      submission
     end
 
     def edit(id:, body: nil, sticky: nil)
