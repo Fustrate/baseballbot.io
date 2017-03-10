@@ -16,12 +16,21 @@ module Redd
           sort: sort_value
         )
       end
+    end
 
-      def flair_template_id(template_id)
+    class Subreddit < LazyModel
+      def set_flair_template(thing, template_id, text: nil)
+        key = thing.is_a?(User) ? :name : :link
+
+        params = {
+          key => thing.name,
+          flair_template_id: template_id,
+          text: text
+        }
+
         @client.post(
-          '/api/selectflair',
-          link: fullname,
-          flair_template_id: template_id
+          "/r/#{get_attribute(:display_name)}/api/selectflair",
+          params
         )
       end
     end
@@ -193,7 +202,8 @@ class Baseballbot
 
       submission.make_sticky if sticky
       submission.suggested_sort(sort) unless sort == ''
-      submission.flair_template_id(flair) if flair
+
+      subreddit.set_flair_template(submission, flair) if flair
     end
 
     def edit(id:, body: nil, sticky: nil)
