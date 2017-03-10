@@ -84,7 +84,7 @@ class Baseballbot
                     sort: 'new',
                     flair: flair
 
-      @bot.redis.hset(template.game.gid, @name.downcase, post[:id])
+      @bot.redis.hset(template.game.gid, @name.downcase, post.id)
 
       post
     end
@@ -125,7 +125,7 @@ class Baseballbot
 
       raise "Could not load post with ID #{post_id}." unless post
 
-      body = template.replace_in CGI.unescapeHTML(post[:selftext])
+      body = template.replace_in CGI.unescapeHTML(post.selftext_html)
 
       if template.game.over?
         edit(id: post_id, body: body, sticky: sticky_gamechats? ? false : nil)
