@@ -172,24 +172,24 @@ class Baseballbot
     def submit(title, text:, sticky: false, sort: '', flair: nil)
       @bot.use_account(@account.name)
 
-      begin
-        submission = subreddit.submit(title, text: text, sendreplies: false)
-      rescue Redd::Error::InvalidCaptcha => captcha
-        raise captcha unless ENV['CAPTCHA']
-
-        captcha_id = captcha.body[:json][:captcha]
-
-        puts "http://www.reddit.com/captcha/#{captcha_id}.png"
-
-        response = gets.chomp
-        puts "Got #{captcha}"
-
-        submission = subreddit.submit(
-          title, response, captcha_id,
-          text: text,
-          sendreplies: false
-        )
-      end
+      # begin
+      submission = subreddit.submit(title, text: text, sendreplies: false)
+      # rescue Redd::Error::InvalidCaptcha => captcha
+      #   raise captcha unless ENV['CAPTCHA']
+      #
+      #   captcha_id = captcha.body[:json][:captcha]
+      #
+      #   puts "http://www.reddit.com/captcha/#{captcha_id}.png"
+      #
+      #   response = gets.chomp
+      #   puts "Got #{captcha}"
+      #
+      #   submission = subreddit.submit(
+      #     title, response, captcha_id,
+      #     text: text,
+      #     sendreplies: false
+      #   )
+      # end
 
       submission.make_sticky if sticky
       submission.suggested_sort(sort) unless sort == ''
@@ -205,12 +205,12 @@ class Baseballbot
 
       post.edit(body) if body
 
-      begin
-        post.make_sticky if sticky && !post.stickied
-        post.remove_sticky if sticky == false && post.stickied
-      rescue Redd::Error::Conflict
-        # It was already stickied
-      end
+      # begin
+      post.make_sticky if sticky && !post.stickied
+      post.remove_sticky if sticky == false && post.stickied
+      # rescue Redd::Error::Conflict
+      #   # It was already stickied
+      # end
     end
 
     def submission(id:)

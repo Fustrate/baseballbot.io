@@ -159,22 +159,19 @@ class Baseballbot
     subreddit = team_to_subreddit(team)
 
     subreddit.update description: subreddit.generate_sidebar
-  rescue Redd::Error::ServiceUnavailable, Redd::Error::InternalServerError,
-         Faraday::TimeoutError, OpenURI::HTTPError, Redd::Error::TimedOut
-    # do nothing, it's not the end of the world
-    nil
-  rescue Redd::Error::InvalidOAuth2Credentials
-    client = clients[subreddit.account.name]
-
+  rescue Redd::APIError::InvalidAccess
     puts "Could not update #{subreddit.name} due to invalid credentials:"
-    puts "\tExpires: #{client.access.expires_at.strftime '%F %T'}"
+    puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
     puts "\tCurrent: #{Time.now.strftime '%F %T'}"
 
     refresh_access!
 
-    puts "\tExpires: #{client.access.expires_at.strftime '%F %T'}"
+    puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
 
     subreddit.update description: subreddit.generate_sidebar
+  rescue Redd::APIError, Faraday::TimeoutError, OpenURI::HTTPError
+    # do nothing, it's not the end of the world
+    nil
   end
 
   def post_pregames!(names: [])
@@ -251,7 +248,7 @@ class Baseballbot
     end
   end
 
-  def update_gamechat!(id:, team:, gid:, post_id:)
+  def update_gamechat!(id:, team:, gid:, post_id:, first_attempt: true)
     subreddit = team_to_subreddit(team)
 
     over = subreddit.update_gamechat(gid: gid, post_id: post_id)
@@ -259,8 +256,25 @@ class Baseballbot
     return unless over
 
     @db.exec_params %(UPDATE gamechats SET status = 'Over' WHERE id = $1), [id]
-  rescue Redd::Error::ServiceUnavailable, Redd::Error::InternalServerError,
-         Faraday::TimeoutError, OpenURI::HTTPError, Redd::Error::TimedOut
+  rescue Redd::APIError::InvalidAccess
+    return false unless first_attempt
+
+    puts "Could not update #{subreddit.name} due to invalid credentials:"
+    puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
+    puts "\tCurrent: #{Time.now.strftime '%F %T'}"
+
+    refresh_access!
+
+    puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
+
+    update_gamechat!(
+      id: id,
+      team: team,
+      gid: gid,
+      post_id: post_id,
+      first_attempt: false
+    )
+  rescue Redd::APIError, Faraday::TimeoutError, OpenURI::HTTPError
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
     nil
   rescue StandardError => e
