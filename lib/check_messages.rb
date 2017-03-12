@@ -93,7 +93,7 @@ end
 
 def check_messages(retry_on_failure: true)
   unread_messages.each { |msg| process_message msg }
-rescue Redd::Error::ServiceUnavailable
+rescue Redd::APIError
   return unless retry_on_failure
 
   puts 'Service unavailable: waiting 30 seconds to retry.'

@@ -3,40 +3,6 @@ require_relative 'template/base'
 require_relative 'template/gamechat'
 require_relative 'template/sidebar'
 
-module Redd
-  module Models
-    class Submission < LazyModel
-      # sort_value should be one of:
-      # ['', 'confidence', 'top', 'new', 'hot', 'controversial', 'old',
-      # 'random', 'qa']
-      def suggested_sort(sort_value)
-        @client.post(
-          '/api/set_suggested_sort',
-          id: get_attribute(:id),
-          sort: sort_value
-        )
-      end
-    end
-
-    class Subreddit < LazyModel
-      def set_flair_template(thing, template_id, text: nil)
-        key = thing.is_a?(User) ? :name : :link
-
-        params = {
-          key => thing.name,
-          flair_template_id: template_id,
-          text: text
-        }
-
-        @client.post(
-          "/r/#{get_attribute(:display_name)}/api/selectflair",
-          params
-        )
-      end
-    end
-  end
-end
-
 class Baseballbot
   class Subreddit
     attr_reader :account, :name, :team, :time, :code
@@ -201,7 +167,7 @@ class Baseballbot
       # end
 
       submission.make_sticky if sticky
-      submission.suggested_sort(sort) unless sort == ''
+      submission.set_suggested_sort(sort) unless sort == ''
 
       subreddit.set_flair_template(submission, flair) if flair
 
