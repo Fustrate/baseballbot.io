@@ -28,6 +28,7 @@ gem 'mlb_gameday', '~> 0.1'
 gem 'redd', git: 'https://github.com/avinashbot/redd.git'
 
 group :production do
+  gem 'honeybadger'
   gem 'skylight'
 end
 
