@@ -128,25 +128,12 @@ class Baseballbot
     unposted_pregames.each do |row|
       next unless names.empty? || names.include?(row['name'].downcase)
 
-      post_pregame! id: row['id'],
-                    team: row['name'],
-                    gid: row['gid'],
-                    flair: row['flair']
+      post_pregame! id: row['id'], team: row['name'], gid: row['gid']
     end
   end
 
-  def post_pregame!(id:, team:, gid:, flair: nil)
-    team_to_subreddit(team).post_pregame(gid: gid, flair: flair)
-
-    @db.exec_params(
-      'UPDATE gamechats
-      SET status = $1
-      WHERE id = $2',
-      [
-        'Pregame',
-        id
-      ]
-    )
+  def post_pregame!(id:, team:, gid:)
+    team_to_subreddit(team).post_pregame(id: id, gid: gid)
   end
 
   def post_gamechats!(names: [])
@@ -158,28 +145,15 @@ class Baseballbot
       post_gamechat! id: row['id'],
                      team: row['name'],
                      gid: row['gid'],
-                     title: row['title'],
-                     flair: row['flair']
+                     title: row['title']
     end
   end
 
-  def post_gamechat!(id:, team:, gid:, title:, flair: nil)
-    subreddit = team_to_subreddit(team)
-
-    post = subreddit.post_gamechat(gid: gid, title: title, flair: flair)
-
-    post.edit CGI.unescapeHTML(post.selftext).gsub('#ID#', post.id)
-
-    @db.exec_params(
-      'UPDATE gamechats
-      SET post_id = $1, title = $2, status = $3
-      WHERE id = $4',
-      [
-        post.id,
-        post.title,
-        'Posted',
-        id
-      ]
+  def post_gamechat!(id:, team:, gid:, title:)
+    team_to_subreddit(team).post_gamechat(
+      id: id,
+      gid: gid,
+      title: title
     )
   end
 
@@ -197,13 +171,8 @@ class Baseballbot
   end
 
   def update_gamechat!(id:, team:, gid:, post_id:, first_attempt: true)
-    subreddit = team_to_subreddit(team)
-
-    over = subreddit.update_gamechat(gid: gid, post_id: post_id)
-
-    return unless over
-
-    @db.exec_params %(UPDATE gamechats SET status = 'Over' WHERE id = $1), [id]
+    team_to_subreddit(team)
+      .update_gamechat(id: id, gid: gid, post_id: post_id)
   rescue Redd::InvalidAccess
     return false unless first_attempt
 
@@ -251,66 +220,11 @@ class Baseballbot
     client
   end
 
-  protected
-
-  def unposted_pregames
-    @db.exec(
-      "SELECT gamechats.id, gid, subreddits.name,
-        (options#>>'{pregame,flair}') AS flair
-      FROM gamechats
-      JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status = 'Future'
-        AND (options#>>'{pregame,enabled}')::boolean IS TRUE
-        AND (
-          CASE WHEN substr(options#>>'{pregame,post_at}', 1, 1) = '-'
-            THEN (starts_at::timestamp + (
-              CONCAT(options#>>'{pregame,post_at}', ' hours')
-            )::interval) < NOW()
-            ELSE (
-              DATE(starts_at) + (options#>>'{pregame,post_at}')::interval
-            ) < NOW() AT TIME ZONE (options->>'timezone')
-          END)
-      ORDER BY post_at ASC, gid ASC"
-    )
-  end
-
-  def unposted_gamechats
-    @db.exec(
-      "SELECT gamechats.id, gid, subreddits.name, title,
-        (options#>>'{gamechats,flair}') AS flair
-      FROM gamechats
-      JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status IN ('Pregame', 'Future')
-        AND post_at <= NOW()
-        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
-      ORDER BY post_at ASC, gid ASC"
-    )
-  end
-
-  def active_gamechats
-    @db.exec(
-      "SELECT gamechats.id, gid, subreddits.name, post_id
-      FROM gamechats
-      JOIN subreddits ON (subreddits.id = subreddit_id)
-      WHERE status = 'Posted'
-        AND starts_at <= NOW()
-        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
-      ORDER BY post_id ASC"
-    )
-  end
-
-  def teams_with_sidebars
-    @db.exec(
-      "SELECT name
-      FROM subreddits
-      WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE
-      ORDER BY id ASC"
-    )
-  end
-
   def team_to_subreddit(team)
     team.is_a?(Subreddit) ? team : @subreddits[team.downcase]
   end
+
+  protected
 
   def load_accounts
     @accounts = {}
@@ -356,4 +270,61 @@ class Baseballbot
       options: JSON.parse(row['options'])
     )
   end
+
+  # !@group SQL
+
+  def unposted_pregames
+    @db.exec(
+      "SELECT gamechats.id, gid, subreddits.name
+      FROM gamechats
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status = 'Future'
+        AND (options#>>'{pregame,enabled}')::boolean IS TRUE
+        AND (
+          CASE WHEN substr(options#>>'{pregame,post_at}', 1, 1) = '-'
+            THEN (starts_at::timestamp + (
+              CONCAT(options#>>'{pregame,post_at}', ' hours')
+            )::interval) < NOW()
+            ELSE (
+              DATE(starts_at) + (options#>>'{pregame,post_at}')::interval
+            ) < NOW() AT TIME ZONE (options->>'timezone')
+          END)
+      ORDER BY post_at ASC, gid ASC"
+    )
+  end
+
+  def unposted_gamechats
+    @db.exec(
+      "SELECT gamechats.id, gid, subreddits.name, title
+      FROM gamechats
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status IN ('Pregame', 'Future')
+        AND post_at <= NOW()
+        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
+      ORDER BY post_at ASC, gid ASC"
+    )
+  end
+
+  def active_gamechats
+    @db.exec(
+      "SELECT gamechats.id, gid, subreddits.name, post_id
+      FROM gamechats
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status = 'Posted'
+        AND starts_at <= NOW()
+        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
+      ORDER BY post_id ASC"
+    )
+  end
+
+  def teams_with_sidebars
+    @db.exec(
+      "SELECT name
+      FROM subreddits
+      WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE
+      ORDER BY id ASC"
+    )
+  end
+
+  # !@endgroup
 end

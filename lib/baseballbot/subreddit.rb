@@ -25,8 +25,123 @@ class Baseballbot
       @team = @bot.gameday.team(@code) if @code
     end
 
+    # !@group Game Chats
+
+    def post_gamechat(id:, gid:, title:)
+      @bot.use_account(@account.name)
+
+      template = gamechat_template(gid: gid, title: title)
+
+      submission = submit title: template.title, text: template.result
+
+      # Mark as posted right away so that it won't post again
+      change_gamechat_status id, submission, 'Posted'
+
+      raw_markdown = CGI.unescapeHTML(submission.selftext)
+
+      post.edit raw_markdown.gsub('#ID#', submission.id)
+
+      @bot.redis.hset(template.game.gid, @name.downcase, submission.id)
+
+      post_process_submission(
+        submission,
+        sticky: sticky_gamechats?,
+        sort: 'new',
+        flair: @options.dig('gamechats', 'flair')
+      )
+
+      submission
+    end
+
+    # Update a gamechat - also starts the "game over" process if necessary
+    #
+    # @param id [String] The baseballbot id of the gamechat
+    # @param gid [String] The mlb gid of the game
+    # @param post_id [String] The reddit id of the post to update
+    #
+    # @return [Boolean] to indicate if the game is over or postponed
+    def update_gamechat(id:, gid:, post_id:)
+      @bot.use_account(@account.name)
+
+      template = gamechat_update_template(gid: gid, post_id: post_id)
+      submission = load_submission(id: post_id)
+      game_over = template.game.over? || template.game.postponed?
+
+      edit(
+        id: post_id,
+        body: template.replace_in(CGI.unescapeHTML(submission.selftext))
+      )
+
+      change_gamechat_status id, submission, game_over ? 'Over' : 'Posted'
+
+      end_gamechat(id, submission, gid) if game_over
+
+      game_over
+    end
+
+    def end_gamechat(id, submission, gid)
+      change_gamechat_status id, submission, 'Over'
+
+      post_process_submission(
+        submission,
+        sticky: sticky_gamechats? ? false : nil
+      )
+
+      post_postgame(gid: gid)
+    end
+
+    # !@endgroup
+
+    # !@group Pre Game Chats
+
+    def post_pregame(id:, gid:)
+      return unless @options.dig('pregame', 'enabled')
+
+      @bot.use_account(@account.name)
+
+      template = pregame_template(gid: gid)
+
+      submission = submit title: template.title, text: template.result
+
+      change_gamechat_status id, submission, 'Pregame'
+
+      post_process_submission(
+        submission,
+        sticky: sticky_gamechats?,
+        flair: @options.dig('pregame', 'flair')
+      )
+
+      submission
+    end
+
+    # !@endgroup
+
+    # !@group Post Game Chats
+
+    def post_postgame(gid:)
+      return unless @options.dig('postgame', 'enabled')
+
+      @bot.use_account(@account.name)
+
+      template = postgame_template(gid: gid)
+
+      submission = submit title: template.title, text: template.result
+
+      post_process_submission(
+        submission,
+        sticky: sticky_gamechats?,
+        flair: @options.dig('postgame', 'flair')
+      )
+    end
+
+    # !@endgroup
+
+    # --------------------------------------------------------------------------
+    # Miscellaneous
+    # --------------------------------------------------------------------------
+
     def sticky_gamechats?
-      @options['gamechats']['sticky'] != false
+      @options.dig('gamechats', 'sticky') != false
     end
 
     def generate_sidebar
@@ -39,71 +154,20 @@ class Baseballbot
       CGI.unescapeHTML settings[:description]
     end
 
-    def post_gamechat(gid:, title:, flair: nil)
-      @bot.use_account(@account.name)
+    def change_gamechat_status(id, submission, status)
+      fields = ['status = $2', 'updated_at = $3']
+      fields.concat ['post_id = $4', 'title = $5'] if submission
 
-      template = gamechat_template(gid: gid, title: title)
-
-      post = submit template.title,
-                    text: template.result,
-                    sticky: sticky_gamechats?,
-                    sort: 'new',
-                    flair: flair
-
-      @bot.redis.hset(template.game.gid, @name.downcase, post.id)
-
-      post
-    end
-
-    def post_pregame(gid:, flair: nil)
-      @bot.use_account(@account.name)
-
-      template = pregame_template(gid: gid)
-
-      submit(
-        template.title,
-        text: template.result,
-        sticky: sticky_gamechats?,
-        flair: flair
+      @db.exec_params(
+        "UPDATE gamechats SET #{fields.join(', ')} WHERE id = $1",
+        [
+          id,
+          status,
+          Time.now,
+          submission&.id,
+          submission&.title
+        ].compact
       )
-    end
-
-    def post_postgame(gid:, flair: nil)
-      @bot.use_account(@account.name)
-
-      template = postgame_template(gid: gid)
-
-      submit(
-        template.title,
-        text: template.result,
-        sticky: sticky_gamechats?,
-        flair: flair
-      )
-    end
-
-    # Returns a boolean to indicate if the game is (effectively) over
-    def update_gamechat(gid:, post_id:)
-      @bot.use_account(@account.name)
-
-      template = gamechat_update_template(gid: gid, post_id: post_id)
-
-      post = submission(id: post_id)
-
-      raise "Could not load post with ID #{post_id}." unless post
-
-      body = template.replace_in CGI.unescapeHTML(post.selftext)
-
-      if template.game.over?
-        edit(id: post_id, body: body, sticky: sticky_gamechats? ? false : nil)
-
-        if @options['postgame'] && @options['postgame']['enabled']
-          post_postgame(gid: gid, flair: @options['postgame']['flair'])
-        end
-      else
-        edit(id: post_id, body: body)
-      end
-
-      template.game.over? || template.game.postponed?
     end
 
     def subreddit
@@ -111,102 +175,77 @@ class Baseballbot
     end
 
     def settings
-      @settings ||= subreddit.to_h
+      @settings ||= subreddit.settings
     end
 
+    # Update settings for the current subreddit
+    #
+    # @param new_settings [Hash] new settings to apply to the subreddit
     def update(new_settings = {})
       @bot.use_account(@account.name)
 
-      response = subreddit.admin_edit(new_settings)
+      response = subreddit.modify_settings(new_settings)
 
-      log_errors response.body[:json][:errors], new_settings
+      log_errors response.body.dig(:json, :errors), new_settings
     rescue Faraday::TimeoutError
       log 'Timeout error while updating settings.'
     end
 
-    def log_errors(errors, new_settings)
-      return unless errors && errors.count.positive?
-
-      errors.each do |error|
-        log "#{error[0]}: #{error[1]} (#{error[2]})"
-
-        next unless error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
-
-        # TODO: Message the moderators of the subreddit to tell them their
-        # sidebar is X characters too long.
-        puts "New length is #{new_settings[error[2].to_sym].length}"
-      end
-    end
-
-    # TODO: Make this an actual logger, so we can log to something different
-    def log(message)
-      puts Time.now.strftime "[%Y-%m-%d %H:%M:%S] #{@name}: #{message}"
-    end
-
-    # Returns the post ID
-    def submit(title, text:, sticky: false, sort: '', flair: nil)
+    # Submit a post to reddit in the current subreddit
+    #
+    # @param title [String] the title of the submission to create
+    # @param text [String] the markdown body of the submission to create
+    #
+    # @return [Redd::Models::Submission] the successfully created submission
+    #
+    # @todo Restore ability to pass captcha
+    def submit(title:, text:)
       @bot.use_account(@account.name)
 
-      # begin
-      submission = subreddit.submit(title, text: text, sendreplies: false)
-      # rescue Redd::Error::InvalidCaptcha => captcha
-      #   raise captcha unless ENV['CAPTCHA']
-      #
-      #   captcha_id = captcha.body[:json][:captcha]
-      #
-      #   puts "http://www.reddit.com/captcha/#{captcha_id}.png"
-      #
-      #   response = gets.chomp
-      #   puts "Got #{captcha}"
-      #
-      #   submission = subreddit.submit(
-      #     title, response, captcha_id,
-      #     text: text,
-      #     sendreplies: false
-      #   )
-      # end
-
-      submission.make_sticky if sticky
-      submission.set_suggested_sort(sort) unless sort == ''
-
-      subreddit.set_flair_template(submission, flair) if flair
-
-      submission
+      subreddit.submit(title, text: text, sendreplies: false)
     end
 
-    def edit(id:, body: nil, sticky: nil)
-      return unless body || !sticky.nil?
-
+    def edit(id:, body: nil)
       @bot.use_account(@account.name)
 
-      post = submission id: id
-
-      post.edit(body) if body
-
-      # begin
-      post.make_sticky if sticky && !post.stickied
-      post.remove_sticky if sticky == false && post.stickied
-      # rescue Redd::Error::Conflict
-      #   # It was already stickied
-      # end
+      load_submission(id: id).edit(body)
     end
 
-    def submission(id:)
+    # Load a submission from reddit by its id
+    #
+    # @param id [String] an id to load
+    #
+    # @return [Redd::Models::Submission] the submission, if found
+    #
+    # @raise [RuntimeError] if a submission with this id does not exist
+    def load_submission(id:)
       return @submissions[id] if @submissions[id]
 
       @bot.use_account(@account.name)
 
       submissions = @bot.session.from_ids "t3_#{id}"
 
-      raise "Unable to load post #{id}." unless submissions
+      raise "Unable to load post #{id}." unless submissions&.first
 
       @submissions[id] = submissions.first
     end
 
     protected
 
+    def post_process_submission(submission, sticky: false, sort: '', flair: nil)
+      if submission.stickied
+        submission.remove_sticky if sticky == false
+      elsif sticky
+        submission.make_sticky
+      end
+
+      submission.set_suggested_sort(sort) unless sort == ''
+
+      subreddit.set_flair_template(submission, flair) if flair
+    end
+
     def sidebar_template
-      body = template_for('sidebar')[0]
+      body, = template_for('sidebar')
 
       Template::Sidebar.new body: body, bot: @bot, subreddit: self
     end
@@ -224,7 +263,7 @@ class Baseballbot
     end
 
     def gamechat_update_template(gid:, post_id:)
-      body = template_for('gamechat_update')[0]
+      body, = template_for('gamechat_update')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
@@ -261,9 +300,32 @@ class Baseballbot
         [@id, type]
       )
 
-      raise "#{@name} does not have a #{type} template." if result.count < 1
+      raise "/r/#{@name} does not have a #{type} template." if result.count < 1
 
       [result[0]['body'], result[0]['title']]
+    end
+
+    # --------------------------------------------------------------------------
+    # Logging
+    # --------------------------------------------------------------------------
+
+    def log_errors(errors, new_settings)
+      return unless errors&.count&.positive?
+
+      errors.each do |error|
+        log "#{error[0]}: #{error[1]} (#{error[2]})"
+
+        next unless error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
+
+        # TODO: Message the moderators of the subreddit to tell them their
+        # sidebar is X characters too long.
+        puts "New length is #{new_settings[error[2].to_sym].length}"
+      end
+    end
+
+    # TODO: Make this an actual logger, so we can log to something different
+    def log(message)
+      puts Time.now.strftime "[%Y-%m-%d %H:%M:%S] #{@name}: #{message}"
     end
   end
 end
