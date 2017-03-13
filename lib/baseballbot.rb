@@ -107,7 +107,7 @@ class Baseballbot
     subreddit = team_to_subreddit(team)
 
     subreddit.update description: subreddit.generate_sidebar
-  rescue Redd::APIError::InvalidAccess
+  rescue Redd::InvalidAccess
     puts "Could not update #{subreddit.name} due to invalid credentials:"
     puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
     puts "\tCurrent: #{Time.now.strftime '%F %T'}"
@@ -204,7 +204,7 @@ class Baseballbot
     return unless over
 
     @db.exec_params %(UPDATE gamechats SET status = 'Over' WHERE id = $1), [id]
-  rescue Redd::APIError::InvalidAccess
+  rescue Redd::InvalidAccess
     return false unless first_attempt
 
     puts "Could not update #{subreddit.name} due to invalid credentials:"
