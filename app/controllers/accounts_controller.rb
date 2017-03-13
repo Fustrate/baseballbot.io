@@ -44,9 +44,9 @@ class AccountsController < ApplicationController
     auth_url = Redd.url(
       client_id: Rails.application.secrets.reddit['client_id'],
       redirect_uri: Rails.application.secrets.reddit['redirect_uri'],
+      response_type: 'code',
       state: session[:state],
       scope: AUTH_SCOPE,
-      response_type: 'code',
       duration: 'permanent'
     )
 
