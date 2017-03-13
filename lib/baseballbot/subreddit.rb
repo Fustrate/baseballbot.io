@@ -187,7 +187,7 @@ class Baseballbot
       response = subreddit.modify_settings(new_settings)
 
       log_errors response.body.dig(:json, :errors), new_settings
-    rescue Faraday::TimeoutError
+    rescue ::Faraday::TimeoutError
       log 'Timeout error while updating settings.'
     end
 
