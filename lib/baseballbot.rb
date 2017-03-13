@@ -19,6 +19,9 @@ class Baseballbot
               :current_account
 
   class << self
+    # The default subreddits for each team, as used by /r/baseball. These can
+    # be overridden on a team-by-team basis in their templates.
+    # rubocop:disable Metrics/MethodLength
     def subreddits
       {
         'ARI' => 'azdiamondbacks',
@@ -53,6 +56,7 @@ class Baseballbot
         'WSH' => 'Nationals'
       }.freeze
     end
+    # rubocop:enable Metrics/MethodLength
 
     def subreddit_to_code(name)
       Hash[subreddits.invert.map { |k, v| [k.downcase, v] }][name.downcase]
