@@ -121,7 +121,7 @@ class Baseballbot
     puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
 
     subreddit.update description: subreddit.generate_sidebar
-  rescue Redd::APIError, ::Faraday::TimeoutError, ::OpenURI::HTTPError
+  rescue Redd::APIError, ::OpenURI::HTTPError
     # do nothing, it's not the end of the world
     nil
   end
@@ -195,7 +195,7 @@ class Baseballbot
       post_id: post_id,
       first_attempt: false
     )
-  rescue Redd::APIError, ::Faraday::TimeoutError, ::OpenURI::HTTPError
+  rescue Redd::APIError, ::OpenURI::HTTPError
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
     nil
   rescue StandardError => e
