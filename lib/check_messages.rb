@@ -88,7 +88,7 @@ def load_possible_games
 end
 
 def unread_messages
-  @bot.session.my_messages('unread', mark: false, limit: 5) || []
+  @bot.session.my_messages(category: 'unread', mark: false, limit: 5) || []
 end
 
 def check_messages(retry_on_failure: true)
