@@ -44,9 +44,9 @@ class Baseballbot
 
         def draft_order
           @draft_order ||= divisions.values
-                                    .flatten(1)
-                                    .sort_by! { |team| team[:sort_order] }
-                                    .reverse
+            .flatten(1)
+            .sort_by! { |team| team[:sort_order] }
+            .reverse
         end
 
         def wildcards_in_league(league)
@@ -64,7 +64,7 @@ class Baseballbot
 
         def determine_league_wildcards(teams, division_ids)
           eligible = teams_in_divisions(teams, division_ids)
-                     .sort_by { |team| team[:wildcard_gb] }
+            .sort_by { |team| team[:wildcard_gb] }
 
           first_and_second_wildcards(eligible)
             .each_with_index do |teams_in_spot, position|
@@ -147,9 +147,13 @@ class Baseballbot
           # seems to fix the problem.
           filename = (Time.now - 4 * 3600).strftime STANDINGS
 
-          JSON.parse(open(filename).read)['standings_schedule_date'] \
-            ['standings_all_date_rptr']['standings_all_date']
-              .flat_map { |league| league['queryResults']['row'] }
+          JSON.parse(open(filename).read)
+            .dig(
+              'standings_schedule_date',
+              'standings_all_date_rptr',
+              'standings_all_date'
+            )
+            .flat_map { |league| league['queryResults']['row'] }
         end
       end
     end

@@ -105,8 +105,10 @@ class Baseballbot
       end
 
       def replace_in(text)
-        text.sub replace_regexp,
-                 "#{delimiter}\n#{result}\n#{delimiter close: true}"
+        text.sub(
+          replace_regexp,
+          "#{delimiter}\n#{result}\n#{delimiter close: true}"
+        )
       end
 
       def timestamp(action = nil)

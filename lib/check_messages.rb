@@ -61,13 +61,13 @@ def load_possible_games
   games = Hash.new { |h, k| h[k] = [] }
 
   Nokogiri::XML(open(Time.now.strftime(SCOREBOARD)))
-          .xpath('//games/game')
-          .map do |game|
-            gid = game.xpath('@gameday_link').text
+    .xpath('//games/game')
+    .map do |game|
+      gid = game.xpath('@gameday_link').text
 
-            games[game.xpath('@home_name_abbrev').text] << gid
-            games[game.xpath('@away_name_abbrev').text] << gid
-          end
+      games[game.xpath('@home_name_abbrev').text] << gid
+      games[game.xpath('@away_name_abbrev').text] << gid
+    end
 
   games
 end

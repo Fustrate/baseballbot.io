@@ -45,10 +45,8 @@ class Baseballbot
             return lines unless @game.started? && @game.boxscore
 
             @game.boxscore
-                 .xpath('//boxscore/linescore/inning_line_score')
-                 .each do |inning|
-                   add_inning_to_line_score(inning, lines: lines)
-                 end
+              .xpath('//boxscore/linescore/inning_line_score')
+              .each { |inning| add_inning_to_line_score(inning, lines: lines) }
 
             lines
           end

@@ -7,8 +7,8 @@ class Baseballbot
           return [] unless @game.started?
 
           Nokogiri::XML(open_file('inning/inning_Scores.xml'))
-                  .xpath('//scores/score')
-                  .map { |play| format_play(play) }
+            .xpath('//scores/score')
+            .map { |play| format_play(play) }
         rescue OpenURI::HTTPError
           # There's no inning_Scores.xml file right now
           []

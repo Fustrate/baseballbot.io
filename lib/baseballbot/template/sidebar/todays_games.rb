@@ -7,10 +7,13 @@ class Baseballbot
 
         SCOREBOARD_URL = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
-        PREGAME_STATUSES = ['Preview', 'Warmup', 'Pre-Game',
-                            'Delayed Start'].freeze
-        POSTGAME_STATUSES = ['Final', 'Game Over', 'Postponed',
-                             'Completed Early'].freeze
+        PREGAME_STATUSES = [
+          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start'
+        ].freeze
+
+        POSTGAME_STATUSES = [
+          'Final', 'Game Over', 'Postponed', 'Completed Early'
+        ].freeze
 
         def todays_games
           date = time.now - 10_800
@@ -18,8 +21,8 @@ class Baseballbot
           load_gamechats date
 
           Nokogiri::XML(open(date.strftime(SCOREBOARD_URL)))
-                  .xpath('//games/game')
-                  .map { |game| process_todays_game game }
+            .xpath('//games/game')
+            .map { |game| process_todays_game game }
         end
 
         protected
@@ -36,13 +39,11 @@ class Baseballbot
 
           {
             home: {
-              team: link_for_team(code: game.xpath('@home_name_abbrev').text,
-                                  gid: gid),
+              team: link_for_team(game: game, team: 'home'),
               score: home_score
             },
             away: {
-              team: link_for_team(code: game.xpath('@away_name_abbrev').text,
-                                  gid: gid),
+              team: link_for_team(game: game, team: 'away'),
               score: away_score
             },
             status: gameday_link(game_status(game), gid),
@@ -57,7 +58,10 @@ class Baseballbot
           end
         end
 
-        def link_for_team(code:, gid:)
+        def link_for_team(game:, team:)
+          gid = game.xpath('@gameday_link').text
+          code = game.xpath("@#{team}_name_abbrev").text
+
           gamechat = @gamechats["#{gid}_#{subreddit code}".downcase]
 
           if gamechat
@@ -68,24 +72,21 @@ class Baseballbot
         end
 
         def game_status(game)
-          case game.xpath('@status').text
-          when 'In Progress'
-            game_inning game
-          when 'Game Over', 'Final', 'Completed Early'
+          status = game.xpath('@status').text
+
+          return game_inning game if status == 'In Progress'
+          return italic game.xpath('@ind').text if status == 'Postponed'
+          return delay_type game if status == 'Delayed Start'
+          return "#{delay_type game} #{game_inning game}" if status == 'Delayed'
+          return 'Warmup' if status == 'Warmup'
+
+          if POSTGAME_STATUSES.include?(status)
             innings = game.xpath('@inning').text
 
-            innings == '9' ? 'F' : "F/#{innings}"
-          when 'Postponed'
-            italic game.xpath('@ind').text
-          when 'Delayed Start'
-            delay_type game
-          when 'Delayed'
-            "#{delay_type game} #{game_inning game}"
-          when 'Warmup'
-            'Warmup'
-          else
-            game.xpath('@time').text
+            return innings == '9' ? 'F' : "F/#{innings}"
           end
+
+          game.xpath('@time').text
         end
 
         def delay_type(game)
