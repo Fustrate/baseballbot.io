@@ -35,7 +35,7 @@ def process_message(message)
 
   submission = submissions.first
 
-  subreddit = submission.subreddit.downcase
+  subreddit = submission.subreddit.display_name.downcase
 
   gid = if submission.selftext =~ GID
           Regexp.last_match[1]
