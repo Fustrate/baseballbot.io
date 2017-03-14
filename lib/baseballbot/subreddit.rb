@@ -39,7 +39,7 @@ class Baseballbot
 
       raw_markdown = CGI.unescapeHTML(submission.selftext)
 
-      post.edit raw_markdown.gsub('#ID#', submission.id)
+      submission.edit raw_markdown.gsub('#ID#', submission.id)
 
       @bot.redis.hset(template.game.gid, @name.downcase, submission.id)
 
