@@ -6,6 +6,7 @@ require 'mlb_gameday'
 require 'erb'
 require 'tzinfo'
 require 'redis'
+require 'logger'
 
 require_relative 'baseballbot/error'
 require_relative 'baseballbot/subreddit'
