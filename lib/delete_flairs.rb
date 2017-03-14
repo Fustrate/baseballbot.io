@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require_relative 'default_bot'
 
-@after = nil
 @delete = %w(CHC-wagon SEA-wagon CHAOS-wagon).freeze
 
 @bot = default_bot(purpose: 'Delete Flairs', account: 'BaseballBot')
@@ -30,4 +29,4 @@ def process_flair(flair)
   @subreddit.delete_flair flair[:user]
 end
 
-load_flairs after: @after
+load_flairs after: arguments[:after]

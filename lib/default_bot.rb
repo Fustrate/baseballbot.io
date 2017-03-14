@@ -22,3 +22,13 @@ def default_bot(purpose: nil, account: nil)
 
   bot
 end
+
+def arguments
+  @arguments ||= begin
+    parsed = ARGV
+      .map { |arg| arg.split('=') }
+      .map { |k, v| [k.downcase.to_sym, v || true] }
+
+    Hash[parsed]
+  end
+end

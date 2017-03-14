@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require_relative 'default_bot'
 
-@after = nil
 @remove_flairs = %w(eliminated-wagons)
 
 @bot = default_bot(purpose: 'Chaos Flairs', account: 'BaseballBot')
@@ -31,4 +30,4 @@ def load_flairs(after: nil)
   load_flairs after: flairs.after
 end
 
-load_flairs after: @after
+load_flairs after: arguments[:after]

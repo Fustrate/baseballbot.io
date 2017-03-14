@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 require_relative 'default_bot'
 
-@after = nil
-
 @bot = default_bot(purpose: 'Flair Stats', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')
 
@@ -24,4 +22,4 @@ def load_flairs(after: nil)
   puts @counts.inspect
 end
 
-load_flairs after: @after
+load_flairs after: arguments[:after]
