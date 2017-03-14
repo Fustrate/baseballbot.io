@@ -33,6 +33,8 @@ class Baseballbot
     class Base
       using TemplateRefinements
 
+      DELIMITER = '[](/updates)'.freeze
+
       def initialize(body:, bot:)
         @body = body
         @template = ERB.new body, nil, '<>'
@@ -89,25 +91,16 @@ class Baseballbot
         "[#{text}](/##{title})"
       end
 
-      def delimiter(escape: false, close: false)
-        if escape
-          Regexp.escape delimiter(close: close)
-        else
-          '[](/updates)'
-        end
-      end
-
       def replace_regexp
-        delim_start = delimiter(escape: true)
-        delim_end   = delimiter(escape: true, close: true)
+        delimiter = Regexp.escape DELIMITER
 
-        Regexp.new "#{delim_start}(.*)#{delim_end}", Regexp::MULTILINE
+        Regexp.new "#{delimiter}(.*)#{delimiter}", Regexp::MULTILINE
       end
 
       def replace_in(text)
         text.sub(
           replace_regexp,
-          "#{delimiter}\n#{result}\n#{delimiter close: true}"
+          "#{DELIMITER}\n#{result}\n#{DELIMITER}"
         )
       end
 
