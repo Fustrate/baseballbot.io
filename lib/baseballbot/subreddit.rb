@@ -120,6 +120,11 @@ class Baseballbot
 
     # !@group Post Game Chats
 
+    # Create a postgame thread if the subreddit is set to have them
+    #
+    # @param gid [String] the MLB game ID
+    #
+    # @return [Redd::Models::Submission] the postgame thread
     def post_postgame(gid:)
       return unless @options.dig('postgame', 'enabled')
 
@@ -134,6 +139,8 @@ class Baseballbot
         sticky: sticky_gamechats?,
         flair: @options.dig('postgame', 'flair')
       )
+
+      submission
     end
 
     # !@endgroup
@@ -156,6 +163,9 @@ class Baseballbot
       CGI.unescapeHTML settings[:description]
     end
 
+    # @param id [Integer] the baseballbot ID of the gamechat
+    # @param submission [NilClass, Redd::Models::Submission] the post itself
+    # @param status [String] status of the gamechat
     def change_gamechat_status(id, submission, status)
       fields = ['status = $2', 'updated_at = $3']
       fields.concat ['post_id = $4', 'title = $5'] if submission
