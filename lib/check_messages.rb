@@ -35,9 +35,9 @@ def process_message(message)
 
   submission = submissions.first
 
-  subreddit = submission[:subreddit].downcase
+  subreddit = submission.subreddit.downcase
 
-  gid = if submission[:selftext] =~ GID
+  gid = if submission.selftext =~ GID
           Regexp.last_match[1]
         else
           find_possible_game(subreddit, post_id)

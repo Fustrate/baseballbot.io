@@ -72,15 +72,17 @@ class Baseballbot
         body: template.replace_in(CGI.unescapeHTML(submission.selftext))
       )
 
-      change_gamechat_status id, submission, game_over ? 'Over' : 'Posted'
-
-      end_gamechat(id, submission, gid) if game_over
+      if game_over
+        end_gamechat(id, submission, gid)
+      else
+        change_gamechat_status id, nil, 'Posted'
+      end
 
       game_over
     end
 
     def end_gamechat(id, submission, gid)
-      change_gamechat_status id, submission, 'Over'
+      change_gamechat_status id, nil, 'Over'
 
       post_process_submission(
         submission,
