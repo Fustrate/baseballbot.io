@@ -1,22 +1,9 @@
 # frozen_string_literal: true
-require_relative 'baseballbot'
+require_relative 'default_bot'
 
-@bot = Baseballbot.new(
-  reddit: {
-    user_agent: 'Baseballbot by /u/Fustrate',
-    client_id: ENV['REDDIT_CLIENT_ID'],
-    secret: ENV['REDDIT_SECRET'],
-    redirect_uri: ENV['REDDIT_REDIRECT_URI']
-  },
-  db: {
-    user: ENV['PG_USERNAME'],
-    dbname: ENV['PG_DATABASE'],
-    password: ENV['PG_PASSWORD']
-  },
-  user_agent: 'BaseballBot by /u/Fustrate - Flairs'
-)
+@after = nil
 
-@bot.use_account('BaseballBot')
+@bot = default_bot(purpose: 'Flair Stats', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')
 
 @counts = Hash.new { |h, k| h[k] = 0 }
@@ -26,17 +13,15 @@ def load_flairs(after: nil)
 
   flairs = @subreddit.flair_listing(limit: 1000, after: after)
 
-  flairs.each do |flair|
-    @counts[flair[:flair_css_class]] += 1
-  end
+  flairs.each { |flair| @counts[flair[:flair_css_class]] += 1 }
 
   if flairs.after
     sleep 5
 
-    load_flairs after: flairs.after
-  else
-    puts @counts.inspect
+    return load_flairs after: flairs.after
   end
+
+  puts @counts.inspect
 end
 
-load_flairs
+load_flairs after: @after

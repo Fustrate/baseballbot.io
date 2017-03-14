@@ -1,24 +1,10 @@
 # frozen_string_literal: true
-require_relative 'baseballbot'
+require_relative 'default_bot'
 
+@after = nil
 @delete = %w(CHC-wagon SEA-wagon CHAOS-wagon).freeze
 
-@bot = Baseballbot.new(
-  reddit: {
-    user_agent: 'Baseballbot by /u/Fustrate',
-    client_id: ENV['REDDIT_CLIENT_ID'],
-    secret: ENV['REDDIT_SECRET'],
-    redirect_uri: ENV['REDDIT_REDIRECT_URI']
-  },
-  db: {
-    user: ENV['PG_USERNAME'],
-    dbname: ENV['PG_DATABASE'],
-    password: ENV['PG_PASSWORD']
-  },
-  user_agent: 'BaseballBot by /u/Fustrate - Flairs'
-)
-
-@bot.use_account('BaseballBot')
+@bot = default_bot(purpose: 'Delete Flairs', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')
 
 def load_flairs(after: nil)
@@ -44,4 +30,4 @@ def process_flair(flair)
   @subreddit.delete_flair flair[:user]
 end
 
-load_flairs
+load_flairs after: @after

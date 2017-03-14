@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require_relative 'baseballbot'
+require_relative 'default_bot'
 
 GD2 = 'http://gd2.mlb.com/components/game/mlb'
 SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
@@ -7,22 +7,7 @@ TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
 LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
 GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
 
-@bot = Baseballbot.new(
-  reddit: {
-    user_agent: 'Baseballbot by /u/Fustrate',
-    client_id: ENV['REDDIT_CLIENT_ID'],
-    secret: ENV['REDDIT_SECRET'],
-    redirect_uri: ENV['REDDIT_REDIRECT_URI']
-  },
-  db: {
-    user: ENV['PG_USERNAME'],
-    dbname: ENV['PG_DATABASE'],
-    password: ENV['PG_PASSWORD']
-  },
-  user_agent: 'BaseballBot by /u/Fustrate - Messages'
-)
-
-@bot.use_account('BaseballBot')
+@bot = default_bot(purpose: 'Messages', account: 'BaseballBot')
 
 def process_message(message)
   return unless message.subject =~ TITLE && message.body =~ LINK

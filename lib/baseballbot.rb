@@ -69,7 +69,7 @@ class Baseballbot
         client_id: options[:reddit][:client_id],
         secret: options[:reddit][:secret],
         redirect_uri: options[:reddit][:redirect_uri],
-        user_agent: options[:user_agent]
+        user_agent: options[:reddit][:user_agent]
       ),
       limit_time: 0
     )

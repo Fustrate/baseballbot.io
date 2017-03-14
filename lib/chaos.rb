@@ -1,25 +1,11 @@
 # frozen_string_literal: true
-require_relative 'baseballbot'
+require_relative 'default_bot'
 
-@bot = Baseballbot.new(
-  reddit: {
-    user_agent: 'Baseballbot by /u/Fustrate',
-    client_id: ENV['REDDIT_CLIENT_ID'],
-    secret: ENV['REDDIT_SECRET'],
-    redirect_uri: ENV['REDDIT_REDIRECT_URI']
-  },
-  db: {
-    user: ENV['PG_USERNAME'],
-    dbname: ENV['PG_DATABASE'],
-    password: ENV['PG_PASSWORD']
-  },
-  user_agent: 'BaseballBot by /u/Fustrate - Flairs'
-)
+@after = nil
+@remove_flairs = %w(eliminated-wagons)
 
-@bot.use_account('BaseballBot')
+@bot = default_bot(purpose: 'Chaos Flairs', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')
-
-@remove_flairs = %w(NYY-wagon HOU-wagon)
 
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
@@ -45,4 +31,4 @@ def load_flairs(after: nil)
   load_flairs after: flairs.after
 end
 
-load_flairs
+load_flairs after: @after

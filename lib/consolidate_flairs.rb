@@ -1,31 +1,14 @@
 # frozen_string_literal: true
-require_relative 'baseballbot'
+require_relative 'default_bot'
 
-@bot = Baseballbot.new(
-  reddit: {
-    user_agent: 'Baseballbot by /u/Fustrate',
-    client_id: ENV['REDDIT_CLIENT_ID'],
-    secret: ENV['REDDIT_SECRET'],
-    redirect_uri: ENV['REDDIT_REDIRECT_URI']
-  },
-  db: {
-    user: ENV['PG_USERNAME'],
-    dbname: ENV['PG_DATABASE'],
-    password: ENV['PG_PASSWORD']
-  },
-  user_agent: 'BaseballBot by /u/Fustrate - Flairs'
-)
-
-@after = 't2_b5fby'
-
-@bot.use_account('BaseballBot')
-@subreddit = @bot.session.subreddit('baseball')
+@after = nil
 
 @changes = {
-  'loser' => 'K-MLBmisc',
-  'mlb' => 'MLB-MLBmisc',
-  'sf verified' => 'sfg verified'
+  'old classes' => 'new classes'
 }
+
+@bot = default_bot(purpose: 'Merge Flairs', account: 'BaseballBot')
+@subreddit = @bot.session.subreddit('baseball')
 
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
