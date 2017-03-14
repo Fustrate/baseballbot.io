@@ -16,7 +16,7 @@ require_relative 'baseballbot/template/sidebar'
 
 class Baseballbot
   attr_reader :db, :gameday, :client, :session, :accounts, :redis,
-              :current_account
+              :current_account, :logger
 
   class << self
     # The default subreddits for each team, as used by /r/baseball. These can
@@ -78,6 +78,8 @@ class Baseballbot
     @db = PG::Connection.new options[:db]
     @redis = Redis.new
     @gameday = MLBGameday::API.new
+
+    @logger = options[:logger] || Logger.new(STDOUT)
 
     load_accounts
     load_subreddits

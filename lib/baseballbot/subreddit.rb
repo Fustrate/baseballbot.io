@@ -50,6 +50,8 @@ class Baseballbot
         flair: @options.dig('gamechats', 'flair')
       )
 
+      @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{gid}."
+
       submission
     end
 
@@ -72,6 +74,8 @@ class Baseballbot
         body: template.replace_in(CGI.unescapeHTML(submission.selftext))
       )
 
+      @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{gid}."
+
       if game_over
         end_gamechat(id, submission, gid)
       else
@@ -88,6 +92,8 @@ class Baseballbot
         submission,
         sticky: sticky_gamechats? ? false : nil
       )
+
+      @bot.logger.info "Ended #{submission.id} in /r/#{@name} for #{gid}."
 
       post_postgame(gid: gid)
     end
@@ -112,6 +118,8 @@ class Baseballbot
         sticky: sticky_gamechats?,
         flair: @options.dig('pregame', 'flair')
       )
+
+      @bot.logger.info "Pregame #{submission.id} in /r/#{@name} for #{gid}."
 
       submission
     end
@@ -139,6 +147,8 @@ class Baseballbot
         sticky: sticky_gamechats?,
         flair: @options.dig('postgame', 'flair')
       )
+
+      @bot.logger.info "Postgame #{submission.id} in /r/#{@name} for #{gid}."
 
       submission
     end
@@ -323,7 +333,7 @@ class Baseballbot
       return unless errors&.count&.positive?
 
       errors.each do |error|
-        log "#{error[0]}: #{error[1]} (#{error[2]})"
+        @bot.logger.info "#{@name}: #{error[0]}: #{error[1]} (#{error[2]})"
 
         next unless error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
 
@@ -331,11 +341,6 @@ class Baseballbot
         # sidebar is X characters too long.
         puts "New length is #{new_settings[error[2].to_sym].length}"
       end
-    end
-
-    # TODO: Make this an actual logger, so we can log to something different
-    def log(message)
-      puts Time.now.strftime "[%Y-%m-%d %H:%M:%S] #{@name}: #{message}"
     end
   end
 end

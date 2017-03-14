@@ -15,7 +15,8 @@ def default_bot(purpose: nil, account: nil)
       user: ENV['PG_USERNAME'],
       dbname: ENV['PG_DATABASE'],
       password: ENV['PG_PASSWORD']
-    }
+    },
+    logger: Logger.new(arguments.key?(:log) ? STDOUT : '../log/baseballbot.log')
   )
 
   bot.use_account account if account
