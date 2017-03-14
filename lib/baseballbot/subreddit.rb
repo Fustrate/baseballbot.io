@@ -160,7 +160,7 @@ class Baseballbot
       fields = ['status = $2', 'updated_at = $3']
       fields.concat ['post_id = $4', 'title = $5'] if submission
 
-      @db.exec_params(
+      @bot.db.exec_params(
         "UPDATE gamechats SET #{fields.join(', ')} WHERE id = $1",
         [
           id,
