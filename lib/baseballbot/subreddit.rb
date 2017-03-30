@@ -177,8 +177,10 @@ class Baseballbot
     # @param submission [NilClass, Redd::Models::Submission] the post itself
     # @param status [String] status of the gamechat
     def change_gamechat_status(id, submission, status)
+      gamechat_posted = status == 'Posted'
+
       fields = ['status = $2', 'updated_at = $3']
-      fields.concat ['post_id = $4', 'title = $5'] if submission
+      fields.concat ['post_id = $4', 'title = $5'] if gamechat_posted
 
       @bot.db.exec_params(
         "UPDATE gamechats SET #{fields.join(', ')} WHERE id = $1",
@@ -186,8 +188,8 @@ class Baseballbot
           id,
           status,
           Time.now,
-          submission&.id,
-          submission&.title
+          (submission.id if gamechat_posted),
+          (submission.title if gamechat_posted)
         ].compact
       )
     end
