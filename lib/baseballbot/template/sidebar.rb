@@ -39,7 +39,7 @@ class Baseballbot
         interpolations[:team_id] = @team.id
         interpolations[:team_code] = @team.file_code
 
-        open format(url, interpolations)
+        open(format(url, interpolations)).read
       end
     end
   end
