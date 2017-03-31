@@ -199,7 +199,11 @@ class Baseballbot
     end
 
     def settings
-      @settings ||= subreddit.settings
+      return @settings if @settings
+
+      @bot.use_account(@account.name)
+
+      @settings = subreddit.settings
     end
 
     # Update settings for the current subreddit
