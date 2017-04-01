@@ -73,7 +73,7 @@ class Baseballbot
 
           @previous = []
 
-          [:current, :previous].each do |month|
+          %i(current previous).each do |month|
             Hash[calendar(month).to_a.reverse].each do |_, day|
               next if day[:date] > Date.today
 
@@ -91,7 +91,7 @@ class Baseballbot
 
           @upcoming = []
 
-          [:current, :next].each do |month|
+          %i(current next).each do |month|
             calendar(month).each do |_, day|
               next if day[:date] < Date.today
 

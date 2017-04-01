@@ -34,7 +34,7 @@ class Baseballbot
     class Base
       using TemplateRefinements
 
-      DELIMITER = '[](/updates)'.freeze
+      DELIMITER = '[](/updates)'
 
       def initialize(body:, bot:)
         @body = body
