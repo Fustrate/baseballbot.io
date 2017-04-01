@@ -19,10 +19,6 @@ Metrics/AbcSize:
 Rails:
   Enabled: true
 
-# Ya, no...
-Rails/FilePath:
-  Enabled: false
-
 Style/Documentation:
   Enabled: false
 
