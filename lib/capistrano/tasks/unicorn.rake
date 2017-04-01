@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :load do
   task :defaults do
     set :unicorn_roles, :app

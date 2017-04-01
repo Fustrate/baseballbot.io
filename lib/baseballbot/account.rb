@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Baseballbot
   class Account
     attr_reader :access, :name

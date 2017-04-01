@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'default_bot'
 
 GD2 = 'http://gd2.mlb.com/components/game/mlb'

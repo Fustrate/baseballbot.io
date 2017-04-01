@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 server '173.255.247.137', user: 'baseballbot', roles: %w(web app db)
 
 set :stage, :production
