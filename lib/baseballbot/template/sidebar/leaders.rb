@@ -14,67 +14,75 @@ class Baseballbot
         HITTER_URL  = "#{LEADERS_BASE_URL}&sort_column='avg'&stat_type=hitting"
         PITCHER_URL = "#{LEADERS_BASE_URL}&sort_column='era'&stat_type=pitching"
 
-        # TODO: This method only allows for one year+type to be loaded before
-        # being memoized. Cache into a hash instead?
         def hitter_stats(year: nil, type: 'R', count: 1)
           year ||= Date.today.year
 
-          @hitter_stats ||= begin
-            stats = {}
-            all_hitters = hitters(year: year, type: type)
-            qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
+          @hitter_stats ||= {}
 
-            %w(h xbh hr rbi bb sb r).each do |key|
-              stats[key] = high_stat(key, all_hitters, count: count).map do |s|
-                { name: s[0], value: s[1].to_i }
-              end
-            end
+          key = [year, type, count].join('-')
 
-            %w(avg obp slg ops).each do |key|
-              stats[key] = high_stat(key, qualifying, count: count).map do |s|
-                { name: s[0], value: pct(s[1]) }
-              end
-            end
-
-            stats
-          end
+          @hitter_stats[key] ||= load_hitter_stats(year, type, count)
         end
 
-        # TODO: This method only allows for one year+type to be loaded before
-        # being memoized. Cache into a hash instead?
         def pitcher_stats(year: nil, type: 'R', count: 1)
           year ||= Date.today.year
 
-          @pitcher_stats ||= begin
-            stats = {}
-            all_pitchers = pitchers(year: year, type: type)
-            qualifying = pitchers(year: year, type: type, pool: 'QUALIFIER')
+          @pitcher_stats ||= {}
 
-            %w(w sv hld so).each do |key|
-              stats[key] = high_stat(key, all_pitchers, count: count).map do |s|
-                { name: s[0], value: s[1].to_i }
-              end
-            end
+          key = [year, type, count].join('-')
 
-            stats['ip'] = high_stat('ip', all_pitchers, count: count).map do |s|
-              { name: s[0], value: s[1] }
-            end
-
-            stats['avg'] = low_stat('avg', qualifying, count: count).map do |s|
-              { name: s[0], value: pct(s[1]) }
-            end
-
-            %w(whip era).each do |key|
-              stats[key] = low_stat(key, qualifying, count: 3).map do |s|
-                { name: s[0], value: s[1].to_s.sub(/\A0+/, '') }
-              end
-            end
-
-            stats
-          end
+          @pitcher_stats[key] ||= load_pitcher_stats(year, type, count)
         end
 
         protected
+
+        def load_hitter_stats(year, type, count)
+          stats = {}
+          all_hitters = hitters(year: year, type: type)
+          qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
+
+          %w(h xbh hr rbi bb sb r).each do |key|
+            stats[key] = high_stat(key, all_hitters, count: count).map do |s|
+              { name: s[0], value: s[1].to_i }
+            end
+          end
+
+          %w(avg obp slg ops).each do |key|
+            stats[key] = high_stat(key, qualifying, count: count).map do |s|
+              { name: s[0], value: pct(s[1]) }
+            end
+          end
+
+          stats
+        end
+
+        def load_pitcher_stats(year, type, count)
+          stats = {}
+          all_pitchers = pitchers(year: year, type: type)
+          qualifying = pitchers(year: year, type: type, pool: 'QUALIFIER')
+
+          %w(w sv hld so).each do |key|
+            stats[key] = high_stat(key, all_pitchers, count: count).map do |s|
+              { name: s[0], value: s[1].to_i }
+            end
+          end
+
+          stats['ip'] = high_stat('ip', all_pitchers, count: count).map do |s|
+            { name: s[0], value: s[1] }
+          end
+
+          stats['avg'] = low_stat('avg', qualifying, count: count).map do |s|
+            { name: s[0], value: pct(s[1]) }
+          end
+
+          %w(whip era).each do |key|
+            stats[key] = low_stat(key, qualifying, count: 3).map do |s|
+              { name: s[0], value: s[1].to_s.sub(/\A0+/, '') }
+            end
+          end
+
+          stats
+        end
 
         def high_stat(key, players, count: 1)
           return [['', 0]] unless players
