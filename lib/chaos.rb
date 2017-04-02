@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'default_bot'
 
 @remove_flairs = %w(eliminated-wagons)

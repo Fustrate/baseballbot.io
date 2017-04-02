@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'redd'
 require 'pg'
 require 'chronic'

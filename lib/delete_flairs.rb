@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'default_bot'
 
 @delete = %w(CHC-wagon SEA-wagon CHAOS-wagon).freeze

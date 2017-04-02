@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 app_name = 'baseballbot.io'
 app_user = 'baseballbot'
 

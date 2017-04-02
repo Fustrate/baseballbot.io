@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'template/base'
 require_relative 'template/gamechat'
 require_relative 'template/sidebar'

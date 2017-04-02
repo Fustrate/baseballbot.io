@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AccountsController < ApplicationController
   # identity:  initially find the account name
   # edit:      update game chats

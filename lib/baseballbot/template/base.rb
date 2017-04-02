@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module TemplateRefinements
   refine Date do
     def days_in_month
