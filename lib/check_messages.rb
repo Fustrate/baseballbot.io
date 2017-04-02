@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'default_bot'
+require 'honeybadger/ruby'
 
 GD2 = 'http://gd2.mlb.com/components/game/mlb'
 SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
@@ -87,6 +88,8 @@ rescue Redd::APIError
   sleep 30
 
   check_messages(retry_on_failure: false)
+rescue => ex
+  Honeybadger.notify(ex, context: { team: team })
 end
 
 check_messages

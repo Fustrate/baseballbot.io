@@ -3,7 +3,7 @@
 set :output, '/home/baseballbot/apps/baseballbot.io/shared/log/whenever.log'
 
 DIRECTORY = '/home/baseballbot/apps/baseballbot.io/current/lib'
-BUNDLE_EXEC = 'bundle exec honeybadger exec'
+BUNDLE_EXEC = 'bundle exec'
 
 every 1.hour do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby update_sidebars.rb"

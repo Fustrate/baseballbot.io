@@ -8,6 +8,7 @@ require 'erb'
 require 'tzinfo'
 require 'redis'
 require 'logger'
+require 'honeybadger/ruby'
 
 require_relative 'baseballbot/error'
 require_relative 'baseballbot/subreddit'
@@ -125,9 +126,11 @@ class Baseballbot
     puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
 
     subreddit.update description: subreddit.generate_sidebar
-  rescue Redd::APIError, Redd::ServerError, ::OpenURI::HTTPError
+  rescue Redd::ServerError, ::OpenURI::HTTPError
     # do nothing, it's not the end of the world
     nil
+  rescue => ex
+    Honeybadger.notify(ex, context: { team: team })
   end
 
   def post_pregames!(names: [])
@@ -142,9 +145,11 @@ class Baseballbot
 
   def post_pregame!(id:, team:, gid:)
     team_to_subreddit(team).post_pregame(id: id, gid: gid)
-  rescue Redd::APIError, Redd::ServerError, ::OpenURI::HTTPError
+  rescue Redd::ServerError, ::OpenURI::HTTPError
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
     nil
+  rescue => ex
+    Honeybadger.notify(ex, context: { team: team })
   end
 
   def post_gamechats!(names: [])
@@ -166,9 +171,11 @@ class Baseballbot
       gid: gid,
       title: title
     )
-  rescue Redd::APIError, Redd::ServerError, ::OpenURI::HTTPError
+  rescue Redd::ServerError, ::OpenURI::HTTPError
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
     nil
+  rescue => ex
+    Honeybadger.notify(ex, context: { team: team })
   end
 
   def update_gamechats!(names: [])
@@ -205,14 +212,11 @@ class Baseballbot
       post_id: post_id,
       first_attempt: false
     )
-  rescue Redd::APIError, Redd::ServerError, ::OpenURI::HTTPError
+  rescue Redd::ServerError, ::OpenURI::HTTPError
     # All the same type of error. Waiting an extra 2 minutes won't kill anyone.
     nil
-  rescue StandardError => e
-    puts "[#{Time.now.strftime '%Y-%m-%d %H:%M:%S'}] #{e.class}: " \
-         "Could not update #{post_id} for team #{team}."
-    puts "\t#{e.message}"
-    puts "\t#{e.backtrace}"
+  rescue => ex
+    Honeybadger.notify(ex, context: { team: team })
   end
 
   def refresh_access!
