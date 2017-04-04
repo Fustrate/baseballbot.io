@@ -7,5 +7,6 @@ Rails.application.routes.draw do
     get :authenticate
   end
 
+  resources :gamechats
   resources :subreddits, only: %i(index)
 end
