@@ -4,7 +4,12 @@ class GamechatsController < ApplicationController
   before_action :load_gamechat, except: %i(index new create)
 
   def index
-    @gamechats = Gamechat.where('DATE(starts_at) = ?', Time.zone.today)
+    respond_to do |format|
+      format.html
+      format.json do
+        @gamechats = Gamechat.where('DATE(starts_at) = ?', Time.zone.today)
+      end
+    end
   end
 
   def show
