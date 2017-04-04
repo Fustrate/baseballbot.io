@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Subreddit < ActiveRecord::Base
+class Subreddit < ApplicationRecord
   has_many :gamechats
   belongs_to :account
 

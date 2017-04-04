@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-class Template < ActiveRecord::Base
+class Template < ApplicationRecord
 end
