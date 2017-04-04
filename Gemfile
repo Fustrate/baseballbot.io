@@ -12,6 +12,7 @@ gem 'foundation-rails', '~> 5.0'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'modernizr-rails'
+gem 'jbuilder'
 
 gem 'execjs'
 
