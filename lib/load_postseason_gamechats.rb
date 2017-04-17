@@ -43,17 +43,13 @@ def load_schedule
 
     next if gametime < Time.now
 
-    @attempts += 1
-
-    begin
-      insert_game game['gameday'], gametime, game_title(game)
-    rescue PG::UniqueViolation
-      @failures += 1
-    end
+    insert_game game['gameday'], gametime, game_title(game)
   end
 end
 
 def insert_game(gid, gametime, title)
+  @attempts += 1
+
   @conn.exec_params(
     'INSERT INTO gamechats (
       gid, post_at, starts_at, status, created_at, updated_at, subreddit_id,
@@ -69,6 +65,8 @@ def insert_game(gid, gametime, title)
       title
     ]
   )
+rescue PG::UniqueViolation
+  @failures += 1
 end
 
 load_schedule
