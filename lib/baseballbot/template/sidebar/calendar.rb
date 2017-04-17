@@ -231,7 +231,7 @@ class Baseballbot
         end
 
         def calendar_game_status(game)
-          return 'Delayed' if game[:status_code] == 'D'
+          return 'Delayed' if game[:status_code].start_with? 'D'
 
           return "#{game[:outcome]} #{game[:score].join '-'}" if game[:over]
 
