@@ -8,15 +8,19 @@ class Baseballbot
         PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
 
         def home_batters
-          return [] unless @game.started? && @game.boxscore
+          return [] unless @game.started? && @game.files[:rawboxscore]
 
-          @game.boxscore.xpath(format(BATTER_XPATH, flag: 'home')).to_a
+          @game.files[:rawboxscore]
+            .xpath(format(BATTER_XPATH, flag: 'home'))
+            .to_a
         end
 
         def away_batters
-          return [] unless @game.started? && @game.boxscore
+          return [] unless @game.started? && @game.files[:rawboxscore]
 
-          @game.boxscore.xpath(format(BATTER_XPATH, flag: 'away')).to_a
+          @game.files[:rawboxscore]
+            .xpath(format(BATTER_XPATH, flag: 'away'))
+            .to_a
         end
 
         def batters
@@ -24,15 +28,19 @@ class Baseballbot
         end
 
         def home_pitchers
-          return [] unless @game.started? && @game.boxscore
+          return [] unless @game.started? && @game.files[:rawboxscore]
 
-          @game.boxscore.xpath(format(PITCHER_XPATH, flag: 'home')).to_a
+          @game.files[:rawboxscore]
+            .xpath(format(PITCHER_XPATH, flag: 'home'))
+            .to_a
         end
 
         def away_pitchers
-          return [] unless @game.started? && @game.boxscore
+          return [] unless @game.started? && @game.files[:rawboxscore]
 
-          @game.boxscore.xpath(format(PITCHER_XPATH, flag: 'away')).to_a
+          @game.files[:rawboxscore]
+            .xpath(format(PITCHER_XPATH, flag: 'away'))
+            .to_a
         end
 
         def pitchers

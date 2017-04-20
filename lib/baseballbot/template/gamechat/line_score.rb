@@ -26,13 +26,13 @@ class Baseballbot
         end
 
         def home_rhe
-          return BLANK_RHE unless @game.started? && @game.boxscore
+          return BLANK_RHE unless @game.started? && @game.files[:rawboxscore]
 
           rhe_for_side 'home'
         end
 
         def away_rhe
-          return BLANK_RHE unless @game.started? && @game.boxscore
+          return BLANK_RHE unless @game.started? && @game.files[:rawboxscore]
 
           rhe_for_side 'away'
         end
@@ -43,9 +43,9 @@ class Baseballbot
           @lines ||= begin
             lines = [[nil] * 9, [nil] * 9]
 
-            return lines unless @game.started? && @game.boxscore
+            return lines unless @game.started? && @game.files[:rawboxscore]
 
-            @game.boxscore
+            @game.files[:rawboxscore]
               .xpath('//boxscore/linescore/inning_line_score')
               .each { |inning| add_inning_to_line_score(inning, lines: lines) }
 
@@ -54,7 +54,7 @@ class Baseballbot
         end
 
         def rhe_for_side(side)
-          @rhe ||= @game.boxscore.at_xpath '//boxscore/linescore'
+          @rhe ||= @game.files[:rawboxscore].at_xpath '//boxscore/linescore'
 
           {
             runs: @rhe["#{side}_team_runs"].to_i,

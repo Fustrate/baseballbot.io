@@ -88,19 +88,19 @@ class Baseballbot
       end
 
       def outs
-        return '' unless @game.started? && @game.linescore
+        return '' unless @game.started? && @game.files[:linescore]
 
-        if @game.linescore.at_xpath('//game/@outs')
-          return @game.linescore.xpath('//game/@outs').text.to_i
+        if @game.files[:linescore].at_xpath('//game/@outs')
+          return @game.files[:linescore].xpath('//game/@outs').text.to_i
         end
 
         ''
       end
 
       def runners
-        return '' unless @game.started? && @game.linescore
+        return '' unless @game.started? && @game.files[:linescore]
 
-        rob = @game.linescore.at_xpath '//game/@runner_on_base_status'
+        rob = @game.files[:linescore].at_xpath '//game/@runner_on_base_status'
 
         if rob
           return [
@@ -135,7 +135,7 @@ class Baseballbot
         return title unless title.include? '%{'
 
         local_start_time = home? ? @game.home_start_time : @game.away_start_time
-        linescore = @game.linescore
+        linescore = @game.files[:linescore]
 
         format title,
                home_city: @game.home_team.city,
