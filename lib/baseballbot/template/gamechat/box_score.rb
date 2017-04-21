@@ -4,8 +4,8 @@ class Baseballbot
   module Template
     class Gamechat
       module BoxScore
-        BATTER_XPATH = '//boxscore/batting[@team_flag="%{flag}"]/batter[@bo]'
-        PITCHER_XPATH = '//boxscore/pitching[@team_flag="%{flag}"]/pitcher'
+        BATTER_XPATH = '//boxscore/team[@team_flag="%{flag}"]/batting/batter[@bo]'
+        PITCHER_XPATH = '//boxscore/team[@team_flag="%{flag}"]/pitching/pitcher'
 
         def home_batters
           return [] unless @game.started? && @game.files[:rawboxscore]
