@@ -4,7 +4,7 @@ class Baseballbot
   module Template
     class Gamechat
       module BoxScore
-        BATTER_XPATH = '//boxscore/team[@team_flag="%{flag}"]/batting/batter[@bo]'
+        BATTER_XPATH = '//boxscore/team[@team_flag="%{flag}"]/batting/batter[@bat_order]'
         PITCHER_XPATH = '//boxscore/team[@team_flag="%{flag}"]/pitching/pitcher'
 
         def home_batters
@@ -50,7 +50,7 @@ class Baseballbot
         def batter_row(batter)
           return ' ||||||||' unless batter
 
-          is_replacement = (batter['bo'].to_i % 100).positive?
+          is_replacement = (batter['bat_order'].to_i % 100).positive?
           spacer = '[](/spacer)' if is_replacement
           url = link_to batter['name'], url: player_url(batter['id'])
 
