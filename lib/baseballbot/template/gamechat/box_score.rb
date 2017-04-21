@@ -63,7 +63,7 @@ class Baseballbot
             batter['rbi'],
             batter['bb'],
             batter['so'],
-            batter['avg']
+            batter['bis_avg']
           ].join '|'
         end
 
@@ -81,7 +81,7 @@ class Baseballbot
             pitcher['bb'],
             pitcher['so'],
             "#{pitcher['np']}-#{pitcher['s']}",
-            pitcher['era']
+            pitcher['bis_era']
           ].join '|'
         end
       end
