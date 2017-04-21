@@ -13,6 +13,7 @@ class Baseballbot
           @game.files[:rawboxscore]
             .xpath(format(BATTER_XPATH, flag: 'home'))
             .to_a
+            .sort_by { |batter| batter['bat_order'] }
         end
 
         def away_batters
@@ -21,6 +22,7 @@ class Baseballbot
           @game.files[:rawboxscore]
             .xpath(format(BATTER_XPATH, flag: 'away'))
             .to_a
+            .sort_by { |batter| batter['bat_order'] }
         end
 
         def batters
@@ -33,6 +35,7 @@ class Baseballbot
           @game.files[:rawboxscore]
             .xpath(format(PITCHER_XPATH, flag: 'home'))
             .to_a
+            .sort_by { |batter| batter['pitch_order'] }
         end
 
         def away_pitchers
@@ -41,6 +44,7 @@ class Baseballbot
           @game.files[:rawboxscore]
             .xpath(format(PITCHER_XPATH, flag: 'away'))
             .to_a
+            .sort_by { |batter| batter['pitch_order'] }
         end
 
         def pitchers
