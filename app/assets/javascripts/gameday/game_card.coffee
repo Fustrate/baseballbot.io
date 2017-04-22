@@ -20,12 +20,8 @@ class Gameday.GameCard
       </div>
     </div>'''
 
-  @inProgressStatuses: ['In Progress', 'Manager Challenge']
-
   constructor: (@game) ->
     @card = @constructor.gameCardTemplate.clone()
-
-    @card
       .attr(id: @game.gameday_link)
       .data(gameCard: @)
 
@@ -69,12 +65,15 @@ class Gameday.GameCard
     $('.outs', @card).empty().append(elements)
 
   inProgress: =>
-    @gameInProgress ?= @game.status in @constructor.inProgressStatuses
+    @statusInProgress ?= @game.status in ['In Progress', 'Manager Challenge']
+
+  pregame: =>
+    @statusPregame ?= @game.status in ['Pre-Game', 'Warmup']
 
   gameStatus: =>
     return @game.time if @game.status is 'Preview'
 
-    return @game.status if @game.status in ['Pre-Game', 'Warmup', 'Delayed']
+    return "#{@game.time} - #{@game.status}" if @pregame()
 
     return @game.status if not @inProgress()
 
