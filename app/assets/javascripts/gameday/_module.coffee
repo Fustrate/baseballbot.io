@@ -21,6 +21,14 @@ class window.Gameday
   constructor: ->
     @loadTodaysGames()
 
+  elementAttributes: (element) ->
+    obj = {}
+
+    for attribute in element.attributes
+      obj[attribute.name] = attribute.value if attribute.specified
+
+    obj
+
   loadTodaysGames: ->
     date = moment().format('[year_]YYYY[/month_]MM[/day_]DD')
 
@@ -29,28 +37,27 @@ class window.Gameday
       root = $(response).find('games')
 
       cards = for element in root.find('game')
-        game = $ element
+        game = @elementAttributes element
 
         card = @constructor.gameCardTemplate.clone()
 
-        $('.home-team', card).addClass game.attr('home_file_code')
-        $('.away-team', card).addClass game.attr('away_file_code')
+        $('.home-team', card).addClass game.home_file_code
+        $('.away-team', card).addClass game.away_file_code
 
-        $('.home-team .name', card).text game.attr('home_name_abbrev')
-        $('.away-team .name', card).text game.attr('away_name_abbrev')
-        $('.home-team .runs', card).text game.attr('home_team_runs')
-        $('.away-team .runs', card).text game.attr('away_team_runs')
+        $('.home-team .name', card).text game.home_name_abbrev
+        $('.away-team .name', card).text game.away_name_abbrev
+        $('.home-team .runs', card).text game.home_team_runs
+        $('.away-team .runs', card).text game.away_team_runs
 
-        $('.game-info', card).text game.attr('time')
+        $('.game-info', card).text game.time
 
         card
 
-      spacers = [
-        $('<div class="spacer"></div>')
-        $('<div class="spacer"></div>')
-        $('<div class="spacer"></div>')
-      ]
+      spacer = document.createElement('div')
+      spacer.className = 'card-spacer'
 
-      $('.game-cards').empty().append(cards).append(spacers)
+      cards.push spacer for n in [0..3]
+
+      $('.game-cards').empty().append(cards)
 
       $('.loading').hide()
