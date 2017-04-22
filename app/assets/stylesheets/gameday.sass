@@ -87,6 +87,39 @@ $team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000
       clear: both
       padding: .4rem .75rem
 
+    .runners
+      display: inline-block
+      float: right
+      height: 1rem
+      width: 1rem
+      position: relative
+      margin-top: .3rem
+      transform-origin: center
+      transform: rotate(45deg)
+
+      .first,
+      .second,
+      .third
+        background: #ddd
+        width: .45rem
+        height: .45rem
+        position: absolute
+
+      .first
+        top: 0
+        right: 0
+
+      .second
+        top: 0
+        left: 0
+
+      .third
+        bottom: 0
+        left: 0
+
+      .runner
+        background: #f0c11c
+
     @each $code in $team-colors
       .#{nth($code, 1)}
         background: nth($code, 2)
