@@ -36,10 +36,12 @@ class window.Gameday
         $('.home-team', card).addClass game.attr('home_file_code')
         $('.away-team', card).addClass game.attr('away_file_code')
 
+        
+
         $('.home-team .name', card).text game.attr('home_name_abbrev')
-        $('.home-team .runs', card).text game.attr('home_team_runs')
         $('.away-team .name', card).text game.attr('away_name_abbrev')
-        $('.away-team .runs', card).text game.attr('away_team_runs')
+        $('.home-team .runs', card).text Math.floor(Math.random() * 15) # game.attr('home_team_runs')
+        $('.away-team .runs', card).text Math.floor(Math.random() * 15) # game.attr('away_team_runs')
 
         $('.game-info', card).text game.attr('time')
 

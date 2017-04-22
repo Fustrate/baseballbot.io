@@ -47,13 +47,41 @@ $team-colors: join($team-colors, (kc #74b4fa #fff, det #0c2340 #fa4614, min #0c2
       font-size: 1.6rem
       padding: .75rem
       width: 50%
+      position: relative
+
+      &::after
+        border-style: solid
+        border-width: 24px 6px
+        content: ' '
+        position: absolute
+        top: 0
+        width: 0
 
     .away-team
       border-top-left-radius: 6px
 
+      &::after
+        border-color: transparent #fff #fff transparent
+        right: 0
+
+      .runs
+        float: right
+        padding-right: .25rem
+
     .home-team
       border-top-right-radius: 6px
       text-align: right
+
+      &::after
+        border-color: #fff transparent transparent #fff
+        left: 0
+
+      .name
+        float: right
+
+      .runs
+        float: left
+        padding-left: .25rem
 
     .game-info
       border-radius: 0 0 6px 6px
