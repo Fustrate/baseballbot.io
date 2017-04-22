@@ -1,22 +1,66 @@
-@import 'gameday/normalize'
-@import 'gameday/functions'
-@import 'font-awesome'
+@import 'fustrate/colors'
+@import 'settings'
+@import 'fustrate'
+@import 'layout'
 
-$color: #0b2d4d
 
-html,
 body
-  margin: 0
-  padding: 0
+  background-color: $body-bg
 
 .loading
-  background: linear-gradient(to bottom, scale-color($color, $lightness: 5%), scale-color($color, $lightness: -10%))
-  color: white
-  height: 100vh
-  line-height: 100vh
+  color: scale-color($primary-color, $lightness: 60%, $saturation: -60%)
+  height: 50vh
+  line-height: 50vh
   text-align: center
   width: 100vw
 
   &::before
     +font-awesome('\f110', $spin: true)
     font-size: 5vw
+
+$team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000 #fb5b1f, sd #483727 #fec325
+$team-colors: join($team-colors, (atl #002855 #ba0c2f, was #ba122b #fff, nym #002d70 #fc4c00, phi #ba0c2e #fff, mia #0482cc #fcde04))
+$team-colors: join($team-colors, (bal #fc4c00 #000, bos #c60c30 #024, nyy #1c2841 #fff, tor #003da5 #fff, tb #79bdee #fff))
+$team-colors: join($team-colors, (ana #ba032e #fff, hou #072854 #ff7f00, tex #bd1021 #003279, sea #1c8b85 #c0c0c0, oak #00483a #ffbe00))
+$team-colors: join($team-colors, (chc #002f6c #c8102e, cin #ba0c2f #fff, stl #c41e3a #0a2252, mil #012143 #c4953b, pit #000 #ffc72b))
+$team-colors: join($team-colors, (kc #74b4fa #fff, det #0c2340 #fa4614, min #0c2341 #ba0c2e, cle #d50032 #0c2340, cws #000 #fff))
+
+.game-cards
+  align-items: flex-start
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-around
+
+  .game-card
+    background: white
+    border-radius: 6px
+    box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2)
+    flex-grow: 1
+    margin: .8rem
+    min-width: 16rem
+    max-width: 24rem
+
+    .away-team,
+    .home-team
+      display: inline-block
+      float: left
+      font-size: 1.6rem
+      padding: .75rem
+      width: 50%
+
+    .away-team
+      border-top-left-radius: 6px
+
+    .home-team
+      border-top-right-radius: 6px
+      text-align: right
+
+    .game-info
+      border-radius: 0 0 6px 6px
+      clear: both
+      padding: .4rem .75rem
+
+    @each $code in $team-colors
+      .#{nth($code, 1)}
+        background: nth($code, 2)
+        color: nth($code, 3)

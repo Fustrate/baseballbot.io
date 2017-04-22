@@ -8,4 +8,15 @@
   = javascript_include_tag :gameday
   = javascript_include_tag :modernizr
 %body
-  %div.loading
+  %nav.toolbar{ role: 'navigation' }
+    = link_to 'Baseballbot', root_path, class: 'branding'
+
+    %section.main-menu
+      = link_to 'Game Threads', '#'
+      = link_to 'Subreddits', subreddits_path
+      = link_to 'Templates', '#'
+      = link_to 'Gameday', gameday_path
+
+  %section.game-cards
+
+  .loading
