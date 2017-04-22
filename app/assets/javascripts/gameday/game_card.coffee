@@ -37,8 +37,6 @@ class Gameday.GameCard
 
     "#{side} #{@game.inning}"
 
-    @game.status
-
   refreshInfo: =>
     $('.home-team .runs', @card).text @game.home_team_runs
     $('.away-team .runs', @card).text @game.away_team_runs
