@@ -1,0 +1,22 @@
+@import 'gameday/normalize'
+@import 'gameday/functions'
+@import 'font-awesome'
+
+$color: #0b2d4d
+
+html,
+body
+  margin: 0
+  padding: 0
+
+.loading
+  background: linear-gradient(to bottom, scale-color($color, $lightness: 5%), scale-color($color, $lightness: -10%))
+  color: white
+  height: 100vh
+  line-height: 100vh
+  text-align: center
+  width: 100vw
+
+  &::before
+    +font-awesome('\f110', $spin: true)
+    font-size: 5vw

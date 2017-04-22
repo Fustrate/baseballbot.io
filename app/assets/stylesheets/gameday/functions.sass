@@ -1,0 +1,15 @@
+=font-awesome($unicode, $padding-right: 3px, $spin: false)
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+  content: $unicode
+  font-family: FontAwesome
+  font-weight: 100
+  text-rendering: auto
+
+  @if $spin
+    -webkit-animation: fa-spin 2s infinite linear
+    animation: fa-spin 2s infinite linear
+    display: inline-block
+    margin-right: $padding-right
+  @else
+    padding-right: $padding-right

@@ -8,5 +8,7 @@ Rails.application.routes.draw do
   end
 
   resources :gamechats
-  resources :subreddits, only: %i(index)
+  resources :subreddits, only: %i[index]
+
+  get :gameday, to: 'home#gameday'
 end

@@ -7,4 +7,8 @@ class HomeController < ApplicationController
       .where('DATE(post_at) = ?', Time.zone.today)
       .includes(:subreddit)
   end
+
+  def gameday
+    render :gameday, layout: nil
+  end
 end
