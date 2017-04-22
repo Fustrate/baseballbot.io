@@ -5,23 +5,39 @@
 class window.Gameday
   @gdx = 'http://gdx.mlb.com/components/game/mlb'
 
-  @gameCardTemplate: $ '''
-    <div class="game-card">
-      <div class="away-team">
-        <div class="runs"></div>
-        <div class="name"></div>
-      </div>
-      <div class="home-team">
-        <div class="name"></div>
-        <div class="runs"></div>
-      </div>
-      <div class="game-info"></div>
-    </div>'''
-
   constructor: ->
-    @loadTodaysGames()
+    @date = moment()
 
-  elementAttributes: (element) ->
+    @_reloadGameInfo(@date, @createGameCards)
+
+    window.setInterval =>
+      @_reloadGameInfo(@date, @updateGameCards)
+    , 15000
+
+  createGameCards: (gameNodes) =>
+    cards = for element in gameNodes
+      new Gameday.GameCard(@_elementAttributes element)
+
+    nodes = (card.render() for card in cards)
+
+    spacer = document.createElement('div')
+    spacer.className = 'card-spacer'
+
+    nodes.push spacer.cloneNode() for n in [0..3]
+
+    $('.game-cards').empty().append(nodes)
+
+    $('.loading').hide()
+
+  updateGameCards: (gameNodes) =>
+    for element in gameNodes
+      attributes = @_elementAttributes element
+
+      $("##{attributes.gameday_link}")
+        .data('game-card')
+        .update(attributes)
+
+  _elementAttributes: (element) ->
     obj = {}
 
     for attribute in element.attributes
@@ -29,45 +45,9 @@ class window.Gameday
 
     obj
 
-  gameStatus: (game) ->
-    return game.time if game.status is 'Preview'
+  _reloadGameInfo: (date, onLoad = ->) ->
+    date_folder = date.format('[year_]YYYY[/month_]MM[/day_]DD')
 
-    return game.status if game.status in ['Pre-Game', 'Warmup', 'Delayed']
-
-    if game.status is 'In Progress'
-      return "#{if game.top_inning is 'Y' then 'Top' else 'Bot'} #{game.inning}"
-
-    game.status
-
-  loadTodaysGames: ->
-    date = moment().format('[year_]YYYY[/month_]MM[/day_]DD')
-
-    $.get("#{@constructor.gdx}/#{date}/miniscoreboard.xml")
-    .done (response) =>
-      root = $(response).find('games')
-
-      cards = for element in root.find('game')
-        game = @elementAttributes element
-
-        card = @constructor.gameCardTemplate.clone()
-
-        $('.home-team', card).addClass game.home_file_code
-        $('.away-team', card).addClass game.away_file_code
-
-        $('.home-team .name', card).text game.home_name_abbrev
-        $('.away-team .name', card).text game.away_name_abbrev
-        $('.home-team .runs', card).text game.home_team_runs
-        $('.away-team .runs', card).text game.away_team_runs
-
-        $('.game-info', card).text @gameStatus(game)
-
-        card
-
-      spacer = document.createElement('div')
-      spacer.className = 'card-spacer'
-
-      cards.push spacer.cloneNode() for n in [0..3]
-
-      $('.game-cards').empty().append(cards)
-
-      $('.loading').hide()
+    $.get("#{@constructor.gdx}/#{date_folder}/miniscoreboard.xml")
+    .done (response) ->
+      onLoad $(response).find('games game')
