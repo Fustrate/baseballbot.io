@@ -21,7 +21,7 @@
           - if gamechat.post_at.past? && gamechat.status == 'Future'
             %span.label.radius.fw.gamechat.error Error
           - elsif gamechat.starts_at.past? && gamechat.status == 'Posted'
-            %span.label.radius.fw.gamechat.current Live
+            %span.label.radius.fw.gamechat.live Live
           - else
             %span.label.radius.fw.gamechat{ class: gamechat.status.downcase }= gamechat.status
 
