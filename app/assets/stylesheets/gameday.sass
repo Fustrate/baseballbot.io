@@ -38,6 +38,12 @@ $team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000
     background: $card-bg
     border-radius: 6px
     box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2)
+    cursor: pointer
+    transform-origin: center
+    transition: .18s ease-in-out
+
+    &:hover
+      transform: scale(1.05)
 
     .away-team,
     .home-team
@@ -97,7 +103,6 @@ $team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000
 
       .out
         display: inline-block
-        margin: .1rem
 
         &::before
           content: '●'
