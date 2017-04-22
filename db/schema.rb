@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20170404035219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", id: :integer, default: -> { "nextval('users_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "accounts", force: :cascade do |t|
     t.string   "name"
     t.string   "access_token"
     t.string   "refresh_token"
