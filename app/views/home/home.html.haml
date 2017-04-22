@@ -1,30 +1,28 @@
-.row
-  .small-12.columns
-    %h4 Today's Game Threads (#{@gamechats.count})
+%h4 Today's Game Threads (#{@gamechats.count})
 
-    %table
-      %thead
-        %tr
-          %th GID
-          %th Title
-          %th Subreddit
-          %th Post At
-          %th Starts At
-          %th Status
-      %tbody
-        - @gamechats.each do |gamechat|
-          %tr
-            %td= gamechat.gid
-            %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
-            %td= link_to gamechat.subreddit.name, "http://reddit.com/r/#{gamechat.subreddit.name}"
-            %td.no-wrap= gamechat.post_at.strftime '%-I:%M %p'
-            %td.no-wrap= gamechat.starts_at.strftime '%-I:%M %p'
-            %td
-              - if gamechat.post_at.past? && gamechat.status == 'Future'
-                %span.label.radius.fw.gamechat.error Error
-              - elsif gamechat.starts_at.past? && gamechat.status == 'Posted'
-                %span.label.radius.fw.gamechat.current Live
-              - else
-                %span.label.radius.fw.gamechat{ class: gamechat.status.downcase }= gamechat.status
+%table
+  %thead
+    %tr
+      %th GID
+      %th Title
+      %th Subreddit
+      %th Post At
+      %th Starts At
+      %th Status
+  %tbody
+    - @gamechats.each do |gamechat|
+      %tr
+        %td= gamechat.gid
+        %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
+        %td= link_to gamechat.subreddit.name, "http://reddit.com/r/#{gamechat.subreddit.name}"
+        %td.no-wrap= gamechat.post_at.strftime '%-I:%M %p'
+        %td.no-wrap= gamechat.starts_at.strftime '%-I:%M %p'
+        %td
+          - if gamechat.post_at.past? && gamechat.status == 'Future'
+            %span.label.radius.fw.gamechat.error Error
+          - elsif gamechat.starts_at.past? && gamechat.status == 'Posted'
+            %span.label.radius.fw.gamechat.current Live
+          - else
+            %span.label.radius.fw.gamechat{ class: gamechat.status.downcase }= gamechat.status
 
-    %p All times are Pacific.
+%p All times are Pacific.

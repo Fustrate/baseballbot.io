@@ -1,5 +1,10 @@
+$body-bg: #f4f4f4
+$content-bg: #fff
 $toolbar-bg: #093258
 $toolbar-color: #fff
+
+body
+  background-color: $body-bg
 
 .toolbar
   background-color: $toolbar-bg
@@ -9,8 +14,9 @@ $toolbar-color: #fff
 
   a
     color: $toolbar-color
-    height: 58px
-    line-height: 60px
+    height: 40px
+    line-height: 40px
+    margin: 10px 0
 
   .branding
     display: inline-block
@@ -25,3 +31,13 @@ $toolbar-color: #fff
       display: inline-block
       font-size: 1rem
       padding: 0 10px
+
+.page-content
+  background: $content-bg
+  border-radius: 6px
+  box-shadow: 0 .6rem 3rem scale-color($content-bg, $lightness: -20%)
+  margin: 1.5rem
+  padding: 1rem 1.2rem
+
+  > :last-child
+    margin-bottom: 0

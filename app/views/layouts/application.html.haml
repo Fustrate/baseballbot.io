@@ -17,11 +17,12 @@
       = link_to 'Subreddits', subreddits_path
       = link_to 'Templates', '#'
 
-  - unless flash.empty?
-    - flash.each do |type, message|
-      .alert-box{ class: type }
-        %a.close{ href: '#' } &times;
-        = message
-    - flash.clear
+  %section.page-content
+    - unless flash.empty?
+      - flash.each do |type, message|
+        .alert-box{ class: type }
+          %a.close{ href: '#' } &times;
+          = message
+      - flash.clear
 
-  = yield
+    = yield

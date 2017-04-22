@@ -1,24 +1,22 @@
-.row
-  .small-12.columns
-    %h4 Subreddits
+%h4 Subreddits
 
-    %table
-      %thead
-        %tr
-          %th Name
-          %th Team
-          %th Account
-          %th Sidebar
-          %th Game Chats
-          %th Pregame
-          %th Postgame
-      %tbody
-        - @subreddits.each do |subreddit|
-          %tr
-            %td= link_to subreddit.name, subreddit.url
-            %td= subreddit.team_code
-            %td= subreddit.account.name
-            %td.text-center= '✓' if subreddit.update_sidebar?
-            %td.text-center= '✓' if subreddit.post_gamechats?
-            %td.text-center{ title: (subreddit.options['pregame']['post_at'] if subreddit.post_pregame?) }= '✓' if subreddit.post_pregame?
-            %td.text-center= '✓' if subreddit.post_postgame?
+%table
+  %thead
+    %tr
+      %th Name
+      %th Team
+      %th Account
+      %th Sidebar
+      %th Game Chats
+      %th Pregame
+      %th Postgame
+  %tbody
+    - @subreddits.each do |subreddit|
+      %tr
+        %td= link_to subreddit.name, subreddit.url
+        %td= subreddit.team_code
+        %td= subreddit.account.name
+        %td.text-center= '✓' if subreddit.update_sidebar?
+        %td.text-center= '✓' if subreddit.post_gamechats?
+        %td.text-center{ title: (subreddit.options['pregame']['post_at'] if subreddit.post_pregame?) }= '✓' if subreddit.post_pregame?
+        %td.text-center= '✓' if subreddit.post_postgame?
