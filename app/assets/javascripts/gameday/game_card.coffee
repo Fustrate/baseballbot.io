@@ -11,14 +11,13 @@ class Gameday.GameCard
       </div>
       <div class="game-info">
         <span class="status"></span>
+        <span class="outs"></span>
+        <div class="runners">
+          <div class="first"></div>
+          <div class="second"></div>
+          <div class="third"></div>
+        </div>
       </div>
-    </div>'''
-
-  @runnersTemplate: $ '''
-    <div class="runners">
-      <div class="first"></div>
-      <div class="second"></div>
-      <div class="third"></div>
     </div>'''
 
   @inProgressStatuses: ['In Progress', 'Manager Challenge']
@@ -45,20 +44,32 @@ class Gameday.GameCard
   # 6: Runners on 2nd and 3rd
   # 7: Bases loaded
   runners: =>
-    return unless @game.status is 'In Progress'
+    $('.runners', @card).toggle @inProgress()
+
+    return unless @inProgress()
 
     index = parseInt @game.runner_on_base_status, 10
 
-    unless @runnersDiv
-      @runnersDiv = @constructor.runnersTemplate.clone()
-      $('.game-info', @card).append @runnersDiv
+    $('.first', @card).toggleClass 'runner', (index in [1, 4, 5, 7])
+    $('.second', @card).toggleClass 'runner', (index in [2, 4, 6, 7])
+    $('.third', @card).toggleClass 'runner', (index in [3, 5, 6, 7])
 
-    $('.first', @runnersDiv).toggleClass 'runner', (index in [1, 4, 5, 7])
-    $('.second', @runnersDiv).toggleClass 'runner', (index in [2, 4, 6, 7])
-    $('.third', @runnersDiv).toggleClass 'runner', (index in [3, 5, 6, 7])
+  outs: =>
+    # $('.outs', @card).toggle @inProgress()
+
+    return unless @inProgress()
+
+    outs = parseInt @game.outs, 10
+
+    elements = if outs < 3
+      $('<span class="out"></span>') for n in [0...outs]
+    else
+      []
+
+    $('.outs', @card).empty().append(elements)
 
   inProgress: =>
-    @game.status in @constructor.inProgressStatuses
+    @gameInProgress ?= @game.status in @constructor.inProgressStatuses
 
   gameStatus: =>
     return @game.time if @game.status is 'Preview'
@@ -73,6 +84,7 @@ class Gameday.GameCard
     "#{side} #{@game.inning}"
 
   refreshInfo: =>
+    @outs()
     @runners()
 
     $('.home-team .runs', @card).text @game.home_team_runs

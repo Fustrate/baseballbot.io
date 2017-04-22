@@ -83,35 +83,49 @@ $team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000
         padding-left: .25rem
 
     .game-info
+      align-items: center
       border-radius: 0 0 6px 6px
       clear: both
-      padding: .4rem .75rem
+      display: flex
+      justify-content: space-between
+      padding: .25rem .75rem
+
+    .outs
+      color: #9d1014
+      display: inline-block
+      font-size: 1.5rem
+
+      .out
+        display: inline-block
+        margin: .1rem
+
+        &::before
+          content: '●'
 
     .runners
       display: inline-block
-      float: right
       height: 1.5rem
-      width: 1.5rem
       margin-top: .375rem
       position: relative
-      transform-origin: center
       transform: rotate(45deg)
+      transform-origin: center
+      width: 1.5rem
 
       .first,
       .second,
       .third
         background: #ddd
-        width: .7rem
         height: .7rem
         position: absolute
+        width: .7rem
 
       .first
-        top: 0
         right: 0
+        top: 0
 
       .second
-        top: 0
         left: 0
+        top: 0
 
       .third
         bottom: 0
