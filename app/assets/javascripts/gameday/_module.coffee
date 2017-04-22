@@ -56,7 +56,7 @@ class window.Gameday
       spacer = document.createElement('div')
       spacer.className = 'card-spacer'
 
-      cards.push spacer for n in [0..3]
+      cards.push spacer.cloneNode() for n in [0..3]
 
       $('.game-cards').empty().append(cards)
 
