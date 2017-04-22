@@ -51,7 +51,7 @@ class Gameday.GameCard
     $('.third', @card).toggleClass 'runner', (index in [3, 5, 6, 7])
 
   outs: =>
-    # $('.outs', @card).toggle @inProgress()
+    $('.outs', @card).toggle @inProgress()
 
     return unless @inProgress()
 
@@ -65,10 +65,10 @@ class Gameday.GameCard
     $('.outs', @card).empty().append(elements)
 
   inProgress: =>
-    @statusInProgress ?= @game.status in ['In Progress', 'Manager Challenge']
+    @game.status in ['In Progress', 'Manager Challenge']
 
   pregame: =>
-    @statusPregame ?= @game.status in ['Pre-Game', 'Warmup']
+    @game.status in ['Pre-Game', 'Warmup']
 
   gameStatus: =>
     return @game.time if @game.status is 'Preview'
