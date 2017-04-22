@@ -3,7 +3,7 @@
 #= require_tree .
 
 class window.Gameday
-  @gdx = 'http://gd2.mlb.com/components/game/mlb'
+  @gdx = 'http://gdx.mlb.com/components/game/mlb'
 
   @gameCardTemplate: $ '''
     <div class="game-card">
@@ -29,6 +29,16 @@ class window.Gameday
 
     obj
 
+  gameStatus: (game) ->
+    return game.time if game.status is 'Preview'
+
+    return game.status if game.status in ['Pre-Game', 'Warmup', 'Delayed']
+
+    if game.status is 'In Progress'
+      return "#{if game.top_inning is 'Y' then 'Top' else 'Bot'} #{game.inning}"
+
+    game.status
+
   loadTodaysGames: ->
     date = moment().format('[year_]YYYY[/month_]MM[/day_]DD')
 
@@ -49,7 +59,7 @@ class window.Gameday
         $('.home-team .runs', card).text game.home_team_runs
         $('.away-team .runs', card).text game.away_team_runs
 
-        $('.game-info', card).text game.time
+        $('.game-info', card).text @gameStatus(game)
 
         card
 
