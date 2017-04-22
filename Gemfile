@@ -8,19 +8,15 @@ gem 'rails', '5.0.2'
 gem 'pg'
 
 gem 'coffee-rails'
-gem 'foundation-rails', '~> 5.0'
 gem 'haml-rails'
-gem 'jquery-rails'
-gem 'modernizr-rails'
 gem 'jbuilder'
+gem 'jquery-rails'
 
 gem 'execjs'
 
 gem 'uglifier', '>= 2.6.0'
 
-# Turbolinks makes following links in your web application faster.
-# Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'fustrate-rails', git: 'https://github.com/Fustrate/fustrate-rails'
 
 # Use Unicorn as the app server
 gem 'unicorn'
@@ -83,9 +79,6 @@ gem 'sorcery'
 
 # Cron jobs
 gem 'whenever', require: false
-
-# Rails 4 stuff!
-gem 'activerecord-session_store'
 
 gem 'chronic'
 gem 'redis'
