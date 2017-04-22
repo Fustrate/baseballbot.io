@@ -45,6 +45,12 @@ class window.Gameday
 
         card
 
-      $('.game-cards').empty().append cards
+      spacers = [
+        $('<div class="spacer"></div>')
+        $('<div class="spacer"></div>')
+        $('<div class="spacer"></div>')
+      ]
+
+      $('.game-cards').empty().append(cards).append(spacers)
 
       $('.loading').hide()

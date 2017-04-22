@@ -28,14 +28,16 @@ $team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000
   flex-wrap: wrap
   justify-content: space-around
 
-  .game-card
-    background: $card-bg
-    border-radius: 6px
-    box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2)
+  > div
     flex-grow: 1
     margin: .8rem
     max-width: 24rem
     min-width: 16rem
+
+  .game-card
+    background: $card-bg
+    border-radius: 6px
+    box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2)
 
     .away-team,
     .home-team
