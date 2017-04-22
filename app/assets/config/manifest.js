@@ -3,3 +3,5 @@
 //
 //= link application.coffee
 //= link gameday.coffee
+//
+//= link_directory ../fonts .ttf

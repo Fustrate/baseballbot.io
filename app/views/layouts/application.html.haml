@@ -4,24 +4,18 @@
   %title= content_for?(:title) ? yield(:title) : 'baseballbot.io'
   %meta{ charset: 'utf-8' }
   %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
-  = stylesheet_link_tag    :application, media: :all, 'data-turbolinks-track' => true
-  = javascript_include_tag :application, 'data-turbolinks-track' => true
-  = javascript_include_tag :modernizr, 'data-turbolinks-track' => true
+  = stylesheet_link_tag    :application, media: :all
+  = javascript_include_tag :application
+  = javascript_include_tag :modernizr
   = csrf_meta_tags
 %body
-  .contain-to-grid.fixed
-    %nav.top-bar{ 'data-topbar' => true, role: 'navigation' }
-      %ul.title-area
-        %li.name
-          %h1= link_to 'Baseballbot.io', root_path
+  %nav.toolbar{ role: 'navigation' }
+    = link_to 'Baseballbot', root_path, class: 'branding'
 
-      %section.top-bar-section
-        %ul.right
-          %li.has-form= link_to 'Authenticate', '#', class: 'button'
-        %ul.left
-          %li= link_to 'Game Threads', '#'
-          %li= link_to 'Subreddits', subreddits_path
-          %li= link_to 'Templates', '#'
+    %section.main-menu
+      = link_to 'Game Threads', '#'
+      = link_to 'Subreddits', subreddits_path
+      = link_to 'Templates', '#'
 
   - unless flash.empty?
     - flash.each do |type, message|

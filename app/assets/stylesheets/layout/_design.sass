@@ -1,2 +1,27 @@
-body
-  color: red
+$toolbar-bg: #093258
+$toolbar-color: #fff
+
+.toolbar
+  background-color: $toolbar-bg
+  background-image: linear-gradient(to right, scale-color($toolbar-bg, $lightness: 15%), scale-color($toolbar-bg, $lightness: -10%))
+  border-bottom: 1px solid $toolbar-bg
+  height: 60px
+
+  a
+    color: $toolbar-color
+    height: 58px
+    line-height: 60px
+
+  .branding
+    display: inline-block
+    font-size: 1.4rem
+    padding: 0 20px
+
+  .main-menu
+    display: inline-block
+
+    a
+      color: scale-color($toolbar-bg, $saturation: -40%, $lightness: 80%)
+      display: inline-block
+      font-size: 1rem
+      padding: 0 10px

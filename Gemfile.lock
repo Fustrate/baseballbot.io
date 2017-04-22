@@ -316,6 +316,12 @@ GEM
     ruby_parser (3.9.0)
       sexp_processor (~> 4.1)
     sass (3.4.23)
+    sass-rails (5.0.6)
+      railties (>= 4.0.0, < 6)
+      sass (~> 3.1)
+      sprockets (>= 2.8, < 4.0)
+      sprockets-rails (>= 2.0, < 4.0)
+      tilt (>= 1.1, < 3)
     sexp_processor (4.9.0)
     shellany (0.0.1)
     simplecov (0.14.1)
@@ -411,11 +417,13 @@ DEPENDENCIES
   rspec-rails
   rubocop
   ruby_gntp
+  sass-rails
   simplecov
   skylight
   sorcery
   spring
-  uglifier (>= 2.6.0)
+  sprockets-rails
+  uglifier (~> 3.0)
   unicorn
   web-console (~> 3.0)
   whenever

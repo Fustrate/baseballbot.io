@@ -8,13 +8,13 @@ gem 'rails', '5.0.2'
 gem 'pg'
 
 gem 'coffee-rails'
+gem 'execjs'
 gem 'haml-rails'
 gem 'jbuilder'
 gem 'jquery-rails'
-
-gem 'execjs'
-
-gem 'uglifier', '>= 2.6.0'
+gem 'sass-rails'
+gem 'sprockets-rails'
+gem 'uglifier', '~> 3.0'
 
 gem 'fustrate-rails', git: 'https://github.com/Fustrate/fustrate-rails'
 
