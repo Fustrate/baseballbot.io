@@ -10,15 +10,15 @@ body
   background-color: $body-bg
 
 .loading
+  bottom: 1vw
   color: scale-color($primary-color, $lightness: 60%, $saturation: -60%)
-  height: 50vh
-  line-height: 50vh
+  position: fixed
+  right: 1vw
   text-align: center
-  width: 100vw
 
   &::before
     +font-awesome('\f110', $spin: true)
-    font-size: 5vw
+    font-size: 3vw
 
 $team-colors: la #002f6c #fff, col #24135e #cacdcd, ari #a71930 #dbceac, sf #000 #fb5b1f, sd #483727 #fec325, atl #002855 #ba0c2f, was #ba122b #fff, nym #002d70 #fc4c00, phi #ba0c2e #fff, mia #0482cc #f9423b, bal #fc4c00 #000, bos #c60c30 #024, nyy #1c2841 #fff, tor #003da5 #fff, tb #79bdee #ffd700, ana #ba032e #fff, hou #072854 #ff7f00, tex #bd1021 #003279, sea #1c8b85 #c0c0c0, oak #00483a #ffbe00, chc #002f6c #c8102e, cin #ba0c2f #fff, stl #c41e3a #0a2252, mil #012143 #c4953b, pit #000 #ffc72b, kc #74b4fa #fff, det #0c2340 #fa4614, min #0c2341 #ba0c2e, cle #d50032 #0c2340, cws #000 #fff
 

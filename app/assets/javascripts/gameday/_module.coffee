@@ -6,6 +6,7 @@ class window.Gameday
   @gdx = 'http://gdx.mlb.com/components/game/mlb'
 
   constructor: ->
+    @loading = $('.loading')
     @date = moment()
 
     @_reloadGameInfo(@date, @createGameCards)
@@ -27,8 +28,6 @@ class window.Gameday
 
     $('.game-cards').empty().append(nodes)
 
-    $('.loading').hide()
-
   updateGameCards: (gameNodes) =>
     for element in gameNodes
       attributes = @_elementAttributes element
@@ -46,8 +45,12 @@ class window.Gameday
     obj
 
   _reloadGameInfo: (date, onLoad = ->) ->
+    @loading.show()
+
     date_folder = date.format('[year_]YYYY[/month_]MM[/day_]DD')
 
     $.get("#{@constructor.gdx}/#{date_folder}/miniscoreboard.xml")
-    .done (response) ->
+    .done (response) =>
       onLoad $(response).find('games game')
+
+      @loading.hide()
