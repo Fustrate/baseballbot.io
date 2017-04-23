@@ -68,7 +68,7 @@ class Gameday.GameCard
     @game.status in ['In Progress', 'Manager Challenge']
 
   pregame: =>
-    @game.status in ['Pre-Game', 'Warmup']
+    @game.status in ['Pre-Game', 'Warmup', 'Delayed Start']
 
   gameStatus: =>
     return @game.time if @game.status is 'Preview'
