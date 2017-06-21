@@ -15,59 +15,59 @@ ActiveRecord::Schema.define(version: 20170404035219) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", force: :cascade do |t|
-    t.string   "name"
-    t.string   "access_token"
-    t.string   "refresh_token"
-    t.string   "scope",         default: [], array: true
+  create_table "accounts", id: :integer, default: -> { "nextval('users_id_seq'::regclass)" }, force: :cascade do |t|
+    t.string "name"
+    t.string "access_token"
+    t.string "refresh_token"
+    t.string "scope", default: [], array: true
     t.datetime "expires_at"
   end
 
-  create_table "events", force: :cascade do |t|
-    t.string   "eventable_type"
-    t.integer  "eventable_id"
-    t.string   "type"
-    t.string   "note"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id", using: :btree
+  create_table "events", id: :serial, force: :cascade do |t|
+    t.string "eventable_type"
+    t.integer "eventable_id"
+    t.string "type"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id"
   end
 
-  create_table "gamechats", force: :cascade do |t|
-    t.string   "gid"
+  create_table "gamechats", id: :serial, force: :cascade do |t|
+    t.string "gid"
     t.datetime "post_at"
     t.datetime "starts_at"
-    t.string   "status"
-    t.string   "title"
-    t.string   "post_id"
+    t.string "status"
+    t.string "title"
+    t.string "post_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "subreddit_id", null: false
-    t.index ["gid", "subreddit_id"], name: "index_gamechats_on_gid_and_subreddit_id", unique: true, using: :btree
+    t.integer "subreddit_id", null: false
+    t.index ["gid", "subreddit_id"], name: "index_gamechats_on_gid_and_subreddit_id", unique: true
   end
 
-  create_table "scheduled_posts", force: :cascade do |t|
+  create_table "scheduled_posts", id: :serial, force: :cascade do |t|
     t.datetime "next_post_at"
-    t.string   "title"
-    t.text     "body"
-    t.integer  "subreddit_id", null: false
-    t.json     "options"
+    t.string "title"
+    t.text "body"
+    t.integer "subreddit_id", null: false
+    t.json "options"
   end
 
-  create_table "subreddits", force: :cascade do |t|
-    t.string  "name"
-    t.string  "team_code"
+  create_table "subreddits", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "team_code"
     t.integer "account_id"
-    t.json    "options"
+    t.json "options"
   end
 
-  create_table "templates", force: :cascade do |t|
-    t.text     "body"
-    t.string   "type"
-    t.integer  "subreddit_id"
+  create_table "templates", id: :serial, force: :cascade do |t|
+    t.text "body"
+    t.string "type"
+    t.integer "subreddit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title"
+    t.string "title"
   end
 
 end
