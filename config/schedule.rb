@@ -27,3 +27,7 @@ end
 every 2.minutes do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby update_gamechats.rb"
 end
+
+every :saturday do
+  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_sunday_gamechats.rb"
+end
