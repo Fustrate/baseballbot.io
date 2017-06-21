@@ -16,7 +16,8 @@ require 'chronic'
                            dbname: ENV['PG_DATABASE'],
                            password: ENV['PG_PASSWORD']
 
-URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_2015/postseason_scoreboard.json'
+R_BASEBALL_ID = 15
+URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_2017/postseason_scoreboard.json'
 
 def game_title(row)
   if row['game_type'] == 'F'
@@ -55,13 +56,14 @@ def insert_game(gid, gametime, title)
       gid, post_at, starts_at, status, created_at, updated_at, subreddit_id,
       title)
     VALUES
-    ($1, $2, $3, \'Future\', $4, $5, 15, $6)',
+    ($1, $2, $3, \'Future\', $4, $5, $6, $7)',
     [
       gid,
       (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
       gametime.strftime('%Y-%m-%d %H:%M:%S'),
       @right_now,
       @right_now,
+      R_BASEBALL_ID,
       title
     ]
   )
