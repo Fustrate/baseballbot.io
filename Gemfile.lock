@@ -210,7 +210,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.2.0)
     minitest (5.10.2)
-    mlb_gameday (0.2.3)
+    mlb_gameday (0.2.4)
       chronic (~> 0.10)
       httparty (~> 0.13)
       nokogiri (~> 1.6)
