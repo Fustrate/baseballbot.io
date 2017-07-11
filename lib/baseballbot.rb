@@ -238,8 +238,8 @@ class Baseballbot
     client
   end
 
-  def team_to_subreddit(team)
-    team.is_a?(Subreddit) ? team : @subreddits[team.downcase]
+  def team_to_subreddit(code)
+    code.is_a?(Subreddit) ? code : @subreddits[code.downcase]
   end
 
   protected
