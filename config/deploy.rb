@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid only for current version of Capistrano
-lock '3.8.2'
+lock '3.9.0'
 
 set :application, 'baseballbot.io'
 set :user, 'baseballbot'
@@ -11,8 +11,11 @@ set :branch, ENV['REVISION'] || :master
 
 set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
-set :linked_files, %w[config/secrets.yml config/database.yml
-                      config/honeybadger.yml config/skylight.yml]
+set :linked_files, %w[
+  config/secrets.yml config/database.yml config/honeybadger.yml
+  config/reddit.yml config/skylight.yml
+]
+
 set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets public/system]
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
