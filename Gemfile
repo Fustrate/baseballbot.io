@@ -2,8 +2,8 @@
 
 source 'https://rubygems.org'
 
-ruby '2.4.1'
-gem 'rails', '5.1.3'
+ruby '2.4.2'
+gem 'rails', '5.1.4'
 
 gem 'pg'
 
@@ -42,7 +42,7 @@ group :development do
   gem 'web-console', '~> 3.0'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.9', require: false
+  gem 'capistrano', '~> 3.8', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv', '~> 2.0'
