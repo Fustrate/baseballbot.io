@@ -91,7 +91,7 @@ class Baseballbot
 
           @upcoming = []
 
-          %i(current next).each do |month|
+          %i[current next].each do |month|
             calendar(month).each do |_, day|
               next if day[:date] < Date.today
 

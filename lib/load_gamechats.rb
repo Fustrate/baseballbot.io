@@ -74,6 +74,8 @@ def load_schedule(subreddit_id, code, post_at, start_date, end_date)
   schedule = data['schedule_team_sponsors']['schedule_team_complete']
   games = schedule['queryResults']['row']
 
+  games = Array[games] if games.is_a?(Hash)
+
   games.each do |game|
     next if game['game_time_et'][11..15] == '03:33'
 
