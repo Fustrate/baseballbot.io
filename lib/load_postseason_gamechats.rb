@@ -1,76 +1,92 @@
 # frozen_string_literal: true
 
-# This file really needs to be cleaned up, as does the entire /lib/ directory.
-
 require 'pg'
 require 'json'
 require 'open-uri'
 require 'chronic'
 
-@attempts = 0
-@failures = 0
+class PostseasonGameLoader
+  SUBREDDIT_ID = 15
+  URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_%Y/' \
+        'postseason_scoreboard.json'
 
-@right_now = DateTime.now.strftime '%Y-%m-%d %H:%M:%S'
+  def initialize
+    @right_now = DateTime.now.strftime '%Y-%m-%d %H:%M:%S'
 
-@conn = PG::Connection.new user: ENV['PG_USERNAME'],
-                           dbname: ENV['PG_DATABASE'],
-                           password: ENV['PG_PASSWORD']
-
-R_BASEBALL_ID = 15
-URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_2017/postseason_scoreboard.json'
-
-def game_title(row)
-  if row['game_type'] == 'F'
-    return "Game Thread: #{row['series']} ⚾ #{row['away_team_name']} @ " \
-           "#{row['home_team_name']} - #{row['first_pitch_et']} PM ET"
+    @attempts = 0
+    @failures = 0
   end
 
-  'Game Thread: %{series_game} ⚾ %{away_name} (%{away_record}) @ ' \
-  '%{home_name} (%{home_record}) - %{start_time_et} PM ET'
-end
+  def conn
+    @conn ||= PG::Connection.new(
+      user: ENV['PG_USERNAME'],
+      dbname: ENV['PG_DATABASE'],
+      password: ENV['PG_PASSWORD']
+    )
+  end
 
-def load_schedule
-  data = JSON.parse open(URL).read
+  def run
+    load_schedule
 
-  data['games'].each do |game|
-    # Game time is not yet set or something is TBD
-    next if game['time'] == '3:33' || game['tbd_flag'] == 'Y'
-    # If the team is undetermined, their division will be blank
-    next if game['home_division'] == '' || game['away_division'] == ''
+    puts "Added #{@attempts - @failures} of #{@attempts}"
+  end
 
-    gametime = Chronic.parse(
-      "#{game['original_date']} #{game['first_pitch_et']} PM"
-    ) - 10_800
+  def load_schedule
+    data = JSON.parse open(Date.today.strftime(URL)).read
 
-    next if gametime < Time.now
+    data['games'].each do |game|
+      # Game time is not yet set or something is TBD
+      next if game['time'] == '3:33' || game['tbd_flag'] == 'Y'
+      # If the team is undetermined, their division will be blank
+      next if game['home_division'] == '' || game['away_division'] == ''
 
-    insert_game game['gameday'], gametime, game_title(game)
+      gametime = Chronic.parse(
+        "#{game['original_date']} #{game['first_pitch_et']} PM"
+      ) - 10_800
+
+      next if gametime < Time.now
+
+      insert_game game['gameday'], gametime, game_title(game)
+    end
+  end
+
+  def insert_game(gid, gametime, title)
+    @attempts += 1
+
+    data = row_data(gid, gametime, title)
+
+    conn.exec_params(
+      "INSERT INTO gamechats (#{data.keys.join(', ')})" \
+      "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
+      data.values
+    )
+  rescue PG::UniqueViolation
+    @failures += 1
+  end
+
+  def row_data(gid, gametime, title)
+    {
+      gid: gid,
+      post_at: (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
+      starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
+      status: 'Future',
+      created_at: @right_now,
+      updated_at: @right_now,
+      subreddit_id: SUBREDDIT_ID,
+      title: title
+    }
+  end
+
+  def game_title(row)
+    if row['game_type'] == 'F'
+      # Wild Card game
+      return "Game Thread: #{row['series']} ⚾ #{row['away_team_name']} @ " \
+             "#{row['home_team_name']} - #{row['first_pitch_et']} PM ET"
+    end
+
+    'Game Thread: %<series_game>s ⚾ %<away_name>s (%<away_record>s) @ ' \
+    '%<home_name>s (%<home_record>s) - %<start_time_et>s PM ET'
   end
 end
 
-def insert_game(gid, gametime, title)
-  @attempts += 1
-
-  @conn.exec_params(
-    'INSERT INTO gamechats (
-      gid, post_at, starts_at, status, created_at, updated_at, subreddit_id,
-      title)
-    VALUES
-    ($1, $2, $3, \'Future\', $4, $5, $6, $7)',
-    [
-      gid,
-      (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
-      gametime.strftime('%Y-%m-%d %H:%M:%S'),
-      @right_now,
-      @right_now,
-      R_BASEBALL_ID,
-      title
-    ]
-  )
-rescue PG::UniqueViolation
-  @failures += 1
-end
-
-load_schedule
-
-puts "Added #{@attempts - @failures} of #{@attempts}"
+PostseasonGameLoader.new.run

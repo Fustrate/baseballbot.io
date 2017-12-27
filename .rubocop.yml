@@ -10,7 +10,7 @@ AllCops:
     - bin/**/*
     - db/**/*
     - db/schema.rb
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   TargetRailsVersion: 5.0
 
 Metrics/AbcSize:
