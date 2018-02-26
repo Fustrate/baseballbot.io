@@ -17,3 +17,6 @@
 /tmp
 /config/database.yml
 /config/secrets.yml
+/config/skylight.yml
+
+/app/assets/fonts/FontAwesome/*

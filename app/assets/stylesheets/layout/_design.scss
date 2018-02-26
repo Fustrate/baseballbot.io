@@ -1,0 +1,48 @@
+$body-bg: #f4f4f4;
+$content-bg: #fff;
+
+body {
+  background: $body-bg;
+}
+
+.page-content {
+  background: $content-bg;
+  border-radius: 6px;
+  box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2);
+  margin: 1.5rem;
+  padding: 1rem 1.2rem;
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+th,
+.no-wrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.label {
+  &.gamechat {
+    &.live {
+      @include label-color($green);
+    }
+
+    &.error {
+      @include label-color($red);
+    }
+
+    &.posted,
+    &.pregame {
+      @include label-color($blue);
+    }
+
+    &.future {
+      @include label-color(#ddd);
+    }
+  }
+}

@@ -1,8 +1,12 @@
-@import 'fustrate/colors'
-@import 'settings'
-@import 'fustrate'
+@import 'functions';
+@import 'FontAwesome/variables';
 
-@import 'layout'
+
+@import 'fustrate/colors';
+@import 'settings';
+@import 'fustrate';
+
+@import 'layout';
 
 // body
 //   padding-top: 60px
