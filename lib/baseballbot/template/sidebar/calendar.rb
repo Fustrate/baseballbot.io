@@ -8,9 +8,9 @@ class Baseballbot
         using TemplateRefinements
 
         CALENDAR_DATA_URL = 'http://mlb.mlb.com/lookup/json/named.schedule_' \
-                            "team_sponsors.bam?start_date='%{start_date}'&" \
-                            "end_date='%{end_date}'&team_id=%{team_id}&" \
-                            "season=%{year}&game_type='R'&game_type='A'&" \
+                            "team_sponsors.bam?start_date='%<start_date>s'&" \
+                            "end_date='%<end_date>s'&team_id=%<team_id>d&" \
+                            "season=%<year>d&game_type='R'&game_type='A'&" \
                             "game_type='E'&game_type='F'&game_type='D'&" \
                             "game_type='L'&game_type='W'&game_type='C'&" \
                             "game_type='S'"
@@ -73,8 +73,8 @@ class Baseballbot
 
           @previous = []
 
-          %i(current previous).each do |month|
-            Hash[calendar(month).to_a.reverse].each do |_, day|
+          %i[current previous].each do |month|
+            Hash[calendar(month).to_a.reverse].each_value do |day|
               next if day[:date] > Date.today
 
               day[:games].each { |game| @previous << game if game[:over] }
@@ -92,7 +92,7 @@ class Baseballbot
           @upcoming = []
 
           %i[current next].each do |month|
-            calendar(month).each do |_, day|
+            calendar(month).each_value do |day|
               next if day[:date] < Date.today
 
               day[:games].each { |game| @upcoming << game unless game[:over] }
@@ -186,7 +186,7 @@ class Baseballbot
             home: game['home_away_sw'] == 'H',
             opponent: build_team(code: game['opponent_abbrev'],
                                  name: game['opponent_brief']),
-            over: %w(F C D FT FR).include?(game['game_status_ind']),
+            over: %w[F C D FT FR].include?(game['game_status_ind']),
             score: [game['team_score'].to_i, game['opponent_score'].to_i],
             tv: game['team_tv'] || '',
             status_code: game['game_status_ind']

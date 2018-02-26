@@ -12,11 +12,18 @@ class SundayGamechatLoader
   URL = 'http://gd2.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
         'miniscoreboard.json'
 
+  INSERT_SQL = <<~SQL
+    INSERT INTO gamechats
+      (gid, post_at, starts_at, status, created_at, updated_at, subreddit_id)
+    VALUES
+      ($1, $2, $3, \'Future\', $4, $5, $6)
+  SQL
+
   def initialize
     @attempts = 0
     @failures = 0
 
-    @timestamp = DateTime.now.strftime '%Y-%m-%d %H:%M:%S'
+    @timestamp = Time.now.strftime '%Y-%m-%d %H:%M:%S'
   end
 
   def run
@@ -55,26 +62,24 @@ class SundayGamechatLoader
   def insert_game(gid, gametime)
     @attempts += 1
 
-    @conn.exec_params(
-      'INSERT INTO gamechats
-        (gid, post_at, starts_at, status, created_at, updated_at, subreddit_id)
-      VALUES
-        ($1, $2, $3, \'Future\', $4, $5, $6)',
-      [
-        gid,
-        (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
-        gametime.strftime('%Y-%m-%d %H:%M:%S'),
-        @timestamp,
-        @timestamp,
-        R_BASEBALL_ID
-      ]
-    )
+    @conn.exec_params INSERT_SQL, game_data(gid, gametime)
 
     puts "+ #{gid}"
   rescue PG::UniqueViolation
     @failures += 1
 
     puts "- #{gid}"
+  end
+
+  def game_data(gid, gametime)
+    [
+      gid,
+      (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
+      gametime.strftime('%Y-%m-%d %H:%M:%S'),
+      @timestamp,
+      @timestamp,
+      R_BASEBALL_ID
+    ]
   end
 end
 

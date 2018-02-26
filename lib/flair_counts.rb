@@ -20,7 +20,7 @@ def load_flairs(after: nil)
     return load_flairs after: flairs.after
   end
 
-  puts @counts.inspect
+  @counts.each { |name, count| puts "\"#{name}\",#{count}" }
 end
 
 load_flairs after: arguments[:after]

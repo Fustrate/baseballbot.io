@@ -11,7 +11,7 @@ class PostseasonGameLoader
         'postseason_scoreboard.json'
 
   def initialize
-    @right_now = DateTime.now.strftime '%Y-%m-%d %H:%M:%S'
+    @right_now = Time.now.strftime '%Y-%m-%d %H:%M:%S'
 
     @attempts = 0
     @failures = 0

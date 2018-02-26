@@ -2,7 +2,7 @@
 
 require_relative 'default_bot'
 
-@delete = %w(CHC-wagon SEA-wagon CHAOS-wagon).freeze
+@delete = %w[CHC-wagon SEA-wagon CHAOS-wagon].freeze
 
 @bot = default_bot(purpose: 'Delete Flairs', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')

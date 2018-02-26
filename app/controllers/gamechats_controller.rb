@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class GamechatsController < ApplicationController
-  before_action :load_gamechat, except: %i(index new create)
+  before_action :load_gamechat, except: %i[index new create]
 
   def index
     respond_to do |format|

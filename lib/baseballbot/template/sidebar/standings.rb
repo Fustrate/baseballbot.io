@@ -19,7 +19,7 @@ class Baseballbot
 
             determine_wildcards teams
 
-            sort_teams_into_divisions(teams).each do |_, teams_in_division|
+            sort_teams_into_divisions(teams).each_value do |teams_in_division|
               teams_in_division.sort_by! { |team| team[:sort_order] }
             end
           end
@@ -103,8 +103,8 @@ class Baseballbot
             wildcard_gb:    wildcard(row['gb_wildcard']),
             elim:           row['elim'],
             elim_wildcard:  row['elim_wildcard'],
-            division_champ: %w(y z).include?(row['playoffs_flag_mlb']),
-            wildcard_champ: %w(w x).include?(row['playoffs_flag_mlb']),
+            division_champ: %w[y z].include?(row['playoffs_flag_mlb']),
+            wildcard_champ: %w[w x].include?(row['playoffs_flag_mlb']),
             division_id:    row['division_id'].to_i,
             team:           @bot.gameday.team(row['team_abbrev']),
             subreddit:      subreddit(row['team_abbrev'])
@@ -123,7 +123,7 @@ class Baseballbot
 
         def sort_teams_into_divisions(teams)
           Hash.new { |hash, key| hash[key] = [] }.tap do |divisions|
-            teams.each { |_, team| divisions[team[:division_id]] << team }
+            teams.each_value { |team| divisions[team[:division_id]] << team }
           end
         end
 

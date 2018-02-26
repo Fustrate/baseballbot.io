@@ -4,7 +4,7 @@ require_relative 'default_bot'
 
 @bot = default_bot(purpose: 'Refresh Tokens')
 
-@bot.accounts.each do |_, account|
+@bot.accounts.each_value do |account|
   unless account.access.expired?
     puts "Skipping #{account.name}"
 

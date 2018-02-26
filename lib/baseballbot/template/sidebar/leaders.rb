@@ -5,9 +5,9 @@ class Baseballbot
     class Sidebar
       module Leaders
         LEADERS_BASE_URL = 'http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?' \
-                           'season=%{year}&sort_order=\'desc\'' \
-                           '&page_type=SortablePlayer&team_id=%{team_id}' \
-                           '&game_type=\'%{type}\'&player_pool=%{pool}' \
+                           'season=%<year>d&sort_order=\'desc\'' \
+                           '&page_type=SortablePlayer&team_id=%<team_id>d' \
+                           '&game_type=\'%<type>s\'&player_pool=%<pool>s' \
                            '&season_type=ANY&sport_code=\'mlb\'&results=1000' \
                            '&recSP=1&recPP=50'
 
@@ -41,13 +41,13 @@ class Baseballbot
           all_hitters = hitters(year: year, type: type)
           qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
 
-          %w(h xbh hr rbi bb sb r).each do |key|
+          %w[h xbh hr rbi bb sb r].each do |key|
             stats[key] = high_stat(key, all_hitters, count: count).map do |s|
               { name: s[0], value: s[1].to_i }
             end
           end
 
-          %w(avg obp slg ops).each do |key|
+          %w[avg obp slg ops].each do |key|
             stats[key] = high_stat(key, qualifying, count: count).map do |s|
               { name: s[0], value: pct(s[1]) }
             end
@@ -61,7 +61,7 @@ class Baseballbot
           all_pitchers = pitchers(year: year, type: type)
           qualifying = pitchers(year: year, type: type, pool: 'QUALIFIER')
 
-          %w(w sv hld so).each do |key|
+          %w[w sv hld so].each do |key|
             stats[key] = high_stat(key, all_pitchers, count: count).map do |s|
               { name: s[0], value: s[1].to_i }
             end
@@ -75,7 +75,7 @@ class Baseballbot
             { name: s[0], value: pct(s[1]) }
           end
 
-          %w(whip era).each do |key|
+          %w[whip era].each do |key|
             stats[key] = low_stat(key, qualifying, count: 3).map do |s|
               { name: s[0], value: s[1].to_s.sub(/\A0+/, '') }
             end

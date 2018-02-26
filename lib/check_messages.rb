@@ -35,8 +35,13 @@ def process_message(message)
   message.mark_as_read
 end
 
+def subreddit_to_code(name)
+  BaseballBot::Subreddits::DEFAULT_SUBREDDITS
+    .find { |_, subreddit| subreddit.casecmp(name).zero? }[0]
+end
+
 def find_possible_game(subreddit, post_id)
-  gids = possible_games[Baseballbot.subreddit_to_code subreddit]
+  gids = possible_games[subreddit_to_code(subreddit)]
   possibilities = []
 
   # Remove GIDs that have already been sent to us

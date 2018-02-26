@@ -13,6 +13,14 @@ AllCops:
   TargetRubyVersion: 2.5
   TargetRailsVersion: 5.0
 
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+# False positive
+Lint/UnneededSplatExpansion:
+  Exclude:
+    - 'app/views/**/*.jbuilder'
+
 Metrics/AbcSize:
   Enabled: false
 
@@ -24,6 +32,3 @@ Style/Documentation:
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
-
-Style/MultilineMethodCallIndentation:
-  EnforcedStyle: indented

@@ -47,7 +47,7 @@ class Baseballbot
       def pitcher_line(node)
         name = "#{node.xpath('useName').text} #{node.xpath('lastName').text}"
 
-        format '[%{name}](%{url}) (%{wins}-%{losses}, %{era} ERA)',
+        format '[%<name>s](%<url>s) (%<wins>d-%<losses>d, %0.2<era>f ERA)',
                name: name,
                url: player_url(node.xpath('player_id').text),
                wins: node.xpath('wins').text,
@@ -102,20 +102,18 @@ class Baseballbot
 
         rob = @game.files[:linescore].at_xpath '//game/@runner_on_base_status'
 
-        if rob
-          return [
-            'Bases empty',
-            'Runner on first',
-            'Runner on second',
-            'Runner on third',
-            'First and second',
-            'First and third',
-            'Second and third',
-            'Bases loaded'
-          ][rob.text.to_i]
-        end
+        return '' unless rob
 
-        ''
+        [
+          'Bases empty',
+          'Runner on first',
+          'Runner on second',
+          'Runner on third',
+          'First and second',
+          'First and third',
+          'Second and third',
+          'Bases loaded'
+        ][rob.text.to_i]
       end
 
       protected
@@ -132,34 +130,41 @@ class Baseballbot
         title = time.strftime title
 
         # No interpolations? Great!
-        return title unless title.include? '%{'
+        return title unless title.match?(/%[{<]/)
 
+        format title, title_interpolations
+      end
+
+      # rubocop:disable Metrics/MethodLength
+      def title_interpolations
         local_start_time = home? ? @game.home_start_time : @game.away_start_time
         linescore = @game.files[:linescore]
 
-        format title,
-               home_city: @game.home_team.city,
-               home_name: @game.home_team.name,
-               home_record: @game.home_record.join('-'),
-               home_pitcher: linescore.xpath(
-                 '//game/home_probable_pitcher/@last_name'
-               ).text,
-               home_runs: @game.score[0],
-               away_city: @game.away_team.city,
-               away_name: @game.away_team.name,
-               away_record: @game.away_record.join('-'),
-               away_pitcher: linescore.xpath(
-                 '//game/away_probable_pitcher/@last_name'
-               ).text,
-               away_runs: @game.score[1],
-               start_time: local_start_time,
-               # /r/baseball always displays ET
-               start_time_et: linescore.xpath('//game/@first_pitch_et').text,
-               # Postseason
-               series_game: linescore.xpath('//game/@description').text,
-               home_wins: linescore.xpath('//game/@home_wins').text,
-               away_wins: linescore.xpath('//game/@away_wins').text
+        {
+          home_city: @game.home_team.city,
+          home_name: @game.home_team.name,
+          home_record: @game.home_record.join('-'),
+          home_pitcher: linescore.xpath(
+            '//game/home_probable_pitcher/@last_name'
+          ).text,
+          home_runs: @game.score[0],
+          away_city: @game.away_team.city,
+          away_name: @game.away_team.name,
+          away_record: @game.away_record.join('-'),
+          away_pitcher: linescore.xpath(
+            '//game/away_probable_pitcher/@last_name'
+          ).text,
+          away_runs: @game.score[1],
+          start_time: local_start_time,
+          # /r/baseball always displays ET
+          start_time_et: linescore.xpath('//game/@first_pitch_et').text,
+          # Postseason
+          series_game: linescore.xpath('//game/@description').text,
+          home_wins: linescore.xpath('//game/@home_wins').text,
+          away_wins: linescore.xpath('//game/@away_wins').text
+        }
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end

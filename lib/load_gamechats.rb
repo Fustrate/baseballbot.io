@@ -9,7 +9,7 @@ require 'mlb_gameday'
 class GamechatLoader
   URL = 'http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?' \
         'start_date=\'%<start_date>s\'&end_date=\'%<end_date>s\'&' \
-        'team_id=%<team_id>s&season=%<year>s'
+        'team_id=%<team_id>d&season=%<year>d'
 
   GAME_TYPES = [
     'R', # Regular Season
@@ -27,7 +27,7 @@ class GamechatLoader
     @attempts = 0
     @failures = 0
 
-    @right_now = DateTime.now.strftime('%Y-%m-%d %H:%M:%S')
+    @right_now = Time.now.strftime('%Y-%m-%d %H:%M:%S')
 
     @api = MLBGameday::API.new
   end

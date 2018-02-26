@@ -79,7 +79,8 @@ class Baseballbot
 
       # Get the default subreddit for this team
       def subreddit(code)
-        @subreddits[code.upcase] || Baseballbot.subreddits[code.upcase]
+        @subreddits[code.upcase] ||
+          Baseballbot::Subreddits::DEFAULT_SUBREDDITS[code.upcase]
       end
 
       def link_to(text = '', options = {})

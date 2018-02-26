@@ -29,34 +29,42 @@ class Baseballbot
         protected
 
         def process_todays_game(game)
+          game_hash(game).tap { |data| mark_winner_and_loser(data) }
+        end
+
+        def game_hash(game)
           status = game.xpath('@status').text
           gid = game.xpath('@gameday_link').text
 
           started = !PREGAME_STATUSES.include?(status)
-          over = POSTGAME_STATUSES.include?(status)
-
-          home_score = started ? game.xpath('@home_team_runs').text.to_i : ''
-          away_score = started ? game.xpath('@away_team_runs').text.to_i : ''
 
           {
             home: {
               team: link_for_team(game: game, team: 'home'),
-              score: home_score
+              score: (started ? game.xpath('@home_team_runs').text.to_i : '')
             },
             away: {
               team: link_for_team(game: game, team: 'away'),
-              score: away_score
+              score: (started ? game.xpath('@away_team_runs').text.to_i : '')
             },
+            raw_status: status,
             status: gameday_link(game_status(game), gid),
             free: game.xpath('game_media/media[@free="ALL"]').any?
-          }.tap do |data|
-            if started && home_score != away_score
-              w, l = home_score > away_score ? %i(home away) : %i(away home)
+          }
+        end
 
-              data[w][:score] = bold data[w][:score]
-              data[l][:score] = italic data[l][:score] if over
-            end
-          end
+        def mark_winner_and_loser(data)
+          started = !PREGAME_STATUSES.include?(data[:raw_status])
+
+          return unless started && data[:home][:score] != data[:away][:score]
+
+          home_team_winning = data[:home][:score] > data[:away][:score]
+          winner, loser = home_team_winning ? %i[home away] : %i[away home]
+
+          over = POSTGAME_STATUSES.include?(data[:raw_status])
+
+          data[winner][:score] = bold data[winner][:score]
+          data[loser][:score] = italic data[loser][:score] if over
         end
 
         def link_for_team(game:, team:)
@@ -75,19 +83,30 @@ class Baseballbot
         def game_status(game)
           status = game.xpath('@status').text
 
-          return game_inning game if status == 'In Progress'
-          return italic game.xpath('@ind').text if status == 'Postponed'
-          return delay_type game if status == 'Delayed Start'
-          return "#{delay_type game} #{game_inning game}" if status == 'Delayed'
-          return 'Warmup' if status == 'Warmup'
+          case status
+          when 'In Progress'
+            game_inning game
+          when 'Postponed'
+            italic game.xpath('@ind').text
+          when 'Delayed Start'
+            delay_type game
+          when 'Delayed'
+            "#{delay_type game} #{game_inning game}"
+          when 'Warmup'
+            'Warmup'
+          else
+            pre_or_post_game_status(game, status)
+          end
+        end
 
-          if POSTGAME_STATUSES.include?(status)
-            innings = game.xpath('@inning').text
-
-            return innings == '9' ? 'F' : "F/#{innings}"
+        def pre_or_post_game_status(game, status)
+          unless POSTGAME_STATUSES.include?(status)
+            return game.xpath('@time').text
           end
 
-          game.xpath('@time').text
+          innings = game.xpath('@inning').text
+
+          innings == '9' ? 'F' : "F/#{innings}"
         end
 
         def delay_type(game)
