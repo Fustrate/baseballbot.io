@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Pregames
-    UNPOSTED_PREGAMES = <<~SQL
+    UNPOSTED_PREGAMES_QUERY = <<~SQL
       SELECT gamechats.id, gid, subreddits.name
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
@@ -23,7 +23,7 @@ class Baseballbot
     def post_pregames!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(Queries::UNPOSTED_PREGAMES).each do |row|
+      @db.exec(UNPOSTED_PREGAMES_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         post_pregame! id: row['id'], team: row['name'], gid: row['gid']

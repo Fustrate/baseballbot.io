@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Subreddits
-    BOT_SUBREDDITS = <<~SQL
+    BOT_SUBREDDITS_QUERY = <<~SQL
       SELECT subreddits.*
       FROM subreddits
       LEFT JOIN accounts ON (account_id = accounts.id)
@@ -50,7 +50,7 @@ class Baseballbot
     protected
 
     def load_subreddits
-      @db.exec(Queries::BOT_SUBREDDITS)
+      @db.exec(BOT_SUBREDDITS_QUERY)
         .map { |row| [row['name'].downcase, process_subreddit_row(row)] }
         .to_h
     end

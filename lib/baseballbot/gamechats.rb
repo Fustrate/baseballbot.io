@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Gamechats
-    UNPOSTED_GAMECHATS = <<~SQL
+    UNPOSTED_GAMECHATS_QUERY = <<~SQL
       SELECT gamechats.id, gid, subreddits.name, title
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
@@ -12,7 +12,7 @@ class Baseballbot
       ORDER BY post_at ASC, gid ASC
     SQL
 
-    ACTIVE_GAMECHATS = <<~SQL
+    ACTIVE_GAMECHATS_QUERY = <<~SQL
       SELECT gamechats.id, gid, subreddits.name, post_id
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
@@ -25,7 +25,7 @@ class Baseballbot
     def post_gamechats!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(Queries::UNPOSTED_GAMECHATS).each do |row|
+      @db.exec(UNPOSTED_GAMECHATS_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         post_gamechat!(
@@ -53,7 +53,7 @@ class Baseballbot
     def update_gamechats!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(Queries::ACTIVE_GAMECHATS).each do |row|
+      @db.exec(ACTIVE_GAMECHATS_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         update_gamechat!(

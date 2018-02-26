@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Sidebars
-    SUBREDDITS_WITH_SIDEBARS = <<~SQL
+    SUBREDDITS_WITH_SIDEBARS_QUERY = <<~SQL
       SELECT name
       FROM subreddits
       WHERE (options#>>'{sidebar,enabled}')::boolean IS TRUE
@@ -12,7 +12,7 @@ class Baseballbot
     def update_sidebars!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(Queries::SUBREDDITS_WITH_SIDEBARS).each do |row|
+      @db.exec(SUBREDDITS_WITH_SIDEBARS_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         update_sidebar! @subreddits[row['name']]
