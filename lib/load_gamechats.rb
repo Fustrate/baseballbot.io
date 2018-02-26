@@ -156,14 +156,12 @@ class GamechatLoader
 
   def load_gamechats
     enabled_subreddits.each do |row|
-      next unless names.empty? || names.include?(row['name'].downcase)
+      next unless @names.empty? || @names.include?(row['name'].downcase)
 
       load_schedule(
         row['id'],
         row['team_code'],
-        row['post_at'],
-        @start_date,
-        @end_date
+        row['post_at']
       )
     end
   end
