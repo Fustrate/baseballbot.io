@@ -9,7 +9,7 @@ require 'chronic'
 
 class SundayGamechatLoader
   R_BASEBALL_ID = 15
-  URL = 'http://gd2.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
+  URL = 'http://gdx.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
         'miniscoreboard.json'
 
   INSERT_SQL = <<~SQL

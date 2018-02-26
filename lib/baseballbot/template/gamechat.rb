@@ -7,7 +7,7 @@ class Baseballbot
         require file
       end
 
-      GD2 = 'http://gd2.mlb.com/components/game/mlb'
+      GDX = 'http://gdx.mlb.com/components/game/mlb'
 
       using TemplateRefinements
 
@@ -119,7 +119,7 @@ class Baseballbot
       protected
 
       def game_directory
-        "#{GD2}/year_%Y/month_%m/day_%d/gid_#{@game.gid}"
+        "#{GDX}/year_%Y/month_%m/day_%d/gid_#{@game.gid}"
       end
 
       def open_file(path)

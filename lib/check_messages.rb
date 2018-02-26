@@ -3,8 +3,8 @@
 require_relative 'default_bot'
 require 'honeybadger/ruby'
 
-GD2 = 'http://gd2.mlb.com/components/game/mlb'
-SCOREBOARD = "#{GD2}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+GDX = 'http://gdx.mlb.com/components/game/mlb'
+SCOREBOARD = "#{GDX}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
 LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
 GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
