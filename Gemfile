@@ -56,7 +56,7 @@ end
 
 group :development, :test do
   gem 'database_cleaner', '~> 1.5'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'launchy'
   gem 'rspec', '~> 3.0'
   gem 'rspec-collection_matchers'

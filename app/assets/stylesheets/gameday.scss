@@ -1,7 +1,15 @@
+@import 'functions';
+@import 'FontAwesome/variables';
+
 @import 'fustrate/colors';
 @import 'settings';
 @import 'fustrate';
 @import 'layout';
+
+@import 'FontAwesome/fontawesome';
+@import 'FontAwesome/fa-light';
+@import 'FontAwesome/fa-regular';
+@import 'FontAwesome/fa-solid';
 
 $card-bg: #fff;
 
@@ -197,10 +205,10 @@ $team-colors: (
       }
     }
 
-    @each $code in $team-colors {
-      .#{nth($code, 1)} {
-        background: nth($code, 2);
-        color: nth($code, 3);
+    @each $team, $colors in $team-colors {
+      .#{$team} {
+        background: nth($colors, 1);
+        color: nth($colors, 2);
       }
     }
   }
