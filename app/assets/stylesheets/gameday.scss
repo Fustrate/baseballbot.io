@@ -118,15 +118,17 @@ $team-colors: (
     }
 
     .home-team {
-      border-top-right-radius: 6px
-      text-align: right
+      border-top-right-radius: 6px;
+      text-align: right;
 
       &::after {
-        border-color: $card-bg transparent transparent $card-bg
-        left: 0
+        border-color: $card-bg transparent transparent $card-bg;
+        left: 0;
+      }
 
       .name {
-        float: right
+        float: right;
+      }
 
       .runs {
         float: left;
@@ -193,6 +195,7 @@ $team-colors: (
       .runner {
         background: #f0c11c;
       }
+    }
 
     @each $code in $team-colors {
       .#{nth($code, 1)} {
