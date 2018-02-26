@@ -213,7 +213,7 @@ GEM
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
-    mlb_gameday (0.3.0)
+    mlb_gameday (0.3.1)
       chronic (~> 0.10)
       httparty (~> 0.13)
       nokogiri (~> 1.6)
