@@ -70,7 +70,7 @@ class Baseballbot
       end
 
       # Change the subreddit to use for a team, only in this template
-      #   <% subreddits LAD: 'Dodgers', SF: 'WTF %>'
+      #   <% subreddits LAD: 'Dodgers', SF: 'WTF' %>
       def subreddits(mapping = {})
         normalized = mapping.map { |code, name| [code.to_s.upcase, name.to_s] }
 

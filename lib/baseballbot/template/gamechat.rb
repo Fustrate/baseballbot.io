@@ -52,7 +52,7 @@ class Baseballbot
                url: player_url(node.xpath('player_id').text),
                wins: node.xpath('wins').text,
                losses: node.xpath('losses').text,
-               era: node.xpath('era').text
+               era: node.xpath('era').text.to_f
       end
 
       def home?
