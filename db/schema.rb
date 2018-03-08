@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170404035219) do
+ActiveRecord::Schema.define(version: 20180308202459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "accounts", id: :integer, default: -> { "nextval('users_id_seq'::regclass)" }, force: :cascade do |t|
+  create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "access_token"
     t.string "refresh_token"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170404035219) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "subreddit_id", null: false
+    t.integer "game_pk"
     t.index ["gid", "subreddit_id"], name: "index_gamechats_on_gid_and_subreddit_id", unique: true
   end
 

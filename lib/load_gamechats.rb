@@ -11,17 +11,7 @@ class GamechatLoader
         'start_date=\'%<start_date>s\'&end_date=\'%<end_date>s\'&' \
         'team_id=%<team_id>d&season=%<year>d'
 
-  GAME_TYPES = [
-    'R', # Regular Season
-    'A', # All Star Game
-    'E', # Exhibition
-    'F', # Wild Card Game
-    'D', # Divisional Series
-    'L', # League Championship Series
-    'W', # World Series
-    'C', # ???
-    'S', # Spring Training
-  ].freeze
+  GAME_TYPES = 'ACDEFILPRSW'
 
   def initialize
     @attempts = 0
@@ -51,7 +41,7 @@ class GamechatLoader
   end
 
   def schedule_url(team_id)
-    types = GAME_TYPES.map { |type| "type='#{type}'" }.join('&')
+    types = GAME_TYPES.chars.map { |type| "type='#{type}'" }.join('&')
 
     format(
       [URL, types].join('&'),
@@ -121,7 +111,8 @@ class GamechatLoader
       status: 'Future',
       created_at: @right_now,
       updated_at: @right_now,
-      subreddit_id: subreddit_id
+      subreddit_id: subreddit_id,
+      game_pk: game['game_pk'].to_i
     }
   end
 
