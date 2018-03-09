@@ -106,7 +106,7 @@ class Baseballbot
 
       @bot.use_account(@account.name)
 
-      template = pregame_template(gid: gid, game_pk: game_pk)
+      template = pregame_template(game_pk: game_pk)
 
       submission = submit title: template.title, text: template.result
 
@@ -137,7 +137,7 @@ class Baseballbot
 
       @bot.use_account(@account.name)
 
-      template = postgame_template(gid: gid, game_pk: game_pk)
+      template = postgame_template(game_pk: game_pk)
 
       submission = submit title: template.title, text: template.result
 
@@ -297,24 +297,22 @@ class Baseballbot
                              post_id: post_id
     end
 
-    def pregame_template(gid:, game_pk:)
+    def pregame_template(game_pk:)
       body, title = template_for('pregame')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
-                             gid: gid,
                              game_pk: game_pk,
                              title: title
     end
 
-    def postgame_template(gid:, game_pk:)
+    def postgame_template(game_pk:)
       body, title = template_for('postgame')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
-                             gid: gid,
                              game_pk: game_pk,
                              title: title
     end
