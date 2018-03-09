@@ -5,20 +5,22 @@ class Baseballbot
     class Gamechat
       module Teams
         def away_name
-          @feed.dig('gameData', 'teams', 'away', 'name', 'brief')
+          @feed.dig('gameData', 'teams', 'away', 'teamName')
         end
 
         def away_code
-          @feed.dig('gameData', 'teams', 'away', 'name', 'abbrev')
+          @feed.dig('gameData', 'teams', 'away', 'abbreviation')
         end
+        alias away_abbrev away_code
 
         def home_name
-          @feed.dig('gameData', 'teams', 'home', 'name', 'brief')
+          @feed.dig('gameData', 'teams', 'home', 'teamName')
         end
 
         def home_code
-          @feed.dig('gameData', 'teams', 'home', 'name', 'abbrev')
+          @feed.dig('gameData', 'teams', 'home', 'abbreviation')
         end
+        alias home_abbrev home_code
 
         def away_record
           @feed.dig('gameData', 'teams', 'away', 'record')
@@ -30,14 +32,6 @@ class Baseballbot
           @feed.dig('gameData', 'teams', 'home', 'record')
             &.values_at('wins', 'losses')
             &.join('-')
-        end
-
-        def away_abbrev
-          @feed.dig('gameData', 'teams', 'away', 'name', 'abbrev')
-        end
-
-        def home_abbrev
-          @feed.dig('gameData', 'teams', 'home', 'name', 'abbrev')
         end
 
         def away_id
