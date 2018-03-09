@@ -26,15 +26,15 @@ class Baseballbot
         end
 
         def home_rhe
-          return BLANK_RHE unless @feed.linescore&.dig('home', 'runs')
+          return BLANK_RHE unless @feed.linescore&.dig('teams', 'home', 'runs')
 
-          @feed.linescore.dig('home')
+          @feed.linescore.dig('teams', 'home')
         end
 
         def away_rhe
-          return BLANK_RHE unless @feed.linescore&.dig('away', 'runs')
+          return BLANK_RHE unless @feed.linescore&.dig('teams', 'away', 'runs')
 
-          @feed.linescore.dig('away')
+          @feed.linescore.dig('teams', 'away')
         end
 
         protected
