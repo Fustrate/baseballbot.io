@@ -284,7 +284,6 @@ class Baseballbot
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
-                             gid: gid,
                              game_pk: game_pk,
                              title: title
     end
@@ -295,7 +294,6 @@ class Baseballbot
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
-                             gid: gid,
                              game_pk: game_pk,
                              post_id: post_id
     end

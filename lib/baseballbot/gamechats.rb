@@ -48,8 +48,8 @@ class Baseballbot
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra 2 minutes won't kill anyone.
       nil
-    rescue => ex
-      Honeybadger.notify(ex, context: { team: team })
+    # rescue => ex
+    #   Honeybadger.notify(ex, context: { team: team })
     end
 
     def update_gamechats!(names: [])
@@ -83,8 +83,8 @@ class Baseballbot
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra 2 minutes won't kill anyone.
       nil
-    rescue => ex
-      Honeybadger.notify(ex, context: { team: team })
+    # rescue => ex
+    #   Honeybadger.notify(ex, context: { team: team })
     end
 
     def gamechat_update_failed(post_id)
