@@ -18,18 +18,22 @@ class Baseballbot
 
       attr_reader :game, :title, :post_id, :time, :team, :opponent
 
-      def initialize(body:, bot:, subreddit:, gid:, title: '', post_id: nil)
+      def initialize(body:, bot:, subreddit:, gid:, game_pk:, title: '', post_id: nil)
         super(body: body, bot: bot)
 
         @subreddit = subreddit
         @time = subreddit.time
         @game = bot.gameday.game gid
+        @game2 = bot.stats.game game_pk
 
         @team = home? ? @game.home_team : @game.away_team
         @opponent = home? ? @game.away_team : @game.home_team
 
         @title = format_title title
         @post_id = post_id
+
+        @linescore = bot.stats.linescore(game_pk)
+        @boxscore = bot.stats.boxscore(game_pk)
       end
 
       def inspect

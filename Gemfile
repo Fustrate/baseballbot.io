@@ -23,6 +23,7 @@ gem 'unicorn'
 
 # Reddit interaction
 gem 'mlb_gameday', github: 'Fustrate/mlb_gameday' # '~> 0.1'
+gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api' # '~> 0.1'
 gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
 group :production do

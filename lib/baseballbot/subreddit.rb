@@ -28,7 +28,7 @@ class Baseballbot
 
     # !@group Game Chats
 
-    def post_gamechat(id:, gid:, title:)
+    def post_gamechat(id:, gid:, title:, game_pk:)
       @bot.use_account(@account.name)
 
       template = gamechat_template(gid: gid, title: title)

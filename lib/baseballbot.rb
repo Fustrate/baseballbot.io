@@ -4,6 +4,7 @@ require 'redd'
 require 'pg'
 require 'chronic'
 require 'mlb_gameday'
+require 'mlb_stats_api'
 require 'erb'
 require 'tzinfo'
 require 'redis'
@@ -31,7 +32,7 @@ class Baseballbot
   include Sidebars
   include Subreddits
 
-  attr_reader :db, :gameday, :client, :session, :redis, :logger
+  attr_reader :db, :gameday, :stats, :client, :session, :redis, :logger
 
   def initialize(options = {})
     @client = Redd::APIClient.new(
@@ -47,7 +48,9 @@ class Baseballbot
 
     @db = PG::Connection.new options[:db]
     @redis = Redis.new
+
     @gameday = MLBGameday::API.new
+    @stats = MLBGameday::API.new
 
     @logger = options[:logger] || Logger.new(STDOUT)
 
