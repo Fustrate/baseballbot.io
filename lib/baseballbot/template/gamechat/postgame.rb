@@ -5,7 +5,7 @@ class Baseballbot
     class Gamechat
       module Postgame
         def winning_pitcher
-          pitcher_id = @feed.linescore.dig('pitchers', 'win')
+          pitcher_id = @feed.dig('liveData', 'decisions', 'winner', 'id')
 
           team_id = @feed.dig(
             'liveData', 'players', 'allPlayers', "ID#{pitcher_id}", 'uniformID'
@@ -24,7 +24,7 @@ class Baseballbot
         end
 
         def losing_pitcher
-          pitcher_id = @feed.linescore.dig('pitchers', 'loss')
+          pitcher_id = @feed.dig('liveData', 'decisions', 'loser', 'id')
 
           team_id = @feed.dig(
             'liveData', 'players', 'allPlayers', "ID#{pitcher_id}", 'uniformID'
@@ -43,7 +43,7 @@ class Baseballbot
         end
 
         def save_pitcher
-          pitcher_id = @feed.linescore.dig('pitchers', 'save')
+          pitcher_id = @feed.dig('liveData', 'decisions', 'save', 'id')
 
           team_id = @feed.dig(
             'liveData', 'players', 'allPlayers', "ID#{pitcher_id}", 'uniformID'
