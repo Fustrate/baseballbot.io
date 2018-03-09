@@ -69,7 +69,7 @@ class Baseballbot
         def home?
           return true unless @subreddit.team
 
-          @home ||= @game.home_team.code == @subreddit.team.code
+          @home ||= home_abbrev == @subreddit.team.code
         end
 
         def won?
