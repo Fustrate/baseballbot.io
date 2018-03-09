@@ -99,7 +99,7 @@ class Baseballbot
 
         def pitcher_line(pitcher)
           format '[%<name>s](%<url>s) (%<wins>d-%<losses>d, %<era>s ERA)',
-                 name: pitcher['fullName'],
+                 name: pitcher['person']['fullName'],
                  url: player_url(pitcher['id']),
                  wins: pitcher['seasonStats']['wins'].to_i,
                  losses: pitcher['seasonStats']['losses'].to_i,
