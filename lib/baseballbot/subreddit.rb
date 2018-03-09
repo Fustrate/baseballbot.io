@@ -76,7 +76,7 @@ class Baseballbot
       @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{gid}."
 
       if template.final?
-        end_gamechat(id, submission, gid)
+        end_gamechat(id, submission, gid, game_pk)
       else
         change_gamechat_status id, nil, 'Posted'
       end
