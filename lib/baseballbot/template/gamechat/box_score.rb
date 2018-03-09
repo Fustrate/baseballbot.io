@@ -64,7 +64,7 @@ class Baseballbot
 
           pos = replacement ? batter['position'] : (bold batter['position'])
 
-          batting = batter['gameStats']['batting']
+          batting = batter['stats']['batting']
 
           [
             "#{spacer}#{pos}",
@@ -82,7 +82,7 @@ class Baseballbot
         def pitcher_row(pitcher)
           return ' ||||||||' unless pitcher
 
-          pitching = pitcher['gameStats']['pitching']
+          pitching = pitcher['stats']['pitching']
 
           [
             player_link(pitcher, title: 'Game Score: ???'),
