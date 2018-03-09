@@ -1,20 +1,23 @@
 # frozen_string_literal: true
 
+Dir[File.join(File.dirname(__FILE__), 'gamechat', '*.rb')].each do |file|
+  require file
+end
+
 class Baseballbot
   module Template
     class Gamechat < Base
-      Dir[File.join(File.dirname(__FILE__), 'gamechat', '*.rb')].each do |file|
-        require file
-      end
-
       GDX = 'http://gdx.mlb.com/components/game/mlb'
 
       using TemplateRefinements
 
-      include Template::Gamechat::LineScore
       include Template::Gamechat::BoxScore
+      include Template::Gamechat::Game
       include Template::Gamechat::Highlights
+      include Template::Gamechat::LineScore
+      include Template::Gamechat::Postgame
       include Template::Gamechat::ScoringPlays
+      include Template::Gamechat::Teams
 
       attr_reader :game, :title, :post_id, :time, :team, :opponent
 
@@ -22,9 +25,8 @@ class Baseballbot
         super(body: body, bot: bot)
 
         @subreddit = subreddit
-        @time = subreddit.time
+        @time = subreddit.timezone
         @game = bot.gameday.game gid
-        @game2 = bot.stats.game game_pk
 
         @team = home? ? @game.home_team : @game.away_team
         @opponent = home? ? @game.away_team : @game.home_team
@@ -32,8 +34,7 @@ class Baseballbot
         @title = format_title title
         @post_id = post_id
 
-        @linescore = bot.stats.linescore(game_pk)
-        @boxscore = bot.stats.boxscore(game_pk)
+        @feed = bot.stats.live_feed game_pk
       end
 
       def inspect
@@ -48,6 +49,14 @@ class Baseballbot
         "http://mlb.mlb.com/team/player.jsp?player_id=#{id}"
       end
 
+      def player_link(player, title: nil)
+        link_to(
+          player['name']['boxname'],
+          url: player_url(player['id']),
+          title: title
+        )
+      end
+
       def pitcher_line(node)
         name = "#{node.xpath('useName').text} #{node.xpath('lastName').text}"
 
@@ -59,76 +68,7 @@ class Baseballbot
                era: node.xpath('era').text.to_f
       end
 
-      def home?
-        return true unless @subreddit.team
-
-        @is_home ||= @game.home_team.code == @subreddit.team.code
-      end
-
-      def won?
-        return unless @game.over?
-
-        home? == (home[:runs] > away[:runs])
-      end
-
-      def lost?
-        return unless @game.over?
-
-        home? == (home[:runs] < away[:runs])
-      end
-
-      def inning
-        return 'Postponed' if @game.postponed?
-
-        return 'Final' if @game.over?
-
-        if @game.in_progress?
-          return @game.inning[1] + ' of the ' + @game.inning[0].to_i.ordinalize
-        end
-
-        @game.status
-      rescue
-        @game.status
-      end
-
-      def outs
-        return '' unless @game.started? && @game.files[:linescore]
-
-        if @game.files[:linescore].at_xpath('//game/@outs')
-          return @game.files[:linescore].xpath('//game/@outs').text.to_i
-        end
-
-        ''
-      end
-
-      def runners
-        return '' unless @game.started? && @game.files[:linescore]
-
-        rob = @game.files[:linescore].at_xpath '//game/@runner_on_base_status'
-
-        return '' unless rob
-
-        [
-          'Bases empty',
-          'Runner on first',
-          'Runner on second',
-          'Runner on third',
-          'First and second',
-          'First and third',
-          'Second and third',
-          'Bases loaded'
-        ][rob.text.to_i]
-      end
-
       protected
-
-      def game_directory
-        "#{GDX}/year_%Y/month_%m/day_%d/gid_#{@game.gid}"
-      end
-
-      def open_file(path)
-        open @game.date.strftime "#{game_directory}/#{path}"
-      end
 
       def format_title(title)
         title = time.strftime title
@@ -141,31 +81,24 @@ class Baseballbot
 
       # rubocop:disable Metrics/MethodLength
       def title_interpolations
-        local_start_time = home? ? @game.home_start_time : @game.away_start_time
-        linescore = @game.files[:linescore]
-
         {
-          home_city: @game.home_team.city,
-          home_name: @game.home_team.name,
-          home_record: @game.home_record.join('-'),
-          home_pitcher: linescore.xpath(
-            '//game/home_probable_pitcher/@last_name'
-          ).text,
-          home_runs: @game.score[0],
-          away_city: @game.away_team.city,
-          away_name: @game.away_team.name,
-          away_record: @game.away_record.join('-'),
-          away_pitcher: linescore.xpath(
-            '//game/away_probable_pitcher/@last_name'
-          ).text,
-          away_runs: @game.score[1],
-          start_time: local_start_time,
+          home_city: @feed['gameData']['teams']['home']['locationName'],
+          home_name: @feed['gameData']['teams']['home']['teamName'],
+          home_record: home_record,
+          home_pitcher: probable_home_starter['boxscoreName'],
+          home_runs: home_rhe['runs'],
+          away_city: @feed['gameData']['teams']['away']['locationName'],
+          away_name: @feed['gameData']['teams']['away']['teamName'],
+          away_record: away_record,
+          away_pitcher: probable_away_starter['boxscoreName'],
+          away_runs: away_rhe['runs'],
+          start_time: start_time_local,
           # /r/baseball always displays ET
-          start_time_et: linescore.xpath('//game/@first_pitch_et').text,
+          start_time_et: start_time_et,
           # Postseason
-          series_game: linescore.xpath('//game/@description').text,
-          home_wins: linescore.xpath('//game/@home_wins').text,
-          away_wins: linescore.xpath('//game/@away_wins').text
+          series_game: '?', # @linescore.xpath('//game/@description').text,
+          home_wins: '?',   # @linescore.xpath('//game/@home_wins').text,
+          away_wins: '?'    # @linescore.xpath('//game/@away_wins').text
         }
       end
       # rubocop:enable Metrics/MethodLength

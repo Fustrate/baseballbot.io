@@ -16,7 +16,7 @@ class Baseballbot
         end
 
         def line_score_status
-          return 'Final' if game.over?
+          return @feed['gameData']['status']['detailedState'] unless live?
 
           if runners.empty?
             return "#{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
@@ -26,15 +26,15 @@ class Baseballbot
         end
 
         def home_rhe
-          return BLANK_RHE unless @game.started? && @game.files[:rawboxscore]
+          return BLANK_RHE unless @feed.linescore&.dig('home', 'runs')
 
-          rhe_for_side 'home'
+          @feed.linescore.dig('home')
         end
 
         def away_rhe
-          return BLANK_RHE unless @game.started? && @game.files[:rawboxscore]
+          return BLANK_RHE unless @feed.linescore&.dig('away', 'runs')
 
-          rhe_for_side 'away'
+          @feed.linescore.dig('away')
         end
 
         protected
@@ -43,37 +43,23 @@ class Baseballbot
           @lines ||= begin
             lines = [[nil] * 9, [nil] * 9]
 
-            return lines unless @game.started? && @game.files[:rawboxscore]
+            return lines unless started? && @feed.linescore&.dig('innings')
 
-            @game.files[:rawboxscore]
-              .xpath('//boxscore/linescore/inning_line_score')
-              .each { |inning| add_inning_to_line_score(inning, lines: lines) }
+            @feed.linescore['innings'].each do |inning|
+              if inning['away'] && !inning['away'].empty?
+                lines[0][inning['num'] - 1] = inning.dig('away', 'runs')
+
+                # In case of extra innings
+                lines[1][inning['num'] - 1] = nil
+              end
+
+              next unless inning.dig('home', 'runs')
+
+              lines[1][inning['num'] - 1] = inning.dig('home', 'runs')
+            end
 
             lines
           end
-        end
-
-        def rhe_for_side(side)
-          @rhe ||= @game.files[:rawboxscore].at_xpath '//boxscore/linescore'
-
-          {
-            runs: @rhe["#{side}_team_runs"].to_i,
-            hits: @rhe["#{side}_team_hits"].to_i,
-            errors: @rhe["#{side}_team_errors"].to_i
-          }
-        end
-
-        def add_inning_to_line_score(inning, lines:)
-          if inning['away'] && !inning['away'].empty?
-            lines[0][inning['inning'].to_i - 1] = inning['away']
-
-            # In case of extra innings
-            lines[1][inning['inning'].to_i - 1] = nil
-          end
-
-          return unless inning['home'] && !inning['home'].empty?
-
-          lines[1][inning['inning'].to_i - 1] = inning['home']
         end
 
         def line_for_team(line_team)

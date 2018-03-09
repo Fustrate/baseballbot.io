@@ -1,4 +1,21 @@
 GIT
+  remote: git://github.com/Fustrate/mlb_gameday.git
+  revision: c52be6f0ce6bff5cbe8faa5811ab1af237b79e9e
+  specs:
+    mlb_gameday (0.3.2)
+      chronic (~> 0.10)
+      httparty (~> 0.13)
+      nokogiri (~> 1.6)
+
+GIT
+  remote: git://github.com/Fustrate/mlb_stats_api.git
+  revision: 2d38f4936132718966fbc528b92b5309f471ce4b
+  specs:
+    mlb_stats_api (0.1.0)
+      hana (~> 1.3)
+      httparty (~> 0.16)
+
+GIT
   remote: https://github.com/Fustrate/fustrate-rails
   revision: 00499acad74581fe98c39457747274829a962d72
   ref: 00499a
@@ -13,23 +30,6 @@ GIT
       momentjs-rails
       railties (>= 4, < 5.3)
       sass (>= 3.4)
-
-GIT
-  remote: https://github.com/Fustrate/mlb_gameday.git
-  revision: c52be6f0ce6bff5cbe8faa5811ab1af237b79e9e
-  specs:
-    mlb_gameday (0.3.2)
-      chronic (~> 0.10)
-      httparty (~> 0.13)
-      nokogiri (~> 1.6)
-
-GIT
-  remote: https://github.com/Fustrate/mlb_stats_api.git
-  revision: 62d87d50aefad16abc2e7b52f8a442ce31338f41
-  specs:
-    mlb_stats_api (0.1.0)
-      hana (~> 1.3)
-      httparty (~> 0.16)
 
 GEM
   remote: https://rubygems.org/

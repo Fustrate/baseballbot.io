@@ -5,20 +5,17 @@ class Baseballbot
     class Gamechat
       module ScoringPlays
         def scoring_plays
-          return [] unless @game.started?
+          return [] unless started? && @feed.plays
 
-          Nokogiri::XML(open_file('inning/inning_Scores.xml'))
-            .xpath('//scores/score')
+          @feed.plays['allPlays']
+            .values_at(@feed.plays.dig['scoringPlays'])
             .map { |play| format_play(play) }
-        rescue OpenURI::HTTPError
-          # There's no inning_Scores.xml file right now
-          []
         end
 
         def scoring_plays_table
           rows = scoring_plays.map do |play|
             [
-              "#{play[:inning_side]}#{play[:inning]}",
+              "#{play[:side]}#{play[:inning]}",
               play[:event],
               event_score(play)
             ].join('|')
@@ -31,11 +28,11 @@ class Baseballbot
 
         def format_play(play)
           {
-            side:   play['top_inning'] == 'Y' ? 'T' : 'B',
-            team:   play['top_inning'] == 'Y' ? opponent : team,
-            inning: play['inn'],
-            event:  play.at_xpath('*[@des and @score="T"]')['des'],
-            score:  [play['home'].to_i, play['away'].to_i]
+            side:   play['about']['halfInning'] == 'top' ? 'T' : 'B',
+            team:   play['about']['halfInning'] == 'top' ? opponent : team,
+            inning: play['about']['inning'],
+            event:  play['result']['description'],
+            score:  [play['result']['homeScore'], play['result']['awayScore']]
           }
         end
 

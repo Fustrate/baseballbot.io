@@ -5,15 +5,14 @@ class Baseballbot
     class Gamechat
       module Highlights
         def highlights
-          return [] unless @game.started?
-
-          Nokogiri::XML(open_file('media/mobile.xml'))
-            .xpath('//highlights/media')
-            .sort_by { |a| a['date'] }
-            .map { |media| process_media(media) }
-        rescue OpenURI::HTTPError
-          # I guess the file isn't there yet
           []
+
+          # return [] unless started?
+          #
+          # Nokogiri::XML(open_file('media/mobile.xml'))
+          #   .xpath('//highlights/media')
+          #   .sort_by { |a| a['date'] }
+          #   .map { |media| process_media(media) }
         end
 
         def highlights_list

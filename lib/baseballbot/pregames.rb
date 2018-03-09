@@ -3,7 +3,7 @@
 class Baseballbot
   module Pregames
     UNPOSTED_PREGAMES_QUERY = <<~SQL
-      SELECT gamechats.id, gid, subreddits.name
+      SELECT gamechats.id, gid, game_pk, subreddits.name
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future'

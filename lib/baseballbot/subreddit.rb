@@ -6,7 +6,7 @@ require_relative 'template/sidebar'
 
 class Baseballbot
   class Subreddit
-    attr_reader :account, :name, :team, :time, :code
+    attr_reader :account, :name, :team, :timezone, :code
 
     def initialize(bot:, id:, name:, code:, account:, options: {})
       @bot = bot
@@ -17,7 +17,7 @@ class Baseballbot
       @options = options
       @code = code
 
-      @time = begin
+      @timezone = begin
         TZInfo::Timezone.get options['timezone']
       rescue TZInfo::InvalidTimezoneIdentifier
         TZInfo::Timezone.get 'America/Los_Angeles'
@@ -31,7 +31,7 @@ class Baseballbot
     def post_gamechat(id:, gid:, title:, game_pk:)
       @bot.use_account(@account.name)
 
-      template = gamechat_template(gid: gid, title: title)
+      template = gamechat_template(game_pk: game_pk, title: title)
 
       submission = submit title: template.title, text: template.result
 
@@ -63,12 +63,11 @@ class Baseballbot
     # @param post_id [String] The reddit id of the post to update
     #
     # @return [Boolean] to indicate if the game is over or postponed
-    def update_gamechat(id:, gid:, post_id:)
+    def update_gamechat(id:, gid:, game_pk:, post_id:)
       @bot.use_account(@account.name)
 
-      template = gamechat_update_template(gid: gid, post_id: post_id)
+      template = gamechat_update_template(post_id: post_id, game_pk: game_pk)
       submission = load_submission(id: post_id)
-      game_over = template.game.over? || template.game.postponed?
 
       edit(
         id: post_id,
@@ -77,16 +76,16 @@ class Baseballbot
 
       @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{gid}."
 
-      if game_over
+      if template.final?
         end_gamechat(id, submission, gid)
       else
         change_gamechat_status id, nil, 'Posted'
       end
 
-      game_over
+      template.final?
     end
 
-    def end_gamechat(id, submission, gid)
+    def end_gamechat(id, submission, gid, game_pk)
       change_gamechat_status id, nil, 'Over'
 
       post_process_submission(
@@ -103,7 +102,7 @@ class Baseballbot
 
     # !@group Pre Game Chats
 
-    def post_pregame(id:, gid:)
+    def post_pregame(id:, gid:, game_pk:)
       return unless @options.dig('pregame', 'enabled')
 
       @bot.use_account(@account.name)
@@ -134,12 +133,12 @@ class Baseballbot
     # @param gid [String] the MLB game ID
     #
     # @return [Redd::Models::Submission] the postgame thread
-    def post_postgame(gid:)
+    def post_postgame(gid:, game_pk:)
       return unless @options.dig('postgame', 'enabled')
 
       @bot.use_account(@account.name)
 
-      template = postgame_template(gid: gid)
+      template = postgame_template(gid: gid, game_pk: game_pk)
 
       submission = submit title: template.title, text: template.result
 
@@ -277,7 +276,7 @@ class Baseballbot
       Template::Sidebar.new body: body, bot: @bot, subreddit: self
     end
 
-    def gamechat_template(gid:, title:)
+    def gamechat_template(gid:, game_pk:, title:)
       body, default_title = template_for('gamechat')
 
       title = title && !title.empty? ? title : default_title
@@ -286,36 +285,40 @@ class Baseballbot
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
+                             game_pk: game_pk,
                              title: title
     end
 
-    def gamechat_update_template(gid:, post_id:)
+    def gamechat_update_template(gid:, game_pk:, post_id:)
       body, = template_for('gamechat_update')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
+                             game_pk: game_pk,
                              post_id: post_id
     end
 
-    def pregame_template(gid:)
+    def pregame_template(gid:, game_pk:)
       body, title = template_for('pregame')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
+                             game_pk: game_pk,
                              title: title
     end
 
-    def postgame_template(gid:)
+    def postgame_template(gid:, game_pk:)
       body, title = template_for('postgame')
 
       Template::Gamechat.new body: body,
                              bot: @bot,
                              subreddit: self,
                              gid: gid,
+                             game_pk: game_pk,
                              title: title
     end
 

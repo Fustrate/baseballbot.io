@@ -4,28 +4,32 @@ class Baseballbot
   module Template
     class Gamechat
       module BoxScore
-        BASE_XPATH = '//boxscore/team[@team_flag="%<flag>s"]'
-        BATTER_XPATH = "#{BASE_XPATH}/batting/batter[@bat_order]"
-        PITCHER_XPATH = "#{BASE_XPATH}/pitching/pitcher"
+        def probable_away_starter
+          @feed['gameData']['probablePitchers']['away']['id']
+          @feed['gameData']['players']["ID#{away_id}"]
+        end
+
+        def probable_home_starter
+          @feed['gameData']['probablePitchers']['home']['id']
+          @feed['gameData']['players']["ID#{home_id}"]
+        end
 
         def home_batters
-          return [] unless @game.started? && @game.files[:rawboxscore]
+          return [] unless started? && @feed.boxscore
 
-          @game.files[:rawboxscore]
-            .xpath(format(BATTER_XPATH, flag: 'home'))
-            .to_a
-            .reject { |batter| batter['bat_order'].to_i > 1099 }
-            .sort_by { |batter| batter['bat_order'] }
+          @feed.boxscore['teams']['home']['players']
+            .values
+            .select { |batter| batter['battingOrder'] }
+            .sort_by { |batter| batter['battingOrder'] }
         end
 
         def away_batters
-          return [] unless @game.started? && @game.files[:rawboxscore]
+          return [] unless started? && @feed.boxscore
 
-          @game.files[:rawboxscore]
-            .xpath(format(BATTER_XPATH, flag: 'away'))
-            .to_a
-            .reject { |batter| batter['bat_order'].to_i > 1099 }
-            .sort_by { |batter| batter['bat_order'] }
+          @feed.boxscore['teams']['away']['players']
+            .values
+            .select { |batter| batter['battingOrder'] }
+            .sort_by { |batter| batter['battingOrder'] }
         end
 
         def batters
@@ -33,21 +37,19 @@ class Baseballbot
         end
 
         def home_pitchers
-          return [] unless @game.started? && @game.files[:rawboxscore]
+          return [] unless started? && @feed
 
-          @game.files[:rawboxscore]
-            .xpath(format(PITCHER_XPATH, flag: 'home'))
-            .to_a
-            .sort_by { |pitcher| pitcher['pitch_order'] }
+          @feed.boxscore.dig('teams', 'home', 'pitchers').each do |id|
+            @feed.boxscore('teams', 'home', 'players', "ID#{id}")
+          end
         end
 
         def away_pitchers
-          return [] unless @game.started? && @game.files[:rawboxscore]
+          return [] unless started? && @feed
 
-          @game.files[:rawboxscore]
-            .xpath(format(PITCHER_XPATH, flag: 'away'))
-            .to_a
-            .sort_by { |batter| batter['pitch_order'] }
+          @feed.boxscore.dig('teams', 'away', 'pitchers').each do |id|
+            @feed.boxscore('teams', 'away', 'players', "ID#{id}")
+          end
         end
 
         def pitchers
@@ -57,38 +59,41 @@ class Baseballbot
         def batter_row(batter)
           return ' ||||||||' unless batter
 
-          is_replacement = (batter['bat_order'].to_i % 100).positive?
-          spacer = '[](/spacer)' if is_replacement
-          url = link_to batter['name'], url: player_url(batter['id'])
+          replacement = (batter['battingOrder'].to_i % 100).positive?
+          spacer = '[](/spacer)' if replacement
+
+          pos = replacement ? batter['position'] : (bold batter['position'])
+
+          batting = batter['gameStats']['batting']
 
           [
-            "#{spacer}#{is_replacement ? batter['pos'] : (bold batter['pos'])}",
-            "#{spacer}#{url}",
-            batter['ab'],
-            batter['r'],
-            batter['h'],
-            batter['rbi'],
-            batter['bb'],
-            batter['so'],
-            batter['bis_avg']
+            "#{spacer}#{pos}",
+            "#{spacer}#{player_link(batter)}",
+            batting['atBats'],
+            batting['runs'],
+            batting['hits'],
+            batting['rbi'],
+            batting['baseOnBalls'],
+            batting['strikeOuts'],
+            batter['seasonStats']['batting']['avg']
           ].join '|'
         end
 
         def pitcher_row(pitcher)
           return ' ||||||||' unless pitcher
 
+          pitching = pitcher['gameStats']['pitching']
+
           [
-            link_to(pitcher['name'],
-                    url: player_url(pitcher['id']),
-                    title: "Game Score: #{pitcher['game_score']}"),
-            "#{pitcher['out'].to_i / 3}.#{pitcher['out'].to_i % 3}",
-            pitcher['h'],
-            pitcher['r'],
-            pitcher['er'],
-            pitcher['bb'],
-            pitcher['so'],
-            "#{pitcher['np']}-#{pitcher['s']}",
-            pitcher['bis_era']
+            player_link(pitcher, title: 'Game Score: ???'),
+            pitching['inningsPitched'],
+            pitching['hits'],
+            pitching['runs'],
+            pitching['earnedRuns'],
+            pitching['baseOnBalls'],
+            pitching['strikeOuts'],
+            "#{pitching['pitchesThrown']}-#{pitching['strikes']}",
+            pitcher['seasonStats']['pitching']['era']
           ].join '|'
         end
       end

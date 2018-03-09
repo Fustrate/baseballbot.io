@@ -3,7 +3,7 @@
 class Baseballbot
   module Gamechats
     UNPOSTED_GAMECHATS_QUERY = <<~SQL
-      SELECT gamechats.id, gid, subreddits.name, title
+      SELECT gamechats.id, gid, game_pk, subreddits.name, title
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status IN ('Pregame', 'Future')
@@ -13,7 +13,7 @@ class Baseballbot
     SQL
 
     ACTIVE_GAMECHATS_QUERY = <<~SQL
-      SELECT gamechats.id, gid, subreddits.name, post_id
+      SELECT gamechats.id, gid, game_pk, subreddits.name, post_id
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted'
@@ -32,15 +32,17 @@ class Baseballbot
           id: row['id'],
           team: row['name'],
           gid: row['gid'],
+          game_pk: row['game_pk'],
           title: row['title']
         )
       end
     end
 
-    def post_gamechat!(id:, team:, gid:, title:)
+    def post_gamechat!(id:, team:, gid:, game_pk:, title:)
       team_to_subreddit(team).post_gamechat(
         id: id,
         gid: gid,
+        game_pk: game_pk,
         title: title
       )
     rescue Redd::ServerError, ::OpenURI::HTTPError
@@ -60,18 +62,19 @@ class Baseballbot
           team: row['name'],
           id: row['id'],
           gid: row['gid'],
+          game_pk: row['game_pk'],
           post_id: row['post_id']
         )
       end
     end
 
-    def update_gamechat!(team:, id:, gid:, post_id:)
+    def update_gamechat!(team:, id:, gid:, game_pk:, post_id:)
       first_attempt ||= true
 
       team_to_subreddit(team)
-        .update_gamechat(id: id, gid: gid, post_id: post_id)
+        .update_gamechat(id: id, gid: gid, game_pk: game_pk, post_id: post_id)
     rescue Redd::InvalidAccess
-      gamechat_update_failed(team, id, gid, post_id)
+      gamechat_update_failed(post_id)
 
       if first_attempt
         first_attempt = false
@@ -84,7 +87,7 @@ class Baseballbot
       Honeybadger.notify(ex, context: { team: team })
     end
 
-    def gamechat_update_failed(team, id, gid, post_id)
+    def gamechat_update_failed(post_id)
       puts "Could not update #{post_id} due to invalid credentials:"
       puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
       puts "\tCurrent: #{Time.now.strftime '%F %T'}"
