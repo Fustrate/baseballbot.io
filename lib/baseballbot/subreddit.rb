@@ -31,8 +31,7 @@ class Baseballbot
     def post_gamechat(id:, gid:, title:, game_pk:)
       @bot.use_account(@account.name)
 
-      template = gamechat_template(gid: gid, game_pk: game_pk, title: title)
-
+      template = gamechat_template(game_pk: game_pk, title: title)
       submission = submit title: template.title, text: template.result
 
       # Mark as posted right away so that it won't post again
@@ -276,7 +275,7 @@ class Baseballbot
       Template::Sidebar.new body: body, bot: @bot, subreddit: self
     end
 
-    def gamechat_template(gid:, game_pk:, title:)
+    def gamechat_template(game_pk:, title:)
       body, default_title = template_for('gamechat')
 
       title = title && !title.empty? ? title : default_title
@@ -288,7 +287,7 @@ class Baseballbot
                              title: title
     end
 
-    def gamechat_update_template(gid:, game_pk:, post_id:)
+    def gamechat_update_template(game_pk:, post_id:)
       body, = template_for('gamechat_update')
 
       Template::Gamechat.new body: body,

@@ -4,7 +4,7 @@ class Baseballbot
   module Template
     class Gamechat
       module LineScore
-        BLANK_RHE = { runs: 0, hits: 0, errors: 0 }.freeze
+        BLANK_RHE = { 'runs' => 0, 'hits' => 0, 'errors' => 0 }.freeze
 
         def line_score
           [
@@ -68,7 +68,7 @@ class Baseballbot
           rhe = line_team == :home ? home_rhe : away_rhe
 
           "[#{code}](/#{code})|#{line.join('|')}|" \
-            "#{bold rhe[:runs]}|#{bold rhe[:hits]}|#{bold rhe[:errors]}"
+            "#{bold rhe['runs']}|#{bold rhe['hits']}|#{bold rhe['errors']}"
         end
       end
     end
