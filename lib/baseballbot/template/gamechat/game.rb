@@ -13,6 +13,22 @@ class Baseballbot
           'right' => 'RF'
         }.freeze
 
+        def away_tv
+          '???'
+        end
+
+        def away_radio
+          '???'
+        end
+
+        def home_tv
+          '???'
+        end
+
+        def home_radio
+          '???'
+        end
+
         def start_time_utc
           @start_time_utc ||= \
             Time.parse @feed['gameData']['datetime']['dateTime']

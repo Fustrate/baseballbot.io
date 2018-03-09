@@ -59,6 +59,15 @@ class Baseballbot
             era: data['seasonStats']['pitching']['era']
           }
         end
+
+        def decisions_table
+          winner = '%<name>s (%<record>s, %<era>s)'.format(winning_pitcher)
+          loser = '%<name>s (%<record>s, %<era>s)'.format(losing_pitcher)
+          save = '%<name>s (%<saves>s, %<era>s)'.format(losing_pitcher)
+
+          "Winning Pitcher|Losing Pitcher|Save\n" \
+          ":-:|:-:|:-:\n#{winner}|#{loser}|#{save}"
+        end
       end
     end
   end
