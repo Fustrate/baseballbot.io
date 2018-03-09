@@ -19,9 +19,9 @@ class Baseballbot
         end
 
         def batting_order(batter)
-          return batter['battingOrder'] if batter['battingOrder']
+          return batter['battingOrder'].to_i if batter['battingOrder']
 
-          game_stats(batter)['batting']['battingOrder']
+          game_stats(batter)['batting']['battingOrder'].to_i
         end
 
         def home_batters
@@ -49,7 +49,7 @@ class Baseballbot
         def home_pitchers
           return [] unless started? && @feed
 
-          @feed.boxscore.dig('teams', 'home', 'pitchers').each do |id|
+          @feed.boxscore.dig('teams', 'home', 'pitchers').map do |id|
             @feed.boxscore.dig('teams', 'home', 'players', "ID#{id}")
           end
         end
@@ -57,7 +57,7 @@ class Baseballbot
         def away_pitchers
           return [] unless started? && @feed
 
-          @feed.boxscore.dig('teams', 'away', 'pitchers').each do |id|
+          @feed.boxscore.dig('teams', 'away', 'pitchers').map do |id|
             @feed.boxscore.dig('teams', 'away', 'players', "ID#{id}")
           end
         end
@@ -69,7 +69,7 @@ class Baseballbot
         def batter_row(batter)
           return ' ||||||||' unless batter
 
-          replacement = (batter['battingOrder'].to_i % 100).positive?
+          replacement = (batting_order(batter) % 100).positive?
           spacer = '[](/spacer)' if replacement
 
           pos = replacement ? batter['position'] : (bold batter['position'])
