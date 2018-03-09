@@ -4,16 +4,23 @@ class Baseballbot
   module Template
     class Gamechat
       module Postgame
+        def winning_team
+          home_rhe['runs'] > away_rhe['runs'] ? 'home' : 'away'
+        end
+
+        def losing_team
+          home_rhe['runs'] > away_rhe['runs'] ? 'away' : 'home'
+        end
+
         def winning_pitcher
+          return unless final?
+
           pitcher_id = @feed.dig('liveData', 'decisions', 'winner', 'id')
 
-          team_id = @feed.dig(
-            'liveData', 'players', 'allPlayers', "ID#{pitcher_id}", 'uniformID'
-          )
+          return unless pitcher_id
 
-          team = team_id == home_id ? 'home' : 'away'
-
-          data = @feed.boxscore.dig('teams', team, 'players', "ID#{pitcher_id}")
+          data = @feed.boxscore
+            .dig('teams', winning_team, 'players', "ID#{pitcher_id}")
           stats = data['seasonStats']['pitching']
 
           {
@@ -24,15 +31,14 @@ class Baseballbot
         end
 
         def losing_pitcher
+          return unless final?
+
           pitcher_id = @feed.dig('liveData', 'decisions', 'loser', 'id')
 
-          team_id = @feed.dig(
-            'liveData', 'players', 'allPlayers', "ID#{pitcher_id}", 'uniformID'
-          )
+          return unless pitcher_id
 
-          team = team_id == home_id ? 'home' : 'away'
-
-          data = @feed.boxscore.dig('teams', team, 'players', "ID#{pitcher_id}")
+          data = @feed.boxscore
+            .dig('teams', losing_team, 'players', "ID#{pitcher_id}")
           stats = data['seasonStats']['pitching']
 
           {
@@ -43,15 +49,14 @@ class Baseballbot
         end
 
         def save_pitcher
+          return unless final?
+
           pitcher_id = @feed.dig('liveData', 'decisions', 'save', 'id')
 
-          team_id = @feed.dig(
-            'liveData', 'players', 'allPlayers', "ID#{pitcher_id}", 'uniformID'
-          )
+          return unless pitcher_id
 
-          team = team_id == home_id ? 'home' : 'away'
-
-          data = @feed.boxscore.dig('teams', team, 'players', "ID#{pitcher_id}")
+          data = @feed.boxscore
+            .dig('teams', winning_team, 'players', "ID#{pitcher_id}")
 
           {
             name: player_name(data),
