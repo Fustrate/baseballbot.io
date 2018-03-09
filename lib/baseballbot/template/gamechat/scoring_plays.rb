@@ -8,7 +8,7 @@ class Baseballbot
           return [] unless started? && @feed.plays
 
           @feed.plays['allPlays']
-            .values_at(@feed.plays['scoringPlays'])
+            .values_at(*@feed.plays['scoringPlays'])
             .map { |play| format_play(play) }
         end
 
