@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-Dir[File.join(File.dirname(__FILE__), 'gamechat', '*.rb')].each do |file|
-  require file
-end
-
 class Baseballbot
   module Template
     class Gamechat < Base
+      # This is kept here because of inheritance
+      Dir[File.join(File.dirname(__FILE__), 'gamechat', '*.rb')].each do |file|
+        require file
+      end
+
       GDX = 'http://gdx.mlb.com/components/game/mlb'
 
       using TemplateRefinements
