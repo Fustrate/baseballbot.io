@@ -45,12 +45,20 @@ class Baseballbot
         "http://mlb.mlb.com/team/player.jsp?player_id=#{id}"
       end
 
-      def player_link(player, title: nil)
-        link_to(
-          player['name']['boxname'],
-          url: player_url(player['id']),
-          title: title
+      def player_name(player)
+        return player['boxscoreName'] if player['boxscoreName']
+
+        if player['name'] && player['name']['boxscore']
+          return player['name']['boxscore']
+        end
+
+        @feed.dig(
+          'gameData', 'players', "ID#{player['person']['id']}", 'boxscoreName'
         )
+      end
+
+      def player_link(player, title: nil)
+        link_to player_name(player), url: player_url(player['id']), title: title
       end
 
       protected

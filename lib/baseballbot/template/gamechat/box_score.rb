@@ -14,13 +14,23 @@ class Baseballbot
           @feed.boxscore.dig('teams', 'home', 'players', "ID#{pitcher_id}")
         end
 
+        def game_stats(player)
+          player['gameStats'] || player['stats']
+        end
+
+        def batting_order(batter)
+          return batter['battingOrder'] if batter['battingOrder']
+
+          game_stats(batter)['batting']['battingOrder']
+        end
+
         def home_batters
           return [] unless started? && @feed.boxscore
 
           @feed.boxscore['teams']['home']['players']
             .values
-            .select { |batter| batter['battingOrder'] }
-            .sort_by { |batter| batter['battingOrder'] }
+            .select { |batter| batting_order batter }
+            .sort_by { |batter| batting_order batter }
         end
 
         def away_batters
@@ -28,8 +38,8 @@ class Baseballbot
 
           @feed.boxscore['teams']['away']['players']
             .values
-            .select { |batter| batter['battingOrder'] }
-            .sort_by { |batter| batter['battingOrder'] }
+            .select { |batter| batting_order batter }
+            .sort_by { |batter| batting_order batter }
         end
 
         def batters
@@ -64,7 +74,7 @@ class Baseballbot
 
           pos = replacement ? batter['position'] : (bold batter['position'])
 
-          batting = batter['stats']['batting']
+          batting = game_stats(batter)['batting']
 
           [
             "#{spacer}#{pos}",
@@ -82,7 +92,7 @@ class Baseballbot
         def pitcher_row(pitcher)
           return ' ||||||||' unless pitcher
 
-          pitching = pitcher['stats']['pitching']
+          pitching = game_stats(pitcher)['pitching']
 
           [
             player_link(pitcher, title: 'Game Score: ???'),
