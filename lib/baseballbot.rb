@@ -50,7 +50,7 @@ class Baseballbot
     @redis = Redis.new
 
     @gameday = MLBGameday::API.new
-    @stats = MLBGameday::API.new
+    @stats = MLBStatsAPI::Client.new
 
     @logger = options[:logger] || Logger.new(STDOUT)
 
