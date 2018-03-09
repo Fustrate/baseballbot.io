@@ -17,7 +17,7 @@ class Baseballbot
           stats = data['seasonStats']['pitching']
 
           {
-            name: data['name']['boxname'],
+            name: player_name(data),
             record: stats.values_at('wins', 'losses').join('-'),
             era: stats['era']
           }
@@ -54,7 +54,7 @@ class Baseballbot
           data = @feed.boxscore.dig('teams', team, 'players', "ID#{pitcher_id}")
 
           {
-            name: data['name']['boxname'],
+            name: player_name(data),
             saves: data['seasonStats']['pitching']['saves'],
             era: data['seasonStats']['pitching']['era']
           }
