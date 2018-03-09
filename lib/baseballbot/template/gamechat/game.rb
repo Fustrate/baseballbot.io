@@ -31,7 +31,7 @@ class Baseballbot
         end
 
         def gid
-          @feed['gameData']['game']['id'].gsub(/[^a-z0-9]/, '_')
+          @gid ||= @feed['gameData']['game']['id'].gsub(/[^a-z0-9]/, '_')
         end
 
         def date
@@ -53,15 +53,11 @@ class Baseballbot
         def weather
           data = @feed.dig('gameData', 'weather') || {}
 
-          return unless data['condition']
-
-          "#{data['temp']}°F, #{data['condition']}"
+          "#{data['temp']}°F, #{data['condition']}" if data['condition']
         end
 
         def wind
           data = @feed.dig('gameData', 'weather') || {}
-
-          return unless data['wind']
 
           data['wind']
         end

@@ -8,8 +8,6 @@ class Baseballbot
         require file
       end
 
-      GDX = 'http://gdx.mlb.com/components/game/mlb'
-
       using TemplateRefinements
 
       include Template::Gamechat::BoxScore
@@ -20,30 +18,27 @@ class Baseballbot
       include Template::Gamechat::ScoringPlays
       include Template::Gamechat::Teams
 
-      attr_reader :game, :title, :post_id, :time, :team, :opponent
+      attr_reader :title, :post_id, :time, :team, :opponent
 
-      def initialize(body:, bot:, subreddit:, gid:, game_pk:, title: '', post_id: nil)
+      def initialize(body:, bot:, subreddit:, game_pk:, title: '', post_id: nil)
         super(body: body, bot: bot)
 
         @subreddit = subreddit
         @time = subreddit.timezone
-        @game = bot.gameday.game gid
+        @game_pk = game_pk
 
-        @team = home? ? @game.home_team : @game.away_team
-        @opponent = home? ? @game.away_team : @game.home_team
+        @feed = bot.stats.live_feed game_pk
 
         @title = format_title title
         @post_id = post_id
+      end
 
-        @feed = bot.stats.live_feed game_pk
+      def game
+        raise 'Gameday is no longer being used!'
       end
 
       def inspect
-        if @team
-          %(#<Baseballbot::Template::Gamechat @team="#{@team.name}" @gid="#{@game.gid}">)
-        else
-          %(#<Baseballbot::Template::Gamechat @gid="#{@game.gid}">)
-        end
+        %(#<Baseballbot::Template::Gamechat @game_pk="#{@game_pk}">)
       end
 
       def player_url(id)
