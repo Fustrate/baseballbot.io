@@ -71,13 +71,14 @@ class Baseballbot
 
           replacement = (batting_order(batter) % 100).positive?
           spacer = '[](/spacer)' if replacement
+          position = batter['position']['abbreviation']
 
-          pos = replacement ? batter['position'] : (bold batter['position'])
+          position = bold(position) unless replacement
 
           batting = game_stats(batter)['batting']
 
           [
-            "#{spacer}#{pos}",
+            "#{spacer}#{position}",
             "#{spacer}#{player_link(batter)}",
             batting['atBats'],
             batting['runs'],
