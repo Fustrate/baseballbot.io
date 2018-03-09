@@ -66,9 +66,9 @@ class Baseballbot
         end
 
         def decisions_table
-          winner = '%<name>s (%<record>s, %<era>s)'.format(winning_pitcher)
-          loser = '%<name>s (%<record>s, %<era>s)'.format(losing_pitcher)
-          save = '%<name>s (%<saves>s, %<era>s)'.format(losing_pitcher)
+          winner = format '%<name>s (%<record>s, %<era>s)', winning_pitcher
+          loser = format '%<name>s (%<record>s, %<era>s)', losing_pitcher
+          save = format '%<name>s (%<saves>s, %<era>s)', losing_pitcher
 
           "Winning Pitcher|Losing Pitcher|Save\n" \
           ":-:|:-:|:-:\n#{winner}|#{loser}|#{save}"
