@@ -5,13 +5,13 @@ class Baseballbot
     class Gamechat
       module BoxScore
         def probable_away_starter
-          @feed['gameData']['probablePitchers']['away']['id']
-          @feed['gameData']['players']["ID#{away_id}"]
+          pitcher_id = @feed['gameData']['probablePitchers']['away']['id']
+          @feed['gameData']['players']["ID#{pitcher_id}"]
         end
 
         def probable_home_starter
-          @feed['gameData']['probablePitchers']['home']['id']
-          @feed['gameData']['players']["ID#{home_id}"]
+          pitcher_id = @feed['gameData']['probablePitchers']['home']['id']
+          @feed['gameData']['players']["ID#{pitcher_id}"]
         end
 
         def home_batters
