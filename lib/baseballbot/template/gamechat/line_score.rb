@@ -63,11 +63,11 @@ class Baseballbot
         end
 
         def line_for_team(line_team)
-          team = line_team == :home ? game.home_team : game.away_team
+          code = line_team == :home ? home_code : away_code
           line = line_team == :home ? lines[1] : lines[0]
           rhe = line_team == :home ? home_rhe : away_rhe
 
-          "[#{team.code}](/#{team.code})|#{line.join('|')}|" \
+          "[#{code}](/#{code})|#{line.join('|')}|" \
             "#{bold rhe[:runs]}|#{bold rhe[:hits]}|#{bold rhe[:errors]}"
         end
       end
