@@ -29,7 +29,7 @@ class Baseballbot
 
           @feed.boxscore['teams']['home']['players']
             .values
-            .select { |batter| batting_order batter }
+            .select { |batter| batting_order(batter).positive? }
             .sort_by { |batter| batting_order batter }
         end
 
@@ -38,7 +38,7 @@ class Baseballbot
 
           @feed.boxscore['teams']['away']['players']
             .values
-            .select { |batter| batting_order batter }
+            .select { |batter| batting_order(batter).positive? }
             .sort_by { |batter| batting_order batter }
         end
 
