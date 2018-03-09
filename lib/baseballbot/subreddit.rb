@@ -31,7 +31,7 @@ class Baseballbot
     def post_gamechat(id:, gid:, title:, game_pk:)
       @bot.use_account(@account.name)
 
-      template = gamechat_template(game_pk: game_pk, title: title)
+      template = gamechat_template(gid: gid, game_pk: game_pk, title: title)
 
       submission = submit title: template.title, text: template.result
 
@@ -42,7 +42,7 @@ class Baseballbot
 
       submission.edit raw_markdown.gsub('#ID#', submission.id)
 
-      @bot.redis.hset(template.game.gid, @name.downcase, submission.id)
+      @bot.redis.hset(gid, @name.downcase, submission.id)
 
       post_process_submission(
         submission,
@@ -95,7 +95,7 @@ class Baseballbot
 
       @bot.logger.info "Ended #{submission.id} in /r/#{@name} for #{gid}."
 
-      post_postgame(gid: gid)
+      post_postgame(gid: gid, game_pk: game_pk)
     end
 
     # !@endgroup
@@ -107,7 +107,7 @@ class Baseballbot
 
       @bot.use_account(@account.name)
 
-      template = pregame_template(gid: gid)
+      template = pregame_template(gid: gid, game_pk: game_pk)
 
       submission = submit title: template.title, text: template.result
 

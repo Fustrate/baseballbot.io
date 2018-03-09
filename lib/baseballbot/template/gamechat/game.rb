@@ -95,6 +95,7 @@ class Baseballbot
         def final?
           @feed['gameData']['status']['abstractGameState'] == 'Final'
         end
+        alias over? final?
 
         def live?
           !(preview? || final?)
