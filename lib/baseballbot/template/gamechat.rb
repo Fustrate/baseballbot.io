@@ -88,9 +88,9 @@ class Baseballbot
           away_record: away_record,
           away_pitcher: probable_away_starter['boxscoreName'],
           away_runs: away_rhe['runs'],
-          start_time: start_time_local,
+          start_time: start_time_local.strftime('%-I:%M %p'),
           # /r/baseball always displays ET
-          start_time_et: start_time_et,
+          start_time_et: start_time_et.strftime('%-I:%M %p'),
           # Postseason
           series_game: '?', # @linescore.xpath('//game/@description').text,
           home_wins: '?',   # @linescore.xpath('//game/@home_wins').text,

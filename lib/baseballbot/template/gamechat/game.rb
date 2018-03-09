@@ -19,15 +19,11 @@ class Baseballbot
         end
 
         def start_time_et
-          TZInfo::Timezone.get('America/New_York')
-            .utc_to_local(start_time_utc)
-            .strftime('%-I:%M %p')
+          TZInfo::Timezone.get('America/New_York').utc_to_local(start_time_utc)
         end
 
         def start_time_local
-          @subreddit.timezone
-            .utc_to_local(start_time_utc)
-            .strftime('%-I:%M %p')
+          @subreddit.timezone.utc_to_local(start_time_utc)
         end
 
         def gid
