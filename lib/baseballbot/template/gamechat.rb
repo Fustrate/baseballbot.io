@@ -53,17 +53,6 @@ class Baseballbot
         )
       end
 
-      def pitcher_line(node)
-        name = "#{node.xpath('useName').text} #{node.xpath('lastName').text}"
-
-        format '[%<name>s](%<url>s) (%<wins>d-%<losses>d, %0.2<era>f ERA)',
-               name: name,
-               url: player_url(node.xpath('player_id').text),
-               wins: node.xpath('wins').text,
-               losses: node.xpath('losses').text,
-               era: node.xpath('era').text.to_f
-      end
-
       protected
 
       def format_title(title)

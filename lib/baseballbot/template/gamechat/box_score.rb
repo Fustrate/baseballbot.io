@@ -6,12 +6,12 @@ class Baseballbot
       module BoxScore
         def probable_away_starter
           pitcher_id = @feed['gameData']['probablePitchers']['away']['id']
-          @feed['gameData']['players']["ID#{pitcher_id}"]
+          @feed.boxscore.dig('teams', 'away', 'players', "ID#{pitcher_id}")
         end
 
         def probable_home_starter
           pitcher_id = @feed['gameData']['probablePitchers']['home']['id']
-          @feed['gameData']['players']["ID#{pitcher_id}"]
+          @feed.boxscore.dig('teams', 'home', 'players', "ID#{pitcher_id}")
         end
 
         def home_batters
@@ -40,7 +40,7 @@ class Baseballbot
           return [] unless started? && @feed
 
           @feed.boxscore.dig('teams', 'home', 'pitchers').each do |id|
-            @feed.boxscore('teams', 'home', 'players', "ID#{id}")
+            @feed.boxscore.dig('teams', 'home', 'players', "ID#{id}")
           end
         end
 
@@ -48,7 +48,7 @@ class Baseballbot
           return [] unless started? && @feed
 
           @feed.boxscore.dig('teams', 'away', 'pitchers').each do |id|
-            @feed.boxscore('teams', 'away', 'players', "ID#{id}")
+            @feed.boxscore.dig('teams', 'away', 'players', "ID#{id}")
           end
         end
 
@@ -95,6 +95,15 @@ class Baseballbot
             "#{pitching['pitchesThrown']}-#{pitching['strikes']}",
             pitcher['seasonStats']['pitching']['era']
           ].join '|'
+        end
+
+        def pitcher_line(pitcher)
+          format '[%<name>s](%<url>s) (%<wins>d-%<losses>d, %<era>s ERA)',
+                 name: pitcher['fullName'],
+                 url: player_url(pitcher['id']),
+                 wins: pitcher['seasonStats']['wins'].to_i,
+                 losses: pitcher['seasonStats']['losses'].to_i,
+                 era: pitcher['seasonStats']['era']
         end
       end
     end
