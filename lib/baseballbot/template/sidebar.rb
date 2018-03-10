@@ -19,7 +19,7 @@ class Baseballbot
 
         @subreddit = subreddit
         @team = subreddit.team
-        @time = subreddit.time
+        @time = subreddit.timezone
       end
 
       def inspect
