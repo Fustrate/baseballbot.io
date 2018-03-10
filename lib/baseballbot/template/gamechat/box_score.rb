@@ -15,7 +15,7 @@ class Baseballbot
         end
 
         def game_stats(player)
-          player['gameStats'] || player['stats']
+          player['gameStats'] || player['stats'] || {}
         end
 
         def batting_order(batter)
