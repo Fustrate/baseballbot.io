@@ -14,7 +14,7 @@ gem 'jbuilder'
 gem 'jquery-rails'
 gem 'sass-rails'
 gem 'sprockets-rails'
-gem 'uglifier', '~> 3.0'
+gem 'uglifier', '~> 4.0'
 
 gem 'fustrate-rails', git: 'https://github.com/Fustrate/fustrate-rails', ref: '00499a'
 
