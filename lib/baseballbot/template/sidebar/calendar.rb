@@ -189,7 +189,9 @@ class Baseballbot
             over: %w[F C D FT FR].include?(game['game_status_ind']),
             score: [game['team_score'].to_i, game['opponent_score'].to_i],
             tv: game['team_tv'] || '',
-            status_code: game['game_status_ind']
+            status_code: game['game_status_ind'],
+            game_pk: game['game_pk'],
+            result: game['result']
           )
         end
 
