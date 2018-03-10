@@ -34,7 +34,7 @@ class Baseballbot
     class Base
       using TemplateRefinements
 
-      DELIMITER = '[](/updates)'
+      DELIMITER = '[](/baseballbot)'
 
       def initialize(body:, bot:)
         @body = body
@@ -99,11 +99,11 @@ class Baseballbot
         Regexp.new "#{delimiter}(.*)#{delimiter}", Regexp::MULTILINE
       end
 
+      # Temporary extra replacement to move to the new delimiter
       def replace_in(text)
-        text.sub(
-          replace_regexp,
-          "#{DELIMITER}\n#{result}\n#{DELIMITER}"
-        )
+        text
+          .gsub('[](/updates)', DELIMITER)
+          .sub(replace_regexp, "#{DELIMITER}\n#{result}\n#{DELIMITER}")
       end
 
       def timestamp(action = nil)
