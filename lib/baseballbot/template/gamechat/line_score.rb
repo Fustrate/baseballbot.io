@@ -18,9 +18,7 @@ class Baseballbot
         def line_score_status
           return @feed['gameData']['status']['detailedState'] unless live?
 
-          if runners.empty?
-            return "#{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
-          end
+          return inning if outs == 3
 
           "#{runners}, #{outs} #{outs == 1 ? 'Out' : 'Outs'}, #{inning}"
         end
