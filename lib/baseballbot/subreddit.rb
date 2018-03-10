@@ -78,14 +78,14 @@ class Baseballbot
       if template.final?
         end_gamechat(id, submission, gid, game_pk)
       else
-        change_gamechat_status id, nil, 'Posted'
+        change_gamechat_status id, submission, 'Posted'
       end
 
       template.final?
     end
 
     def end_gamechat(id, submission, gid, game_pk)
-      change_gamechat_status id, nil, 'Over'
+      change_gamechat_status id, submission, 'Over'
 
       post_process_submission(
         submission,
@@ -173,7 +173,7 @@ class Baseballbot
     end
 
     # @param id [Integer] the baseballbot ID of the gamechat
-    # @param submission [NilClass, Redd::Models::Submission] the post itself
+    # @param submission [Redd::Models::Submission] the post itself
     # @param status [String] status of the gamechat
     def change_gamechat_status(id, submission, status)
       gamechat_posted = status == 'Posted'
