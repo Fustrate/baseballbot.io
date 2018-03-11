@@ -89,25 +89,25 @@ class Baseballbot
         def parse_standings_row(row)
           {
             code:           row['team_abbrev'],
-            wins:           row['w'].to_i,
-            losses:         row['l'].to_i,
-            games_back:     row['gb'].to_f,
-            percent:        row['pct'].to_f,
-            last_ten:       row['last_ten'],
-            streak:         row['streak'],
-            run_diff:       row['runs'].to_i - row['opp_runs'].to_i,
-            home_record:    row['home'].split('-'),
-            road_record:    row['away'].split('-'),
-            interleague:    row['interleague'],
-            wildcard:       row['gb_wildcard'],
-            wildcard_gb:    wildcard(row['gb_wildcard']),
-            elim:           row['elim'],
-            elim_wildcard:  row['elim_wildcard'],
             division_champ: %w[y z].include?(row['playoffs_flag_mlb']),
-            wildcard_champ: %w[w x].include?(row['playoffs_flag_mlb']),
             division_id:    row['division_id'].to_i,
+            elim_wildcard:  row['elim_wildcard'],
+            elim:           row['elim'],
+            games_back:     row['gb'].to_f,
+            home_record:    row['home'].split('-'),
+            interleague:    row['interleague'],
+            last_ten:       row['last_ten'],
+            losses:         row['l'].to_i,
+            percent:        row['pct'].to_f,
+            road_record:    row['away'].split('-'),
+            run_diff:       row['runs'].to_i - row['opp_runs'].to_i,
+            streak:         row['streak'],
+            subreddit:      subreddit(row['team_abbrev']),
             team:           @bot.gameday.team(row['team_abbrev']),
-            subreddit:      subreddit(row['team_abbrev'])
+            wildcard_champ: %w[w x].include?(row['playoffs_flag_mlb']),
+            wildcard_gb:    wildcard(row['gb_wildcard']),
+            wildcard:       row['gb_wildcard'],
+            wins:           row['w'].to_i
           }.tap do |team|
             # Used for sorting teams in the standings. Lowest losing %, most
             # wins, least losses, and then fall back to three letter code
