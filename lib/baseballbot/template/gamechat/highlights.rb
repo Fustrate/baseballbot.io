@@ -25,6 +25,21 @@ class Baseballbot
             .join "\n"
         end
 
+        def highlights_table
+          lines = highlights.map do |highlight|
+            icon = link_to '', url: "/#{highlight[:team].code}"
+
+            "#{icon}|#{highlight[:blurb]}|#{highlight[:duration]}|" \
+            "#{link_to('SD', highlight[:sd])}|#{link_to('HD', highlight[:hd])}"
+          end
+
+          <<~HIGHLIGHTS
+            Team|Description|Length|SD|HD
+            -|-|-|-|-
+            #{lines.join("\n")}
+          HIGHLIGHTS
+        end
+
         protected
 
         def playback(media, name)
