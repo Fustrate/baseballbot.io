@@ -7,7 +7,7 @@ class Baseballbot
         def highlights
           return [] unless started?
 
-          content.dig('highlights', 'live', 'items')
+          @highlights ||= content.dig('highlights', 'live', 'items')
             .sort_by { |media| media['id'] }
             .map { |media| process_media(media) }
             .compact
@@ -27,10 +27,13 @@ class Baseballbot
 
         def highlights_table
           lines = highlights.map do |highlight|
-            icon = link_to '', url: "/#{highlight[:team].code}"
-
-            "#{icon}|#{highlight[:blurb]}|#{highlight[:duration]}|" \
-            "#{link_to('SD', highlight[:sd])}|#{link_to('HD', highlight[:hd])}"
+            [
+              link_to('', url: "/#{highlight[:team].code}"),
+              highlight[:blurb],
+              highlight[:duration],
+              link_to('SD', url: highlight[:sd]),
+              link_to('HD', url: highlight[:hd])
+            ].join('|')
           end
 
           <<~HIGHLIGHTS
