@@ -31,7 +31,7 @@ class Baseballbot
 
         def start_time_utc
           @start_time_utc ||= \
-            Time.parse @feed['gameData']['datetime']['dateTime']
+            Time.parse feed['gameData']['datetime']['dateTime']
         end
 
         def start_time_et
@@ -43,15 +43,15 @@ class Baseballbot
         end
 
         def gid
-          @gid ||= @feed['gameData']['game']['id'].gsub(/[^a-z0-9]/, '_')
+          @gid ||= feed['gameData']['game']['id'].gsub(/[^a-z0-9]/, '_')
         end
 
         def date
-          @date ||= Date.parse @feed['gameData']['datetime']['dateTime']
+          @date ||= Date.parse feed['gameData']['datetime']['dateTime']
         end
 
         def umpires
-          names = @feed.dig('liveData', 'boxscore', 'officials').map do |umpire|
+          names = feed.dig('liveData', 'boxscore', 'officials').map do |umpire|
             [UMPIRE_POSITIONS[umpire['position']], umpire['name']]
           end
 
@@ -59,17 +59,17 @@ class Baseballbot
         end
 
         def venue_name
-          @feed.dig('gameData', 'venue', 'name')
+          feed.dig('gameData', 'venue', 'name')
         end
 
         def weather
-          data = @feed.dig('gameData', 'weather') || {}
+          data = feed.dig('gameData', 'weather') || {}
 
           "#{data['temp']}°F, #{data['condition']}" if data['condition']
         end
 
         def wind
-          data = @feed.dig('gameData', 'weather') || {}
+          data = feed.dig('gameData', 'weather') || {}
 
           data['wind']
         end
@@ -81,7 +81,7 @@ class Baseballbot
         def home?
           return true unless @subreddit.team
 
-          @home ||= home_abbrev == @subreddit.team.code
+          @home = home_id == @subreddit.team.id
         end
 
         def won?
@@ -97,11 +97,11 @@ class Baseballbot
         end
 
         def preview?
-          @feed['gameData']['status']['abstractGameState'] == 'Preview'
+          feed['gameData']['status']['abstractGameState'] == 'Preview'
         end
 
         def final?
-          @feed['gameData']['status']['abstractGameState'] == 'Final'
+          feed['gameData']['status']['abstractGameState'] == 'Final'
         end
         alias over? final?
 
@@ -114,25 +114,25 @@ class Baseballbot
         end
 
         def inning
-          return @feed['gameData']['status']['detailedState'] unless live?
+          return feed['gameData']['status']['detailedState'] unless live?
 
-          "#{@feed.linescore['inningState']} of the " \
-          "#{@feed.linescore['currentInningOrdinal']}"
+          "#{linescore['inningState']} of the " \
+          "#{linescore['currentInningOrdinal']}"
         end
 
         def outs
-          return unless live? && @feed.linescore
+          return unless live? && linescore
 
-          @feed.linescore['outs']
+          linescore['outs']
         end
 
         def runners
-          return '' unless live? && @feed.linescore&.dig('offense')
+          return '' unless live? && linescore&.dig('offense')
 
           bitmap = 0b000
-          bitmap |= 0b001 if @feed.linescore.dig('offense', 'first')
-          bitmap |= 0b010 if @feed.linescore.dig('offense', 'second')
-          bitmap |= 0b100 if @feed.linescore.dig('offense', 'third')
+          bitmap |= 0b001 if linescore.dig('offense', 'first')
+          bitmap |= 0b010 if linescore.dig('offense', 'second')
+          bitmap |= 0b100 if linescore.dig('offense', 'third')
 
           [
             'Bases empty',

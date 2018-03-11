@@ -18,7 +18,7 @@ class Baseballbot
       include Template::Gamechat::ScoringPlays
       include Template::Gamechat::Teams
 
-      attr_reader :title, :post_id, :time, :team, :opponent
+      attr_reader :title, :post_id
 
       def initialize(body:, bot:, subreddit:, game_pk:, title: '', post_id: nil)
         super(body: body, bot: bot)
@@ -27,14 +27,28 @@ class Baseballbot
         @time = subreddit.timezone
         @game_pk = game_pk
 
-        @feed = bot.stats.live_feed game_pk
-
         @title = format_title title
         @post_id = post_id
       end
 
       def game
         raise 'Gameday is no longer being used!'
+      end
+
+      def content
+        @content ||= @bot.stats.content game_pk
+      end
+
+      def feed
+        @feed ||= @bot.stats.live_feed game_pk
+      end
+
+      def linescore
+        feed.linescore
+      end
+
+      def boxscore
+        feed.boxscore
       end
 
       def inspect
@@ -52,7 +66,7 @@ class Baseballbot
           return player['name']['boxscore']
         end
 
-        @feed.dig(
+        feed.dig(
           'gameData', 'players', "ID#{player['person']['id']}", 'boxscoreName'
         )
       end
@@ -75,13 +89,13 @@ class Baseballbot
       # rubocop:disable Metrics/MethodLength
       def title_interpolations
         {
-          home_city: @feed['gameData']['teams']['home']['locationName'],
-          home_name: @feed['gameData']['teams']['home']['teamName'],
+          home_city: feed.dig('gameData', 'teams', 'home', 'locationName'),
+          home_name: feed.dig('gameData', 'teams', 'home', 'teamName'),
           home_record: home_record,
           home_pitcher: probable_home_starter['boxscoreName'],
           home_runs: home_rhe['runs'],
-          away_city: @feed['gameData']['teams']['away']['locationName'],
-          away_name: @feed['gameData']['teams']['away']['teamName'],
+          away_city: feed.dig('gameData', 'teams', 'away', 'locationName'),
+          away_name: feed.dig('gameData', 'teams', 'away', 'teamName'),
           away_record: away_record,
           away_pitcher: probable_away_starter['boxscoreName'],
           away_runs: away_rhe['runs'],

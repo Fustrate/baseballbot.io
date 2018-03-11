@@ -16,7 +16,7 @@ class Baseballbot
         end
 
         def line_score_status
-          return @feed['gameData']['status']['detailedState'] unless live?
+          return feed['gameData']['status']['detailedState'] unless live?
 
           return inning if outs == 3
 
@@ -24,15 +24,15 @@ class Baseballbot
         end
 
         def home_rhe
-          return BLANK_RHE unless @feed.linescore&.dig('teams', 'home', 'runs')
+          return BLANK_RHE unless linescore&.dig('teams', 'home', 'runs')
 
-          @feed.linescore.dig('teams', 'home')
+          linescore.dig('teams', 'home')
         end
 
         def away_rhe
-          return BLANK_RHE unless @feed.linescore&.dig('teams', 'away', 'runs')
+          return BLANK_RHE unless linescore&.dig('teams', 'away', 'runs')
 
-          @feed.linescore.dig('teams', 'away')
+          linescore.dig('teams', 'away')
         end
 
         protected
@@ -41,9 +41,9 @@ class Baseballbot
           @lines ||= begin
             lines = [[nil] * 9, [nil] * 9]
 
-            return lines unless started? && @feed.linescore&.dig('innings')
+            return lines unless started? && linescore&.dig('innings')
 
-            @feed.linescore['innings'].each do |inning|
+            linescore['innings'].each do |inning|
               if inning['away'] && !inning['away'].empty?
                 lines[0][inning['num'] - 1] = inning.dig('away', 'runs')
 

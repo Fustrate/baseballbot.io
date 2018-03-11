@@ -5,13 +5,13 @@ class Baseballbot
     class Gamechat
       module BoxScore
         def probable_away_starter
-          pitcher_id = @feed['gameData']['probablePitchers']['away']['id']
-          @feed.boxscore.dig('teams', 'away', 'players', "ID#{pitcher_id}")
+          pitcher_id = feed['gameData']['probablePitchers']['away']['id']
+          boxscore.dig('teams', 'away', 'players', "ID#{pitcher_id}")
         end
 
         def probable_home_starter
-          pitcher_id = @feed['gameData']['probablePitchers']['home']['id']
-          @feed.boxscore.dig('teams', 'home', 'players', "ID#{pitcher_id}")
+          pitcher_id = feed['gameData']['probablePitchers']['home']['id']
+          boxscore.dig('teams', 'home', 'players', "ID#{pitcher_id}")
         end
 
         def game_stats(player)
@@ -25,18 +25,18 @@ class Baseballbot
         end
 
         def home_batters
-          return [] unless started? && @feed.boxscore
+          return [] unless started? && boxscore
 
-          @feed.boxscore['teams']['home']['players']
+          boxscore['teams']['home']['players']
             .values
             .select { |batter| batting_order(batter).positive? }
             .sort_by { |batter| batting_order batter }
         end
 
         def away_batters
-          return [] unless started? && @feed.boxscore
+          return [] unless started? && boxscore
 
-          @feed.boxscore['teams']['away']['players']
+          boxscore['teams']['away']['players']
             .values
             .select { |batter| batting_order(batter).positive? }
             .sort_by { |batter| batting_order batter }
@@ -47,18 +47,18 @@ class Baseballbot
         end
 
         def home_pitchers
-          return [] unless started? && @feed
+          return [] unless started? && boxscore
 
-          @feed.boxscore.dig('teams', 'home', 'pitchers').map do |id|
-            @feed.boxscore.dig('teams', 'home', 'players', "ID#{id}")
+          boxscore.dig('teams', 'home', 'pitchers').map do |id|
+            boxscore.dig('teams', 'home', 'players', "ID#{id}")
           end
         end
 
         def away_pitchers
-          return [] unless started? && @feed
+          return [] unless started? && boxscore
 
-          @feed.boxscore.dig('teams', 'away', 'pitchers').map do |id|
-            @feed.boxscore.dig('teams', 'away', 'players', "ID#{id}")
+          boxscore.dig('teams', 'away', 'pitchers').map do |id|
+            boxscore.dig('teams', 'away', 'players', "ID#{id}")
           end
         end
 

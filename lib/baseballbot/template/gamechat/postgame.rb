@@ -15,11 +15,11 @@ class Baseballbot
         def winning_pitcher
           return unless final?
 
-          pitcher_id = @feed.dig('liveData', 'decisions', 'winner', 'id')
+          pitcher_id = feed.dig('liveData', 'decisions', 'winner', 'id')
 
           return unless pitcher_id
 
-          data = @feed.boxscore
+          data = boxscore
             .dig('teams', winning_team, 'players', "ID#{pitcher_id}")
           stats = data['seasonStats']['pitching']
 
@@ -33,11 +33,11 @@ class Baseballbot
         def losing_pitcher
           return unless final?
 
-          pitcher_id = @feed.dig('liveData', 'decisions', 'loser', 'id')
+          pitcher_id = feed.dig('liveData', 'decisions', 'loser', 'id')
 
           return unless pitcher_id
 
-          data = @feed.boxscore
+          data = boxscore
             .dig('teams', losing_team, 'players', "ID#{pitcher_id}")
           stats = data['seasonStats']['pitching']
 
@@ -51,11 +51,11 @@ class Baseballbot
         def save_pitcher
           return unless final?
 
-          pitcher_id = @feed.dig('liveData', 'decisions', 'save', 'id')
+          pitcher_id = feed.dig('liveData', 'decisions', 'save', 'id')
 
           return unless pitcher_id
 
-          data = @feed.boxscore
+          data = boxscore
             .dig('teams', winning_team, 'players', "ID#{pitcher_id}")
 
           {

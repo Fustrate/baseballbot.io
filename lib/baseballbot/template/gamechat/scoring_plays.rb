@@ -5,10 +5,10 @@ class Baseballbot
     class Gamechat
       module ScoringPlays
         def scoring_plays
-          return [] unless started? && @feed.plays
+          return [] unless started? && feed.plays
 
-          @feed.plays['allPlays']
-            .values_at(*@feed.plays['scoringPlays'])
+          feed.plays['allPlays']
+            .values_at(*feed.plays['scoringPlays'])
             .map { |play| format_play(play) }
         end
 
