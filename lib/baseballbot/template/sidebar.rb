@@ -12,14 +12,11 @@ class Baseballbot
       include Template::Sidebar::Standings
       include Template::Sidebar::TodaysGames
 
-      attr_reader :time
-
       def initialize(body:, bot:, subreddit:)
         super(body: body, bot: bot)
 
         @subreddit = subreddit
         @team = subreddit.team
-        @time = subreddit.timezone
       end
 
       def inspect
@@ -27,7 +24,9 @@ class Baseballbot
       end
 
       def updated_with_link
-        "[Updated](/r/baseballbot) #{time.strftime '%-m/%-d at %-I:%M %p %Z'}"
+        timestamp = @subreddit.timezone.strftime '%-m/%-d at %-I:%M %p %Z'
+
+        "[Updated](/r/baseballbot) #{timestamp}"
       end
 
       protected

@@ -17,7 +17,7 @@ class Baseballbot
         ].freeze
 
         def todays_games
-          date = time.now - 10_800
+          date = @subreddit.timezone.now - 10_800
 
           load_gamechats date
 

@@ -24,7 +24,6 @@ class Baseballbot
         super(body: body, bot: bot)
 
         @subreddit = subreddit
-        @time = subreddit.timezone
         @game_pk = game_pk
 
         @title = format_title title
@@ -78,7 +77,7 @@ class Baseballbot
       protected
 
       def format_title(title)
-        title = time.strftime title
+        title = @subreddit.timezone.strftime title
 
         # No interpolations? Great!
         return title unless title.match?(/%[{<]/)
