@@ -49,10 +49,10 @@ class Baseballbot
     @db = PG::Connection.new options[:db]
     @redis = Redis.new
 
-    @gameday = MLBGameday::API.new
-    @stats = MLBStatsAPI::Client.new
-
     @logger = options[:logger] || Logger.new(STDOUT)
+
+    @gameday = MLBGameday::API.new
+    @stats = MLBStatsAPI::Client.new(logger: @logger)
 
     @accounts = load_accounts
     @subreddits = load_subreddits
