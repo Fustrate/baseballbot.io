@@ -74,6 +74,21 @@ class Baseballbot
         link_to player_name(player), url: player_url(player['id']), title: title
       end
 
+      def gameday_link
+        "http://mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
+      end
+
+      def game_graph_link
+        'http://www.fangraphs.com/livewins.aspx?' \
+        "date=#{date.strftime '%Y-%m-%d'}&team=#{team.name}&" \
+        "dh=#{gid[-1].to_i - 1}&season=#{date.year}"
+      end
+
+      def strikezone_map_link
+        'http://www.brooksbaseball.net/pfxVB/zoneTrack.php?' \
+        "#{date.strftime 'month=%m&day=%d&year=%Y'}&game=gid_#{gid}%2F"
+      end
+
       protected
 
       def format_title(title)
