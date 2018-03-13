@@ -9,7 +9,7 @@ class Baseballbot
         SCOREBOARD_URL = "#{GDX}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
 
         PREGAME_STATUSES = [
-          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start'
+          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
         ].freeze
 
         POSTGAME_STATUSES = [
