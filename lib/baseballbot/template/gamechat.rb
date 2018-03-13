@@ -59,6 +59,8 @@ class Baseballbot
       end
 
       def player_name(player)
+        return 'TBA' unless player
+
         return player['boxscoreName'] if player['boxscoreName']
 
         if player['name'] && player['name']['boxscore']
