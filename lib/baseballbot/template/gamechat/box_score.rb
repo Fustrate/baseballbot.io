@@ -5,12 +5,18 @@ class Baseballbot
     class Gamechat
       module BoxScore
         def probable_away_starter
-          pitcher_id = feed['gameData']['probablePitchers']['away']['id']
+          pitcher_id = feed.dig('gameData', 'probablePitchers', 'away', 'id')
+
+          return unless pitcher_id
+
           boxscore.dig('teams', 'away', 'players', "ID#{pitcher_id}")
         end
 
         def probable_home_starter
-          pitcher_id = feed['gameData']['probablePitchers']['home']['id']
+          pitcher_id = feed.dig('gameData', 'probablePitchers', 'home', 'id')
+
+          return unless pitcher_id
+
           boxscore.dig('teams', 'home', 'players', "ID#{pitcher_id}")
         end
 
@@ -109,6 +115,8 @@ class Baseballbot
         end
 
         def pitcher_line(pitcher)
+          return 'TBA' unless pitcher
+
           format '[%<name>s](%<url>s) (%<wins>d-%<losses>d, %<era>s ERA)',
                  name: pitcher['person']['fullName'],
                  url: player_url(pitcher['id']),
