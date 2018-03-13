@@ -1,0 +1,9 @@
+- title 'Template'
+
+%h4 /r/#{@template.subreddit.name} #{@template.type.titleize} Template
+
+%pre
+  %code.erb= @template.body
+
+:javascript
+  hljs.initHighlightingOnLoad();

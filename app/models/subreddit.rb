@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class Subreddit < ApplicationRecord
-  has_many :gamechats
+  has_many :gamechats, dependent: :destroy
+  has_many :templates, dependent: :destroy
+
   belongs_to :account
 
   def url

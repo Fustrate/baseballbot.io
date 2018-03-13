@@ -1,0 +1,8 @@
+- title "/r/#{@subreddit.name}"
+
+%h4 /r/#{@subreddit.name}
+
+.panel
+  %ul
+    - @subreddit.templates.each do |template|
+      %li= link_to template.type.titleize, template_path(template)
