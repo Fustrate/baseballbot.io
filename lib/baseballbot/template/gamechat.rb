@@ -90,8 +90,8 @@ class Baseballbot
       end
 
       def game_notes_link(mlb_team)
-        "http://www.mlb.com/mlb/presspass/gamenotes.jsp?c_id=" \
-        mlb_team.file_code
+        'http://www.mlb.com/mlb/presspass/gamenotes.jsp?' \
+        "c_id=#{mlb_team.file_code}"
       end
 
       protected
