@@ -18,13 +18,16 @@
       %ul.disc
         - if @subreddit.update_sidebar?
           %li Hourly Sidebar Updates
+
         - if @subreddit.post_pregame?
           %li
             Pregame Threads
             = post_at_format @subreddit.options['pregame']['post_at']
+
         - if @subreddit.post_gamechats?
           %li
             Gamechats
             = post_at_format @subreddit.options['gamechats']['post_at']
+
         - if @subreddit.post_postgame?
           %li Postgame Threads
