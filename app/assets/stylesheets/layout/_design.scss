@@ -36,9 +36,12 @@ th,
       @include label-color($red);
     }
 
-    &.posted,
-    &.pregame {
+    &.posted {
       @include label-color($blue);
+    }
+
+    &.pregame {
+      @include label-color($purple);
     }
 
     &.future {
