@@ -8,9 +8,9 @@ class Baseballbot
           return [] unless started?
 
           @highlights ||= content.dig('highlights', 'live', 'items')
-            .sort_by { |media| media['id'] }
-            .map { |media| process_media(media) }
-            .compact
+            &.sort_by { |media| media['id'] }
+            &.map { |media| process_media(media) }
+            &.compact || []
         end
 
         def highlights_list
