@@ -26,12 +26,17 @@ class Baseballbot
       @db.exec(UNPOSTED_PREGAMES_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        post_pregame! id: row['id'], team: row['name'], gid: row['gid']
+        post_pregame!(
+          id: row['id'],
+          team: row['name'],
+          gid: row['gid'],
+          game_pk: row['game_pk']
+        )
       end
     end
 
-    def post_pregame!(id:, team:, gid:)
-      team_to_subreddit(team).post_pregame(id: id, gid: gid)
+    def post_pregame!(id:, team:, gid:, game_pk:)
+      team_to_subreddit(team).post_pregame(id: id, gid: gid, game_pk: game_pk)
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra 2 minutes won't kill anyone.
       nil
