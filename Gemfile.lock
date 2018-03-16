@@ -15,7 +15,7 @@ GIT
       sass (>= 3.4)
 
 GIT
-  remote: https://github.com/Fustrate/mlb_gameday.git
+  remote: https://github.com/Fustrate/mlb_gameday
   revision: c52be6f0ce6bff5cbe8faa5811ab1af237b79e9e
   specs:
     mlb_gameday (0.3.2)
@@ -24,7 +24,7 @@ GIT
       nokogiri (~> 1.6)
 
 GIT
-  remote: https://github.com/Fustrate/mlb_stats_api.git
+  remote: https://github.com/Fustrate/mlb_stats_api
   revision: ddef572d32b257d4098d5bffe660c68726828608
   specs:
     mlb_stats_api (0.1.0)

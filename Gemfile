@@ -22,8 +22,8 @@ gem 'fustrate-rails', git: 'https://github.com/Fustrate/fustrate-rails', ref: '0
 gem 'unicorn'
 
 # Reddit interaction
-gem 'mlb_gameday', github: 'Fustrate/mlb_gameday' # '~> 0.1'
-gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api' # '~> 0.1'
+gem 'mlb_gameday', git: 'https://github.com/Fustrate/mlb_gameday' # '~> 0.1'
+gem 'mlb_stats_api', git: 'https://github.com/Fustrate/mlb_stats_api' # '~> 0.1'
 gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
 group :production do
