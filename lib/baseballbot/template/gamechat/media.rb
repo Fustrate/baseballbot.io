@@ -1,0 +1,67 @@
+# frozen_string_literal: true
+
+class Baseballbot
+  module Template
+    class Gamechat
+      module Media
+        def free_game?
+          content.dig('media', 'freeGame')
+        end
+
+        def enhanced_game?
+          content.dig('media', 'enhancedGame')
+        end
+
+        def away_tv
+          tv_feeds
+            .select { |item| %w[AWAY NATIONAL].include?(item['mediaFeedType']) }
+            .map { |item| item['callLetters'] }
+            .join(', ')
+        end
+
+        def home_tv
+          tv_feeds
+            .select { |item| %w[HOME NATIONAL].include?(item['mediaFeedType']) }
+            .map { |item| item['callLetters'] }
+            .join(', ')
+        end
+
+        def away_radio
+          radio_feeds
+            .select { |item| %w[AWAY NATIONAL].include?(item['type']) }
+            .sort_by { |item| item['language'] == 'en' ? 0 : 1 }
+            .map { |item| radio_name(item) }
+            .join(', ')
+        end
+
+        def home_radio
+          radio_feeds
+            .select { |item| %w[HOME NATIONAL].include?(item['type']) }
+            .sort_by { |item| item['language'] == 'en' ? 0 : 1 }
+            .map { |item| radio_name(item) }
+            .join(', ')
+        end
+
+        protected
+
+        def tv_feeds
+          @tv_feeds ||= content.dig('media', 'epg')
+            .detect { |media| media['title'] == 'MLBTV' }
+            .fetch('items') || []
+        end
+
+        def radio_feeds
+          @radio_feeds ||= content.dig('media', 'epg')
+            .detect { |media| media['title'] == 'Audio' }
+            .fetch('items') || []
+        end
+
+        def radio_name(item)
+          return item['callLetters'] if item['language'] == 'en'
+
+          "#{item['callLetters']} (#{item['language'].upcase})"
+        end
+      end
+    end
+  end
+end

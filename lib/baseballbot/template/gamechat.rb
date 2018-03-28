@@ -14,6 +14,7 @@ class Baseballbot
       include Template::Gamechat::Game
       include Template::Gamechat::Highlights
       include Template::Gamechat::LineScore
+      include Template::Gamechat::Media
       include Template::Gamechat::Postgame
       include Template::Gamechat::ScoringPlays
       include Template::Gamechat::Teams

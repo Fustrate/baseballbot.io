@@ -5,33 +5,17 @@ class Baseballbot
     class Gamechat
       module Game
         UMPIRE_POSITIONS = {
-          'home' => 'HP',
-          'first' => '1B',
-          'second' => '2B',
-          'third' => '3B',
-          'left' => 'LF',
-          'right' => 'RF'
+          'Home Plate' => 'HP',
+          'First Base' => '1B',
+          'Second Base' => '2B',
+          'Third Base' => '3B',
+          'Left Field' => 'LF',
+          'Right Field' => 'RF'
         }.freeze
-
-        def away_tv
-          '???'
-        end
-
-        def away_radio
-          '???'
-        end
-
-        def home_tv
-          '???'
-        end
-
-        def home_radio
-          '???'
-        end
 
         def start_time_utc
           @start_time_utc ||= \
-            Time.parse feed['gameData']['datetime']['dateTime']
+            Time.parse feed.dig('gameData', 'datetime', 'dateTime')
         end
 
         def start_time_et
@@ -43,19 +27,23 @@ class Baseballbot
         end
 
         def gid
-          @gid ||= feed['gameData']['game']['id'].gsub(/[^a-z0-9]/, '_')
+          @gid ||= feed.dig('gameData', 'game', 'id').gsub(/[^a-z0-9]/, '_')
         end
 
         def date
-          @date ||= Date.parse feed['gameData']['datetime']['dateTime']
+          @date ||= Date.parse feed.dig('gameData', 'datetime', 'dateTime')
         end
 
         def umpires
-          names = feed.dig('liveData', 'boxscore', 'officials').map do |umpire|
-            [UMPIRE_POSITIONS[umpire['position']], umpire['name']]
-          end
-
-          Hash[names]
+          feed
+            .dig('liveData', 'boxscore', 'officials')
+            .map do |umpire|
+              [
+                UMPIRE_POSITIONS[umpire['officialType']],
+                umpire['official']['fullName']
+              ]
+            end
+            .to_h
         end
 
         def venue_name
