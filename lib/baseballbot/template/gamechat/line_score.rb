@@ -16,7 +16,7 @@ class Baseballbot
         end
 
         def line_score_status
-          return feed['gameData']['status']['detailedState'] unless live?
+          return game_data.dig('status', 'detailedState') unless live?
 
           return inning if outs == 3
 

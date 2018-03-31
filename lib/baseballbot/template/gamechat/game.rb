@@ -15,7 +15,7 @@ class Baseballbot
 
         def start_time_utc
           @start_time_utc ||= \
-            Time.parse feed.dig('gameData', 'datetime', 'dateTime')
+            Time.parse game_data.dig('datetime', 'dateTime')
         end
 
         def start_time_et
@@ -27,11 +27,11 @@ class Baseballbot
         end
 
         def gid
-          @gid ||= feed.dig('gameData', 'game', 'id').gsub(/[^a-z0-9]/, '_')
+          @gid ||= game_data.dig('game', 'id').gsub(/[^a-z0-9]/, '_')
         end
 
         def date
-          @date ||= Date.parse feed.dig('gameData', 'datetime', 'dateTime')
+          @date ||= Date.parse game_data.dig('datetime', 'dateTime')
         end
 
         def umpires
@@ -47,17 +47,17 @@ class Baseballbot
         end
 
         def venue_name
-          feed.dig('gameData', 'venue', 'name')
+          game_data.dig('venue', 'name')
         end
 
         def weather
-          data = feed.dig('gameData', 'weather') || {}
+          data = game_data.dig('weather') || {}
 
           "#{data['temp']}°F, #{data['condition']}" if data['condition']
         end
 
         def wind
-          data = feed.dig('gameData', 'weather') || {}
+          data = game_data.dig('weather') || {}
 
           data['wind']
         end
@@ -85,11 +85,11 @@ class Baseballbot
         end
 
         def preview?
-          feed['gameData']['status']['abstractGameState'] == 'Preview'
+          game_data.dig('status', 'abstractGameState') == 'Preview'
         end
 
         def final?
-          feed['gameData']['status']['abstractGameState'] == 'Final'
+          game_data.dig('status', 'abstractGameState') == 'Final'
         end
         alias over? final?
 
@@ -102,7 +102,7 @@ class Baseballbot
         end
 
         def inning
-          return feed['gameData']['status']['detailedState'] unless live?
+          return game_data.dig('status', 'detailedState') unless live?
 
           "#{linescore['inningState']} of the " \
           "#{linescore['currentInningOrdinal']}"

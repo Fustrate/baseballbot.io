@@ -5,7 +5,7 @@ class Baseballbot
     class Gamechat
       module BoxScore
         def probable_away_starter
-          pitcher_id = feed.dig('gameData', 'probablePitchers', 'away', 'id')
+          pitcher_id = game_data.dig('probablePitchers', 'away', 'id')
 
           return unless pitcher_id
 
@@ -13,7 +13,7 @@ class Baseballbot
         end
 
         def probable_home_starter
-          pitcher_id = feed.dig('gameData', 'probablePitchers', 'home', 'id')
+          pitcher_id = game_data.dig('probablePitchers', 'home', 'id')
 
           return unless pitcher_id
 

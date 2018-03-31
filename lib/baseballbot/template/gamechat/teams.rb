@@ -5,39 +5,39 @@ class Baseballbot
     class Gamechat
       module Teams
         def away_name
-          feed.dig('gameData', 'teams', 'away', 'teamName')
+          game_data.dig('teams', 'away', 'teamName')
         end
 
         def away_code
-          feed.dig('gameData', 'teams', 'away', 'abbreviation')
+          game_data.dig('teams', 'away', 'abbreviation')
         end
 
         def home_name
-          feed.dig('gameData', 'teams', 'home', 'teamName')
+          game_data.dig('teams', 'home', 'teamName')
         end
 
         def home_code
-          feed.dig('gameData', 'teams', 'home', 'abbreviation')
+          game_data.dig('teams', 'home', 'abbreviation')
         end
 
         def away_record
-          feed.dig('gameData', 'teams', 'away', 'record')
+          game_data.dig('teams', 'away', 'record')
             &.values_at('wins', 'losses')
             &.join('-')
         end
 
         def home_record
-          feed.dig('gameData', 'teams', 'home', 'record')
+          game_data.dig('teams', 'home', 'record')
             &.values_at('wins', 'losses')
             &.join('-')
         end
 
         def away_id
-          feed.dig('gameData', 'teams', 'away', 'teamID')
+          game_data.dig('teams', 'away', 'teamID')
         end
 
         def home_id
-          feed.dig('gameData', 'teams', 'home', 'teamID')
+          game_data.dig('teams', 'home', 'teamID')
         end
 
         def opponent

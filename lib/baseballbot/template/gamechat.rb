@@ -51,6 +51,10 @@ class Baseballbot
         feed.boxscore
       end
 
+      def game_data
+        feed['gameData']
+      end
+
       def inspect
         %(#<Baseballbot::Template::Gamechat @game_pk="#{@game_pk}">)
       end
@@ -68,9 +72,7 @@ class Baseballbot
           return player['name']['boxscore']
         end
 
-        feed.dig(
-          'gameData', 'players', "ID#{player['person']['id']}", 'boxscoreName'
-        )
+        game_data.dig('players', "ID#{player['person']['id']}", 'boxscoreName')
       end
 
       def player_link(player, title: nil)
@@ -111,13 +113,13 @@ class Baseballbot
       # rubocop:disable Metrics/MethodLength
       def title_interpolations
         {
-          home_city: feed.dig('gameData', 'teams', 'home', 'locationName'),
-          home_name: feed.dig('gameData', 'teams', 'home', 'teamName'),
+          home_city: game_data.dig('teams', 'home', 'locationName'),
+          home_name: game_data.dig('teams', 'home', 'teamName'),
           home_record: home_record,
           home_pitcher: player_name(probable_home_starter),
           home_runs: home_rhe['runs'],
-          away_city: feed.dig('gameData', 'teams', 'away', 'locationName'),
-          away_name: feed.dig('gameData', 'teams', 'away', 'teamName'),
+          away_city: game_data.dig('teams', 'away', 'locationName'),
+          away_name: game_data.dig('teams', 'away', 'teamName'),
           away_record: away_record,
           away_pitcher: player_name(probable_away_starter),
           away_runs: away_rhe['runs'],
