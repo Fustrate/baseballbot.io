@@ -7,11 +7,13 @@ require 'chronic'
 require 'mlb_gameday'
 
 class GamechatLoader
-  URL = 'http://mlb.mlb.com/lookup/json/named.schedule_team_sponsors.bam?' \
-        'start_date=\'%<start_date>s\'&end_date=\'%<end_date>s\'&' \
-        'team_id=%<team_id>d&season=%<year>d'
+  URL = 'https://statsapi.mlb.com/api/v1/schedule?lang=en&' \
+        'sportId=1&season=%<year>d&startDate=%<start_date>s&' \
+        'endDate=%<end_date>s&teamId=%<team_id>d&eventTypes=primary&' \
+        'scheduleTypes=games,events,xref'
 
-  GAME_TYPES = 'ACDEFILPRSW'
+  LIVE_FEED = 'https://statsapi.mlb.com/api/v1/game/%<pk>d/feed/live?' \
+              'fields=gameData,game,id'
 
   def initialize
     @attempts = 0
@@ -41,12 +43,10 @@ class GamechatLoader
   end
 
   def schedule_url(team_id)
-    types = GAME_TYPES.chars.map { |type| "type='#{type}'" }.join('&')
-
     format(
-      [URL, types].join('&'),
-      start_date: @start_date.strftime('%Y/%m/%d'),
-      end_date: @end_date.strftime('%Y/%m/%d'),
+      URL,
+      start_date: @start_date.strftime('%Y-%m-%d'),
+      end_date: @end_date.strftime('%Y-%m-%d'),
       team_id: team_id,
       year: @start_date.year
     )
@@ -62,30 +62,24 @@ class GamechatLoader
 
     data = JSON.parse open(schedule_url(team.id)).read
 
-    games = data.dig(
-      'schedule_team_sponsors',
-      'schedule_team_complete',
-      'queryResults',
-      'row'
-    )
-
-    process_games(games, subreddit_id, adjust_time_proc(post_at))
+    process_games(data.dig('dates'), subreddit_id, adjust_time_proc(post_at))
   end
 
-  def process_games(games, subreddit_id, adjusted_time)
+  def process_games(dates, subreddit_id, adjusted_time)
     # If there's only one game in this month (like 10/2017) then the API only
     # returns a hash *not* wrapped in an array.
-    games = Array[games] if games.is_a?(Hash)
+    dates.each do |date|
+      date['games'].each do |game|
+        gametime = Chronic.parse(game['gameDate']) - (7 * 3_600)
 
-    games.each do |game|
-      next if game['game_time_et'][11..15] == '03:33'
+        # next if game['game_time_et'][11..15] == '03:33'
 
-      gametime = Chronic.parse(game['game_time_et']) - 10_800
-      post_at = adjusted_time.call(gametime)
+        post_at = adjusted_time.call(gametime)
 
-      next if post_at < Time.now
+        next if post_at < Time.now
 
-      insert_game subreddit_id, game, post_at, gametime
+        insert_game subreddit_id, game, post_at, gametime
+      end
     end
   end
 
@@ -104,15 +98,20 @@ class GamechatLoader
   end
 
   def row_data(game, gametime, post_at, subreddit_id)
+    game_pk = game['gamePk'].to_i
+    gid = JSON.parse(open(format(LIVE_FEED, pk: game_pk)).read)
+      .dig('gameData', 'game', 'id')
+      .gsub(/[^a-z0-9]/, '_')
+
     {
-      gid: game['game_id'].gsub(%r{[/\-]}, '_'),
+      gid: gid,
       post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
       starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
       status: 'Future',
       created_at: @right_now,
       updated_at: @right_now,
       subreddit_id: subreddit_id,
-      game_pk: game['game_pk'].to_i
+      game_pk: game_pk
     }
   end
 
