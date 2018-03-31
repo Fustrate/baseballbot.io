@@ -19,7 +19,7 @@ class Baseballbot
       include Template::Gamechat::ScoringPlays
       include Template::Gamechat::Teams
 
-      attr_reader :title, :post_id
+      attr_reader :title, :post_id, :game_pk
 
       def initialize(body:, bot:, subreddit:, game_pk:, title: '', post_id: nil)
         super(body: body, bot: bot)
@@ -80,13 +80,13 @@ class Baseballbot
       end
 
       def gameday_link
-        "http://mlb.mlb.com/mlb/gameday/index.jsp?gid=#{gid}"
+        "https://www.mlb.com/gameday/#{game_pk}"
       end
 
       def game_graph_link
         'http://www.fangraphs.com/livewins.aspx?' \
         "date=#{date.strftime '%Y-%m-%d'}&team=#{team.name}&" \
-        "dh=#{gid[-1].to_i - 1}&season=#{date.year}"
+        "dh=#{game_data.dig('game', 'gameNumber') - 1}&season=#{date.year}"
       end
 
       def strikezone_map_link
