@@ -28,7 +28,7 @@ class Baseballbot
 
     # !@group Game Chats
 
-    def post_gamechat(id:, gid:, title:, game_pk:)
+    def post_gamechat(id:, title:, game_pk:)
       @bot.use_account(@account.name)
 
       template = gamechat_template(game_pk: game_pk, title: title)
@@ -41,7 +41,7 @@ class Baseballbot
 
       submission.edit raw_markdown.gsub('#ID#', submission.id)
 
-      @bot.redis.hset(gid, @name.downcase, submission.id)
+      @bot.redis.hset(template.gid, @name.downcase, submission.id)
 
       post_process_submission(
         submission,
@@ -50,7 +50,7 @@ class Baseballbot
         flair: @options.dig('gamechats', 'flair')
       )
 
-      @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{gid}."
+      @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{game_pk}."
 
       submission
     end
@@ -58,11 +58,11 @@ class Baseballbot
     # Update a gamechat - also starts the "game over" process if necessary
     #
     # @param id [String] The baseballbot id of the gamechat
-    # @param gid [String] The mlb gid of the game
+    # @param game_pk [Integer] The mlb id of the game
     # @param post_id [String] The reddit id of the post to update
     #
     # @return [Boolean] to indicate if the game is over or postponed
-    def update_gamechat(id:, gid:, game_pk:, post_id:)
+    def update_gamechat(id:, game_pk:, post_id:)
       @bot.use_account(@account.name)
 
       template = gamechat_update_template(post_id: post_id, game_pk: game_pk)
@@ -76,7 +76,7 @@ class Baseballbot
       @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{game_pk}."
 
       if template.final?
-        end_gamechat(id, submission, gid, game_pk)
+        end_gamechat(id, submission, game_pk)
       else
         change_gamechat_status id, submission, 'Posted'
       end
@@ -84,7 +84,7 @@ class Baseballbot
       template.final?
     end
 
-    def end_gamechat(id, submission, gid, game_pk)
+    def end_gamechat(id, submission, game_pk)
       change_gamechat_status id, submission, 'Over'
 
       post_process_submission(
@@ -94,14 +94,14 @@ class Baseballbot
 
       @bot.logger.info "Ended #{submission.id} in /r/#{@name} for #{game_pk}."
 
-      post_postgame(gid: gid, game_pk: game_pk)
+      post_postgame(game_pk: game_pk)
     end
 
     # !@endgroup
 
     # !@group Pre Game Chats
 
-    def post_pregame(id:, gid:, game_pk:)
+    def post_pregame(id:, game_pk:)
       return unless @options.dig('pregame', 'enabled')
 
       @bot.use_account(@account.name)
@@ -129,10 +129,10 @@ class Baseballbot
 
     # Create a postgame thread if the subreddit is set to have them
     #
-    # @param gid [String] the MLB game ID
+    # @param game_pk [String] the MLB game ID
     #
     # @return [Redd::Models::Submission] the postgame thread
-    def post_postgame(gid:, game_pk:)
+    def post_postgame(game_pk:)
       return unless @options.dig('postgame', 'enabled')
 
       @bot.use_account(@account.name)
@@ -147,7 +147,7 @@ class Baseballbot
         flair: @options.dig('postgame', 'flair')
       )
 
-      @bot.logger.info "Postgame #{submission.id} in /r/#{@name} for #{game_pk}."
+      @bot.logger.info "Postgame #{submission.id} in /r/#{@name} for #{game_pk}"
 
       submission
     end

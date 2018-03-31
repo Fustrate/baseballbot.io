@@ -7,13 +7,9 @@ require 'chronic'
 require 'mlb_gameday'
 
 class GamechatLoader
-  URL = 'https://statsapi.mlb.com/api/v1/schedule?lang=en&' \
-        'sportId=1&season=%<year>d&startDate=%<start_date>s&' \
-        'endDate=%<end_date>s&teamId=%<team_id>d&eventTypes=primary&' \
-        'scheduleTypes=games,events,xref'
-
-  LIVE_FEED = 'https://statsapi.mlb.com/api/v1/game/%<pk>d/feed/live?' \
-              'fields=gameData,game,id'
+  URL = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=%<year>d&' \
+        'startDate=%<start_date>s&endDate=%<end_date>s&teamId=%<team_id>d&' \
+        'eventTypes=primary&scheduleTypes=games,events,xref'
 
   def initialize
     @attempts = 0
@@ -99,12 +95,8 @@ class GamechatLoader
 
   def row_data(game, gametime, post_at, subreddit_id)
     game_pk = game['gamePk'].to_i
-    gid = JSON.parse(open(format(LIVE_FEED, pk: game_pk)).read)
-      .dig('gameData', 'game', 'id')
-      .gsub(/[^a-z0-9]/, '_')
 
     {
-      gid: gid,
       post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
       starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
       status: 'Future',

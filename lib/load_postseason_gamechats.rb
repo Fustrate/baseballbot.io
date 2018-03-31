@@ -46,14 +46,14 @@ class PostseasonGameLoader
 
       next if gametime < Time.now
 
-      insert_game game['gameday'], gametime, game_title(game)
+      insert_game game['game_pk'], gametime, game_title(game)
     end
   end
 
-  def insert_game(gid, gametime, title)
+  def insert_game(game_pk, gametime, title)
     @attempts += 1
 
-    data = row_data(gid, gametime, title)
+    data = row_data(game_pk, gametime, title)
 
     conn.exec_params(
       "INSERT INTO gamechats (#{data.keys.join(', ')})" \
@@ -64,9 +64,9 @@ class PostseasonGameLoader
     @failures += 1
   end
 
-  def row_data(gid, gametime, title)
+  def row_data(game_pk, gametime, title)
     {
-      gid: gid,
+      game_pk: game_pk,
       post_at: (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
       starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
       status: 'Future',

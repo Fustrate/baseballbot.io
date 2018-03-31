@@ -3,7 +3,7 @@
 class Baseballbot
   module Pregames
     UNPOSTED_PREGAMES_QUERY = <<~SQL
-      SELECT gamechats.id, gid, game_pk, subreddits.name
+      SELECT gamechats.id, game_pk, subreddits.name
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future'
@@ -17,7 +17,7 @@ class Baseballbot
               DATE(starts_at) + (options#>>'{pregame,post_at}')::interval
             ) < NOW() AT TIME ZONE (options->>'timezone')
           END)
-      ORDER BY post_at ASC, gid ASC
+      ORDER BY post_at ASC, game_pk ASC
     SQL
 
     def post_pregames!(names: [])
@@ -29,14 +29,13 @@ class Baseballbot
         post_pregame!(
           id: row['id'],
           team: row['name'],
-          gid: row['gid'],
           game_pk: row['game_pk']
         )
       end
     end
 
-    def post_pregame!(id:, team:, gid:, game_pk:)
-      team_to_subreddit(team).post_pregame(id: id, gid: gid, game_pk: game_pk)
+    def post_pregame!(id:, team:, game_pk:)
+      team_to_subreddit(team).post_pregame(id: id, game_pk: game_pk)
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra 2 minutes won't kill anyone.
       nil

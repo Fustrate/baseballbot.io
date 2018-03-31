@@ -34,7 +34,6 @@ class Baseballbot
 
         def game_hash(game)
           status = game.xpath('@status').text
-          gid = game.xpath('@gameday_link').text
 
           started = !PREGAME_STATUSES.include?(status)
 
@@ -48,7 +47,7 @@ class Baseballbot
               score: (started ? game.xpath('@away_team_runs').text.to_i : '')
             },
             raw_status: status,
-            status: gameday_link(game_status(game), gid),
+            status: gameday_link(game),
             free: game.xpath('game_media/media[@free="ALL"]').any?
           }
         end
@@ -118,8 +117,11 @@ class Baseballbot
             bold(game.xpath('@inning').text)
         end
 
-        def gameday_link(text, gid)
-          link_to text, url: "http://mlb.com/r/game?gid=#{gid}"
+        def gameday_link(game)
+          text = game_status(game)
+          game_pk = game.xpath('@game_pk').text.to_i
+
+          link_to text, url: "https://www.mlb.com/gameday/#{game_pk}"
         end
 
         def load_gamechats(date)

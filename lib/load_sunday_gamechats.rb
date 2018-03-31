@@ -12,13 +12,6 @@ class SundayGamechatLoader
   URL = 'http://gdx.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
         'miniscoreboard.json'
 
-  INSERT_SQL = <<~SQL
-    INSERT INTO gamechats
-      (gid, post_at, starts_at, status, created_at, updated_at, subreddit_id)
-    VALUES
-      ($1, $2, $3, \'Future\', $4, $5, $6)
-  SQL
-
   def initialize
     @attempts = 0
     @failures = 0
@@ -59,27 +52,34 @@ class SundayGamechatLoader
     end
   end
 
-  def insert_game(gid, gametime)
+  def insert_game(game_pk, gametime)
     @attempts += 1
 
-    @conn.exec_params INSERT_SQL, game_data(gid, gametime)
+    data = game_data(game_pk, gametime)
 
-    puts "+ #{gid}"
+    @conn.exec_params(
+      "INSERT INTO gamechats (#{data.keys.join(', ')})" \
+      "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
+      data.values
+    )
+
+    puts "+ #{game_pk}"
   rescue PG::UniqueViolation
     @failures += 1
 
-    puts "- #{gid}"
+    puts "- #{game_pk}"
   end
 
-  def game_data(gid, gametime)
-    [
-      gid,
-      (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
-      gametime.strftime('%Y-%m-%d %H:%M:%S'),
-      @timestamp,
-      @timestamp,
-      R_BASEBALL_ID
-    ]
+  def game_data(game_pk, gametime)
+    {
+      game_pk: game_pk,
+      post_at: (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
+      starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
+      status: 'Future',
+      created_at: @timestamp,
+      updated_at: @timestamp,
+      subreddit_id: R_BASEBALL_ID
+    }
   end
 end
 

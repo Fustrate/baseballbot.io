@@ -3,17 +3,17 @@
 class Baseballbot
   module Gamechats
     UNPOSTED_GAMECHATS_QUERY = <<~SQL
-      SELECT gamechats.id, gid, game_pk, subreddits.name, title
+      SELECT gamechats.id, game_pk, subreddits.name, title
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status IN ('Pregame', 'Future')
         AND post_at <= NOW()
         AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
-      ORDER BY post_at ASC, gid ASC
+      ORDER BY post_at ASC, game_pk ASC
     SQL
 
     ACTIVE_GAMECHATS_QUERY = <<~SQL
-      SELECT gamechats.id, gid, game_pk, subreddits.name, post_id
+      SELECT gamechats.id, game_pk, subreddits.name, post_id
       FROM gamechats
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted'
@@ -31,17 +31,15 @@ class Baseballbot
         post_gamechat!(
           id: row['id'],
           team: row['name'],
-          gid: row['gid'],
           game_pk: row['game_pk'],
           title: row['title']
         )
       end
     end
 
-    def post_gamechat!(id:, team:, gid:, game_pk:, title:)
+    def post_gamechat!(id:, team:, game_pk:, title:)
       team_to_subreddit(team).post_gamechat(
         id: id,
-        gid: gid,
         game_pk: game_pk,
         title: title
       )
@@ -61,18 +59,17 @@ class Baseballbot
         update_gamechat!(
           team: row['name'],
           id: row['id'],
-          gid: row['gid'],
           game_pk: row['game_pk'],
           post_id: row['post_id']
         )
       end
     end
 
-    def update_gamechat!(team:, id:, gid:, game_pk:, post_id:)
+    def update_gamechat!(team:, id:, game_pk:, post_id:)
       first_attempt ||= true
 
       team_to_subreddit(team)
-        .update_gamechat(id: id, gid: gid, game_pk: game_pk, post_id: post_id)
+        .update_gamechat(id: id, game_pk: game_pk, post_id: post_id)
     rescue Redd::InvalidAccess
       gamechat_update_failed(post_id)
 
