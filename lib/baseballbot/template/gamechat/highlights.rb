@@ -16,7 +16,7 @@ class Baseballbot
         def highlights_list
           highlights
             .map do |highlight|
-              icon = link_to '', url: "/#{highlight[:team]&.code}"
+              icon = link_to '', url: "/#{highlight[:code]}"
               text = "#{highlight[:blurb]} (#{highlight[:duration]})"
               url = highlight[:hd]
 
@@ -28,7 +28,7 @@ class Baseballbot
         def highlights_table
           lines = highlights.map do |highlight|
             [
-              link_to('', url: "/#{highlight[:team]&.code}"),
+              link_to('', url: "/#{highlight[:code]}"),
               highlight[:blurb],
               highlight[:duration],
               link_to('SD', url: highlight[:sd]),
@@ -57,7 +57,7 @@ class Baseballbot
             &.dig('value')
 
           {
-            team: team_id.to_i == team.id ? team : opponent,
+            code: team_id&.to_i == home_id ? home_code : away_code,
             headline: media['headline'].strip,
             blurb: media['blurb'].strip.gsub(/^[A-Z@]+: /, ''),
             duration: media['duration'].strip.gsub(/^00:0?/, ''),

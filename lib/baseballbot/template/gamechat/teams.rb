@@ -33,11 +33,11 @@ class Baseballbot
         end
 
         def away_id
-          game_data.dig('teams', 'away', 'teamID')
+          game_data.dig('teams', 'away', 'id')
         end
 
         def home_id
-          game_data.dig('teams', 'home', 'teamID')
+          game_data.dig('teams', 'home', 'id')
         end
 
         def opponent
