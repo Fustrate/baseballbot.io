@@ -76,7 +76,8 @@ class Baseballbot
       end
 
       def player_link(player, title: nil)
-        link_to player_name(player), url: player_url(player['id']), title: title
+        url = player_url(player['id'] || player.dig('person', 'id'))
+        link_to player_name(player), url: url, title: title
       end
 
       def gameday_link
