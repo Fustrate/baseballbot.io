@@ -56,7 +56,7 @@ class GamechatLoader
       return
     end
 
-    data = JSON.parse open(schedule_url(team.id)).read
+    data = JSON.parse URI.parse(schedule_url(team.id)).open.read
 
     process_games(data.dig('dates'), subreddit_id, adjust_time_proc(post_at))
   end

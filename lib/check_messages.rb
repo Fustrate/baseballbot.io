@@ -67,7 +67,7 @@ end
 def load_possible_games
   games = Hash.new { |h, k| h[k] = [] }
 
-  Nokogiri::XML(open(Time.now.strftime(SCOREBOARD)))
+  Nokogiri::XML(URI.parse(Time.now.strftime(SCOREBOARD)).open)
     .xpath('//games/game')
     .map do |game|
       gid = game.xpath('@gameday_link').text

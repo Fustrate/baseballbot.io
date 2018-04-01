@@ -148,7 +148,7 @@ class Baseballbot
           # seems to fix the problem.
           filename = (Time.now - 4 * 3600).strftime STANDINGS
 
-          JSON.parse(open(filename).read)
+          JSON.parse(URI.parse(filename).open.read)
             .dig(
               'standings_schedule_date',
               'standings_all_date_rptr',

@@ -42,15 +42,13 @@ class Baseballbot
           qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
 
           %w[h xbh hr rbi bb sb r].each do |key|
-            stats[key] = high_stat(key, all_hitters, count: count).map do |s|
-              { name: s[0], value: s[1].to_i }
-            end
+            stats[key] = high_stat(key, all_hitters, count: count)
+              .map { |s| { name: s[0], value: s[1].to_i } }
           end
 
           %w[avg obp slg ops].each do |key|
-            stats[key] = high_stat(key, qualifying, count: count).map do |s|
-              { name: s[0], value: pct(s[1]) }
-            end
+            stats[key] = high_stat(key, qualifying, count: count)
+              .map { |s| { name: s[0], value: pct(s[1]) } }
           end
 
           stats
@@ -62,23 +60,19 @@ class Baseballbot
           qualifying = pitchers(year: year, type: type, pool: 'QUALIFIER')
 
           %w[w sv hld so].each do |key|
-            stats[key] = high_stat(key, all_pitchers, count: count).map do |s|
-              { name: s[0], value: s[1].to_i }
-            end
+            stats[key] = high_stat(key, all_pitchers, count: count)
+              .map { |s| { name: s[0], value: s[1].to_i } }
           end
 
-          stats['ip'] = high_stat('ip', all_pitchers, count: count).map do |s|
-            { name: s[0], value: s[1] }
-          end
+          stats['ip'] = high_stat('ip', all_pitchers, count: count)
+            .map { |s| { name: s[0], value: s[1] } }
 
-          stats['avg'] = low_stat('avg', qualifying, count: count).map do |s|
-            { name: s[0], value: pct(s[1]) }
-          end
+          stats['avg'] = low_stat('avg', qualifying, count: count)
+            .map { |s| { name: s[0], value: pct(s[1]) } }
 
           %w[whip era].each do |key|
-            stats[key] = low_stat(key, qualifying, count: 3).map do |s|
-              { name: s[0], value: s[1].to_s.sub(/\A0+/, '') }
-            end
+            stats[key] = low_stat(key, qualifying, count: 3)
+              .map { |s| { name: s[0], value: s[1].to_s.sub(/\A0+/, '') } }
           end
 
           stats

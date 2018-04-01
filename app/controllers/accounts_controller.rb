@@ -70,7 +70,7 @@ class AccountsController < ApplicationController
       duration: 'permanent'
     )
 
-    redirect_to auth_url, status: 301
+    redirect_to auth_url, status: :moved_permanently
   end
 
   def save_account

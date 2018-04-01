@@ -32,7 +32,7 @@ class PostseasonGameLoader
   end
 
   def load_schedule
-    data = JSON.parse open(Date.today.strftime(URL)).read
+    data = JSON.parse URI.parse(Date.today.strftime(URL)).open.read
 
     data['games'].each do |game|
       # Game time is not yet set or something is TBD

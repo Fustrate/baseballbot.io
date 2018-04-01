@@ -22,8 +22,7 @@ set :linked_dirs, %w[
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
 
-set :rbenv_ruby,
-    File.read(File.expand_path('../../.ruby-version', __FILE__)).strip
+set :rbenv_ruby, File.read(File.expand_path('../.ruby-version', __dir__)).strip
 set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} " \
                    "#{fetch :rbenv_path}/bin/rbenv exec"
 set :rbenv_map_bins, %w[rake gem bundle ruby rails honeybadger]

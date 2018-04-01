@@ -36,7 +36,7 @@ class SundayGamechatLoader
   end
 
   def load_espn_game(date)
-    data = JSON.parse open(date.strftime(URL)).read
+    data = JSON.parse URI.parse(date.strftime(URL)).open.read
 
     data.dig('data', 'games', 'game').each do |game|
       # Game time is not yet set or something is TBD

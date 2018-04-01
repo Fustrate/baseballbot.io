@@ -50,7 +50,7 @@ class Baseballbot
         flair: @options.dig('gamechats', 'flair')
       )
 
-      @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{game_pk}."
+      @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{game_pk}"
 
       submission
     end
@@ -73,7 +73,7 @@ class Baseballbot
         body: template.replace_in(CGI.unescapeHTML(submission.selftext))
       )
 
-      @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{game_pk}."
+      @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{game_pk}"
 
       if template.final?
         end_gamechat(id, submission, game_pk)
@@ -92,7 +92,7 @@ class Baseballbot
         sticky: sticky_gamechats? ? false : nil
       )
 
-      @bot.logger.info "Ended #{submission.id} in /r/#{@name} for #{game_pk}."
+      @bot.logger.info "Ended #{submission.id} in /r/#{@name} for #{game_pk}"
 
       post_postgame(game_pk: game_pk)
     end
@@ -118,7 +118,7 @@ class Baseballbot
         flair: @options.dig('pregame', 'flair')
       )
 
-      @bot.logger.info "Pregame #{submission.id} in /r/#{@name} for #{game_pk}."
+      @bot.logger.info "Pregame #{submission.id} in /r/#{@name} for #{game_pk}"
 
       submission
     end
