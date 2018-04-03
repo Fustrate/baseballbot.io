@@ -1,4 +1,15 @@
-               Prefix Verb URI Pattern                      Controller#Action
-                 root GET  /                                home#home
-accounts_authenticate GET  /accounts/authenticate(.:format) accounts#authenticate
-           subreddits GET  /subreddits(.:format)            subreddits#index
+               Prefix Verb   URI Pattern                      Controller#Action
+                 root GET    /                                home#home
+accounts_authenticate GET    /accounts/authenticate(.:format) accounts#authenticate
+            gamechats GET    /gamechats(.:format)             gamechats#index
+                      POST   /gamechats(.:format)             gamechats#create
+         new_gamechat GET    /gamechats/new(.:format)         gamechats#new
+        edit_gamechat GET    /gamechats/:id/edit(.:format)    gamechats#edit
+             gamechat GET    /gamechats/:id(.:format)         gamechats#show
+                      PATCH  /gamechats/:id(.:format)         gamechats#update
+                      PUT    /gamechats/:id(.:format)         gamechats#update
+                      DELETE /gamechats/:id(.:format)         gamechats#destroy
+           subreddits GET    /subreddits(.:format)            subreddits#index
+            subreddit GET    /subreddits/:id(.:format)        subreddits#show
+             template GET    /templates/:id(.:format)         templates#show
+              gameday GET    /gameday(.:format)               home#gameday
