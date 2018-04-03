@@ -52,7 +52,7 @@ class Baseballbot
     @logger = options[:logger] || Logger.new(STDOUT)
 
     @gameday = MLBGameday::API.new
-    @stats = MLBStatsAPI::Client.new(logger: @logger)
+    @stats = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
 
     @accounts = load_accounts
     @subreddits = load_subreddits
