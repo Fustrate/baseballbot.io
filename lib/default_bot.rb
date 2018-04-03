@@ -17,7 +17,7 @@ def default_bot(purpose: nil, account: nil)
       password: ENV['PG_PASSWORD']
     },
     logger: Logger.new(
-      arguments.key?(:log) ? STDOUT : File.expand_path('./log/baseballbot.log')
+      arguments.key?(:log) ? STDOUT : File.expand_path('../log/baseballbot.log', __dir__)
     )
   )
 
