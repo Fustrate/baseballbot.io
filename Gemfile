@@ -40,13 +40,13 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'rubocop'
   gem 'ruby_gntp'
-  gem 'web-console', '~> 3.0'
+  gem 'web-console', '~> 3.5'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.8', require: false
+  gem 'capistrano', '~> 3.10', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
-  gem 'capistrano-rbenv', '~> 2.0'
+  gem 'capistrano-rbenv', '~> 2.1'
 end
 
 group :test do
@@ -56,10 +56,10 @@ group :test do
 end
 
 group :development, :test do
-  gem 'database_cleaner', '~> 1.5'
+  gem 'database_cleaner', '~> 1.6'
   gem 'factory_bot_rails'
   gem 'launchy'
-  gem 'rspec', '~> 3.0'
+  gem 'rspec', '~> 3.7'
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
 
@@ -72,7 +72,7 @@ end
 
 # "is_active" links in views, and pagination
 gem 'active_link_to'
-gem 'will_paginate', '~> 3.0'
+gem 'will_paginate', '~> 3.1'
 
 # Authentication and permissions
 gem 'authority'

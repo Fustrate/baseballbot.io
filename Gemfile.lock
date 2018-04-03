@@ -410,14 +410,14 @@ DEPENDENCIES
   binding_of_caller
   bullet
   byebug
-  capistrano (~> 3.8)
+  capistrano (~> 3.10)
   capistrano-bundler
   capistrano-rails
-  capistrano-rbenv (~> 2.0)
+  capistrano-rbenv (~> 2.1)
   capybara
   chronic
   coffee-rails
-  database_cleaner (~> 1.5)
+  database_cleaner (~> 1.6)
   execjs
   factory_bot_rails
   fustrate-rails!
@@ -436,7 +436,7 @@ DEPENDENCIES
   rails (= 5.1.6)
   redd
   redis
-  rspec (~> 3.0)
+  rspec (~> 3.7)
   rspec-collection_matchers
   rspec-rails
   rubocop
@@ -449,9 +449,9 @@ DEPENDENCIES
   sprockets-rails
   uglifier (~> 4.0)
   unicorn
-  web-console (~> 3.0)
+  web-console (~> 3.5)
   whenever
-  will_paginate (~> 3.0)
+  will_paginate (~> 3.1)
 
 RUBY VERSION
    ruby 2.5.1p57
