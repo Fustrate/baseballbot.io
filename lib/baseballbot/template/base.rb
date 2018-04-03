@@ -1,37 +1,12 @@
 # frozen_string_literal: true
 
-module TemplateRefinements
-  refine Date do
-    def days_in_month
-      Date.civil(year, month, -1).day
-    end
-  end
-
-  refine Numeric do
-    def ordinalize
-      "#{self}#{ordinal}"
-    end
-
-    def ordinal
-      abs_number = to_i.abs
-
-      if (11..13).cover?(abs_number % 100)
-        'th'
-      else
-        case abs_number % 10
-        when 1 then 'st'
-        when 2 then 'nd'
-        when 3 then 'rd'
-        else        'th'
-        end
-      end
-    end
-  end
-end
+require_relative 'markdown_helpers'
+require_relative 'template_refinements'
 
 class Baseballbot
   module Template
     class Base
+      include MarkdownHelpers
       using TemplateRefinements
 
       DELIMITER = '[](/baseballbot)'
@@ -45,28 +20,6 @@ class Baseballbot
 
       def result
         @template.result binding
-      end
-
-      def bold(text)
-        "**#{text}**"
-      end
-
-      def italic(text)
-        "*#{text}*"
-      end
-
-      def sup(text)
-        "^(#{text})"
-      end
-
-      def pct(percent)
-        format('%0.3f', percent).sub(/\A0+/, '')
-      end
-
-      def gb(games_back)
-        return '-' if games_back.zero?
-
-        (games_back % 1.0).zero? ? games_back.to_i : games_back
       end
 
       # Change the subreddit to use for a team, only in this template
@@ -83,16 +36,6 @@ class Baseballbot
           Baseballbot::Subreddits::DEFAULT_SUBREDDITS[code.upcase]
       end
 
-      def link_to(text = '', options = {})
-        title = %( "#{options[:title]}") if options[:title]
-
-        return "[#{text}](/r/#{options[:sub]}#{title})" if options[:sub]
-        return "[#{text}](#{options[:url]}#{title})" if options[:url]
-        return "[#{text}](/u/#{options[:user]}#{title})" if options[:user]
-
-        "[#{text}](/##{title})"
-      end
-
       def replace_regexp
         delimiter = Regexp.escape DELIMITER
 
@@ -107,9 +50,9 @@ class Baseballbot
       end
 
       def timestamp(action = nil)
-        return @subreddit.timezone.strftime '%-I:%M %p %Z' unless action
+        return @subreddit.timezone.strftime '%-I:%M %p' unless action
 
-        italic "#{action} at #{@subreddit.timezone.strftime '%-I:%M %p %Z'}."
+        italic "#{action} at #{@subreddit.timezone.strftime '%-I:%M %p'}."
       end
     end
   end

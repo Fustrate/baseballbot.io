@@ -16,9 +16,7 @@ def default_bot(purpose: nil, account: nil)
       dbname: ENV['PG_DATABASE'],
       password: ENV['PG_PASSWORD']
     },
-    logger: Logger.new(
-      arguments.key?(:log) ? STDOUT : File.expand_path('../log/baseballbot.log', __dir__)
-    )
+    logger: Logger.new(log_location)
   )
 
   bot.use_account account if account
@@ -27,11 +25,14 @@ def default_bot(purpose: nil, account: nil)
 end
 
 def arguments
-  @arguments ||= begin
-    parsed = ARGV
-      .map { |arg| arg.split('=') }
-      .map { |k, v| [k.downcase.to_sym, v || true] }
+  @arguments ||= ARGV
+    .map { |arg| arg.split('=') }
+    .map { |k, v| [k.downcase.to_sym, v || true] }
+    .to_h
+end
 
-    Hash[parsed]
-  end
+def log_location
+  return STDOUT if arguments.key?(:log)
+
+  File.expand_path('../log/baseballbot.log', __dir__)
 end

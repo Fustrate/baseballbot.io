@@ -4,9 +4,6 @@ class Baseballbot
   module Template
     class Sidebar
       module Calendar
-        # Date#days_in_month
-        using TemplateRefinements
-
         CALENDAR_DATA_URL = 'http://mlb.mlb.com/lookup/json/named.schedule_' \
                             "team_sponsors.bam?start_date='%<start_date>s'&" \
                             "end_date='%<end_date>s'&team_id=%<team_id>d&" \
@@ -38,7 +35,7 @@ class Baseballbot
 
           days = {}
 
-          1.upto(date.days_in_month).each do |day|
+          1.upto(Date.civil(date.year, date.month, -1).day).each do |day|
             days[day] = {
               date: Date.new(date.year, date.month, day),
               games: []
