@@ -15,7 +15,7 @@ class Baseballbot
       @db.exec(SUBREDDITS_WITH_SIDEBARS_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        update_sidebar! @subreddits[row['name']]
+        update_sidebar! subreddits[row['name']]
       end
     end
 

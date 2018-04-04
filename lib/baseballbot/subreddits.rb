@@ -44,7 +44,7 @@ class Baseballbot
     }.freeze
 
     def team_to_subreddit(code)
-      code.is_a?(Subreddit) ? code : @subreddits[code.downcase]
+      code.is_a?(Subreddit) ? code : subreddits[code.downcase]
     end
 
     protected
@@ -61,7 +61,7 @@ class Baseballbot
         id: row['id'].to_i,
         name: row['name'],
         team_id: row['team_id'],
-        account: @accounts[row['account_id']],
+        account: accounts[row['account_id']],
         options: JSON.parse(row['options'])
       )
     end

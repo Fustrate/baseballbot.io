@@ -6,7 +6,7 @@ class Baseballbot
 
     def use_account(name)
       unless @current_account&.name == name
-        @current_account = @accounts.values.find { |acct| acct.name == name }
+        @current_account = accounts.values.find { |acct| acct.name == name }
 
         @client.access = @current_account.access
       end
