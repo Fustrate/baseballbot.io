@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
-require 'redd'
-require 'pg'
 require 'chronic'
-require 'mlb_stats_api'
 require 'erb'
-require 'tzinfo'
-require 'redis'
-require 'logger'
 require 'honeybadger/ruby'
+require 'logger'
+require 'mlb_stats_api'
+require 'open-uri'
+require 'pg'
+require 'redd'
+require 'redis'
+require 'tzinfo'
 
 require_relative 'baseballbot/error'
 require_relative 'baseballbot/subreddit'
