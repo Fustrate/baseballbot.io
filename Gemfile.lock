@@ -15,15 +15,6 @@ GIT
       sass (>= 3.4)
 
 GIT
-  remote: https://github.com/Fustrate/mlb_gameday
-  revision: c52be6f0ce6bff5cbe8faa5811ab1af237b79e9e
-  specs:
-    mlb_gameday (0.3.2)
-      chronic (~> 0.10)
-      httparty (~> 0.13)
-      nokogiri (~> 1.6)
-
-GIT
   remote: https://github.com/Fustrate/mlb_stats_api
   revision: 3182f1a28ccb3957a3d8bcbf0ac8996e9f6f3ea9
   specs:
@@ -431,7 +422,6 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   launchy
-  mlb_gameday!
   mlb_stats_api!
   mock_redis
   pg

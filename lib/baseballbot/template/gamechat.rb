@@ -31,10 +31,6 @@ class Baseballbot
         @post_id = post_id
       end
 
-      def game
-        raise 'Gameday is no longer being used!'
-      end
-
       def content
         @content ||= @bot.api.content @game_pk
       end
