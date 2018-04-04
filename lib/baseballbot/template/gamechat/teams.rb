@@ -41,7 +41,7 @@ class Baseballbot
         end
 
         def opponent
-          return @bot.gameday.team(home_code) if @subreddit.team&.id == away_id
+          return @bot.stats.team(home_id) if @subreddit.team&.id == away_id
 
           @bot.stats.team(away_id)
         end

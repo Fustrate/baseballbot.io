@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180308202459) do
+ActiveRecord::Schema.define(version: 20180404032107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,6 @@ ActiveRecord::Schema.define(version: 20180308202459) do
   end
 
   create_table "gamechats", id: :serial, force: :cascade do |t|
-    t.string "gid"
     t.datetime "post_at"
     t.datetime "starts_at"
     t.string "status"
@@ -44,7 +43,7 @@ ActiveRecord::Schema.define(version: 20180308202459) do
     t.datetime "updated_at"
     t.integer "subreddit_id", null: false
     t.integer "game_pk"
-    t.index ["gid", "subreddit_id"], name: "index_gamechats_on_gid_and_subreddit_id", unique: true
+    t.index ["game_pk", "subreddit_id"], name: "index_gamechats_on_game_pk_and_subreddit_id", unique: true
   end
 
   create_table "scheduled_posts", id: :serial, force: :cascade do |t|
@@ -60,6 +59,7 @@ ActiveRecord::Schema.define(version: 20180308202459) do
     t.string "team_code"
     t.integer "account_id"
     t.json "options"
+    t.integer "team_id"
   end
 
   create_table "templates", id: :serial, force: :cascade do |t|

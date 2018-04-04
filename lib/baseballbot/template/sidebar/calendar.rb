@@ -153,8 +153,8 @@ class Baseballbot
         end
 
         def build_team(code:, name:)
-          @bot.gameday.team(code) ||
-            MLBGameday::Team.new(name: name, code: code)
+          @bot.stats.team(code) ||
+            MLBStatsAPI::Team.new('teamName' => name, 'abbreviation' => code)
         end
 
         def date_for_month(month)
@@ -181,8 +181,10 @@ class Baseballbot
           post_process_game(
             date: date,
             home: game['home_away_sw'] == 'H',
-            opponent: build_team(code: game['opponent_abbrev'],
-                                 name: game['opponent_brief']),
+            opponent: build_team(
+              code: game['opponent_abbrev'],
+              name: game['opponent_brief']
+            ),
             over: %w[F C D FT FR].include?(game['game_status_ind']),
             score: [game['team_score'].to_i, game['opponent_score'].to_i],
             tv: game['team_tv'] || '',
@@ -211,10 +213,12 @@ class Baseballbot
           start_date = Date.civil(date.year, date.month, 1).strftime('%Y/%m/%d')
           end_date = Date.civil(date.year, date.month, -1).strftime('%Y/%m/%d')
 
-          JSON.parse open_url(CALENDAR_DATA_URL,
-                              year: date.year,
-                              start_date: start_date,
-                              end_date: end_date)
+          JSON.parse open_url(
+            CALENDAR_DATA_URL,
+            year: date.year,
+            start_date: start_date,
+            end_date: end_date
+          )
         end
 
         def add_days_to_calendar(days, calendar, options = {})

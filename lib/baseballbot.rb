@@ -3,7 +3,6 @@
 require 'redd'
 require 'pg'
 require 'chronic'
-require 'mlb_gameday'
 require 'mlb_stats_api'
 require 'erb'
 require 'tzinfo'
@@ -51,7 +50,6 @@ class Baseballbot
 
     @logger = options[:logger] || Logger.new(STDOUT)
 
-    @gameday = MLBGameday::API.new
     @stats = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
   end
 

@@ -7,8 +7,8 @@ default: &default
 
 development:
   <<: *default
-  database: fustrate
+  database: baseballbot
 
 test:
   <<: *default
-  database: fustrate_test
+  database: baseballbot_test
