@@ -17,7 +17,7 @@ class Baseballbot
             division['teamRecords'].each do |team|
               data = parse_standings_row(division, team)
 
-              @all_teams[data['team']['abbreviation']] = data
+              @all_teams << data
             end
           end
 
@@ -47,9 +47,12 @@ class Baseballbot
             .reverse
         end
 
+        def teams_in_league(league_id)
+          all_teams.select { |team| team[:league_id] == league_id }
+        end
+
         def wildcards_in_league(league_id)
-          all_teams
-            .select { |team| team[:league_id] == league_id }
+          teams_in_league(league_id)
             .reject { |team| team[:games_back] == '-' }
             .sort_by! { |team| team[:wildcard_gb].to_i }
         end
@@ -79,7 +82,7 @@ class Baseballbot
             home_record:    records['home'],
             last_ten:       records['lastTen'],
             losses:         row['losses'],
-            percent:        row['leagueRecord']['pct'],
+            percent:        row['leagueRecord']['pct'].to_f,
             road_record:    records['road'],
             run_diff:       row['runDifferential'],
             streak:         row['streak']['streakCode'],
