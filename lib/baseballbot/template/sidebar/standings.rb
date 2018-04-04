@@ -58,7 +58,7 @@ class Baseballbot
         end
 
         def team_stats
-          @team_stats ||= standings.find { |team| team[:id] == @team.id }
+          @team_stats ||= all_teams.find { |team| team[:team].id == @team.id }
         end
 
         protected
@@ -72,7 +72,8 @@ class Baseballbot
             .to_h
 
           {
-            code:           team['abbreviation'],
+            id:             team.id,
+            code:           team.abbreviation,
             # elim_wildcard:  row['elim_wildcard'],
             subreddit:      subreddit(team['abbreviation']),
             division_champ: row['divisionChamp'],
@@ -111,12 +112,11 @@ class Baseballbot
           eligible = teams_in_league(league_id)
             .sort_by { |team| team[:wildcard_gb] }
 
-          first_and_second_wildcards(eligible)
-            .each_with_index do |teams_in_spot, position|
-              teams_in_spot.each do |team|
-                teams[team[:code].to_sym][:wildcard_position] = position + 1
-              end
-            end
+          # first_and_second_wildcards(eligible).each_with_index do |teams_in_spot, position|
+          #   teams_in_spot.each do |team|
+          #     teams[team[:code].to_sym][:wildcard_position] = position + 1
+          #   end
+          # end
         end
 
         # Take the eligible teams, remove all teams who aren't at least tied
