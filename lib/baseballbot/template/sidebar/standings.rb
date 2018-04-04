@@ -15,9 +15,7 @@ class Baseballbot
 
           load_divisions_from_remote.each do |division|
             division['teamRecords'].each do |team|
-              data = parse_standings_row(division, team)
-
-              @all_teams << data
+              @all_teams << parse_standings_row(team)
             end
           end
 
@@ -53,11 +51,11 @@ class Baseballbot
         end
 
         def teams_in_league(league_id)
-          all_teams.select { |team| team[:league_id] == league_id }
+          all_teams.select { |team| team[:team].league_id == league_id }
         end
 
         def teams_in_division(division_id)
-          all_teams.select { |team| team[:division_id] == division_id }
+          all_teams.select { |team| team[:team].division_id == division_id }
         end
 
         def wildcards_in_league(league_id)
@@ -73,7 +71,7 @@ class Baseballbot
         protected
 
         # rubocop:disable Metrics/MethodLength
-        def parse_standings_row(division, row)
+        def parse_standings_row(row)
           team = @bot.api.team(row['team']['id'])
 
           records = row.dig('records', 'splitRecords')
@@ -86,7 +84,6 @@ class Baseballbot
             # elim_wildcard:  row['elim_wildcard'],
             subreddit:      subreddit(team['abbreviation']),
             division_champ: row['divisionChamp'],
-            division_id:    division['division']['id'],
             elim:           row['eliminationNumber'],
             games_back:     row['divisionGamesBack'],
             home_record:    records['home'],
