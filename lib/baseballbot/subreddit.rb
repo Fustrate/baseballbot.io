@@ -8,14 +8,13 @@ class Baseballbot
   class Subreddit
     attr_reader :account, :name, :team, :timezone, :code
 
-    def initialize(bot:, id:, name:, code:, account:, options: {})
+    def initialize(bot:, id:, name:, team_id:, account:, options: {})
       @bot = bot
       @id = id
       @name = name
       @account = account
       @submissions = {}
       @options = options
-      @code = code
 
       @timezone = begin
         TZInfo::Timezone.get options['timezone']
@@ -23,7 +22,8 @@ class Baseballbot
         TZInfo::Timezone.get 'America/Los_Angeles'
       end
 
-      @team = @bot.api.team(@code) if @code
+      @team = @bot.api.team(team_id) if team_id
+      @code = @team&.abbreviation
     end
 
     # !@group Game Chats
