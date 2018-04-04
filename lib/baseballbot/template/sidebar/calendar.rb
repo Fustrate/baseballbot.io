@@ -152,8 +152,8 @@ class Baseballbot
           games[0][:home] ? (bold "#{num} #{link}") : (italic "#{num} #{link}")
         end
 
-        def build_team(code:, name:)
-          @bot.api.team(code) ||
+        def build_team(id:, code:, name:)
+          @bot.api.team(id) ||
             MLBStatsAPI::Team.new('teamName' => name, 'abbreviation' => code)
         end
 
@@ -182,6 +182,7 @@ class Baseballbot
             date: date,
             home: game['home_away_sw'] == 'H',
             opponent: build_team(
+              id: game['opponent_id'].to_i,
               code: game['opponent_abbrev'],
               name: game['opponent_brief']
             ),
