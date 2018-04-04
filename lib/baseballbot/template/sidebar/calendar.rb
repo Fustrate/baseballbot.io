@@ -201,8 +201,10 @@ class Baseballbot
         end
 
         def calendar_games(date)
-          calendar_data(date)['schedule_team_sponsors'] \
-            ['schedule_team_complete']['queryResults']['row']
+          calendar_data(date).dig(
+            'schedule_team_sponsors', 'schedule_team_complete', 'queryResults',
+            'row'
+          )
         end
 
         def calendar_data(date)

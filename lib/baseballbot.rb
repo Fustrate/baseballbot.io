@@ -53,12 +53,17 @@ class Baseballbot
 
     @gameday = MLBGameday::API.new
     @stats = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
-
-    @accounts = load_accounts
-    @subreddits = load_subreddits
   end
 
   def inspect
     %(#<Baseballbot>)
+  end
+
+  def accounts
+    @accounts ||= load_accounts
+  end
+
+  def subreddits
+    @subreddits ||= load_subreddits
   end
 end
