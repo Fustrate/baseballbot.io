@@ -30,13 +30,19 @@ class Baseballbot
         end
 
         def standings
-          all_teams.select { |team| team[:division_id] == @team.division_id }
+          teams_in_division(@team.division_id)
         end
 
         def full_standings
           @full_standings ||= {
-            al: all_teams.select { |team| team[:league_id] == 103 },
-            nl: all_teams.select { |team| team[:league_id] == 104 }
+            al: teams_in_division(200).zip(
+              teams_in_division(202),
+              teams_in_division(201)
+            ),
+            nl: teams_in_division(203).zip(
+              teams_in_division(205),
+              teams_in_division(204)
+            )
           }
         end
         alias leagues full_standings
@@ -49,6 +55,10 @@ class Baseballbot
 
         def teams_in_league(league_id)
           all_teams.select { |team| team[:league_id] == league_id }
+        end
+
+        def teams_in_division(division_id)
+          all_teams.select { |team| team[:division_id] == division_id }
         end
 
         def wildcards_in_league(league_id)
