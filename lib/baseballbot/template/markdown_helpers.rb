@@ -24,9 +24,7 @@ module MarkdownHelpers
   end
 
   def gb(games_back)
-    return '-' if games_back == '-'
-
-    (games_back % 1.0).zero? ? games_back.to_i : games_back
+    games_back.gsub(/\.0$/, '')
   end
 
   def table(columns: [], data: [])
