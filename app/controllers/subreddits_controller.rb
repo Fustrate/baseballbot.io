@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'mlb_stats_api'
+
 class SubredditsController < ApplicationController
   def index
     @api = ::MLBStatsAPI::Client.new(
