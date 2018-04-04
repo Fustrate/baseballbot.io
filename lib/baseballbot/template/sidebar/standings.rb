@@ -120,7 +120,7 @@ class Baseballbot
         def mark_league_wildcards(league_id)
           wildcards = first_and_second_wildcards teams_in_league(league_id)
 
-          return if wildcards.none?
+          # return if wildcards.none?
 
           # if wildcards.length == 1
           #   wildcards[0][:wildcard_position] = 1
