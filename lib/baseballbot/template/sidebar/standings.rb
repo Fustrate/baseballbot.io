@@ -133,9 +133,8 @@ class Baseballbot
           allowed_wildcards = 5 - division_leaders
 
           ranked = teams
-            .reject { |team| team[:wildcard_gb] == '-' }
             .reject { |team| team[:games_back] == '-' }
-            .sort_by! { |team| team[:wildcard_rank] }
+            .sort_by { |team| team[:wildcard_rank] }
 
           first_wildcard = teams
             .select { |team| team[:wildcard_rank] == ranked[0][:wildcard_rank] }
@@ -145,7 +144,7 @@ class Baseballbot
           return unless first_wildcard.count < allowed_wildcards
 
           teams
-            .select { |team| team[:wildcard_rank] == ranked[0][:wildcard_rank] }
+            .select { |team| team[:wildcard_rank] == ranked[1][:wildcard_rank] }
             .each { |team| team[:wildcard_position] = 2 }
         end
 
