@@ -23,30 +23,32 @@ class Baseballbot
 
           @all_teams.sort_by! { |team| team[:sort_order] }
 
-          determine_wildcards(103)
-          determine_wildcards(104)
+          determine_league_wildcards(103)
+          determine_league_wildcards(104)
 
           @all_teams
         end
 
         def standings
-          teams.select { |team| team[:division_id] == @team.division_id }
+          all_teams.select { |team| team[:division_id] == @team.division_id }
         end
 
         def full_standings
           @full_standings ||= {
-            al: teams.select { |team| team[:league_id] == 103 },
-            nl: teams.select { |team| team[:league_id] == 104 }
+            al: all_teams.select { |team| team[:league_id] == 103 },
+            nl: all_teams.select { |team| team[:league_id] == 104 }
           }
         end
         alias leagues full_standings
 
         def draft_order
-          @draft_order ||= teams.sort_by! { |team| team[:sort_order] }.reverse
+          @draft_order ||= all_teams
+            .sort_by! { |team| team[:sort_order] }
+            .reverse
         end
 
         def wildcards_in_league(league_id)
-          teams
+          all_teams
             .select { |team| team[:league_id] == league_id }
             .reject { |team| team[:games_back] == '-' }
             .sort_by! { |team| team[:wildcard_gb].to_i }
@@ -101,11 +103,6 @@ class Baseballbot
         # rubocop:enable Metrics/MethodLength
 
         # @!group Wildcards
-
-        def determine_wildcards(teams)
-          determine_league_wildcards teams, [203, 204, 205]
-          determine_league_wildcards teams, [200, 201, 202]
-        end
 
         def determine_league_wildcards(league_id)
           eligible = teams_in_league(league_id)

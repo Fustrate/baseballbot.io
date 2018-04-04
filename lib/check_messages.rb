@@ -2,6 +2,7 @@
 
 require_relative 'default_bot'
 require 'honeybadger/ruby'
+require 'nokogiri'
 
 GDX = 'http://gdx.mlb.com/components/game/mlb'
 SCOREBOARD = "#{GDX}/year_%Y/month_%m/day_%d/miniscoreboard.xml"

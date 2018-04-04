@@ -36,8 +36,6 @@ class Baseballbot
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # do nothing, it's not the end of the world
       nil
-    rescue => ex
-      Honeybadger.notify(ex, context: { team: team })
     end
   end
 end

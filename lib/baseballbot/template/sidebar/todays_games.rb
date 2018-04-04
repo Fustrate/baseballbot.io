@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'nokogiri'
+
 class Baseballbot
   module Template
     class Sidebar
