@@ -2,6 +2,11 @@
 
 class SubredditsController < ApplicationController
   def index
+    @api = ::MLBStatsAPI::Client.new(
+      logger: Rails.logger,
+      cache: Rails.application.redis
+    )
+
     @subreddits = Subreddit.order(:name).includes(:account)
   end
 
