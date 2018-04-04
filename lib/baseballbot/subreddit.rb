@@ -23,7 +23,7 @@ class Baseballbot
         TZInfo::Timezone.get 'America/Los_Angeles'
       end
 
-      @team = @bot.stats.team(@code) if @code
+      @team = @bot.api.team(@code) if @code
     end
 
     # !@group Game Chats

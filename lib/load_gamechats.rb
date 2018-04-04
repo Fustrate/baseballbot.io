@@ -4,7 +4,6 @@ require 'pg'
 require 'json'
 require 'open-uri'
 require 'chronic'
-require 'mlb_gameday'
 
 class GamechatLoader
   URL = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=%<year>d&' \
@@ -16,8 +15,6 @@ class GamechatLoader
     @failures = 0
 
     @right_now = Time.now.strftime('%Y-%m-%d %H:%M:%S')
-
-    @api = MLBGameday::API.new
   end
 
   def run
@@ -48,15 +45,8 @@ class GamechatLoader
     )
   end
 
-  def load_schedule(subreddit_id, code, post_at)
-    team = @api.team code
-
-    unless team
-      puts "Invalid team code: #{code}"
-      return
-    end
-
-    data = JSON.parse URI.parse(schedule_url(team.id)).open.read
+  def load_schedule(subreddit_id, team_id, post_at)
+    data = JSON.parse URI.parse(schedule_url(team_id)).open.read
 
     process_games(data.dig('dates'), subreddit_id, adjust_time_proc(post_at))
   end
@@ -142,7 +132,7 @@ class GamechatLoader
 
       load_schedule(
         row['id'],
-        row['team_code'],
+        row['team_id'],
         row['post_at']
       )
     end
@@ -150,9 +140,10 @@ class GamechatLoader
 
   def enabled_subreddits
     conn.exec(
-      "SELECT id, name, team_code, options#>>'{gamechats,post_at}' AS post_at
+      "SELECT id, name, team_id, options#>>'{gamechats,post_at}' AS post_at
       FROM subreddits
-      WHERE (options#>>'{gamechats,enabled}')::boolean IS TRUE"
+      WHERE team_id IS NOT NULL
+      AND (options#>>'{gamechats,enabled}')::boolean IS TRUE"
     )
   end
 

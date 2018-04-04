@@ -60,7 +60,7 @@ class Baseballbot
         bot: self,
         id: row['id'].to_i,
         name: row['name'],
-        code: row['team_code'],
+        team_id: row['team_id'],
         account: @accounts[row['account_id']],
         options: JSON.parse(row['options'])
       )

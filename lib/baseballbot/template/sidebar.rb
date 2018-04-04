@@ -37,7 +37,6 @@ class Baseballbot
 
       def open_url(url, interpolations = {})
         interpolations[:team_id] = @team.id
-        interpolations[:team_code] = @team.file_code
 
         URI.parse(format(url, interpolations)).open.read
       end

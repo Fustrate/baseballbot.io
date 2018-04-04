@@ -31,7 +31,7 @@ class Baseballbot
   include Sidebars
   include Subreddits
 
-  attr_reader :db, :gameday, :stats, :client, :session, :redis, :logger
+  attr_reader :db, :api, :client, :session, :redis, :logger
 
   def initialize(options = {})
     @client = Redd::APIClient.new(
@@ -50,7 +50,7 @@ class Baseballbot
 
     @logger = options[:logger] || Logger.new(STDOUT)
 
-    @stats = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
+    @api = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
   end
 
   def inspect

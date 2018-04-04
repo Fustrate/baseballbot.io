@@ -14,7 +14,7 @@
     - @subreddits.each do |subreddit|
       %tr
         %td= link_to subreddit.name, subreddit.url
-        %td= subreddit.team_code
+        %td= subreddit.team_id
         %td= subreddit.account.name
         %td.text-center= '✓' if subreddit.update_sidebar?
         %td.text-center= '✓' if subreddit.post_gamechats?

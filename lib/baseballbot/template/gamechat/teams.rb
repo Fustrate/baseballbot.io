@@ -41,13 +41,13 @@ class Baseballbot
         end
 
         def opponent
-          return @bot.stats.team(home_id) if @subreddit.team&.id == away_id
+          return @bot.api.team(home_id) if @subreddit.team&.id == away_id
 
-          @bot.stats.team(away_id)
+          @bot.api.team(away_id)
         end
 
         def team
-          @subreddit.team || @bot.stats.team(home_id)
+          @subreddit.team || @bot.api.team(home_id)
         end
       end
     end

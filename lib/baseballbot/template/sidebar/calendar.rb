@@ -153,7 +153,7 @@ class Baseballbot
         end
 
         def build_team(code:, name:)
-          @bot.stats.team(code) ||
+          @bot.api.team(code) ||
             MLBStatsAPI::Team.new('teamName' => name, 'abbreviation' => code)
         end
 

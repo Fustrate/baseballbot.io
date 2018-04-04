@@ -60,7 +60,7 @@ class Baseballbot
 
         # rubocop:disable Metrics/MethodLength
         def parse_standings_row(division, row)
-          team = @bot.stats.team(row['team']['id'])
+          team = @bot.api.team(row['team']['id'])
 
           records = row.dig('records', 'splitRecords')
             .map { |rec| [rec['type'], [rec['wins'], rec['losses']]] }

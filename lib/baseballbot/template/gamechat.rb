@@ -36,11 +36,11 @@ class Baseballbot
       end
 
       def content
-        @content ||= @bot.stats.content @game_pk
+        @content ||= @bot.api.content @game_pk
       end
 
       def feed
-        @feed ||= @bot.stats.live_feed @game_pk
+        @feed ||= @bot.api.live_feed @game_pk
       end
 
       def linescore
