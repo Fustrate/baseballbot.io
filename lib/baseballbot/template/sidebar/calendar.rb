@@ -4,13 +4,12 @@ class Baseballbot
   module Template
     class Sidebar
       module Calendar
-        CALENDAR_DATA_URL = 'http://mlb.mlb.com/lookup/json/named.schedule_' \
-                            "team_sponsors.bam?start_date='%<start_date>s'&" \
-                            "end_date='%<end_date>s'&team_id=%<team_id>d&" \
-                            "season=%<year>d&game_type='R'&game_type='A'&" \
-                            "game_type='E'&game_type='F'&game_type='D'&" \
-                            "game_type='L'&game_type='W'&game_type='C'&" \
-                            "game_type='S'"
+        CALENDAR_DATA_URL = \
+          'http://lookup-service-prod.mlb.com/json/named.schedule_team_' \
+          "sponsors.bam?start_date='%<start_date>s'&end_date='%<end_date>s'&" \
+          "team_id=%<team_id>d&season=%<year>d&game_type='R'&game_type='A'&" \
+          "game_type='E'&game_type='F'&game_type='D'&game_type='L'&" \
+          "game_type='W'&game_type='C'&game_type='S'"
 
         # See #calendar for month options
         def month_calendar(month = nil, options = {})
