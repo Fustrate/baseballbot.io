@@ -23,8 +23,7 @@ class Baseballbot
 
           @all_teams.sort_by! { |team| team[:sort_order] }
 
-          determine_league_wildcards(103)
-          determine_league_wildcards(104)
+          [103, 104].each { |league_id| mark_league_wildcards(league_id) }
 
           @all_teams
         end
@@ -118,14 +117,15 @@ class Baseballbot
 
         # @!group Wildcards
 
-        def determine_league_wildcards(league_id)
-          eligible = teams_in_league(league_id)
-            .sort_by { |team| team[:wildcard_gb] }
+        def mark_league_wildcards(league_id)
+          wildcards = first_and_second_wildcards teams_in_league(league_id)
 
-          # first_and_second_wildcards(eligible).each_with_index do |teams_in_spot, position|
-          #   teams_in_spot.each do |team|
-          #     teams[team[:code].to_sym][:wildcard_position] = position + 1
-          #   end
+          return if wildcards.none?
+
+          # if wildcards.length == 1
+          #   wildcards[0][:wildcard_position] = 1
+          # else
+          #   if wildcards[0]
           # end
         end
 
@@ -134,18 +134,25 @@ class Baseballbot
         # split between teams ahead of the second spot
         #
         # This might put two teams tied for second instead of tied for first
-        def first_and_second_wildcards(eligible)
-          division_leaders_count = eligible
-            .count { |team| team[:games_back] == '-' }
+        def first_and_second_wildcards(teams)
+          division_leaders = teams.count { |team| team[:games_back] == '-' }
 
           # 5 or more division leaders means no wildcards
-          return [] if division_leaders_count >= 5
+          return [] if division_leaders >= 5
 
-          eligible
-            .reject { |team| team[:wildcard_gb] == '-' }
-            .reject { |team| team[:games_back] == '-' }
-            .sort_by! { |team| team[:wildcard_rank] }
-            .first(5 - division_leaders_count)
+          # ranked = teams
+          #   .reject { |team| team[:wildcard_gb] == '-' }
+          #   .reject { |team| team[:games_back] == '-' }
+          #   .sort_by! { |team| team[:wildcard_rank] }
+          #
+          # first_wildcard = teams
+          #   .select { |team| team[:wildcard_rank] == ranked[0][:wildcard_rank] }
+          #
+          # first_wildcard.each { |team| team[:]}
+          #
+          # if wildcard_count == 1
+          #   teams.find { |team| team[:id] == eligible.first[:id] }
+          # end
         end
 
         # @!endgroup Wildcards
