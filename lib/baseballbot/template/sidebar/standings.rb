@@ -84,7 +84,7 @@ class Baseballbot
             last_ten:       records['lastTen'],
             losses:         row['losses'],
             percent:        row['leagueRecord']['pct'].to_f,
-            road_record:    records['road'],
+            road_record:    records['away'],
             run_diff:       row['runDifferential'],
             streak:         row['streak']['streakCode'],
             team:           team,
