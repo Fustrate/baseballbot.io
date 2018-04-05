@@ -75,7 +75,7 @@ class Baseballbot
 
         protected
 
-        def build_date_array(end_date)
+        def build_date_hash(end_date)
           days = {}
 
           1.upto(end_date.day).each do |day|
@@ -102,6 +102,11 @@ class Baseballbot
           end
 
           days
+        end
+
+        def current_team_game?(game)
+          game.dig('teams', 'away', 'team', 'id') == @subreddit.team.id ||
+            game.dig('teams', 'home', 'team', 'id') == @subreddit.team.id
         end
 
         def cell(date, games, options = {})
