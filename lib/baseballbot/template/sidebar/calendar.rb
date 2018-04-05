@@ -114,17 +114,14 @@ class Baseballbot
           days = {}
 
           start_date.upto(end_date).each do |day|
-            days[day] = {
-              date: Date.civil(end_date.year, end_date.month, day),
-              games: []
-            }
+            days[day] = { date: day, games: [] }
           end
 
           days
         end
 
         def calendar_games(start_date, end_date)
-          days = build_date_hash(end_date)
+          days = build_date_hash(start_date, end_date)
 
           calendar_dates(start_date, end_date).each do |calendar_date|
             calendar_date['games'].each do |game|
@@ -132,7 +129,7 @@ class Baseballbot
 
               date = @subreddit.parse_in_time_zone game['gameDate']
 
-              days[date][:games] << process_game(game, date)
+              days[date.strftime('%F')][:games] << process_game(game, date)
             end
           end
 
