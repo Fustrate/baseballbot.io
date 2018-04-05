@@ -61,7 +61,7 @@ class Baseballbot
         end
 
         def line_for_team(line_team)
-          code = line_team == :home ? home_code : away_code
+          code = line_team == :home ? home_team.code : away_team.code
           line = line_team == :home ? lines[1] : lines[0]
           rhe = line_team == :home ? home_rhe : away_rhe
 

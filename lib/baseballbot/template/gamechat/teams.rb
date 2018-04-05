@@ -4,22 +4,6 @@ class Baseballbot
   module Template
     class Gamechat
       module Teams
-        def away_name
-          game_data.dig('teams', 'away', 'teamName')
-        end
-
-        def away_code
-          game_data.dig('teams', 'away', 'abbreviation')
-        end
-
-        def home_name
-          game_data.dig('teams', 'home', 'teamName')
-        end
-
-        def home_code
-          game_data.dig('teams', 'home', 'abbreviation')
-        end
-
         def away_record
           game_data.dig('teams', 'away', 'record')
             &.values_at('wins', 'losses')
@@ -32,22 +16,22 @@ class Baseballbot
             &.join('-')
         end
 
-        def away_id
-          game_data.dig('teams', 'away', 'id')
+        def home_team
+          @home_team ||= @bot.api.team game_data.dig('teams', 'home', 'id')
         end
 
-        def home_id
-          game_data.dig('teams', 'home', 'id')
+        def away_team
+          @away_team ||= @bot.api.team game_data.dig('teams', 'away', 'id')
         end
 
         def opponent
-          return @bot.api.team(home_id) if @subreddit.team&.id == away_id
+          return home_team if @subreddit.team&.id == away_team.id
 
-          @bot.api.team(away_id)
+          away_team
         end
 
         def team
-          @subreddit.team || @bot.api.team(home_id)
+          @subreddit.team || home_team
         end
       end
     end

@@ -55,9 +55,10 @@ class Baseballbot
           team_id = media['keywordsDisplay']
             .find { |keyword| keyword['type'] == 'team_id' }
             &.dig('value')
+            &.to_i
 
           {
-            code: team_id&.to_i == home_id ? home_code : away_code,
+            code: team_id == home_team.id ? home_team.code : away_team.code,
             headline: media['headline'].strip,
             blurb: media['blurb'].strip.gsub(/^[A-Z@]+: /, ''),
             duration: media['duration'].strip.gsub(/^00:0?/, ''),

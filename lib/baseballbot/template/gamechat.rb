@@ -110,13 +110,13 @@ class Baseballbot
       # rubocop:disable Metrics/MethodLength
       def title_interpolations
         {
-          home_city: game_data.dig('teams', 'home', 'locationName'),
-          home_name: game_data.dig('teams', 'home', 'teamName'),
+          home_full_name: home_team.full_name,
+          home_name: home_team.name,
           home_record: home_record,
           home_pitcher: player_name(probable_home_starter),
           home_runs: home_rhe['runs'],
-          away_city: game_data.dig('teams', 'away', 'locationName'),
-          away_name: game_data.dig('teams', 'away', 'teamName'),
+          away_full_name: away_team.full_name,
+          away_name: away_team.name,
           away_record: away_record,
           away_pitcher: player_name(probable_away_starter),
           away_runs: away_rhe['runs'],
