@@ -72,7 +72,7 @@ class Baseballbot
         end
 
         def link_for_team(game:, team:)
-          code = team_from_id(team.dig('team', 'id'))['abbreviation']
+          code = @bot.api.team(team.dig('team', 'id'))&.abbreviation
 
           gamechat = @gamechats["#{game['gamePk']}_#{subreddit code}".downcase]
 
