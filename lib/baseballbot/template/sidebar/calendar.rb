@@ -164,6 +164,7 @@ class Baseballbot
 
           game['broadcasts']
             .select { |broadcast| broadcast['type'] == 'TV' }
+            .select { |broadcast| broadcast['language'] == 'en' }
             .select { |broadcast| broadcast['homeAway'] == home_away }
             .map { |broadcast| broadcast['callSign'] }
             .join(', ')
