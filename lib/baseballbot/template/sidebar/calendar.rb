@@ -16,8 +16,9 @@ class Baseballbot
 
           dates = calendar_games(start_date, end_date)
 
-          cells = dates
-            .map { |date, day| cell(date.day, day[:games], downcase: downcase) }
+          cells = dates.map do |_, day|
+            cell(day[:date].day, day[:games], downcase: downcase)
+          end
 
           rows = [cells.shift(7 - dates.values.first[:date].wday).join('|')]
 
@@ -114,7 +115,7 @@ class Baseballbot
           days = {}
 
           start_date.upto(end_date).each do |day|
-            days[day] = { date: day, games: [] }
+            days[day.strftime('%F')] = { date: day, games: [] }
           end
 
           days
