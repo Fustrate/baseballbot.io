@@ -12,7 +12,7 @@ class Baseballbot
           "game_type='W'&game_type='C'&game_type='S'"
 
         # See #calendar for month options
-        def month_calendar(month = nil, options = {})
+        def month_calendar(downcase: false)
           days = calendar(month)
 
           first_day = days[days.keys.first]
@@ -23,7 +23,7 @@ class Baseballbot
             ' |' * first_day[:date].wday
           ]
 
-          add_days_to_calendar(days, parts, options)
+          add_days_to_calendar(days, parts, downcase: downcase)
 
           parts.join ''
         end
@@ -221,11 +221,11 @@ class Baseballbot
           )
         end
 
-        def add_days_to_calendar(days, calendar, options = {})
+        def add_days_to_calendar(days, calendar, downcase: false)
           days_in_month = days.keys.last
 
           days.each do |cday, day|
-            calendar << cell(cday, day[:games], downcase: options[:downcase])
+            calendar << cell(cday, day[:games], downcase: downcase)
 
             if !day[:date].saturday?
               calendar << '|'
