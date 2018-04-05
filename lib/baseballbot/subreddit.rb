@@ -26,6 +26,14 @@ class Baseballbot
       @code = @team&.abbreviation
     end
 
+    def parse_in_time_zone(date)
+      utc = Time.parse(date).utc
+      period = @timezone.period_for_utc(utc)
+      with_offset = utc + period.utc_total_offset
+
+      Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
+    end
+
     # !@group Game Chats
 
     def post_gamechat(id:, title:, game_pk:)
