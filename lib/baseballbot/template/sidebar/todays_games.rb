@@ -74,7 +74,17 @@ class Baseballbot
         def link_for_team(game:, team:)
           code = @bot.api.team(team.dig('team', 'id'))&.abbreviation
 
-          gamechat = @gamechats["#{game['gamePk']}_#{subreddit code}".downcase]
+          # This is no longer included in the data - we might have to switch to
+          # using game_pk instead.
+          key = [
+            Time.now.strftime('%Y_%m_%d'),
+            game.dig('teams', 'away', 'team', 'teamCode'),
+            game.dig('teams', 'home', 'team', 'teamCode'),
+            game['gameNumber'],
+            subreddit(code)
+          ].join('_').downcase
+
+          gamechat = @gamechats[key]
 
           if gamechat
             "[^★](/#{gamechat} \"team-#{code.downcase}\")"
@@ -131,10 +141,11 @@ class Baseballbot
           @gamechats = {}
 
           @bot.redis.keys("#{@date.strftime('%Y-%m-%d')}_*").each do |key|
-            _, game_pk = key.split('_').last
+            # _, game_pk = key.split('_').last
 
             @bot.redis.hgetall(key).each do |subreddit, link_id|
-              @gamechats["#{game_pk}_#{subreddit}".downcase] = link_id
+              # @gamechats["#{game_pk}_#{subreddit}".downcase] = link_id
+              @gamechats["#{key}_#{subreddit}".downcase] = link_id
             end
           end
         end
