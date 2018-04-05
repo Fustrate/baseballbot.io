@@ -30,7 +30,10 @@ class Baseballbot
         end
 
         def month_games
-          calendar.flat_map { |_, day| day[:games] }
+          start_date = Date.civil(Date.today.year, Date.today.month, 1)
+          end_date = Date.civil(Date.today.year, Date.today.month, -1)
+
+          calendar_games(start_date, end_date).flat_map { |_, day| day[:games] }
         end
 
         def previous_games(limit)
