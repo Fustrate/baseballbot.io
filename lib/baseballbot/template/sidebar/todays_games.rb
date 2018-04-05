@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-
 class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-        GDX = 'http://gdx.mlb.com/components/game/mlb'
-
-        SCOREBOARD_URL = "#{GDX}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+        SCHEDULE = \
+          'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
+          'hydrate=game(content(summary)),linescore,flags,team'
 
         PREGAME_STATUSES = [
           'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
@@ -19,12 +17,14 @@ class Baseballbot
         ].freeze
 
         def todays_games
-          date = @subreddit.timezone.now - 10_800
+          @date = @subreddit.timezone.now
 
-          load_gamechats date
+          load_gamechats
 
-          Nokogiri::XML(open(date.strftime(SCOREBOARD_URL)))
-            .xpath('//games/game')
+          url = format(SCHEDULE, date: @date.strftime('%m/%d/%Y'))
+
+          JSON.parse(URI.parse(url).open.read)
+            .dig('dates', 0, 'games')
             .map { |game| process_todays_game game }
         end
 
@@ -35,22 +35,25 @@ class Baseballbot
         end
 
         def game_hash(game)
-          status = game.xpath('@status').text
+          status = game.dig('status', 'abstractGameState')
 
           started = !PREGAME_STATUSES.include?(status)
 
           {
-            home: {
-              team: link_for_team(game: game, team: 'home'),
-              score: (started ? game.xpath('@home_team_runs').text.to_i : '')
-            },
-            away: {
-              team: link_for_team(game: game, team: 'away'),
-              score: (started ? game.xpath('@away_team_runs').text.to_i : '')
-            },
+            home: team_data(game, 'home', started),
+            away: team_data(game, 'away', started),
             raw_status: status,
-            status: gameday_link(game),
-            free: game.xpath('game_media/media[@free="ALL"]').any?
+            status: gameday_link(game_status(game), game['gamePk']),
+            free: game.dig('content', 'media', 'freeGame')
+          }
+        end
+
+        def team_data(game, flag, started)
+          team = game.dig('teams', flag)
+
+          {
+            team: link_for_team(game: game, team: team),
+            score: (started ? team['score'].to_i : '')
           }
         end
 
@@ -69,10 +72,9 @@ class Baseballbot
         end
 
         def link_for_team(game:, team:)
-          gid = game.xpath('@gameday_link').text
-          code = game.xpath("@#{team}_name_abbrev").text
+          code = team_from_id(team.dig('team', 'id'))['abbreviation']
 
-          gamechat = @gamechats["#{gid}_#{subreddit code}".downcase]
+          gamechat = @gamechats["#{game['gamePk']}_#{subreddit code}".downcase]
 
           if gamechat
             "[^★](/#{gamechat} \"team-#{code.downcase}\")"
@@ -82,13 +84,13 @@ class Baseballbot
         end
 
         def game_status(game)
-          status = game.xpath('@status').text
+          status = game.dig('status', 'detailedState')
 
           case status
           when 'In Progress'
             game_inning game
           when 'Postponed'
-            italic game.xpath('@ind').text
+            italic game.dig('status', 'statusCode')
           when 'Delayed Start'
             delay_type game
           when 'Delayed'
@@ -101,37 +103,38 @@ class Baseballbot
         end
 
         def pre_or_post_game_status(game, status)
-          unless POSTGAME_STATUSES.include?(status)
-            return game.xpath('@time').text
+          if POSTGAME_STATUSES.include?(status)
+            innings = game.dig('linescore', 'currentInning')
+
+            return innings == '9' ? 'F' : "F/#{innings}"
           end
 
-          innings = game.xpath('@inning').text
-
-          innings == '9' ? 'F' : "F/#{innings}"
+          @subreddit.timezone
+            .utc_to_local(Time.parse(game['gameDate']))
+            .strftime('%-I:%M')
         end
 
         def delay_type(game)
-          game.xpath('@reason').text == 'Rain' ? '☂' : 'Delay'
+          game.dig('status', 'reason') == 'Rain' ? '☂' : 'Delay'
         end
 
         def game_inning(game)
-          (game.xpath('@top_inning').text == 'Y' ? '▲' : '▼') +
-            bold(game.xpath('@inning').text)
+          (game.dig('linescore', 'isTopInning') ? '▲' : '▼') +
+            bold(game.dig('linescore', 'currentInning'))
         end
 
-        def gameday_link(game)
-          text = game_status(game)
-          game_pk = game.xpath('@game_pk').text.to_i
-
+        def gameday_link(text, game_pk)
           link_to text, url: "https://www.mlb.com/gameday/#{game_pk}"
         end
 
-        def load_gamechats(date)
+        def load_gamechats
           @gamechats = {}
 
-          @bot.redis.keys(date.strftime('%Y_%m_%d_*')).each do |gid|
-            @bot.redis.hgetall(gid).each do |subreddit, link_id|
-              @gamechats["#{gid}_#{subreddit}".downcase] = link_id
+          @bot.redis.keys("#{@date.strftime('%Y-%m-%d')}_*").each do |key|
+            _, game_pk = key.split('_').last
+
+            @bot.redis.hgetall(key).each do |subreddit, link_id|
+              @gamechats["#{game_pk}_#{subreddit}".downcase] = link_id
             end
           end
         end

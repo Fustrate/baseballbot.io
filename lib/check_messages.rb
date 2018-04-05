@@ -2,10 +2,11 @@
 
 require_relative 'default_bot'
 require 'honeybadger/ruby'
-require 'nokogiri'
 
-GDX = 'http://gdx.mlb.com/components/game/mlb'
-SCOREBOARD = "#{GDX}/year_%Y/month_%m/day_%d/miniscoreboard.xml"
+SCHEDULE = \
+  'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
+  'hydrate=game(content(summary)),linescore,flags,team'
+
 TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
 LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
 GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
@@ -68,14 +69,23 @@ end
 def load_possible_games
   games = Hash.new { |h, k| h[k] = [] }
 
-  Nokogiri::XML(URI.parse(Time.now.strftime(SCOREBOARD)).open)
-    .xpath('//games/game')
-    .map do |game|
-      gid = game.xpath('@gameday_link').text
+  data = URI.parse(
+    format(SCHEDULE, date: Time.now.strftime('%m/%d/%Y'))
+  ).open.read
 
-      games[game.xpath('@home_name_abbrev').text] << gid
-      games[game.xpath('@away_name_abbrev').text] << gid
-    end
+  JSON.parse(data).dig('dates', 0, 'games').each do |game|
+    # This is no longer included in the data - we might have to switch to
+    # using game_pk instead.
+    gid = [
+      Time.now.strftime('%Y_%m_%d'),
+      game.dig('teams', 'away', 'team', 'teamCode'),
+      game.dig('teams', 'home', 'team', 'teamCode'),
+      game['gameNumber']
+    ].join('_')
+
+    games[game.dig('teams', 'away', 'team', 'abbreviation')] << gid
+    games[game.dig('teams', 'home', 'team', 'abbreviation')] << gid
+  end
 
   games
 end
@@ -85,7 +95,7 @@ def unread_messages
 end
 
 def check_messages(retry_on_failure: true)
-  unread_messages.each { |msg| process_message msg }
+  unread_messages.each { |message| process_message message }
 rescue Redd::APIError
   return unless retry_on_failure
 
