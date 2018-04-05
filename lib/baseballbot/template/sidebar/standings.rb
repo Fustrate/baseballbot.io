@@ -151,7 +151,7 @@ class Baseballbot
           filename = format(
             STATS_STANDINGS,
             year: Time.now.year,
-            date: Time.now.strftime('%m/%d/%Y')
+            date: (Time.now + 86_400).strftime('%m/%d/%Y')
           )
 
           JSON.parse(URI.parse(filename).open.read).dig('records')
