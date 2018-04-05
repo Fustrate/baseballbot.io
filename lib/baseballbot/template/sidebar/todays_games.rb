@@ -106,7 +106,7 @@ class Baseballbot
           if POSTGAME_STATUSES.include?(status)
             innings = game.dig('linescore', 'currentInning')
 
-            return innings == '9' ? 'F' : "F/#{innings}"
+            return innings == 9 ? 'F' : "F/#{innings}"
           end
 
           @subreddit.timezone
