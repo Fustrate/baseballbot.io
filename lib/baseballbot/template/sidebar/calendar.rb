@@ -13,7 +13,7 @@ class Baseballbot
 
         # See #calendar for month options
         def month_calendar(downcase: false)
-          days = calendar(month)
+          days = calendar
 
           first_day = days[days.keys.first]
 
