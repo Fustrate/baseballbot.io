@@ -17,7 +17,7 @@ class Baseballbot
           dates = calendar_games(start_date, end_date)
 
           cells = dates
-            .map { |cday, day| cell(cday, day[:games], downcase: downcase) }
+            .map { |date, day| cell(date.day, day[:games], downcase: downcase) }
 
           rows = [cells.shift(7 - dates.values.first[:date].wday).join('|')]
 
@@ -110,10 +110,10 @@ class Baseballbot
 
         protected
 
-        def build_date_hash(end_date)
+        def build_date_hash(start_date, end_date)
           days = {}
 
-          1.upto(end_date.day).each do |day|
+          start_date.upto(end_date).each do |day|
             days[day] = {
               date: Date.civil(end_date.year, end_date.month, day),
               games: []
@@ -132,7 +132,7 @@ class Baseballbot
 
               date = @subreddit.parse_in_time_zone game['gameDate']
 
-              days[date.day][:games] << process_game(game, date)
+              days[date][:games] << process_game(game, date)
             end
           end
 
