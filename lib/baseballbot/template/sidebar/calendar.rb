@@ -148,20 +148,22 @@ class Baseballbot
           team = game.dig('teams', home_team?(game) ? 'home' : 'away')
           opponent = game.dig('teams', home_team?(game) ? 'away' : 'home')
 
-          {
+          info = {
             date: date,
             home: home_team?(game),
             opponent: game_opponent(game),
             score: [team['score'], opponent['score']],
             tv: tv_stations(game),
             status_code: game['status']['statusCode'],
-            game_pk: game['gamePk'],
-            result: game_result(team, opponent)
-          }.tap do |info|
-            info[:outcome] = outcome(info) if info[:over]
-            info[:status] = calendar_game_status info
-            info[:over] = %w[F C D FT FR].include? info[:status_code]
-          end
+            game_pk: game['gamePk']
+          }
+
+          info[:over] = %w[F C D FT FR].include? info[:status_code]
+          info[:outcome] = outcome(info) if info[:over]
+          info[:status] = calendar_game_status info
+          info[:result] = game_result(info)
+
+          info
         end
 
         def tv_stations(game)
@@ -175,12 +177,14 @@ class Baseballbot
             .join(', ')
         end
 
-        def game_result(team, opponent)
-          return 'L' if opponent['isWinner']
+        def game_result(game)
+          return '' unless game[:over]
 
-          return 'W' if team['isWinner']
+          return 'T' if game[:score][0] == game[:score][1]
 
-          ''
+          return 'W' if game[:score][0] > game[:score][1]
+
+          'L'
         end
 
         def game_opponent(game)
