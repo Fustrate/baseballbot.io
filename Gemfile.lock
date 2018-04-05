@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/Fustrate/mlb_stats_api
-  revision: 3182f1a28ccb3957a3d8bcbf0ac8996e9f6f3ea9
+  revision: ce49626f7964e590eca9496c54aa5d33176fd378
   specs:
     mlb_stats_api (0.1.0)
       hana (~> 1.3)
@@ -104,13 +104,13 @@ GEM
     capistrano-rbenv (2.1.3)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
-    capybara (2.18.0)
+    capybara (3.0.0)
       addressable
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (>= 2.0, < 4.0)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      xpath (~> 3.0)
     chronic (0.10.2)
     coderay (1.1.2)
     coffee-rails (4.2.2)
