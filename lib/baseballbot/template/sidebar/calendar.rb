@@ -16,7 +16,8 @@ class Baseballbot
 
           dates = calendar_games(start_date, end_date)
 
-          cells = calendar_cells(dates, downcase: downcase)
+          cells = dates
+            .map { |cday, day| cell(cday, day[:games], downcase: downcase) }
 
           rows = [cells.shift(7 - dates.values.first[:date].wday).join('|')]
 
@@ -147,7 +148,7 @@ class Baseballbot
           team = game.dig('teams', home_team?(game) ? 'home' : 'away')
           opponent = game.dig('teams', home_team?(game) ? 'away' : 'home')
 
-          post_process_game(
+          {
             date: date,
             home: home_team?(game),
             opponent: game_opponent(game),
@@ -156,7 +157,11 @@ class Baseballbot
             status_code: game['status']['statusCode'],
             game_pk: game['gamePk'],
             result: game_result(team, opponent)
-          )
+          }.tap do |info|
+            info[:outcome] = outcome(info) if info[:over]
+            info[:status] = calendar_game_status info
+            info[:over] = %w[F C D FT FR].include? info[:status_code]
+          end
         end
 
         def tv_stations(game)
@@ -188,15 +193,6 @@ class Baseballbot
           game.dig('teams', 'away', 'team', 'id') != @subreddit.team&.id
         end
 
-        # Values that depend on other values in the hash
-        def post_process_game(game)
-          game[:outcome] = outcome(game) if game[:over]
-          game[:status] = calendar_game_status game
-          game[:over] = %w[F C D FT FR].include? game[:status_code]
-
-          game
-        end
-
         def calendar_dates(start_date, end_date)
           url = format(
             SCHEDULE,
@@ -206,10 +202,6 @@ class Baseballbot
           )
 
           JSON.parse(URI.parse(url).open.read).dig('dates')
-        end
-
-        def calendar_cells(days, downcase: false)
-          days.map { |cday, day| cell(cday, day[:games], downcase: downcase) }
         end
 
         def calendar_game_status(game)
