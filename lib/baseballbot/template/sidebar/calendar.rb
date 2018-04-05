@@ -77,6 +77,37 @@ class Baseballbot
           @upcoming.first(limit)
         end
 
+        def next_game
+          upcoming_games(1)[0]
+        end
+
+        def next_game_str(date_format: '%-m/%-d')
+          game = next_game
+
+          return '???' unless game
+
+          if game[:home]
+            "#{game[:date].strftime(date_format)} #{@team.name} vs. " \
+            "#{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
+          else
+            "#{game[:date].strftime(date_format)} #{@team.name} @ " \
+            "#{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
+          end
+        end
+
+        def last_game
+          previous_games(1)[0]
+        end
+
+        def last_game_str(date_format: '%-m/%-d')
+          game = last_game
+
+          return '???' unless game
+
+          "#{game[:date].strftime(date_format)} #{@team.name} " \
+          "#{game[:score][0]} #{game[:opponent].name} #{game[:score][1]}"
+        end
+
         protected
 
         def build_date_hash(end_date)
