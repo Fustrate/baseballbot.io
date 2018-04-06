@@ -140,7 +140,7 @@ class Baseballbot
         def load_gamechats
           @gamechats = {}
 
-          @bot.redis.keys("#{@date.strftime('%Y-%m-%d')}_*").each do |key|
+          @bot.redis.keys(@date.strftime('%Y_%m_%d_*')).each do |key|
             # _, game_pk = key.split('_').last
 
             @bot.redis.hgetall(key).each do |subreddit, link_id|
