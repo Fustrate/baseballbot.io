@@ -16,8 +16,8 @@ class Baseballbot
           'Final', 'Game Over', 'Postponed', 'Completed Early'
         ].freeze
 
-        def todays_games
-          @date = @subreddit.timezone.now
+        def todays_games(date)
+          @date = date || @subreddit.now
 
           load_gamechats
 
@@ -119,8 +119,8 @@ class Baseballbot
             return innings == 9 ? 'F' : "F/#{innings}"
           end
 
-          @subreddit.timezone
-            .utc_to_local(Time.parse(game['gameDate']))
+          Baseballbot
+            .parse_time(game['gameDate'], in_time_zone: @subreddit.timezone)
             .strftime('%-I:%M')
         end
 

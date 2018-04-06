@@ -65,4 +65,12 @@ class Baseballbot
   def subreddits
     @subreddits ||= load_subreddits
   end
+
+  def self.parse_time(utc, in_time_zone:)
+    utc = Time.parse(utc).utc unless utc.is_a? Time
+    period = in_time_zone.period_for_utc(utc)
+    with_offset = utc + period.utc_total_offset
+
+    Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
+  end
 end

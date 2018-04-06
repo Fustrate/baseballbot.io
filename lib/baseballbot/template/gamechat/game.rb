@@ -14,16 +14,21 @@ class Baseballbot
         }.freeze
 
         def start_time_utc
-          @start_time_utc ||= \
-            Time.parse game_data.dig('datetime', 'dateTime')
+          @start_time_utc ||= Time.parse game_data.dig('datetime', 'dateTime')
         end
 
         def start_time_et
-          TZInfo::Timezone.get('America/New_York').utc_to_local(start_time_utc)
+          Baseballbot.parse_time(
+            start_time_utc,
+            in_time_zone: TZInfo::Timezone.get('America/New_York')
+          )
         end
 
         def start_time_local
-          @subreddit.timezone.utc_to_local(start_time_utc)
+          Baseballbot.parse_time(
+            start_time_utc,
+            in_time_zone: @subreddit.timezone
+          )
         end
 
         def gid

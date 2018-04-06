@@ -99,7 +99,7 @@ class Baseballbot
       protected
 
       def format_title(title)
-        title = @subreddit.timezone.strftime title
+        title = start_time_local.strftime title
 
         # No interpolations? Great!
         return title unless title.match?(/%[{<]/)

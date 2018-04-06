@@ -27,15 +27,7 @@ class Baseballbot
     end
 
     def now
-      parse_in_time_zone Time.now.utc
-    end
-
-    def parse_in_time_zone(utc)
-      utc = Time.parse(utc).utc unless utc.is_a? Time
-      period = @timezone.period_for_utc(utc)
-      with_offset = utc + period.utc_total_offset
-
-      Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
+      Baseballbot.parse_time(Time.now.utc, in_time_zone: @timezone)
     end
 
     # !@group Game Chats

@@ -128,7 +128,10 @@ class Baseballbot
             calendar_date['games'].each do |game|
               next unless current_team_game?(game)
 
-              date = @subreddit.parse_in_time_zone game['gameDate']
+              date = Baseballbot.parse_time(
+                game['gameDate'],
+                in_time_zone: @subreddit.timezone
+              )
 
               days[date.strftime('%F')][:games] << process_game(game, date)
             end
