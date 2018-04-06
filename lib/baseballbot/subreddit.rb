@@ -26,8 +26,12 @@ class Baseballbot
       @code = @team&.abbreviation
     end
 
-    def parse_in_time_zone(date)
-      utc = Time.parse(date).utc
+    def now
+      parse_in_time_zone Time.now.utc
+    end
+
+    def parse_in_time_zone(utc)
+      utc = Time.parse(utc).utc unless utc.is_a? Time
       period = @timezone.period_for_utc(utc)
       with_offset = utc + period.utc_total_offset
 
