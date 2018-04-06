@@ -27,7 +27,7 @@ class Baseballbot
     end
 
     def now
-      Baseballbot.parse_time(Time.now.utc, in_time_zone: @timezone)
+      @now ||= Baseballbot.parse_time(Time.now.utc, in_time_zone: @timezone)
     end
 
     # !@group Game Chats
