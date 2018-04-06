@@ -78,8 +78,8 @@ def load_possible_games
     # using game_pk instead.
     gid = [
       Time.now.strftime('%Y_%m_%d'),
-      game.dig('teams', 'away', 'team', 'teamCode'),
-      game.dig('teams', 'home', 'team', 'teamCode'),
+      "#{game.dig('teams', 'away', 'team', 'teamCode')}mlb",
+      "#{game.dig('teams', 'home', 'team', 'teamCode')}mlb",
       game['gameNumber']
     ].join('_')
 

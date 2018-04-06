@@ -78,8 +78,8 @@ class Baseballbot
           # using game_pk instead.
           key = [
             Time.now.strftime('%Y_%m_%d'),
-            game.dig('teams', 'away', 'team', 'teamCode'),
-            game.dig('teams', 'home', 'team', 'teamCode'),
+            "#{game.dig('teams', 'away', 'team', 'teamCode')}mlb",
+            "#{game.dig('teams', 'home', 'team', 'teamCode')}mlb",
             game['gameNumber'],
             subreddit(code)
           ].join('_').downcase
