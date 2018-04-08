@@ -12,7 +12,7 @@
   %tbody
     - @gamechats.each do |gamechat|
       %tr
-        %td= gamechat.game_pk
+        %td= link_to gamechat.game_pk, "https://www.mlb.com/gameday/#{gamechat.game_pk}"
         %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
         %td= link_to gamechat.subreddit.name, "http://reddit.com/r/#{gamechat.subreddit.name}"
         %td.no-wrap= gamechat.post_at.strftime '%-I:%M %p'

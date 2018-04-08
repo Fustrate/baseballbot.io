@@ -48,7 +48,7 @@ class SundayGamechatLoader
 
       next if gametime < Time.now
 
-      insert_game game['gameday_link'], gametime
+      insert_game game['game_pk'], gametime
     end
   end
 
@@ -57,7 +57,7 @@ class SundayGamechatLoader
 
     data = game_data(game_pk, gametime)
 
-    @conn.exec_params(
+    conn.exec_params(
       "INSERT INTO gamechats (#{data.keys.join(', ')})" \
       "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
       data.values
