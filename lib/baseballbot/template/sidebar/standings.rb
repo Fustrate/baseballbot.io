@@ -6,7 +6,7 @@ class Baseballbot
       module Standings
         STATS_STANDINGS = \
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-          'leagueId=103,104&season=%<year>d&date=%<date>s'
+          'leagueId=103,104&season=%<year>d&t=%<t>d'
 
         def all_teams
           return @all_teams if @all_teams
@@ -151,7 +151,7 @@ class Baseballbot
           filename = format(
             STATS_STANDINGS,
             year: Time.now.year,
-            date: (@subreddit.now + 86_400).strftime('%m/%d/%Y')
+            t: Time.now.to_i
           )
 
           JSON.parse(URI.parse(filename).open.read).dig('records')
