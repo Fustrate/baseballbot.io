@@ -53,7 +53,7 @@ class Baseballbot
 
           {
             team: link_for_team(game: game, team: team),
-            score: (started ? team['score'].to_i : '')
+            score: (started && team['score'] ? team['score'].to_i : '')
           }
         end
 
