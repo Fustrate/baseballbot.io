@@ -98,6 +98,10 @@ class Baseballbot
         end
         alias over? final?
 
+        def postponed?
+          game_data.dig('status', 'detailedState') == 'Postponed'
+        end
+
         def live?
           !(preview? || final?)
         end

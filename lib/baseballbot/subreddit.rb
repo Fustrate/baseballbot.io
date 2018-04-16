@@ -36,6 +36,9 @@ class Baseballbot
       @bot.use_account(@account.name)
 
       template = gamechat_template(game_pk: game_pk, title: title)
+
+      return change_gamechat_status(id, nil, 'Postponed') if template.postponed?
+
       submission = submit title: template.title, text: template.result
 
       # Mark as posted right away so that it won't post again
@@ -74,9 +77,11 @@ class Baseballbot
         body: template.replace_in(CGI.unescapeHTML(submission.selftext))
       )
 
-      @bot.logger.info "Updated #{submission.id} in /r/#{@name} for #{game_pk}"
+      @bot.logger.info "[UPD] #{submission.id} in /r/#{@name} for #{game_pk}"
 
-      if template.final?
+      if template.postponed?
+        postpone_gamechat(id, submission, game_pk)
+      elsif template.final?
         end_gamechat(id, submission, game_pk)
 
         if template.won?
@@ -99,7 +104,15 @@ class Baseballbot
         sticky: sticky_gamechats? ? false : nil
       )
 
-      @bot.logger.info "Ended #{submission.id} in /r/#{@name} for #{game_pk}"
+      @bot.logger.info "[END] #{submission.id} in /r/#{@name} for #{game_pk}"
+
+      post_postgame(game_pk: game_pk)
+    end
+
+    def postpone_gamechat(id, submission, game_pk)
+      change_gamechat_status id, submission, 'Postponed'
+
+      @bot.logger.info "[PPD] #{submission.id} in /r/#{@name} for #{game_pk}"
 
       post_postgame(game_pk: game_pk)
     end
