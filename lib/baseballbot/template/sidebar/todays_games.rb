@@ -19,7 +19,7 @@ class Baseballbot
         def todays_games(date)
           @date = date || @subreddit.now
 
-          load_gamechats
+          load_gamechats(date)
 
           url = format(SCHEDULE, date: @date.strftime('%m/%d/%Y'))
 
@@ -137,10 +137,10 @@ class Baseballbot
           link_to text, url: "https://www.mlb.com/gameday/#{game_pk}"
         end
 
-        def load_gamechats
+        def load_gamechats(date)
           @gamechats = {}
 
-          @bot.redis.keys(@date.strftime('%Y_%m_%d_*')).each do |key|
+          @bot.redis.keys(date.strftime('%Y_%m_%d_*')).each do |key|
             # _, game_pk = key.split('_').last
 
             @bot.redis.hgetall(key).each do |subreddit, link_id|
