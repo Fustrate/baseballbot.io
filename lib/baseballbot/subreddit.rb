@@ -47,12 +47,9 @@ class Baseballbot
 
       @bot.redis.hset(template.gid, @name.downcase, submission.id)
 
-      post_process_submission(
-        submission,
-        sticky: sticky_gamechats?,
-        sort: 'new',
-        flair: @options.dig('gamechats', 'flair')
-      )
+      post_process_submission submission, sticky: sticky_gamechats?, sort: 'new'
+
+      set_post_flair submission, @options.dig('gamechats', 'flair', 'default')
 
       @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{game_pk}"
 
@@ -81,6 +78,12 @@ class Baseballbot
 
       if template.final?
         end_gamechat(id, submission, game_pk)
+
+        if template.won?
+          set_post_flair submission, @options.dig('gamechats', 'flair', 'won')
+        elsif template.lost?
+          set_post_flair submission, @options.dig('gamechats', 'flair', 'lost')
+        end
       else
         change_gamechat_status id, submission, 'Posted'
       end
@@ -116,11 +119,9 @@ class Baseballbot
 
       change_gamechat_status id, submission, 'Pregame'
 
-      post_process_submission(
-        submission,
-        sticky: sticky_gamechats?,
-        flair: @options.dig('pregame', 'flair')
-      )
+      post_process_submission submission, sticky: sticky_gamechats?
+
+      set_post_flair submission, @options.dig('pregame', 'flair')
 
       @bot.logger.info "Pregame #{submission.id} in /r/#{@name} for #{game_pk}"
 
@@ -145,11 +146,9 @@ class Baseballbot
 
       submission = submit title: template.title, text: template.result
 
-      post_process_submission(
-        submission,
-        sticky: sticky_gamechats?,
-        flair: @options.dig('postgame', 'flair')
-      )
+      post_process_submission submission, sticky: sticky_gamechats?
+
+      set_post_flair submission, @options.dig('postgame', 'flair')
 
       @bot.logger.info "Postgame #{submission.id} in /r/#{@name} for #{game_pk}"
 
@@ -261,16 +260,22 @@ class Baseballbot
 
     protected
 
-    def post_process_submission(submission, sticky: false, sort: '', flair: nil)
+    def post_process_submission(submission, sticky: false, sort: '')
       if submission.stickied
         submission.remove_sticky if sticky == false
       elsif sticky
         submission.make_sticky
       end
 
-      submission.set_suggested_sort(sort) unless sort == ''
+      return if sort == ''
 
-      subreddit.set_flair_template(submission, flair) if flair
+      submission.set_suggested_sort sort
+    end
+
+    def set_post_flair(submission, flair)
+      return unless flair
+
+      subreddit.set_flair submission, flair['text'], css_class: flair['class']
     end
 
     def sidebar_template
