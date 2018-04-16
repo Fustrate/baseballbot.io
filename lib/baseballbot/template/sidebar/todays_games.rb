@@ -19,7 +19,7 @@ class Baseballbot
         def todays_games(date)
           @date = date || @subreddit.now
 
-          load_gamechats(date)
+          load_gamechats
 
           url = format(SCHEDULE, date: @date.strftime('%m/%d/%Y'))
 
@@ -77,7 +77,7 @@ class Baseballbot
           # This is no longer included in the data - we might have to switch to
           # using game_pk instead.
           key = [
-            @subreddit.now.strftime('%Y_%m_%d'),
+            @date.strftime('%Y_%m_%d'),
             "#{game.dig('teams', 'away', 'team', 'teamCode')}mlb",
             "#{game.dig('teams', 'home', 'team', 'teamCode')}mlb",
             game['gameNumber'],
@@ -137,10 +137,10 @@ class Baseballbot
           link_to text, url: "https://www.mlb.com/gameday/#{game_pk}"
         end
 
-        def load_gamechats(date)
+        def load_gamechats
           @gamechats = {}
 
-          @bot.redis.keys(date.strftime('%Y_%m_%d_*')).each do |key|
+          @bot.redis.keys(@date.strftime('%Y_%m_%d_*')).each do |key|
             # _, game_pk = key.split('_').last
 
             @bot.redis.hgetall(key).each do |subreddit, link_id|
