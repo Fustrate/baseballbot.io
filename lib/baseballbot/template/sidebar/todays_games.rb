@@ -100,7 +100,8 @@ class Baseballbot
           when 'In Progress'
             game_inning game
           when 'Postponed'
-            italic game.dig('status', 'statusCode')
+            italic 'PPD'
+            # italic game.dig('status', 'statusCode')
           when 'Delayed Start'
             delay_type game
           when 'Delayed'
