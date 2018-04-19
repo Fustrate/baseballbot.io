@@ -49,7 +49,7 @@ class Baseballbot
         end
 
         def batters
-          home_batters.zip away_batters
+          full_zip home_batters, away_batters
         end
 
         def home_pitchers
@@ -69,7 +69,7 @@ class Baseballbot
         end
 
         def pitchers
-          home_pitchers.zip away_pitchers
+          full_zip home_pitchers, away_pitchers
         end
 
         def batter_row(batter)
@@ -123,6 +123,14 @@ class Baseballbot
                  wins: pitcher['seasonStats']['wins'].to_i,
                  losses: pitcher['seasonStats']['losses'].to_i,
                  era: pitcher['seasonStats']['era']
+        end
+
+        # If the first array isn't at least as big as the second, it gets
+        # truncated during a normal zip operation
+        def full_zip(one, two)
+          return one.zip(two) unless one.length < two.length
+
+          (one + [nil] * (two.length - one.length)).zip(two)
         end
       end
     end
