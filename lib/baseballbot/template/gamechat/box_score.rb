@@ -118,11 +118,11 @@ class Baseballbot
           return 'TBA' unless pitcher
 
           format '[%<name>s](%<url>s) (%<wins>d-%<losses>d, %<era>s ERA)',
-                 name: pitcher['person']['fullName'],
-                 url: player_url(pitcher['id']),
-                 wins: pitcher['seasonStats']['wins'].to_i,
-                 losses: pitcher['seasonStats']['losses'].to_i,
-                 era: pitcher['seasonStats']['era']
+                 name: pitcher.dig('person', 'fullName'),
+                 url: player_url(pitcher.dig('person', 'id')),
+                 wins: pitcher.dig('seasonStats', 'pitching', 'wins').to_i,
+                 losses: pitcher.dig('seasonStats', 'pitching', 'losses').to_i,
+                 era: pitcher.dig('seasonStats', 'pitching', 'era')
         end
 
         # If the first array isn't at least as big as the second, it gets
