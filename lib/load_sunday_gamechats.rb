@@ -6,6 +6,7 @@ require 'pg'
 require 'json'
 require 'open-uri'
 require 'chronic'
+require 'tzinfo'
 
 class SundayGamechatLoader
   R_BASEBALL_ID = 15
@@ -42,9 +43,13 @@ class SundayGamechatLoader
       # Game time is not yet set or something is TBD
       next unless game['game_type'] == 'R' && game['tv_station'] == 'ESPN'
 
-      gametime = Chronic.parse(
-        "#{game['time_date_hm_lg']} PM #{game['home_time_zone']}"
-      ) - 10_800
+      zulu = Time.parse game.dig('game_media', 'media', 'start')
+
+      offset = TZInfo::Timezone.get('America/Los_Angeles')
+        .period_for_utc(zulu)
+        .utc_total_offset
+
+      gametime = zulu + offset
 
       next if gametime < Time.now
 
