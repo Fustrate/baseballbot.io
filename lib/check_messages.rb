@@ -105,7 +105,7 @@ rescue Redd::APIError
 
   check_messages(retry_on_failure: false)
 rescue => ex
-  Honeybadger.notify(ex, context: { team: team })
+  Honeybadger.notify(ex)
 end
 
 check_messages

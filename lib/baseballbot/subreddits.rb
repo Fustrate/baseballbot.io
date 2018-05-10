@@ -43,8 +43,8 @@ class Baseballbot
       'WSH' => 'Nationals'
     }.freeze
 
-    def team_to_subreddit(code)
-      code.is_a?(Subreddit) ? code : subreddits[code.downcase]
+    def name_to_subreddit(name)
+      name.is_a?(Subreddit) ? name : subreddits[name.downcase]
     end
 
     protected

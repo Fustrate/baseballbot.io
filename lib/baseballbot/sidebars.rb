@@ -19,8 +19,8 @@ class Baseballbot
       end
     end
 
-    def update_sidebar!(team)
-      subreddit = team_to_subreddit(team)
+    def update_sidebar!(name)
+      subreddit = name_to_subreddit(name)
 
       subreddit.update description: subreddit.generate_sidebar
     rescue Redd::InvalidAccess

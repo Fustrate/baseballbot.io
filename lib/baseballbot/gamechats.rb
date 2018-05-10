@@ -30,15 +30,15 @@ class Baseballbot
 
         post_gamechat!(
           id: row['id'],
-          team: row['name'],
+          name: row['name'],
           game_pk: row['game_pk'],
           title: row['title']
         )
       end
     end
 
-    def post_gamechat!(id:, team:, game_pk:, title:)
-      team_to_subreddit(team).post_gamechat(
+    def post_gamechat!(id:, name:, game_pk:, title:)
+      name_to_subreddit(name).post_gamechat(
         id: id,
         game_pk: game_pk,
         title: title
@@ -55,7 +55,7 @@ class Baseballbot
         next unless names.empty? || names.include?(row['name'].downcase)
 
         update_gamechat!(
-          team: row['name'],
+          name: row['name'],
           id: row['id'],
           game_pk: row['game_pk'],
           post_id: row['post_id']
@@ -63,10 +63,10 @@ class Baseballbot
       end
     end
 
-    def update_gamechat!(team:, id:, game_pk:, post_id:)
+    def update_gamechat!(name:, id:, game_pk:, post_id:)
       first_attempt ||= true
 
-      team_to_subreddit(team)
+      name_to_subreddit(name)
         .update_gamechat(id: id, game_pk: game_pk, post_id: post_id)
     rescue Redd::InvalidAccess
       gamechat_update_failed(post_id)

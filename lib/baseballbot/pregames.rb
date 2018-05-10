@@ -28,19 +28,19 @@ class Baseballbot
 
         post_pregame!(
           id: row['id'],
-          team: row['name'],
+          name: row['name'],
           game_pk: row['game_pk']
         )
       end
     end
 
-    def post_pregame!(id:, team:, game_pk:)
-      team_to_subreddit(team).post_pregame(id: id, game_pk: game_pk)
+    def post_pregame!(id:, name:, game_pk:)
+      name_to_subreddit(name).post_pregame(id: id, game_pk: game_pk)
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra 2 minutes won't kill anyone.
       nil
     rescue => ex
-      Honeybadger.notify(ex, context: { team: team })
+      Honeybadger.notify(ex, context: { name: name })
     end
   end
 end
