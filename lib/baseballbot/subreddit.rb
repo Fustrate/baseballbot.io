@@ -302,41 +302,49 @@ class Baseballbot
 
       title = title && !title.empty? ? title : default_title
 
-      Template::Gamechat.new body: body,
-                             bot: @bot,
-                             subreddit: self,
-                             game_pk: game_pk,
-                             title: title
+      Template::Gamechat.new(
+        body: body,
+        bot: @bot,
+        subreddit: self,
+        game_pk: game_pk,
+        title: title
+      )
     end
 
     def gamechat_update_template(game_pk:, post_id:)
       body, = template_for('gamechat_update')
 
-      Template::Gamechat.new body: body,
-                             bot: @bot,
-                             subreddit: self,
-                             game_pk: game_pk,
-                             post_id: post_id
+      Template::Gamechat.new(
+        body: body,
+        bot: @bot,
+        subreddit: self,
+        game_pk: game_pk,
+        post_id: post_id
+      )
     end
 
     def pregame_template(game_pk:)
       body, title = template_for('pregame')
 
-      Template::Gamechat.new body: body,
-                             bot: @bot,
-                             subreddit: self,
-                             game_pk: game_pk,
-                             title: title
+      Template::Gamechat.new(
+        body: body,
+        bot: @bot,
+        subreddit: self,
+        game_pk: game_pk,
+        title: title
+      )
     end
 
     def postgame_template(game_pk:)
       body, title = template_for('postgame')
 
-      Template::Gamechat.new body: body,
-                             bot: @bot,
-                             subreddit: self,
-                             game_pk: game_pk,
-                             title: title
+      Template::Gamechat.new(
+        body: body,
+        bot: @bot,
+        subreddit: self,
+        game_pk: game_pk,
+        title: title
+      )
     end
 
     def template_for(type)
