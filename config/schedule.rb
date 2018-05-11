@@ -7,6 +7,7 @@ BUNDLE_EXEC = 'bundle exec'
 
 every 1.hour do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby update_sidebars.rb"
+  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby post_off_day_threads.rb"
 end
 
 every 15.minutes do
