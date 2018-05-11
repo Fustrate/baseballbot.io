@@ -6,7 +6,7 @@ require_relative 'template/sidebar'
 
 class Baseballbot
   class Subreddit
-    attr_reader :account, :name, :team, :timezone, :code
+    attr_reader :account, :name, :team, :timezone, :code, :options
 
     def initialize(bot:, id:, name:, team_id:, account:, options: {})
       @bot = bot
@@ -115,6 +115,46 @@ class Baseballbot
       @bot.logger.info "[PPD] #{submission.id} in /r/#{@name} for #{game_pk}"
 
       post_postgame(game_pk: game_pk)
+    end
+
+    # !@endgroup
+
+    # !@group Off Day Threads
+
+    def post_off_day_thread
+      return unless @options.dig('off_day', 'enabled')
+
+      return unless team_is_off_today?
+
+      submission = submit_off_day_thread!
+
+      @bot.logger.info "Off Day #{submission.id} in /r/#{@name}"
+
+      submission
+    end
+
+    def team_is_off_today?
+      url = format(
+        'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
+        'date=%<today>s&sportId=1&eventTypes=primary&scheduleTypes=games',
+        team_id: @team.id,
+        today: Time.now.strftime('%m/%d/%Y')
+      )
+
+      JSON.parse(URI.parse(url).open.read).dig('totalGames').zero?
+    end
+
+    def submit_off_day_thread!
+      @bot.use_account(@account.name)
+
+      template = off_day_template
+
+      submission = submit title: template.title, text: template.result
+
+      submission.make_sticky if @options.dig('off_day', 'sticky') != false
+      set_post_flair submission, @options.dig('off_day', 'flair')
+
+      submission
     end
 
     # !@endgroup
@@ -343,6 +383,17 @@ class Baseballbot
         bot: @bot,
         subreddit: self,
         game_pk: game_pk,
+        title: title
+      )
+    end
+
+    def off_day_template
+      body, title = template_for('off_day')
+
+      Template::General.new(
+        body: body,
+        bot: @bot,
+        subreddit: self,
         title: title
       )
     end

@@ -18,6 +18,7 @@ require_relative 'baseballbot/account'
 require_relative 'baseballbot/accounts'
 require_relative 'baseballbot/gamechats'
 require_relative 'baseballbot/pregames'
+require_relative 'baseballbot/off_day'
 require_relative 'baseballbot/sidebars'
 require_relative 'baseballbot/subreddits'
 
@@ -28,6 +29,7 @@ require_relative 'baseballbot/template/sidebar'
 class Baseballbot
   include Accounts
   include Gamechats
+  include OffDay
   include Pregames
   include Sidebars
   include Subreddits
