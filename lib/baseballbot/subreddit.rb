@@ -6,7 +6,7 @@ require_relative 'template/sidebar'
 
 class Baseballbot
   class Subreddit
-    attr_reader :account, :name, :team, :timezone, :code, :options
+    attr_reader :id, :account, :name, :team, :timezone, :code, :options
 
     def initialize(bot:, id:, name:, team_id:, account:, options: {})
       @bot = bot

@@ -41,10 +41,9 @@ class Baseballbot
     end
 
     def off_day_check_was_run!(subreddit)
-      subreddit.options['off_day']['last_run_at'] = \
-        Time.zone.now.strftime('%F %T')
+      subreddit.options['off_day']['last_run_at'] = Time.now.strftime('%F %T')
 
-      @bot.db.exec_params(
+      @db.exec_params(
         'UPDATE subreddits SET options = $1 WHERE id = $2',
         [JSON.dump(subreddit.options), subreddit.id]
       )
