@@ -103,7 +103,6 @@ class Baseballbot
             # Used for sorting teams in the standings. Lowest losing %, most
             # wins, least losses, and then fall back to three letter code
             info[:sort_order] = [
-              (162.0 - info[:games_back].to_i),
               1.0 - info[:percent],
               162 - info[:wins],
               info[:losses],
