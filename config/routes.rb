@@ -15,5 +15,6 @@ Rails.application.routes.draw do
 
   namespace :discord do
     get 'reddit-callback'
+    get 'debug'
   end
 end

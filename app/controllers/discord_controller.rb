@@ -11,6 +11,12 @@ class DiscordController < ApplicationController
     save_account
   end
 
+  def debug
+    Rails.application.redis.publish 'discord.debug', 'Debug endpoint hit'
+
+    redirect_to '/'
+  end
+
   protected
 
   def save_account
@@ -31,8 +37,7 @@ class DiscordController < ApplicationController
       reddit_username: session.me.name
     )
 
-    RedisConnection.redis.rpush('discord.verification_queue', @user_id) do
-      RedisConnection.publish 'discord.verified'
-    end
+    Rails.application.redis.rpush 'discord.verification_queue', @user_id
+    Rails.application.redis.publish 'discord.verified', @user_id
   end
 end
