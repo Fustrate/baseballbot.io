@@ -7,3 +7,6 @@ module BaseballbotIo
 end
 
 Rails.application.redis = Redis.new(host: 'localhost', port: 6379)
+
+# Manages the connection with the redis server, to send messages and cache data
+EM.next_tick { RedisConnection.ensure_redis }

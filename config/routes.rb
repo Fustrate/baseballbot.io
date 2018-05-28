@@ -12,4 +12,8 @@ Rails.application.routes.draw do
   resources :templates, only: %i[show]
 
   get :gameday, to: 'home#gameday'
+
+  namespace :discord do
+    get 'reddit-callback'
+  end
 end

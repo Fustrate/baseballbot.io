@@ -82,3 +82,7 @@ gem 'whenever', require: false
 
 gem 'chronic'
 gem 'redis'
+
+# Communication with the Discord bot
+gem 'em-hiredis'
+gem 'eventmachine'
