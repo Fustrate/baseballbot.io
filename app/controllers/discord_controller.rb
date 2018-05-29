@@ -4,9 +4,7 @@ class DiscordController < ApplicationController
   def reddit_callback
     raise 'Invalid auth code' unless params[:code]
 
-    raise 'Invalid state' unless params[:state]&.match?(/\A\d+\z/)
-
-    @user_id = params[:state].to_i
+    raise 'Invalid state' unless params[:state]
 
     save_account
   end
