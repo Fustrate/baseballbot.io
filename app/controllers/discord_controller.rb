@@ -27,17 +27,16 @@ class DiscordController < ApplicationController
       redirect_uri: 'https://baseballbot.io/discord/reddit-callback'
     )
 
-    save_to_redis session
+    save_to_redis_and_publish session
   end
 
-  def save_to_redis(session)
-    Rails.application.redis.mapped_hmset(
-      "discord.#{@user_id}",
-      verified: true,
+  def save_to_redis_and_publish(session)
+    data = {
+      state_token: params[:state],
       reddit_username: session.me.name
-    )
+    }.to_json
 
-    Rails.application.redis.rpush 'discord.verification_queue', @user_id
-    Rails.application.redis.publish 'discord.verified', @user_id
+    Rails.application.redis.rpush 'discord.verification_queue', data
+    Rails.application.redis.publish 'discord.verified', data
   end
 end
