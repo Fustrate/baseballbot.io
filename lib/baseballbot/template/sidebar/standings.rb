@@ -81,9 +81,10 @@ class Baseballbot
           {
             id:             team.id,
             code:           team.abbreviation,
-            # elim_wildcard:  row['elim_wildcard'],
+            elim_wildcard:  row['wildCardEliminationNumber'].to_i,
             subreddit:      subreddit(team['abbreviation']),
             division_champ: row['divisionChamp'],
+            division_lead:  row['divisionLeader'],
             elim:           row['eliminationNumber'],
             games_back:     row['divisionGamesBack'],
             home_record:    records['home'],
@@ -122,7 +123,7 @@ class Baseballbot
         def mark_league_wildcards(league_id)
           teams = teams_in_league(league_id)
 
-          division_leaders = teams.count { |team| team[:games_back] == '-' }
+          division_leaders = teams.count { |team| team[:division_lead] }
 
           # 5 or more division leaders means no wildcards
           return [] if division_leaders >= 5
@@ -130,7 +131,7 @@ class Baseballbot
           allowed_wildcards = 5 - division_leaders
 
           ranked = teams
-            .reject { |team| team[:games_back] == '-' }
+            .reject { |team| team[:division_lead] }
             .sort_by { |team| team[:wildcard_rank] }
 
           first_wildcard = teams
