@@ -13,6 +13,17 @@ class Baseballbot
           'Right Field' => 'RF'
         }.freeze
 
+        BASERUNNERS = [
+          'Bases empty',
+          'Runner on first',
+          'Runner on second',
+          'First and second',
+          'Runner on third',
+          'First and third',
+          'Second and third',
+          'Bases loaded'
+        ].freeze
+
         def start_time_utc
           @start_time_utc ||= Time.parse game_data.dig('datetime', 'dateTime')
         end
@@ -131,16 +142,7 @@ class Baseballbot
           bitmap |= 0b010 if linescore.dig('offense', 'second')
           bitmap |= 0b100 if linescore.dig('offense', 'third')
 
-          [
-            'Bases empty',
-            'Runner on first',
-            'Runner on second',
-            'First and second',
-            'Runner on third',
-            'First and third',
-            'Second and third',
-            'Bases loaded'
-          ][bitmap]
+          BASERUNNERS[bitmap]
         end
       end
     end
