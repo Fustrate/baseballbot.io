@@ -72,7 +72,7 @@ class Baseballbot
         end
 
         def link_for_team(game:, team:)
-          code = @bot.api.team(team.dig('team', 'id'))&.abbreviation
+          code = team.dig('team', 'abbreviation')
 
           # This is no longer included in the data - we might have to switch to
           # using game_pk instead.
