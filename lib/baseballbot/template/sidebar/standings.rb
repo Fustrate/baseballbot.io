@@ -6,7 +6,7 @@ class Baseballbot
       module Standings
         STATS_STANDINGS = \
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-          'leagueId=103,104&season=%<year>d&t=%<t>d'
+          'leagueId=103,104&season=%<year>d&hydrate=team&t=%<t>d'
 
         def all_teams
           return @all_teams if @all_teams
@@ -51,11 +51,15 @@ class Baseballbot
         end
 
         def teams_in_league(league_id)
-          all_teams.select { |team| team[:team].league_id == league_id }
+          all_teams.select do |team|
+            team.dig(:team, 'league', 'id') == league_id
+          end
         end
 
         def teams_in_division(division_id)
-          all_teams.select { |team| team[:team].division_id == division_id }
+          all_teams.select do |team|
+            team.dig(:team, 'division', 'id') == division_id
+          end
         end
 
         def wildcards_in_league(league_id)
@@ -65,24 +69,22 @@ class Baseballbot
         end
 
         def team_stats
-          @team_stats ||= all_teams.find { |team| team[:team].id == @team.id }
+          @team_stats ||= all_teams.find { |team| team[:id] == @team.id }
         end
 
         protected
 
         # rubocop:disable Metrics/MethodLength
         def parse_standings_row(row)
-          team = @bot.api.team(row['team']['id'])
-
           records = row.dig('records', 'splitRecords')
             .map { |rec| [rec['type'], [rec['wins'], rec['losses']]] }
             .to_h
 
           {
-            id:             team.id,
-            code:           team.abbreviation,
+            id:             row['team']['id'],
+            code:           row['team']['abbreviation'],
             elim_wildcard:  row['wildCardEliminationNumber'].to_i,
-            subreddit:      subreddit(team['abbreviation']),
+            subreddit:      subreddit(row['team']['abbreviation']),
             division_champ: row['divisionChamp'],
             division_lead:  row['divisionLeader'],
             elim:           row['eliminationNumber'],
@@ -94,7 +96,7 @@ class Baseballbot
             road_record:    records['away'],
             run_diff:       row['runDifferential'],
             streak:         row['streak']['streakCode'],
-            team:           team,
+            team:           row['team'],
             wildcard_champ: false,
             wildcard_gb:    row['wildCardGamesBack'],
             wildcard_rank:  row['wildCardRank'].to_i,
@@ -107,7 +109,7 @@ class Baseballbot
               1.0 - info[:percent],
               162 - info[:wins],
               info[:losses],
-              info[:team]['abbreviation']
+              info[:code]
             ]
           end
         end
