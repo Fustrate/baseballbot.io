@@ -81,12 +81,9 @@ class Baseballbot
             .to_h
 
           {
-            id:             row['team']['id'],
-            code:           row['team']['abbreviation'],
-            elim_wildcard:  row['wildCardEliminationNumber'].to_i,
-            subreddit:      subreddit(row['team']['abbreviation']),
             division_champ: row['divisionChamp'],
             division_lead:  row['divisionLeader'],
+            elim_wildcard:  row['wildCardEliminationNumber'].to_i,
             elim:           row['eliminationNumber'],
             games_back:     row['divisionGamesBack'],
             home_record:    records['home'],
@@ -96,6 +93,7 @@ class Baseballbot
             road_record:    records['away'],
             run_diff:       row['runDifferential'],
             streak:         row['streak']['streakCode'],
+            subreddit:      subreddit(row['team']['abbreviation']),
             team:           row['team'],
             wildcard_champ: false,
             wildcard_gb:    row['wildCardGamesBack'],
@@ -109,7 +107,7 @@ class Baseballbot
               1.0 - info[:percent],
               162 - info[:wins],
               info[:losses],
-              info[:code]
+              info[:team]['abbreviation']
             ]
           end
         end
