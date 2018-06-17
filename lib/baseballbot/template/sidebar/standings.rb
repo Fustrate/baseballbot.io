@@ -69,7 +69,9 @@ class Baseballbot
         end
 
         def team_stats
-          @team_stats ||= all_teams.find { |team| team[:id] == @team.id }
+          @team_stats ||= all_teams.find do |team|
+            team[:team]['id'] == @team.id
+          end
         end
 
         protected
