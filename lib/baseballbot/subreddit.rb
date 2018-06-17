@@ -6,13 +6,16 @@ require_relative 'template/sidebar'
 
 class Baseballbot
   class Subreddit
-    attr_reader :id, :account, :name, :team, :timezone, :code, :options
+    attr_reader :id, :account, :name, :timezone, :options
 
     def initialize(bot:, id:, name:, team_id:, account:, options: {})
       @bot = bot
+
       @id = id
       @name = name
+      @team_id = team_id
       @account = account
+
       @submissions = {}
       @options = options
 
@@ -21,9 +24,14 @@ class Baseballbot
       rescue TZInfo::InvalidTimezoneIdentifier
         TZInfo::Timezone.get 'America/Los_Angeles'
       end
+    end
 
-      @team = @bot.api.team(team_id) if team_id
-      @code = @team&.abbreviation
+    def team
+      @team ||= @bot.api.team(@team_id) if @team_id
+    end
+
+    def code
+      team&.abbreviation
     end
 
     def now
@@ -137,7 +145,7 @@ class Baseballbot
       url = format(
         'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
         'date=%<today>s&sportId=1&eventTypes=primary&scheduleTypes=games',
-        team_id: @team.id,
+        team_id: @team_id,
         today: Time.now.strftime('%m/%d/%Y')
       )
 
