@@ -90,13 +90,7 @@ class Baseballbot
       if template.postponed?
         postpone_gamechat(id, submission, game_pk)
       elsif template.final?
-        end_gamechat(id, submission, game_pk)
-
-        if template.won?
-          set_post_flair submission, @options.dig('gamechats', 'flair', 'won')
-        elsif template.lost?
-          set_post_flair submission, @options.dig('gamechats', 'flair', 'lost')
-        end
+        end_gamechat(id, submission, template, game_pk)
       else
         change_gamechat_status id, submission, 'Posted'
       end
@@ -104,7 +98,7 @@ class Baseballbot
       template.final?
     end
 
-    def end_gamechat(id, submission, game_pk)
+    def end_gamechat(id, submission, template, game_pk)
       change_gamechat_status id, submission, 'Over'
 
       post_process_submission(
@@ -115,6 +109,12 @@ class Baseballbot
       @bot.logger.info "[END] #{submission.id} in /r/#{@name} for #{game_pk}"
 
       post_postgame(game_pk: game_pk)
+
+      if template.won?
+        set_post_flair submission, @options.dig('gamechats', 'flair', 'won')
+      elsif template.lost?
+        set_post_flair submission, @options.dig('gamechats', 'flair', 'lost')
+      end
     end
 
     def postpone_gamechat(id, submission, game_pk)
