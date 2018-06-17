@@ -38,7 +38,7 @@ class Baseballbot
       @now ||= Baseballbot.parse_time(Time.now.utc, in_time_zone: @timezone)
     end
 
-    # !@group Game Chats
+    # @!group Game Chats
 
     def post_gamechat(id:, title:, game_pk:)
       @bot.use_account(@account.name)
@@ -125,9 +125,9 @@ class Baseballbot
       post_postgame(game_pk: game_pk)
     end
 
-    # !@endgroup
+    # @!endgroup
 
-    # !@group Off Day Threads
+    # @!group Off Day Threads
 
     def post_off_day_thread
       return unless @options.dig('off_day', 'enabled')
@@ -165,9 +165,9 @@ class Baseballbot
       submission
     end
 
-    # !@endgroup
+    # @!endgroup
 
-    # !@group Pre Game Chats
+    # @!group Pre Game Chats
 
     def post_pregame(id:, game_pk:)
       return unless @options.dig('pregame', 'enabled')
@@ -189,9 +189,9 @@ class Baseballbot
       submission
     end
 
-    # !@endgroup
+    # @!endgroup
 
-    # !@group Post Game Chats
+    # @!group Post Game Chats
 
     # Create a postgame thread if the subreddit is set to have them
     #
@@ -216,7 +216,7 @@ class Baseballbot
       submission
     end
 
-    # !@endgroup
+    # @!endgroup
 
     # --------------------------------------------------------------------------
     # Miscellaneous
