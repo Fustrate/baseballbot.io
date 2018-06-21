@@ -5,7 +5,7 @@ module MarkdownHelpers
     center: ':-:',
     left: '-',
     right: '-:'
-  }
+  }.freeze
 
   def bold(text)
     "**#{text}**"

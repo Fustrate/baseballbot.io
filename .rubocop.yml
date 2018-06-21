@@ -1,11 +1,4 @@
 AllCops:
-  Include:
-    - Capfile
-    - config.ru
-    - Gemfile
-    - Guardfile
-    - Rakefile
-    - app/views/**/*.jbuilder
   Exclude:
     - bin/**/*
     - db/**/*
