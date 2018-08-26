@@ -32,3 +32,7 @@ end
 every :saturday do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_sunday_gamechats.rb"
 end
+
+every 1.day, at: '5:30 am' do
+  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby around_the_horn.rb"
+end
