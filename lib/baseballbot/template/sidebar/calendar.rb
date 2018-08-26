@@ -199,6 +199,8 @@ class Baseballbot
         end
 
         def tv_stations(game)
+          return '' unless game['broadcasts']
+
           home_away = home_team?(game) ? 'home' : 'away'
 
           game['broadcasts']
