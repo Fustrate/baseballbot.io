@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 ruby '2.5.1'
-gem 'rails', '5.1.6'
+gem 'rails', '5.2.1'
 
 gem 'pg'
 
@@ -16,7 +16,9 @@ gem 'sass-rails'
 gem 'sprockets-rails'
 gem 'uglifier', '~> 4.0'
 
-gem 'fustrate-rails', git: 'https://github.com/Fustrate/fustrate-rails', ref: '00499a'
+gem 'fustrate-rails',
+    git: 'https://github.com/Fustrate/fustrate-rails',
+    ref: '00499a'
 
 # Use Unicorn as the app server
 gem 'unicorn'

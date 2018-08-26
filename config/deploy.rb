@@ -12,8 +12,8 @@ set :branch, ENV['REVISION'] || :master
 set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
 set :linked_files, %w[
-  config/secrets.yml config/database.yml config/honeybadger.yml
-  config/reddit.yml config/skylight.yml
+  config/database.yml config/honeybadger.yml config/master.key config/reddit.yml
+  config/skylight.yml
 ]
 
 set :linked_dirs, %w[
