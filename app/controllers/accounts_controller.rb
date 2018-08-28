@@ -83,30 +83,42 @@ class AccountsController < ApplicationController
 
     # session.client.refresh if session.client.access.expired?
 
+    create_or_update_account(session)
+  end
+
+  def create_or_update_account(session)
     name = session.me.name
     expires_in = session.client.access.expires_in
 
     existing = Account.where('LOWER(name) = ?', name.downcase).first
 
     if existing
-      existing.update(
-        scope: AUTH_SCOPE,
-        access_token: session.client.access.access_token,
-        refresh_token: session.client.access.refresh_token,
-        expires_at: Time.zone.now + expires_in - 10.seconds
-      )
+      update_existing_account(existing, session, expires_in)
 
       existing
     else
-      Account.create(
-        id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
-        name: name,
-        scope: AUTH_SCOPE,
-        access_token: session.client.access.access_token,
-        refresh_token: session.client.access.refresh_token,
-        expires_at: Time.zone.now + expires_in - 10.seconds
-      )
+      create_new_account(name, session, expires_in)
     end
+  end
+
+  def update_existing_account(account, session, expires_in)
+    account.update(
+      scope: AUTH_SCOPE,
+      access_token: session.client.access.access_token,
+      refresh_token: session.client.access.refresh_token,
+      expires_at: Time.zone.now + expires_in - 10.seconds
+    )
+  end
+
+  def create_new_account(name, session, expires_in)
+    Account.create(
+      id: Account.order('id DESC').limit(1).pluck(:id)[0] + 1,
+      name: name,
+      scope: AUTH_SCOPE,
+      access_token: session.client.access.access_token,
+      refresh_token: session.client.access.refresh_token,
+      expires_at: Time.zone.now + expires_in - 10.seconds
+    )
   end
 
   def reddit_config

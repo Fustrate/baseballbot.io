@@ -76,7 +76,7 @@ class Baseballbot
         retry
       end
     rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra 2 minutes won't kill anyone.
+      # Waiting an extra few minutes won't kill anyone.
       nil
     end
 

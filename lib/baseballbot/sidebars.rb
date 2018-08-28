@@ -22,7 +22,7 @@ class Baseballbot
     def update_sidebar!(name)
       subreddit = name_to_subreddit(name)
 
-      subreddit.update description: subreddit.generate_sidebar
+      subreddit.modify_settings description: subreddit.generate_sidebar
     rescue Redd::InvalidAccess
       puts "Could not update #{subreddit.name} due to invalid credentials:"
       puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
@@ -32,7 +32,7 @@ class Baseballbot
 
       puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
 
-      subreddit.update description: subreddit.generate_sidebar
+      subreddit.modify_settings description: subreddit.generate_sidebar
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # do nothing, it's not the end of the world
       nil

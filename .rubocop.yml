@@ -6,22 +6,50 @@ AllCops:
   TargetRubyVersion: 2.5
   TargetRailsVersion: 5.2
 
+Rails:
+  Enabled: true
+
+#
+# Coding Style
+#
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+#
+# Disabled Cops
+#
 
 # False positive
 Lint/UnneededSplatExpansion:
   Exclude:
     - 'app/views/**/*.jbuilder'
 
+# Rails by default ships with lines (and blocks) that are "too long".
+Metrics/BlockLength:
+  Exclude:
+    - 'config/**/*.rb'
+    - 'spec/**/*.rb'
+    - 'lib/capistrano/**/*.rake'
+
+Metrics/LineLength:
+  Exclude:
+    - 'config/**/*.rb'
+
 Metrics/AbcSize:
   Enabled: false
 
-Rails:
-  Enabled: true
-
 Style/Documentation:
   Enabled: false
-
-Style/EmptyMethod:
-  EnforcedStyle: expanded

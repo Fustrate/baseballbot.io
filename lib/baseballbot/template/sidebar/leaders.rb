@@ -110,8 +110,8 @@ class Baseballbot
         end
 
         def parse_player_data(data)
-          json = JSON.parse data
-          players = json['stats_sortable_player']['queryResults']['row']
+          json = JSON.parse(data)
+          players = json.dig('stats_sortable_player', 'queryResults', 'row')
 
           # Array(players) doesn't work because hashes have a #to_a method
           players.is_a?(Hash) ? [players] : players

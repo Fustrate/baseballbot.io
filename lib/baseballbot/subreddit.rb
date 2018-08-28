@@ -6,7 +6,7 @@ require_relative 'template/sidebar'
 
 class Baseballbot
   class Subreddit
-    attr_reader :id, :account, :name, :timezone, :options
+    attr_reader :id, :account, :name, :timezone, :options, :bot
 
     def initialize(bot:, id:, name:, team_id:, account:, options: {})
       @bot = bot
@@ -264,7 +264,7 @@ class Baseballbot
     def settings
       return @settings if @settings
 
-      @bot.use_account(@account.name)
+      @bot.use_account @account.name
 
       @settings = subreddit.settings
     end
@@ -272,10 +272,10 @@ class Baseballbot
     # Update settings for the current subreddit
     #
     # @param new_settings [Hash] new settings to apply to the subreddit
-    def update(new_settings = {})
-      @bot.use_account(@account.name)
+    def modify_settings(new_settings = {})
+      @bot.use_account @account.name
 
-      response = subreddit.modify_settings(new_settings)
+      response = subreddit.modify_settings new_settings
 
       log_errors response.body.dig(:json, :errors), new_settings
     end
@@ -289,13 +289,13 @@ class Baseballbot
     #
     # @todo Restore ability to pass captcha
     def submit(title:, text:)
-      @bot.use_account(@account.name)
+      @bot.use_account @account.name
 
-      subreddit.submit(title, text: text, sendreplies: false)
+      subreddit.submit title, text: text, sendreplies: false
     end
 
     def edit(id:, body: nil)
-      @bot.use_account(@account.name)
+      @bot.use_account @account.name
 
       load_submission(id: id).edit(body)
     end
