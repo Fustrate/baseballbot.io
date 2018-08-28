@@ -51,6 +51,12 @@ class Baseballbot
         feed['gameData']
       end
 
+      def schedule_data(hydrate: 'probablePitcher(note)')
+        @bot.api.fetch("schedule_data_#{gid}_#{hydrate}") do
+          @bot.api.schedule(gamePk: @game_pk, hydrate: hydrate)
+        end
+      end
+
       def inspect
         %(#<Baseballbot::Template::Gamechat @game_pk="#{@game_pk}">)
       end
