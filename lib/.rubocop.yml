@@ -10,9 +10,6 @@ Layout/MultilineMethodCallIndentation:
 Metrics/AbcSize:
   Enabled: false
 
-Metrics/MethodLength:
-  Max: 16
-
 Style/Documentation:
   Enabled: false
 

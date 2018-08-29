@@ -38,13 +38,14 @@ class Baseballbot
     end
 
     def post_gamechat!(id:, name:, game_pk:, title:)
-      name_to_subreddit(name).post_gamechat(
+      Baseballbot::Posts::GameChat.new(
         id: id,
         game_pk: game_pk,
-        title: title
-      )
+        title: title,
+        subreddit: name_to_subreddit(name)
+      ).create!
     rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra 2 minutes won't kill anyone.
+      # Waiting an extra few minutes won't kill anyone.
       nil
     end
 
@@ -63,24 +64,29 @@ class Baseballbot
       end
     end
 
+    # Update a gamechat - also starts the "game over" process if necessary
+    #
+    # @param name [String] The name of the subreddit to post in
+    # @param id [String] The baseballbot id of the gamechat
+    # @param game_pk [Integer] The mlb id of the game
+    # @param post_id [String] The reddit id of the post to update
+    #
+    # @return [Boolean] to indicate if the game is over or postponed
     def update_gamechat!(name:, id:, game_pk:, post_id:)
-      first_attempt ||= true
-
-      name_to_subreddit(name)
-        .update_gamechat(id: id, game_pk: game_pk, post_id: post_id)
+      Baseballbot::Posts::GameChat.new(
+        id: id,
+        game_pk: game_pk,
+        post_id: post_id,
+        subreddit: name_to_subreddit(name)
+      ).update!
     rescue Redd::InvalidAccess
-      gamechat_update_failed(post_id)
-
-      if first_attempt
-        first_attempt = false
-        retry
-      end
+      invalid_access(post_id)
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra few minutes won't kill anyone.
       nil
     end
 
-    def gamechat_update_failed(post_id)
+    def invalid_access(post_id)
       puts "Could not update #{post_id} due to invalid credentials:"
       puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
       puts "\tCurrent: #{Time.now.strftime '%F %T'}"

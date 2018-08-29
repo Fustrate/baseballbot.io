@@ -38,110 +38,9 @@ class Baseballbot
       @now ||= Baseballbot.parse_time(Time.now.utc, in_time_zone: @timezone)
     end
 
-    # @!group Game Chats
+    def post_off_day_thread?
+      return false unless @options.dig('off_day', 'enabled')
 
-    def post_gamechat(id:, title:, game_pk:)
-      @bot.use_account(@account.name)
-
-      template = gamechat_template(game_pk: game_pk, title: title)
-
-      return change_gamechat_status(id, nil, 'Postponed') if template.postponed?
-
-      submission = submit title: template.title, text: template.result
-
-      # Mark as posted right away so that it won't post again
-      change_gamechat_status id, submission, 'Posted'
-
-      raw_markdown = CGI.unescapeHTML(submission.selftext)
-
-      submission.edit raw_markdown.gsub('#ID#', submission.id)
-
-      @bot.redis.hset(template.gid, @name.downcase, submission.id)
-
-      post_process_submission submission, sticky: sticky_gamechats?, sort: 'new'
-
-      set_post_flair submission, @options.dig('gamechats', 'flair', 'default')
-
-      @bot.logger.info "Posted #{submission.id} in /r/#{@name} for #{game_pk}"
-
-      submission
-    end
-
-    # Update a gamechat - also starts the "game over" process if necessary
-    #
-    # @param id [String] The baseballbot id of the gamechat
-    # @param game_pk [Integer] The mlb id of the game
-    # @param post_id [String] The reddit id of the post to update
-    #
-    # @return [Boolean] to indicate if the game is over or postponed
-    def update_gamechat(id:, game_pk:, post_id:)
-      @bot.use_account(@account.name)
-
-      template = gamechat_update_template(post_id: post_id, game_pk: game_pk)
-      submission = load_submission(id: post_id)
-
-      edit(
-        id: post_id,
-        body: template.replace_in(CGI.unescapeHTML(submission.selftext))
-      )
-
-      @bot.logger.info "[UPD] #{submission.id} in /r/#{@name} for #{game_pk}"
-
-      if template.postponed?
-        postpone_gamechat(id, submission, game_pk)
-      elsif template.final?
-        end_gamechat(id, submission, template, game_pk)
-      else
-        change_gamechat_status id, submission, 'Posted'
-      end
-
-      template.final?
-    end
-
-    def end_gamechat(id, submission, template, game_pk)
-      change_gamechat_status id, submission, 'Over'
-
-      post_process_submission(
-        submission,
-        sticky: sticky_gamechats? ? false : nil
-      )
-
-      @bot.logger.info "[END] #{submission.id} in /r/#{@name} for #{game_pk}"
-
-      post_postgame(game_pk: game_pk)
-
-      if template.won?
-        set_post_flair submission, @options.dig('gamechats', 'flair', 'won')
-      elsif template.lost?
-        set_post_flair submission, @options.dig('gamechats', 'flair', 'lost')
-      end
-    end
-
-    def postpone_gamechat(id, submission, game_pk)
-      change_gamechat_status id, submission, 'Postponed'
-
-      @bot.logger.info "[PPD] #{submission.id} in /r/#{@name} for #{game_pk}"
-
-      post_postgame(game_pk: game_pk)
-    end
-
-    # @!endgroup
-
-    # @!group Off Day Threads
-
-    def post_off_day_thread
-      return unless @options.dig('off_day', 'enabled')
-
-      return unless team_is_off_today?
-
-      submission = submit_off_day_thread!
-
-      @bot.logger.info "Off Day #{submission.id} in /r/#{@name}"
-
-      submission
-    end
-
-    def team_is_off_today?
       url = format(
         'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
         'date=%<today>s&sportId=1&eventTypes=primary&scheduleTypes=games',
@@ -151,72 +50,6 @@ class Baseballbot
 
       JSON.parse(URI.parse(url).open.read).dig('totalGames').zero?
     end
-
-    def submit_off_day_thread!
-      @bot.use_account(@account.name)
-
-      template = off_day_template
-
-      submission = submit title: template.title, text: template.result
-
-      submission.make_sticky if @options.dig('off_day', 'sticky') != false
-      set_post_flair submission, @options.dig('off_day', 'flair')
-
-      submission
-    end
-
-    # @!endgroup
-
-    # @!group Pre Game Chats
-
-    def post_pregame(id:, game_pk:)
-      return unless @options.dig('pregame', 'enabled')
-
-      @bot.use_account(@account.name)
-
-      template = pregame_template(game_pk: game_pk)
-
-      submission = submit title: template.title, text: template.result
-
-      change_gamechat_status id, submission, 'Pregame'
-
-      post_process_submission submission, sticky: sticky_gamechats?
-
-      set_post_flair submission, @options.dig('pregame', 'flair')
-
-      @bot.logger.info "Pregame #{submission.id} in /r/#{@name} for #{game_pk}"
-
-      submission
-    end
-
-    # @!endgroup
-
-    # @!group Post Game Chats
-
-    # Create a postgame thread if the subreddit is set to have them
-    #
-    # @param game_pk [String] the MLB game ID
-    #
-    # @return [Redd::Models::Submission] the postgame thread
-    def post_postgame(game_pk:)
-      return unless @options.dig('postgame', 'enabled')
-
-      @bot.use_account(@account.name)
-
-      template = postgame_template(game_pk: game_pk)
-
-      submission = submit title: template.title, text: template.result
-
-      post_process_submission submission, sticky: sticky_gamechats?
-
-      set_post_flair submission, @options.dig('postgame', 'flair')
-
-      @bot.logger.info "Postgame #{submission.id} in /r/#{@name} for #{game_pk}"
-
-      submission
-    end
-
-    # @!endgroup
 
     # --------------------------------------------------------------------------
     # Miscellaneous
@@ -234,27 +67,6 @@ class Baseballbot
       raise Baseballbot::Error::NoSidebarText unless settings[:description]
 
       CGI.unescapeHTML settings[:description]
-    end
-
-    # @param id [Integer] the baseballbot ID of the gamechat
-    # @param submission [Redd::Models::Submission] the post itself
-    # @param status [String] status of the gamechat
-    def change_gamechat_status(id, submission, status)
-      gamechat_posted = status == 'Posted'
-
-      fields = ['status = $2', 'updated_at = $3']
-      fields.concat ['post_id = $4', 'title = $5'] if gamechat_posted
-
-      @bot.db.exec_params(
-        "UPDATE gamechats SET #{fields.join(', ')} WHERE id = $1",
-        [
-          id,
-          status,
-          Time.now,
-          (submission.id if gamechat_posted),
-          (submission.title if gamechat_posted)
-        ].compact
-      )
     end
 
     def subreddit
@@ -312,111 +124,30 @@ class Baseballbot
 
       @bot.use_account(@account.name)
 
-      submissions = @bot.session.from_ids "t3_#{id}"
+      submission = @bot.session.from_ids("t3_#{id}")&.first
 
-      raise "Unable to load post #{id}." unless submissions&.first
+      raise "Unable to load post #{id}." unless submission
 
-      @submissions[id] = submissions.first
-    end
-
-    protected
-
-    def post_process_submission(submission, sticky: false, sort: '')
-      if submission.stickied
-        submission.remove_sticky if sticky == false
-      elsif sticky
-        submission.make_sticky
-      end
-
-      return if sort == ''
-
-      submission.set_suggested_sort sort
-    end
-
-    def set_post_flair(submission, flair)
-      return unless flair
-
-      subreddit.set_flair submission, flair['text'], css_class: flair['class']
-    end
-
-    def sidebar_template
-      body, = template_for('sidebar')
-
-      Template::Sidebar.new body: body, bot: @bot, subreddit: self
-    end
-
-    def gamechat_template(game_pk:, title:)
-      body, default_title = template_for('gamechat')
-
-      title = title && !title.empty? ? title : default_title
-
-      Template::Gamechat.new(
-        body: body,
-        bot: @bot,
-        subreddit: self,
-        game_pk: game_pk,
-        title: title
-      )
-    end
-
-    def gamechat_update_template(game_pk:, post_id:)
-      body, = template_for('gamechat_update')
-
-      Template::Gamechat.new(
-        body: body,
-        bot: @bot,
-        subreddit: self,
-        game_pk: game_pk,
-        post_id: post_id
-      )
-    end
-
-    def pregame_template(game_pk:)
-      body, title = template_for('pregame')
-
-      Template::Gamechat.new(
-        body: body,
-        bot: @bot,
-        subreddit: self,
-        game_pk: game_pk,
-        title: title
-      )
-    end
-
-    def postgame_template(game_pk:)
-      body, title = template_for('postgame')
-
-      Template::Gamechat.new(
-        body: body,
-        bot: @bot,
-        subreddit: self,
-        game_pk: game_pk,
-        title: title
-      )
-    end
-
-    def off_day_template
-      body, title = template_for('off_day')
-
-      Template::General.new(
-        body: body,
-        bot: @bot,
-        subreddit: self,
-        title: title
-      )
+      @submissions[id] = submission
     end
 
     def template_for(type)
-      result = @bot.db.exec_params(
+      rows = @bot.db.exec_params(
         "SELECT body, title
         FROM templates
         WHERE subreddit_id = $1 AND type = $2",
         [@id, type]
       )
 
-      raise "/r/#{@name} does not have a #{type} template." if result.count < 1
+      raise "/r/#{@name} does not have a #{type} template." if rows.count < 1
 
-      [result[0]['body'], result[0]['title']]
+      [rows[0]['body'], rows[0]['title']]
+    end
+
+    def sidebar_template
+      body, = template_for('sidebar')
+
+      Template::Sidebar.new body: body, bot: @bot, subreddit: self
     end
 
     # --------------------------------------------------------------------------

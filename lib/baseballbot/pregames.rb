@@ -35,7 +35,13 @@ class Baseballbot
     end
 
     def post_pregame!(id:, name:, game_pk:)
-      name_to_subreddit(name).post_pregame(id: id, game_pk: game_pk)
+      return unless @subreddit.options.dig('pregame', 'enabled')
+
+      Baseballbot::Posts::Pregame.new(
+        id: id,
+        game_pk: game_pk,
+        subreddit: name_to_subreddit(name)
+      ).create!
     rescue Redd::ServerError, ::OpenURI::HTTPError
       # Waiting an extra 2 minutes won't kill anyone.
       nil

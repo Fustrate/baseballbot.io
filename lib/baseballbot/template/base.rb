@@ -18,7 +18,7 @@ class Baseballbot
         @subreddits = {}
       end
 
-      def result
+      def body
         @template.result binding
       end
 
@@ -46,7 +46,7 @@ class Baseballbot
       def replace_in(text)
         text
           .gsub('[](/updates)', DELIMITER)
-          .sub(replace_regexp, "#{DELIMITER}\n#{result}\n#{DELIMITER}")
+          .sub(replace_regexp, "#{DELIMITER}\n#{body}\n#{DELIMITER}")
       end
 
       def timestamp(action = nil)
