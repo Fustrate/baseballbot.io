@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180429223112) do
+ActiveRecord::Schema.define(version: 2018_08_29_181712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,11 @@ ActiveRecord::Schema.define(version: 20180429223112) do
     t.text "body"
     t.integer "subreddit_id", null: false
     t.json "options"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "name", null: false
+    t.json "value"
   end
 
   create_table "subreddits", id: :serial, force: :cascade do |t|
