@@ -8,8 +8,8 @@ class Baseballbot
 
         def line_score
           [
-            " |#{(1..(lines[0].count)).to_a.join('|')}|R|H|E",
-            ":-:|#{(':-:|' * lines[0].count)}:-:|:-:|:-:",
+            "| |#{(1..(lines[0].count)).to_a.join('|')}|R|H|E",
+            "|:-:|#{(':-:|' * lines[0].count)}:-:|:-:|:-:",
             line_for_team(:away),
             line_for_team(:home)
           ].join "\n"
@@ -65,7 +65,7 @@ class Baseballbot
           line = line_team == :home ? lines[1] : lines[0]
           rhe = line_team == :home ? home_rhe : away_rhe
 
-          "[#{code}](/#{code})|#{line.join('|')}|" \
+          "|[#{code}](/#{code})|#{line.join('|')}|" \
             "#{bold rhe['runs']}|#{bold rhe['hits']}|#{bold rhe['errors']}"
         end
       end
