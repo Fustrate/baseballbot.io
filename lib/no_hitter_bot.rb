@@ -3,11 +3,7 @@
 require_relative 'default_bot'
 
 class NoHitterBot
-  SCHEDULE = \
-    'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
-    'hydrate=game(content(summary)),linescore,flags,team'
-
-  MIN_INNINGS = 6
+  MIN_INNINGS = 1
   SUBREDDIT_NAME = 'baseballtest'
 
   def initialize
@@ -15,9 +11,10 @@ class NoHitterBot
   end
 
   def run!
-    data = URI.parse(
-      format(SCHEDULE, date: Time.now.strftime('%m/%d/%Y'))
-    ).open.read
+    data = @bot.api.schedule(
+      date: Time.now.strftime('%m/%d/%Y'),
+      hydrate: 'game(content(summary)),linescore,flags,team'
+    )
 
     JSON.parse(data).dig('dates', 0, 'games').each do |game|
       process_game(game)
@@ -81,7 +78,6 @@ class NoHitterBot
     template = Baseballbot::Template::NoHitter.new(
       body: body,
       title: title,
-      bot: @bot,
       subreddit: @subreddit,
       game_pk: game['gamePk'],
       flag: flag
@@ -104,7 +100,6 @@ class NoHitterBot
     template = Baseballbot::Template::NoHitter.new(
       body: body,
       title: title,
-      bot: @bot,
       subreddit: @subreddit,
       game_pk: game['gamePk'],
       flag: flag

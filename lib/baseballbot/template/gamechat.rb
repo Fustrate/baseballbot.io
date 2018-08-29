@@ -21,8 +21,8 @@ class Baseballbot
 
       attr_reader :title, :post_id, :game_pk
 
-      def initialize(body:, bot:, subreddit:, game_pk:, title: '', post_id: nil)
-        super(body: body, bot: bot)
+      def initialize(body:, subreddit:, game_pk:, title: '', post_id: nil)
+        super(body: body, bot: subreddit.bot)
 
         @subreddit = subreddit
         @game_pk = game_pk
