@@ -26,7 +26,6 @@ module Baseballbot
 
         Template::General.new(
           body: body,
-          bot: @subreddit.bot,
           subreddit: @subreddit,
           title: title
         )

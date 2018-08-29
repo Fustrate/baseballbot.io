@@ -147,7 +147,7 @@ class Baseballbot
     def sidebar_template
       body, = template_for('sidebar')
 
-      Template::Sidebar.new body: body, bot: @bot, subreddit: self
+      Template::Sidebar.new body: body, subreddit: self
     end
 
     # --------------------------------------------------------------------------

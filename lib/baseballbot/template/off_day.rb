@@ -7,8 +7,8 @@ class Baseballbot
 
       attr_reader :title
 
-      def initialize(body:, bot:, subreddit:, title: '')
-        super(body: body, bot: bot)
+      def initialize(body:, subreddit:, title: '')
+        super(body: body, bot: subreddit.bot)
 
         @subreddit = subreddit
         @title = format_title title

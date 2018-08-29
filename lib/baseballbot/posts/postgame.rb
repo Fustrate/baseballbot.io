@@ -26,7 +26,6 @@ module Baseballbot
 
         Template::Gamechat.new(
           body: body,
-          bot: @subreddit.bot,
           subreddit: @subreddit,
           game_pk: @game_pk,
           title: title

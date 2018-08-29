@@ -34,6 +34,30 @@ class Baseballbot
           @pitcher_stats[key] ||= load_pitcher_stats(year, type, count)
         end
 
+        def hitter_stats_table(stats: [])
+          rows = stats.map do |stat|
+            "#{stat.upcase}|#{hitter_stats[stat].first.values.join('|')}"
+          end
+
+          <<~TABLE
+            Stat|Player|Total
+            -|-|-
+            #{rows.join("\n")}
+          TABLE
+        end
+
+        def pitcher_stats_table(stats: [])
+          rows = stats.map do |stat|
+            "#{stat.upcase}|#{pitcher_stats[stat].first.values.join('|')}"
+          end
+
+          <<~TABLE
+            Stat|Player|Total
+            -|-|-
+            #{rows.join("\n")}
+          TABLE
+        end
+
         protected
 
         def load_hitter_stats(year, type, count)

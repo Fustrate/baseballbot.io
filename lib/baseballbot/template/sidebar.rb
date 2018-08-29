@@ -12,8 +12,8 @@ class Baseballbot
       include Template::Sidebar::Standings
       include Template::Sidebar::TodaysGames
 
-      def initialize(body:, bot:, subreddit:)
-        super(body: body, bot: bot)
+      def initialize(body:, subreddit:)
+        super(body: body, bot: subreddit.bot)
 
         @subreddit = subreddit
         @team = subreddit.team

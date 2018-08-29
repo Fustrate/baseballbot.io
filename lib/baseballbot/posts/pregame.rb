@@ -33,8 +33,7 @@ module Baseballbot
 
         Template::Gamechat.new(
           body: body,
-          bot: @bot,
-          subreddit: self,
+          subreddit: @subreddit,
           game_pk: @game_pk,
           title: title
         )
