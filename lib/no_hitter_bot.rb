@@ -5,23 +5,51 @@ require_relative 'default_bot'
 class NoHitterBot
   MIN_INNINGS = 1
   SUBREDDIT_NAME = 'baseballtest'
+  HYDRATE = 'game(content(summary)),linescore,flags,team'
 
   def initialize
     @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
   end
 
-  def run!
-    data = @bot.api.schedule(
+  def post_no_hitters!
+    return unless perform_check?
+
+    # Default to checking again in 10 minutes
+    @next_check = [Time.now + 600]
+
+    schedule = @bot.api.schedule(
       date: Time.now.strftime('%m/%d/%Y'),
-      hydrate: 'game(content(summary)),linescore,flags,team'
+      hydrate: HYDRATE
     )
 
-    JSON.parse(data).dig('dates', 0, 'games').each do |game|
-      process_game(game)
+    JSON.parse(schedule).dig('dates', 0, 'games')
+      .each { |game| process_game(game) }
+  end
+
+  def update_no_hitters!
+    @bot.redis.keys('no_hitter_*').each do |key|
+      game_pk = key[10..-1]
+
+      @bot.redis.hgetall(key) do |flag, post_id|
+        game = @bot.api.schedule(gamePk: game_pk, hydrate: HYDRATE)
+          .dig('dates', 0, 'games', 0)
+
+        update_thread!(post_id, game, flag)
+      end
     end
   end
 
   protected
+
+  def perform_check?
+    @bot.redis.get('next_no_hitter_check') do |value|
+      !value || Time.parse(value) < Time.now
+    end
+  end
+
+  def update_next_check_time!(new_time)
+    @bot.redis.set 'next_no_hitter_check', new_time.strftime('%F %T')
+  end
 
   def subreddit
     @subreddit ||= @bot.session.subreddit(SUBREDDIT_NAME)
@@ -33,8 +61,11 @@ class NoHitterBot
     inning = game.dig('linescore', 'currentInning')
     half = game.dig('linescore', 'inningHalf')
 
-    process_away_team(game, inning, half)
-    process_home_team(game, inning, half)
+    # Game hasn't started yet
+    return unless inning
+
+    post_thread!(game, 'home') if away_team_being_no_hit?(game, inning, half)
+    post_thread!(game, 'away') if home_team_being_no_hit?(game, inning, half)
   end
 
   # Checking for a perfect game is likely redundant
@@ -42,34 +73,34 @@ class NoHitterBot
     game.dig('flags', 'noHitter') || game.dig('flags', 'perfectGame')
   end
 
-  def process_away_team(game, inning, half)
-    existing_id = @bot.redis.hget "no_hitter_#{game['gamePk']}", 'home'
-
-    return update_thread!(existing_id, game, 'home') if existing_id
-
-    post_thread!(game, 'home') if away_team_being_no_hit?(game, inning, half)
-  end
-
-  def process_home_team(game, inning, half)
-    existing_id = @bot.redis.hget "no_hitter_#{game['gamePk']}", 'away'
-
-    return update_thread!(existing_id, game, 'away') if existing_id
-
-    post_thread!(game, 'away') if home_team_being_no_hit?(game, inning, half)
-  end
-
   # Check the away team if it's after the top of the 6th or later
   def away_team_being_no_hit?(game, inning, half)
-    return unless game.dig('linescore', 'teams', 'away').dig('hits').zero?
+    return unless game.dig('linescore', 'teams', 'away', 'hits').zero?
 
-    inning > MIN_INNINGS || (inning == MIN_INNINGS && half != 'Top')
+    if inning > MIN_INNINGS || (inning == MIN_INNINGS && half != 'Top')
+      return true
+    end
+
+    wait_for [0, 3600, 3600, 1800, 1200, 600, 30].last(MIN_INNINGS + 1)[inning]
+
+    false
   end
 
   # Check the home team if it's the end of the 6th or later
   def home_team_being_no_hit?(game, inning, half)
-    return unless game.dig('linescore', 'teams', 'home').dig('hits').zero?
+    return unless game.dig('linescore', 'teams', 'home', 'hits').zero?
 
-    inning > MIN_INNINGS || (inning == MIN_INNINGS && half == 'End')
+    if inning > MIN_INNINGS || (inning == MIN_INNINGS && half == 'End')
+      return true
+    end
+
+    wait_for [0, 3600, 3600, 1800, 1200, 600, 30].last(MIN_INNINGS + 1)[inning]
+
+    false
+  end
+
+  def wait_for(seconds)
+    @next_check << Time.now + seconds
   end
 
   def post_thread!(game, flag)
@@ -89,23 +120,29 @@ class NoHitterBot
       sendreplies: false
     )
 
+    @bot.redis.hdel "no_hitter_#{game['gamePk']}", flag if template.final?
+
     submission.set_suggested_sort 'new'
 
     @bot.redis.hset "no_hitter_#{game['gamePk']}", flag, submission.id
   end
 
   def update_thread!(post_id, game, flag)
-    body, title = @subreddit.template_for('no_hitter_update')
+    body, = @subreddit.template_for('no_hitter_update')
+
+    submission = @subreddit.load_submission(id: post_id)
 
     template = Baseballbot::Template::NoHitter.new(
       body: body,
-      title: title,
       subreddit: @subreddit,
       game_pk: game['gamePk'],
       flag: flag
     )
 
-    submission = @subreddit.load_submission(id: post_id)
+    # Stop updating if the game is over
+    if template.final? || template.postponed?
+      @bot.redis.hdel "no_hitter_#{game['gamePk']}", flag
+    end
 
     @subreddit.edit(
       id: post_id,
@@ -113,5 +150,3 @@ class NoHitterBot
     )
   end
 end
-
-NoHitterBot.new.run!
