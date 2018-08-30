@@ -16,7 +16,11 @@ module Baseballbot
 
         @bot.use_account @subreddit.account.name
 
-        @subreddit.set_flair @submission, flair['text'], css_class: flair['class']
+        @subreddit.set_flair(
+          @submission,
+          flair['text'],
+          css_class: flair['class']
+        )
       end
 
       def update_sticky(sticky = false)

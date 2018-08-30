@@ -25,7 +25,7 @@ class Baseballbot
     def post_gamechats!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(UNPOSTED_GAMECHATS_QUERY).each do |row|
+      unposted_gamechats.each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         post_gamechat!(
@@ -52,7 +52,7 @@ class Baseballbot
     def update_gamechats!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(ACTIVE_GAMECHATS_QUERY).each do |row|
+      active_gamechats.each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         update_gamechat!(
@@ -70,8 +70,6 @@ class Baseballbot
     # @param id [String] The baseballbot id of the gamechat
     # @param game_pk [Integer] The mlb id of the game
     # @param post_id [String] The reddit id of the post to update
-    #
-    # @return [Boolean] to indicate if the game is over or postponed
     def update_gamechat!(name:, id:, game_pk:, post_id:)
       Baseballbot::Posts::GameChat.new(
         id: id,
@@ -94,6 +92,14 @@ class Baseballbot
       refresh_access!
 
       puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
+    end
+
+    def active_gamechats
+      @active_gamechats ||= @db.exec(ACTIVE_GAMECHATS_QUERY)
+    end
+
+    def unposted_gamechats
+      @unposted_gamechats ||= @db.exec(UNPOSTED_GAMECHATS_QUERY)
     end
   end
 end
