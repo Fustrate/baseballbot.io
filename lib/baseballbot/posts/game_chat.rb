@@ -62,7 +62,7 @@ module Baseballbot
       def update_gamechat_post!
         @subreddit.edit(
           id: @post_id,
-          body: @template.replace_in(CGI.unescapeHTML(@submission.selftext))
+          body: @template.replace_in(@submission)
         )
 
         return postpone_gamechat! if @template.postponed?

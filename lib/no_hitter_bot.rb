@@ -109,7 +109,7 @@ class NoHitterBot
 
     @subreddit.edit(
       id: post_id,
-      body: template.replace_in(CGI.unescapeHTML(submission.selftext))
+      body: template.replace_in(submission)
     )
   end
 end

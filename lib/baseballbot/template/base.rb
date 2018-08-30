@@ -44,6 +44,10 @@ class Baseballbot
 
       # Temporary extra replacement to move to the new delimiter
       def replace_in(text)
+        if text.is_a?(Redd::Models::Submission)
+          text = CGI.unescapeHTML(text.selftext)
+        end
+
         text
           .gsub('[](/updates)', DELIMITER)
           .sub(replace_regexp, "#{DELIMITER}\n#{body}\n#{DELIMITER}")
