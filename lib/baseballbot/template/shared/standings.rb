@@ -153,7 +153,7 @@ class Baseballbot
         def load_all_teams_standings
           @all_teams = []
 
-          data = @bot.api.fetch('standings', expires: 300) do
+          data = @bot.api.load('standings', expires: 300) do
             @bot.api.standings(leagues: %i[al nl])
           end
 

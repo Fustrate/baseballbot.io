@@ -53,7 +53,7 @@ class Baseballbot
       end
 
       def schedule_data(hydrate: 'probablePitcher(note)')
-        @bot.api.fetch("schedule_data_#{gid}_#{hydrate}") do
+        @bot.api.load("schedule_data_#{gid}_#{hydrate}", expires: 300) do
           @bot.api.schedule(gamePk: @game_pk, hydrate: hydrate)
         end
       end
