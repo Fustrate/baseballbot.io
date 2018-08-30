@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Sidebar
+    class Shared
       module Standings
         STATS_STANDINGS = \
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \

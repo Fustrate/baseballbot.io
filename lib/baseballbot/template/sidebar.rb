@@ -9,8 +9,9 @@ class Baseballbot
 
       include Template::Sidebar::Calendar
       include Template::Sidebar::Leaders
-      include Template::Sidebar::Standings
       include Template::Sidebar::TodaysGames
+
+      include Template::Shared::Standings
 
       def initialize(body:, subreddit:)
         super(body: body, bot: subreddit.bot)

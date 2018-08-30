@@ -19,6 +19,8 @@ class Baseballbot
       include Template::Gamechat::ScoringPlays
       include Template::Gamechat::Teams
 
+      include Template::Shared::Standings
+
       attr_reader :title, :post_id, :game_pk
 
       def initialize(body:, subreddit:, game_pk:, title: '', post_id: nil)
