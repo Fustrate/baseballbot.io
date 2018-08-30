@@ -15,7 +15,7 @@ class Baseballbot
         end
 
         def standings
-          teams_in_division(@team.division_id)
+          teams_in_division(@subreddit.team.division_id)
         end
 
         def full_standings
@@ -70,7 +70,7 @@ class Baseballbot
 
         def team_stats
           @team_stats ||= all_teams.find do |team|
-            team[:team]['id'] == @team.id
+            team[:team]['id'] == @subreddit.team.id
           end
         end
 

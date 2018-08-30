@@ -12,7 +12,7 @@ module Baseballbot
         )
 
         update_sticky @subreddit.sticky_gamechats?
-        update_flair @subreddit.options.dig('postgame', 'flair')
+        update_flair postgame_flair
 
         info "[PST] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
 
@@ -30,6 +30,15 @@ module Baseballbot
           game_pk: @game_pk,
           title: title
         )
+      end
+
+      def postgame_flair
+        flairs = @subreddit.options.dig('postgame', 'flair')
+
+        return flairs['won'] if @template.won? && flairs['won']
+        return flairs['lost'] if @template.lost? && flairs['lost']
+
+        flairs
       end
     end
   end

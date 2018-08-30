@@ -82,10 +82,10 @@ class Baseballbot
           return '???' unless game
 
           if game[:home]
-            "#{game[:date].strftime(date_format)} #{@team.name} vs. " \
-            "#{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
+            "#{game[:date].strftime(date_format)} #{@subreddit.team.name} vs." \
+            " #{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
           else
-            "#{game[:date].strftime(date_format)} #{@team.name} @ " \
+            "#{game[:date].strftime(date_format)} #{@subreddit.team.name} @ " \
             "#{game[:opponent].name} #{game[:date].strftime('%-I:%M %p')}"
           end
         end
@@ -99,7 +99,7 @@ class Baseballbot
 
           return '???' unless game
 
-          "#{game[:date].strftime(date_format)} #{@team.name} " \
+          "#{game[:date].strftime(date_format)} #{@subreddit.team.name} " \
           "#{game[:score][0]} #{game[:opponent].name} #{game[:score][1]}"
         end
 

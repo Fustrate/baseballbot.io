@@ -11,28 +11,20 @@ class Baseballbot
 
       DELIMITER = '[](/baseballbot)'
 
-      def initialize(body:, bot:)
+      def initialize(body:, subreddit:)
         @body = body
         @template = ERB.new body, nil, '<>'
-        @bot = bot
-        @subreddits = {}
+        @bot = subreddit.bot
+        @subreddit = subreddit
       end
 
       def body
         @template.result binding
       end
 
-      # Change the subreddit to use for a team, only in this template
-      #   <% subreddits LAD: 'Dodgers', SF: 'WTF' %>
-      def subreddits(mapping = {})
-        normalized = mapping.map { |code, name| [code.to_s.upcase, name.to_s] }
-
-        @subreddits.merge! Hash[normalized]
-      end
-
       # Get the default subreddit for this team
       def subreddit(code)
-        @subreddits[code.upcase] ||
+        @subreddit.options.dig('subreddits', code.upcase) ||
           Baseballbot::Subreddits::DEFAULT_SUBREDDITS[code.upcase]
       end
 

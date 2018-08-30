@@ -13,15 +13,8 @@ class Baseballbot
 
       include Template::Shared::Standings
 
-      def initialize(body:, subreddit:)
-        super(body: body, bot: subreddit.bot)
-
-        @subreddit = subreddit
-        @team = subreddit.team
-      end
-
       def inspect
-        %(#<Baseballbot::Template::Sidebar @team="#{@team.name}">)
+        %(#<Baseballbot::Template::Sidebar @subreddit="#{@subreddit.name}">)
       end
 
       def updated_with_link
@@ -37,7 +30,7 @@ class Baseballbot
       end
 
       def open_url(url, interpolations = {})
-        interpolations[:team_id] = @team.id
+        interpolations[:team_id] = @subreddit.team.id
 
         URI.parse(format(url, interpolations)).open.read
       end
