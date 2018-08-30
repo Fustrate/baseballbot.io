@@ -9,7 +9,7 @@ class Baseballbot
 
           load_all_teams_standings
 
-          [103, 104].each { |league_id| mark_league_wildcards(league_id) }
+          %i[al nl].each { |league| mark_league_wildcards(league) }
 
           @all_teams
         end
@@ -20,13 +20,13 @@ class Baseballbot
 
         def full_standings
           @full_standings ||= {
-            al: teams_in_division(200).zip(
-              teams_in_division(202),
-              teams_in_division(201)
+            al: teams_in_division(:al_west).zip(
+              teams_in_division(:al_central),
+              teams_in_division(:al_east)
             ),
-            nl: teams_in_division(203).zip(
-              teams_in_division(205),
-              teams_in_division(204)
+            nl: teams_in_division(:nl_west).zip(
+              teams_in_division(:nl_central),
+              teams_in_division(:nl_east)
             )
           }
         end
@@ -38,20 +38,32 @@ class Baseballbot
             .reverse
         end
 
-        def teams_in_league(league_id)
+        def teams_in_league(league)
+          league_id = if league.is_a?(Integer)
+                        league
+                      else
+                        MLBStatsAPI::Leagues::LEAGUES[league]
+                      end
+
           all_teams.select do |team|
             team.dig(:team, 'league', 'id') == league_id
           end
         end
 
-        def teams_in_division(division_id)
+        def teams_in_division(division)
+          division_id = if division.is_a?(Integer)
+                          division
+                        else
+                          MLBStatsAPI::Divisions::DIVISIONS[division]
+                        end
+
           all_teams.select do |team|
             team.dig(:team, 'division', 'id') == division_id
           end
         end
 
-        def wildcards_in_league(league_id)
-          teams_in_league(league_id)
+        def wildcards_in_league(league)
+          teams_in_league(league)
             .reject { |team| team[:games_back] == '-' }
             .sort_by! { |team| team[:wildcard_gb].to_i }
         end
@@ -110,8 +122,8 @@ class Baseballbot
         # split between teams ahead of the second spot
         #
         # This might put two teams tied for second instead of tied for first
-        def mark_league_wildcards(league_id)
-          teams = teams_in_league(league_id)
+        def mark_league_wildcards(league)
+          teams = teams_in_league(league)
 
           division_leaders = teams.count { |team| team[:division_lead] }
 

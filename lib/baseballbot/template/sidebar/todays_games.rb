@@ -72,21 +72,18 @@ class Baseballbot
 
           # This is no longer included in the data - we might have to switch to
           # using game_pk instead.
-          key = [
+          gid = [
             @date.strftime('%Y_%m_%d'),
             "#{game.dig('teams', 'away', 'team', 'teamCode')}mlb",
             "#{game.dig('teams', 'home', 'team', 'teamCode')}mlb",
-            game['gameNumber'],
-            subreddit(code)
-          ].join('_').downcase
+            game['gameNumber']
+          ].join('_')
 
-          gamechat = @gamechats[key]
+          gamechat = @gamechats["#{gid}_#{subreddit(code)}".downcase]
 
-          if gamechat
-            "[^★](/#{gamechat} \"team-#{code.downcase}\")"
-          else
-            "[][#{code}]"
-          end
+          return "[^★](/#{gamechat} \"team-#{code.downcase}\")" if gamechat
+
+          "[][#{code}]"
         end
 
         def game_status(game)
