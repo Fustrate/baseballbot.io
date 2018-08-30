@@ -139,7 +139,7 @@ module Baseballbot
       #
       # @return [Redd::Models::Submission] the postgame thread
       def post_postgame!
-        return unless @options.dig('postgame', 'enabled')
+        return unless @subreddit.options.dig('postgame', 'enabled')
 
         Baseballbot::Posts::Postgame.new(
           id: @id,
