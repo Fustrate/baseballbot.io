@@ -29,13 +29,11 @@ module Baseballbot
       end
 
       def pregame_template
-        body, title = template_for('pregame')
-
         Template::Gamechat.new(
-          body: body,
+          body: @subreddit.template_for('pregame'),
           subreddit: @subreddit,
           game_pk: @game_pk,
-          title: title
+          title: @subreddit.options.dig('pregame', 'title')
         )
       end
     end

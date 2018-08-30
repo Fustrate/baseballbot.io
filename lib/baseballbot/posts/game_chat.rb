@@ -122,10 +122,8 @@ module Baseballbot
       end
 
       def template_for(type)
-        body, default_title = @subreddit.template_for(type)
-
         Template::Gamechat.new(
-          body: body,
+          body: @subreddit.template_for(type),
           subreddit: @subreddit,
           game_pk: @game_pk,
           title: @title && !@title.empty? ? @title : default_title,

@@ -22,12 +22,10 @@ module Baseballbot
       protected
 
       def off_day_template
-        body, title = @subreddit.template_for('off_day')
-
         Template::General.new(
-          body: body,
+          body: @subreddit.template_for('off_day'),
           subreddit: @subreddit,
-          title: title
+          title: @subreddit.options.dig('off_day', 'title')
         )
       end
     end

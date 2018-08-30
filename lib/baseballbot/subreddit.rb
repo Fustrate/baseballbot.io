@@ -132,7 +132,7 @@ class Baseballbot
 
     def template_for(type)
       rows = @bot.db.exec_params(
-        "SELECT body, title
+        "SELECT body
         FROM templates
         WHERE subreddit_id = $1 AND type = $2",
         [@id, type]
@@ -140,13 +140,11 @@ class Baseballbot
 
       raise "/r/#{@name} does not have a #{type} template." if rows.count < 1
 
-      [rows[0]['body'], rows[0]['title']]
+      rows[0]['body']
     end
 
     def sidebar_template
-      body, = template_for('sidebar')
-
-      Template::Sidebar.new body: body, subreddit: self
+      Template::Sidebar.new body: template_for('sidebar'), subreddit: self
     end
 
     # --------------------------------------------------------------------------

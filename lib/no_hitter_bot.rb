@@ -104,11 +104,9 @@ class NoHitterBot
   end
 
   def post_thread!(game, flag)
-    body, title = @subreddit.template_for('no_hitter')
-
     template = Baseballbot::Template::NoHitter.new(
-      body: body,
-      title: title,
+      body: @subreddit.template_for('no_hitter'),
+      title: 'No-H****r Alert - %{pitcher_names} (%{pitching_team})',
       subreddit: @subreddit,
       game_pk: game['gamePk'],
       flag: flag

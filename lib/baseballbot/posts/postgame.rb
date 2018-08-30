@@ -3,6 +3,9 @@
 module Baseballbot
   module Posts
     class Postgame < GameChat
+      DEFAULT_TITLE = 'Postgame Thread: ' \
+                      '%{away_name} %{away_runs} @ %{home_name} %{home_runs}'
+
       def create!
         @template = postgame_template
 
@@ -22,13 +25,11 @@ module Baseballbot
       protected
 
       def postgame_template
-        body, title = @subreddit.template_for('postgame')
-
         Template::Gamechat.new(
-          body: body,
+          body: @subreddit.template_for('postgame'),
           subreddit: @subreddit,
           game_pk: @game_pk,
-          title: title
+          title: postgame_title
         )
       end
 
@@ -39,6 +40,16 @@ module Baseballbot
         return flairs['lost'] if @template.lost? && flairs['lost']
 
         flairs
+      end
+
+      def postgame_title
+        titles = @subreddit.options.dig('postgame', 'title') || DEFAULT_TITLE
+
+        return titles['won'] if @template.won? && titles['won']
+        return titles['lost'] if @template.lost? && titles['lost']
+
+        # Spring training games can end in a tie.
+        titles['tie'] || titles
       end
     end
   end
