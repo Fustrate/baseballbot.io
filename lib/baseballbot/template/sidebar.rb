@@ -3,9 +3,9 @@
 class Baseballbot
   module Template
     class Sidebar < Base
-      Dir[File.join(File.dirname(__FILE__), 'sidebar', '*.rb')].each do |file|
-        require file
-      end
+      Dir.glob(
+        File.join(File.dirname(__FILE__), '{sidebar,shared}/*.rb')
+      ).each { |file| require file }
 
       include Template::Sidebar::Calendar
       include Template::Sidebar::Leaders

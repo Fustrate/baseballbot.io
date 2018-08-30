@@ -4,9 +4,9 @@ class Baseballbot
   module Template
     class Gamechat < Base
       # This is kept here because of inheritance
-      Dir[File.join(File.dirname(__FILE__), 'gamechat', '*.rb')].each do |file|
-        require file
-      end
+      Dir.glob(
+        File.join(File.dirname(__FILE__), '{gamechat,shared}/*.rb')
+      ).each { |file| require file }
 
       using TemplateRefinements
 

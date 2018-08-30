@@ -3,6 +3,11 @@
 class Baseballbot
   module Template
     class General < Base
+      # This is kept here because of inheritance
+      Dir.glob(
+        File.join(File.dirname(__FILE__), 'shared', '*.rb')
+      ).each { |file| require file }
+
       using TemplateRefinements
 
       attr_reader :title
