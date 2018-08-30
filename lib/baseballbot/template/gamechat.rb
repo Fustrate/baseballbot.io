@@ -27,7 +27,6 @@ class Baseballbot
         super(body: body, subreddit: subreddit)
 
         @game_pk = game_pk
-
         @title = format_title title
         @post_id = post_id
       end

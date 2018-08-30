@@ -12,10 +12,10 @@ class Baseballbot
       DELIMITER = '[](/baseballbot)'
 
       def initialize(body:, subreddit:)
-        @body = body
+        @subreddit = subreddit
+
         @template = ERB.new body, nil, '<>'
         @bot = subreddit.bot
-        @subreddit = subreddit
       end
 
       def body
