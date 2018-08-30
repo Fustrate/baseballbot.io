@@ -4,12 +4,6 @@ class Baseballbot
   module Template
     class Sidebar
       module Calendar
-        SCHEDULE = \
-          'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
-          'startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
-          'eventTypes=primary&scheduleTypes=games&hydrate=team' \
-          '(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
-
         def month_calendar(downcase: false)
           start_date = Date.civil(Date.today.year, Date.today.month, 1)
           end_date = Date.civil(Date.today.year, Date.today.month, -1)
@@ -232,14 +226,16 @@ class Baseballbot
         end
 
         def calendar_dates(start_date, end_date)
-          url = format(
-            SCHEDULE,
-            team_id: @subreddit.team.id,
-            start_date: start_date.strftime('%m/%d/%Y'),
-            end_date: end_date.strftime('%m/%d/%Y')
-          )
-
-          JSON.parse(URI.parse(url).open.read).dig('dates')
+          @bot.api.schedule(
+            teamId: @subreddit.team.id,
+            startDate: start_date.strftime('%m/%d/%Y'),
+            endDate: end_date.strftime('%m/%d/%Y'),
+            sportId: 1,
+            eventTypes: 'primary',
+            scheduleTypes: 'games',
+            hydrate: 'team(venue(timezone)),game(content(summary)),' \
+                     'linescore,broadcasts(all)'
+          ).dig('dates')
         end
 
         def calendar_game_status(game)

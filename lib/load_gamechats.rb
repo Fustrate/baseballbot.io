@@ -6,10 +6,6 @@ require 'open-uri'
 require 'chronic'
 
 class GamechatLoader
-  URL = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&season=%<year>d&' \
-        'startDate=%<start_date>s&endDate=%<end_date>s&teamId=%<team_id>d&' \
-        'eventTypes=primary&scheduleTypes=games,events,xref'
-
   def initialize
     @attempts = 0
     @failures = 0
@@ -36,12 +32,14 @@ class GamechatLoader
   end
 
   def schedule_url(team_id)
-    format(
-      URL,
-      start_date: @start_date.strftime('%Y-%m-%d'),
-      end_date: @end_date.strftime('%Y-%m-%d'),
-      team_id: team_id,
-      year: @start_date.year
+    @bot.api.schedule(
+      sportId: 1,
+      season: @start_date.year,
+      startDate: @start_date.strftime('%Y-%m-%d'),
+      endDate: @end_date.strftime('%Y-%m-%d'),
+      teamId: team_id,
+      eventTypes: 'primary',
+      scheduleTypes: 'games,events,xref'
     )
   end
 

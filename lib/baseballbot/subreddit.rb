@@ -41,14 +41,13 @@ class Baseballbot
     def post_off_day_thread?
       return false unless @options.dig('off_day', 'enabled')
 
-      url = format(
-        'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
-        'date=%<today>s&sportId=1&eventTypes=primary&scheduleTypes=games',
-        team_id: @team_id,
-        today: Time.now.strftime('%m/%d/%Y')
-      )
-
-      JSON.parse(URI.parse(url).open.read).dig('totalGames').zero?
+      @bot.api.schedule(
+        sportId: 1,
+        teamId: @team_id,
+        date: Time.now.strftime('%m/%d/%Y'),
+        eventTypes: 'primary',
+        scheduleTypes: 'games'
+      ).dig('totalGames').zero?
     end
 
     # --------------------------------------------------------------------------

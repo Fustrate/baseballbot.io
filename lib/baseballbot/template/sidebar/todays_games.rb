@@ -4,10 +4,6 @@ class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-        SCHEDULE = \
-          'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
-          'hydrate=game(content(summary)),linescore,flags,team'
-
         PREGAME_STATUSES = [
           'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
         ].freeze
@@ -21,11 +17,11 @@ class Baseballbot
 
           load_gamechats
 
-          url = format(SCHEDULE, date: @date.strftime('%m/%d/%Y'))
-
-          JSON.parse(URI.parse(url).open.read)
-            .dig('dates', 0, 'games')
-            .map { |game| process_todays_game game }
+          @bot.api.schedule(
+            sportId: 1,
+            date: @date.strftime('%m/%d/%Y'),
+            hydrate: 'game(content(summary)),linescore,flags,team'
+          ).dig('dates', 0, 'games').map { |game| process_todays_game game }
         end
 
         protected

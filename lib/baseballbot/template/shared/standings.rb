@@ -4,22 +4,10 @@ class Baseballbot
   module Template
     class Shared
       module Standings
-        STATS_STANDINGS = \
-          'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-          'leagueId=103,104&season=%<year>d&hydrate=team&t=%<t>d'
-
         def all_teams
           return @all_teams if @all_teams
 
-          @all_teams = []
-
-          load_divisions_from_remote.each do |division|
-            division['teamRecords'].each do |team|
-              @all_teams << parse_standings_row(team)
-            end
-          end
-
-          @all_teams.sort_by! { |team| team[:sort_order] }
+          load_all_teams_standings
 
           [103, 104].each { |league_id| mark_league_wildcards(league_id) }
 
@@ -150,14 +138,20 @@ class Baseballbot
 
         # @!endgroup Wildcards
 
-        def load_divisions_from_remote
-          filename = format(
-            STATS_STANDINGS,
-            year: Time.now.year,
-            t: Time.now.to_i
-          )
+        def load_all_teams_standings
+          @all_teams = []
 
-          JSON.parse(URI.parse(filename).open.read).dig('records')
+          data = @bot.api.fetch('standings', expires: 300) do
+            @bot.api.standings(leagues: %i[al nl])
+          end
+
+          data.dig('records').each do |division|
+            division['teamRecords'].each do |team|
+              @all_teams << parse_standings_row(team)
+            end
+          end
+
+          @all_teams.sort_by! { |team| team[:sort_order] }
         end
       end
     end

@@ -4,10 +4,6 @@ require_relative 'default_bot'
 require 'honeybadger/ruby'
 
 class CheckMessages
-  SCHEDULE = \
-    'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
-    'hydrate=game(content(summary)),linescore,flags,team'
-
   TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
   LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
   GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
@@ -89,11 +85,13 @@ class CheckMessages
   def load_possible_games
     games = Hash.new { |h, k| h[k] = [] }
 
-    data = URI.parse(
-      format(SCHEDULE, date: Time.now.strftime('%m/%d/%Y'))
-    ).open.read
+    game_data = @bot.api.schedule(
+      sportId: 1,
+      date: Time.now.strftime('%m/%d/%Y'),
+      hydrate: 'game(content(summary)),linescore,flags,team',
+    ).dig('dates', 0, 'games')
 
-    JSON.parse(data).dig('dates', 0, 'games').each do |game|
+    game_data.each do |game|
       gid = gid_for_game(game)
 
       games[game.dig('teams', 'away', 'team', 'abbreviation')] << gid
