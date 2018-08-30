@@ -132,6 +132,24 @@ class Baseballbot
 
           (one + [nil] * (two.length - one.length)).zip(two)
         end
+
+        def home_lob
+          boxscore.dig('teams', 'home', 'info')
+            .find { |info| info['title'] == 'BATTING' }
+            .dig('fieldList')
+            .find { |stat| stat['label'] == 'Team LOB' }
+            .dig('value')
+            .to_i
+        end
+
+        def away_lob
+          boxscore.dig('teams', 'away', 'info')
+            .find { |info| info['title'] == 'BATTING' }
+            .dig('fieldList')
+            .find { |stat| stat['label'] == 'Team LOB' }
+            .dig('value')
+            .to_i
+        end
       end
     end
   end
