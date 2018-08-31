@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 
-require_relative 'markdown_helpers'
-require_relative 'template_refinements'
-
 class Baseballbot
   module Template
     class Base
       # This is kept here because of inheritance
       Dir.glob(
         File.join(File.dirname(__FILE__), 'shared', '*.rb')
-      ).each { |file| require file }
+      ).each { |file| require_relative file }
 
       include MarkdownHelpers
       using TemplateRefinements
