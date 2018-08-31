@@ -131,6 +131,10 @@ class Baseballbot
         )
       end
 
+      def default_title
+        @subreddit.options.dig('gamechats', 'title')
+      end
+
       # Create a postgame thread if the subreddit is set to have them
       #
       # @param game_pk [String] the MLB game ID
