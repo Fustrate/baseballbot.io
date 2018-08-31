@@ -24,7 +24,7 @@ require_relative 'baseballbot/subreddits'
 
 Dir.glob(
   File.join(File.dirname(__FILE__), 'baseballbot/{template,posts}/*.rb')
-).each { |file| require_relative file }
+).sort.each { |file| require_relative file }
 
 class Baseballbot
   include Accounts
