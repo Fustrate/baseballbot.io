@@ -5,7 +5,7 @@ class Baseballbot
     class Gamechat < Base
       # This is kept here because of inheritance
       Dir.glob(
-        File.join(File.dirname(__FILE__), '{gamechat,shared}/*.rb')
+        File.join(File.dirname(__FILE__), 'gamechat', '*.rb')
       ).each { |file| require file }
 
       using TemplateRefinements
@@ -18,8 +18,6 @@ class Baseballbot
       include Template::Gamechat::Postgame
       include Template::Gamechat::ScoringPlays
       include Template::Gamechat::Teams
-
-      include Template::Shared::Standings
 
       attr_reader :title, :post_id, :game_pk
 

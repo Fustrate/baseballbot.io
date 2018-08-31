@@ -6,8 +6,15 @@ require_relative 'template_refinements'
 class Baseballbot
   module Template
     class Base
+      # This is kept here because of inheritance
+      Dir.glob(
+        File.join(File.dirname(__FILE__), 'shared', '*.rb')
+      ).each { |file| require file }
+
       include MarkdownHelpers
       using TemplateRefinements
+
+      include Template::Shared::Standings
 
       DELIMITER = '[](/baseballbot)'
 

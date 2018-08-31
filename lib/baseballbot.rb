@@ -22,9 +22,9 @@ require_relative 'baseballbot/off_day'
 require_relative 'baseballbot/sidebars'
 require_relative 'baseballbot/subreddits'
 
-require_relative 'baseballbot/template/base'
-require_relative 'baseballbot/template/gamechat'
-require_relative 'baseballbot/template/sidebar'
+Dir.glob(
+  File.join(File.dirname(__FILE__), 'baseballbot/{template/posts}/*.rb')
+).each { |file| require file }
 
 class Baseballbot
   include Accounts
