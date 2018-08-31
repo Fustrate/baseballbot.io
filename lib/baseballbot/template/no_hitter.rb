@@ -3,12 +3,13 @@
 class Baseballbot
   module Template
     class NoHitter < Gamechat
-      def initialize(body:, title:, subreddit:, game_pk:, flag:)
+      def initialize(body:, title:, subreddit:, game_pk:, flag:, post_id: nil)
         super(
           body: body,
           subreddit: subreddit,
           game_pk: game_pk,
-          title: title
+          title: title,
+          post_id: post_id
         )
 
         @flag = flag
