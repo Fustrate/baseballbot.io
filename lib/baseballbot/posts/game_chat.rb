@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Baseballbot
+class Baseballbot
   module Posts
     class GameChat < Base
       def initialize(id:, game_pk:, subreddit:, title: nil, post_id: nil)

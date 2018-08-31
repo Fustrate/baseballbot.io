@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Baseballbot
+class Baseballbot
   module Posts
     class Base
       attr_reader :submission, :template

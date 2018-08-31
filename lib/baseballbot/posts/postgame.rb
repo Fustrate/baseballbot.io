@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Baseballbot
+class Baseballbot
   module Posts
     class Postgame < GameChat
       DEFAULT_TITLE = 'Postgame Thread: ' \
