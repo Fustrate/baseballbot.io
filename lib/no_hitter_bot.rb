@@ -134,7 +134,8 @@ class NoHitterBot
       body: body,
       subreddit: @subreddit,
       game_pk: game['gamePk'],
-      flag: flag
+      flag: flag,
+      post_id: post_id
     )
 
     # Stop updating if the game is over
