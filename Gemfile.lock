@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: https://github.com/Fustrate/mlb_stats_api
-  revision: c69503121988ea2ef3cca402a7c6650116da39fd
+  revision: e763d6ac2a968c8f13c1e4a045b3a35f580f9f55
   specs:
     mlb_stats_api (0.1.1)
       hana (~> 1.3)

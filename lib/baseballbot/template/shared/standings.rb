@@ -154,7 +154,7 @@ class Baseballbot
           @all_teams = []
 
           data = @bot.api.load('standings_hydrate_team', expires: 300) do
-            @bot.api.standings(leagues: %i[al nl], hydrate: 'team')
+            @bot.api.standings(leagues: %i[al nl])
           end
 
           data.dig('records').each do |division|
