@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'template/base'
-require_relative 'template/gamechat'
-require_relative 'template/sidebar'
-
 class Baseballbot
   class Subreddit
     attr_reader :id, :account, :name, :timezone, :options, :bot

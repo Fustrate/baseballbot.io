@@ -17,13 +17,13 @@ require_relative 'baseballbot/account'
 
 require_relative 'baseballbot/accounts'
 require_relative 'baseballbot/gamechats'
-require_relative 'baseballbot/pregames'
 require_relative 'baseballbot/off_day'
+require_relative 'baseballbot/pregames'
 require_relative 'baseballbot/sidebars'
 require_relative 'baseballbot/subreddits'
 
 Dir.glob(
-  File.join(File.dirname(__FILE__), 'baseballbot/{template/posts}/*.rb')
+  File.join(File.dirname(__FILE__), 'baseballbot/{template,posts}/*.rb')
 ).each { |file| require_relative file }
 
 class Baseballbot
