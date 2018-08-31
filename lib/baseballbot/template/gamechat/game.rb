@@ -91,13 +91,13 @@ class Baseballbot
         def won?
           return unless final?
 
-          home? == (home['runs'] > away['runs'])
+          home? == (home_rhe['runs'] > away_rhe['runs'])
         end
 
         def lost?
           return unless final?
 
-          home? == (home['runs'] < away['runs'])
+          home? == (home_rhe['runs'] < away_rhe['runs'])
         end
 
         def preview?
