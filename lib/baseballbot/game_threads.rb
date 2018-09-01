@@ -18,7 +18,6 @@ class Baseballbot
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted'
         AND starts_at <= NOW()
-        AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
       ORDER BY post_id ASC
     SQL
 
