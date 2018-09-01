@@ -35,8 +35,6 @@ class Baseballbot
     end
 
     def post_pregame_thread!(id:, name:, game_pk:)
-      return unless @subreddit.options.dig('pregame', 'enabled')
-
       Baseballbot::Posts::Pregame.new(
         id: id,
         game_pk: game_pk,
