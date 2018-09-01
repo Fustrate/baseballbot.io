@@ -26,6 +26,16 @@ Dir.glob(
   File.join(File.dirname(__FILE__), 'baseballbot/{template,posts}/*.rb')
 ).sort.each { |file| require_relative file }
 
+IGNORED_EXCEPTIONS = [::Redd::ServerError, ::OpenURI::HTTPError].freeze
+
+Honeybadger.configure do |config|
+  config.before_notify do |notice|
+    if IGNORED_EXCEPTIONS.any? { |klass| notice.exception.is_a?(klass) }
+      notice.halt!
+    end
+  end
+end
+
 class Baseballbot
   include Accounts
   include GameThreads

@@ -42,9 +42,6 @@ class Baseballbot
         game_pk: game_pk,
         subreddit: name_to_subreddit(name)
       ).create!
-    rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra 2 minutes won't kill anyone.
-      nil
     rescue => ex
       Honeybadger.notify(ex, context: { name: name })
     end

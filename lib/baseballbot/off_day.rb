@@ -35,9 +35,6 @@ class Baseballbot
       return unless subreddit.post_off_day_thread?
 
       Baseballbot::Posts::OffDay.new(subreddit: subreddit).create!
-    rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra 2 minutes won't kill anyone.
-      nil
     rescue => ex
       Honeybadger.notify(ex, context: { name: name })
     end

@@ -44,9 +44,8 @@ class Baseballbot
         title: title,
         subreddit: name_to_subreddit(name)
       ).create!
-    rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra few minutes won't kill anyone.
-      nil
+    rescue => ex
+      Honeybadger.notify(ex, context: { name: name, game_pk: game_pk })
     end
 
     def update_game_threads!(names: [])
@@ -78,20 +77,9 @@ class Baseballbot
         subreddit: name_to_subreddit(name)
       ).update!
     rescue Redd::InvalidAccess
-      invalid_access(post_id)
-    rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra few minutes won't kill anyone.
-      nil
-    end
-
-    def invalid_access(post_id)
-      puts "Could not update #{post_id} due to invalid credentials:"
-      puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
-      puts "\tCurrent: #{Time.now.strftime '%F %T'}"
-
       refresh_access!
-
-      puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
+    rescue => ex
+      Honeybadger.notify(ex, context: { game_pk: game_pk, post_id: post_id })
     end
 
     def active_game_threads
