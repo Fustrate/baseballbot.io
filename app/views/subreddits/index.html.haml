@@ -9,7 +9,7 @@
       %th Team
       %th Account
       %th Sidebar
-      %th Game Chats
+      %th Game Threads
       %th Pregame
       %th Postgame
   %tbody
@@ -19,6 +19,6 @@
         %td= @api.team(subreddit.team_id).abbreviation if subreddit.team_id
         %td= subreddit.account.name
         %td.text-center= '✓' if subreddit.update_sidebar?
-        %td.text-center= '✓' if subreddit.post_gamechats?
+        %td.text-center= '✓' if subreddit.post_game_threads?
         %td.text-center{ title: (subreddit.options['pregame']['post_at'] if subreddit.post_pregame?) }= '✓' if subreddit.post_pregame?
         %td.text-center= '✓' if subreddit.post_postgame?

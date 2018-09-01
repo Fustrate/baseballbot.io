@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Posts
-    class Postgame < GameChat
+    class Postgame < GameThread
       DEFAULT_TITLE = 'Postgame Thread: ' \
                       '%{away_name} %{away_runs} @ %{home_name} %{home_runs}'
 
@@ -14,7 +14,7 @@ class Baseballbot
           text: @template.body
         )
 
-        update_sticky @subreddit.sticky_gamechats?
+        update_sticky @subreddit.sticky_game_threads?
         update_flair postgame_flair
 
         info "[PST] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
@@ -25,7 +25,7 @@ class Baseballbot
       protected
 
       def postgame_template
-        Template::Gamechat.new(
+        Template::GameThread.new(
           body: @subreddit.template_for('postgame'),
           subreddit: @subreddit,
           game_pk: @game_pk,

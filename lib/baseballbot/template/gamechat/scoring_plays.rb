@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module ScoringPlays
         def scoring_plays
           return [] unless started? && feed.plays

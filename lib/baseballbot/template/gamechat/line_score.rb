@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module LineScore
         BLANK_RHE = { 'runs' => 0, 'hits' => 0, 'errors' => 0 }.freeze
 

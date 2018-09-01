@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module Highlights
         def highlights
           return [] unless started?

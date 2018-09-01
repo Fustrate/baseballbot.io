@@ -1,6 +1,6 @@
 - title 'Baseballbot'
 
-%h4 Today's Game Threads (#{@gamechats.count})
+%h4 Today's Game Threads (#{@game_threads.count})
 
 %table
   %thead
@@ -12,19 +12,19 @@
       %th Starts At
       %th Status
   %tbody
-    - @gamechats.each do |gamechat|
+    - @game_threads.each do |game_thread|
       %tr
-        %td= link_to gamechat.game_pk, "https://www.mlb.com/gameday/#{gamechat.game_pk}"
-        %td= link_to gamechat.title, "http://redd.it/#{gamechat.post_id}" if gamechat.post_id.present?
-        %td= link_to gamechat.subreddit.name, "http://reddit.com/r/#{gamechat.subreddit.name}"
-        %td.no-wrap= gamechat.post_at.strftime '%-I:%M %p'
-        %td.no-wrap= gamechat.starts_at.strftime '%-I:%M %p'
+        %td= link_to game_thread.game_pk, "https://www.mlb.com/gameday/#{game_thread.game_pk}"
+        %td= link_to game_thread.title, "http://redd.it/#{game_thread.post_id}" if game_thread.post_id.present?
+        %td= link_to game_thread.subreddit.name, "http://reddit.com/r/#{game_thread.subreddit.name}"
+        %td.no-wrap= game_thread.post_at.strftime '%-I:%M %p'
+        %td.no-wrap= game_thread.starts_at.strftime '%-I:%M %p'
         %td
-          - if gamechat.post_at.past? && gamechat.status == 'Future'
-            %span.label.radius.fw.gamechat.error Error
-          - elsif gamechat.starts_at.past? && gamechat.status == 'Posted'
-            %span.label.radius.fw.gamechat.live Live
+          - if game_thread.post_at.past? && game_thread.status == 'Future'
+            %span.label.radius.fw.game_thread.error Error
+          - elsif game_thread.starts_at.past? && game_thread.status == 'Posted'
+            %span.label.radius.fw.game_thread.live Live
           - else
-            %span.label.radius.fw.gamechat{ class: gamechat.status.downcase }= gamechat.status
+            %span.label.radius.fw.game_thread{ class: game_thread.status.downcase }= game_thread.status
 
 %p All times are Pacific.

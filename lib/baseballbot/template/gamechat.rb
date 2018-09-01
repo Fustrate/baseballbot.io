@@ -2,22 +2,22 @@
 
 class Baseballbot
   module Template
-    class Gamechat < Base
+    class GameThread < Base
       # This is kept here because of inheritance
       Dir.glob(
-        File.join(File.dirname(__FILE__), 'gamechat', '*.rb')
+        File.join(File.dirname(__FILE__), 'game_thread', '*.rb')
       ).each { |file| require file }
 
       using TemplateRefinements
 
-      include Template::Gamechat::BoxScore
-      include Template::Gamechat::Game
-      include Template::Gamechat::Highlights
-      include Template::Gamechat::LineScore
-      include Template::Gamechat::Media
-      include Template::Gamechat::Postgame
-      include Template::Gamechat::ScoringPlays
-      include Template::Gamechat::Teams
+      include Template::GameThread::BoxScore
+      include Template::GameThread::Game
+      include Template::GameThread::Highlights
+      include Template::GameThread::LineScore
+      include Template::GameThread::Media
+      include Template::GameThread::Postgame
+      include Template::GameThread::ScoringPlays
+      include Template::GameThread::Teams
 
       attr_reader :title, :post_id, :game_pk
 
@@ -56,7 +56,7 @@ class Baseballbot
       end
 
       def inspect
-        %(#<Baseballbot::Template::Gamechat @game_pk="#{@game_pk}">)
+        %(#<Baseballbot::Template::GameThread @game_pk="#{@game_pk}">)
       end
 
       def player_url(id)

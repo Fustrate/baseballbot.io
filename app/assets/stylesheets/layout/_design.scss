@@ -27,7 +27,7 @@ th,
 }
 
 .label {
-  &.gamechat {
+  &.game_thread {
     &.live {
       @include label-color($green);
     }

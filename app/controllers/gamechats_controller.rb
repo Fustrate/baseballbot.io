@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class GamechatsController < ApplicationController
-  before_action :load_gamechat, except: %i[index new create]
+class GameThreadsController < ApplicationController
+  before_action :load_game_thread, except: %i[index new create]
 
   def index
     respond_to do |format|
       format.html
       format.json do
-        @gamechats = Gamechat.where('DATE(starts_at) = ?', Time.zone.today)
+        @game_threads = GameThread.where('DATE(starts_at) = ?', Time.zone.today)
       end
     end
   end
@@ -32,7 +32,7 @@ class GamechatsController < ApplicationController
 
   protected
 
-  def load_gamechat
-    @gamechat = Gamechat.find params[:id]
+  def load_game_thread
+    @game_thread = GameThread.find params[:id]
   end
 end

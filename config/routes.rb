@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get :authenticate
   end
 
-  resources :gamechats
+  resources :game_threads
   resources :subreddits, only: %i[index show]
   resources :templates, only: %i[show]
 

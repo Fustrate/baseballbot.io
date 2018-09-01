@@ -50,8 +50,8 @@ class Baseballbot
     # Miscellaneous
     # --------------------------------------------------------------------------
 
-    def sticky_gamechats?
-      @options.dig('gamechats', 'sticky') != false
+    def sticky_game_threads?
+      @options.dig('game_threads', 'sticky') != false
     end
 
     def generate_sidebar

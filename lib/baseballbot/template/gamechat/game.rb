@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module Game
         UMPIRE_POSITIONS = {
           'Home Plate' => 'HP',

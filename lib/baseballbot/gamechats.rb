@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
 class Baseballbot
-  module Gamechats
-    UNPOSTED_GAMECHATS_QUERY = <<~SQL
-      SELECT gamechats.id, game_pk, subreddits.name, title
-      FROM gamechats
+  module GameThreads
+    UNPOSTED_GAME_THREADS_QUERY = <<~SQL
+      SELECT game_threads.id, game_pk, subreddits.name, title
+      FROM game_threads
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status IN ('Pregame', 'Future')
         AND post_at <= NOW()
-        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
+        AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
       ORDER BY post_at ASC, game_pk ASC
     SQL
 
-    ACTIVE_GAMECHATS_QUERY = <<~SQL
-      SELECT gamechats.id, game_pk, subreddits.name, post_id
-      FROM gamechats
+    ACTIVE_GAME_THREADS_QUERY = <<~SQL
+      SELECT game_threads.id, game_pk, subreddits.name, post_id
+      FROM game_threads
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted'
         AND starts_at <= NOW()
-        AND (options#>>'{gamechats,enabled}')::boolean IS TRUE
+        AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
       ORDER BY post_id ASC
     SQL
 
-    def post_gamechats!(names: [])
+    def post_game_threads!(names: [])
       names = names.map(&:downcase)
 
-      unposted_gamechats.each do |row|
+      unposted_game_threads.each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        post_gamechat!(
+        post_game_thread!(
           id: row['id'],
           name: row['name'],
           game_pk: row['game_pk'],
@@ -37,8 +37,8 @@ class Baseballbot
       end
     end
 
-    def post_gamechat!(id:, name:, game_pk:, title:)
-      Baseballbot::Posts::GameChat.new(
+    def post_game_thread!(id:, name:, game_pk:, title:)
+      Baseballbot::Posts::GameThread.new(
         id: id,
         game_pk: game_pk,
         title: title,
@@ -49,13 +49,13 @@ class Baseballbot
       nil
     end
 
-    def update_gamechats!(names: [])
+    def update_game_threads!(names: [])
       names = names.map(&:downcase)
 
-      active_gamechats.each do |row|
+      active_game_threads.each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        update_gamechat!(
+        update_game_thread!(
           name: row['name'],
           id: row['id'],
           game_pk: row['game_pk'],
@@ -64,14 +64,14 @@ class Baseballbot
       end
     end
 
-    # Update a gamechat - also starts the "game over" process if necessary
+    # Update a game thread - also starts the "game over" process if necessary
     #
     # @param name [String] The name of the subreddit to post in
-    # @param id [String] The baseballbot id of the gamechat
+    # @param id [String] The baseballbot id of the game thread
     # @param game_pk [Integer] The mlb id of the game
     # @param post_id [String] The reddit id of the post to update
-    def update_gamechat!(name:, id:, game_pk:, post_id:)
-      Baseballbot::Posts::GameChat.new(
+    def update_game_thread!(name:, id:, game_pk:, post_id:)
+      Baseballbot::Posts::GameThread.new(
         id: id,
         game_pk: game_pk,
         post_id: post_id,
@@ -94,12 +94,12 @@ class Baseballbot
       puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
     end
 
-    def active_gamechats
-      @active_gamechats ||= @db.exec(ACTIVE_GAMECHATS_QUERY)
+    def active_game_threads
+      @active_game_threads ||= @db.exec(ACTIVE_GAME_THREADS_QUERY)
     end
 
-    def unposted_gamechats
-      @unposted_gamechats ||= @db.exec(UNPOSTED_GAMECHATS_QUERY)
+    def unposted_game_threads
+      @unposted_game_threads ||= @db.exec(UNPOSTED_GAME_THREADS_QUERY)
     end
   end
 end

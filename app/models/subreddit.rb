@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Subreddit < ApplicationRecord
-  has_many :gamechats, dependent: :destroy
+  has_many :game_threads, dependent: :destroy
   has_many :templates, dependent: :destroy
 
   belongs_to :account
@@ -14,8 +14,8 @@ class Subreddit < ApplicationRecord
     @update_sidebar ||= options['sidebar'].try(:[], 'enabled')
   end
 
-  def post_gamechats?
-    @post_gamechats ||= options['gamechats'].try(:[], 'enabled')
+  def post_game_threads?
+    @post_game_threads ||= options['game_threads'].try(:[], 'enabled')
   end
 
   def post_pregame?

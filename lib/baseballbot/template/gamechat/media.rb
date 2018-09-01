@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module Media
         def free_game?
           content.dig('media', 'freeGame')

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_29_223112) do
+ActiveRecord::Schema.define(version: 2018_09_01_001353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2018_04_29_223112) do
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id"
   end
 
-  create_table "gamechats", id: :serial, force: :cascade do |t|
+  create_table "game_threads", id: :serial, force: :cascade do |t|
     t.datetime "post_at"
     t.datetime "starts_at"
     t.string "status"

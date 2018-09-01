@@ -5,7 +5,7 @@ require 'json'
 require 'open-uri'
 require 'chronic'
 
-class GamechatLoader
+class GameThreadLoader
   def initialize
     @attempts = 0
     @failures = 0
@@ -16,7 +16,7 @@ class GamechatLoader
   def run
     calculate_dates
 
-    load_gamechats
+    load_game_threads
 
     puts "Added #{@attempts - @failures} of #{@attempts}"
   end
@@ -46,7 +46,7 @@ class GamechatLoader
   def load_schedule(subreddit_id, team_id, post_at)
     data = JSON.parse URI.parse(schedule_url(team_id)).open.read
 
-    process_games(data.dig('dates'), subreddit_id, adjust_time_proc(post_at))
+    process_games data.dig('dates'), subreddit_id, adjust_time_proc(post_at)
   end
 
   def process_games(dates, subreddit_id, adjusted_time)
@@ -73,7 +73,7 @@ class GamechatLoader
     data = row_data(game, gametime, post_at, subreddit_id)
 
     conn.exec_params(
-      "INSERT INTO gamechats (#{data.keys.join(', ')})" \
+      "INSERT INTO game_threads (#{data.keys.join(', ')})" \
       "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
       data.values
     )
@@ -124,41 +124,41 @@ class GamechatLoader
     @names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
   end
 
-  def load_gamechats
+  def load_game_threads
     enabled_subreddits.each do |row|
       next unless @names.empty? || @names.include?(row['name'].downcase)
 
-      load_schedule(
-        row['id'],
-        row['team_id'],
-        row['post_at']
-      )
+      load_schedule row['id'], row['team_id'], row['post_at']
     end
   end
 
   def enabled_subreddits
     conn.exec(
-      "SELECT id, name, team_id, options#>>'{gamechats,post_at}' AS post_at
+      "SELECT id, name, team_id, options#>>'{game_threads,post_at}' AS post_at
       FROM subreddits
       WHERE team_id IS NOT NULL
-      AND (options#>>'{gamechats,enabled}')::boolean IS TRUE"
+      AND (options#>>'{game_threads,enabled}')::boolean IS TRUE"
     )
   end
 
   def adjust_time_proc(post_at)
     if post_at =~ /\A\-?\d{1,2}\z/
-      ->(time) { time + Regexp.last_match[0].to_i * 3600 }
+      ->(time) { time - Regexp.last_match[0].to_i.abs * 3600 }
     elsif post_at =~ /(1[012]|\d)(:\d\d|) ?(am|pm)/i
-      lambda do |time|
-        hours = Regexp.last_match[1].to_i
-        hours += 12 if hours != 12 && Regexp.last_match[3].casecmp('pm').zero?
-        minutes = (Regexp.last_match[1] || ':00')[1..2].to_i
-
-        Time.new(time.year, time.month, time.day, hours, minutes, 0)
-      end
+      constant_time(Regexp.last_match)
     else
       # Default to 3 hours before game time
       ->(time) { time - 3 * 3600 }
+    end
+  end
+
+  def constant_time(match_data)
+    lambda do |time|
+      hours = match_data[1].to_i
+      hours += 12 if hours != 12 && match_data[3].casecmp('pm').zero?
+      minutes = (match_data[2] || ':00')[1..2].to_i
+
+      Time.new(time.year, time.month, time.day, hours, minutes, 0)
     end
   end
 
@@ -172,4 +172,4 @@ class GamechatLoader
   end
 end
 
-GamechatLoader.new.run
+GameThreadLoader.new.run
