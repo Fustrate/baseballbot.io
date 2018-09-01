@@ -10,5 +10,5 @@ text = @subreddit.wiki_page('ath').content_md.split(/\r?\n-{3,}\r?\n/)[1].strip
 
 submission = @subreddit.submit(title, text: text, sendreplies: false)
 
-submission.make_sticky
+submission.make_sticky(slot: 1)
 submission.set_suggested_sort 'new'
