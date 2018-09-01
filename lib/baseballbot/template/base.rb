@@ -50,9 +50,9 @@ class Baseballbot
       end
 
       def timestamp(action = nil)
-        return @subreddit.now.strftime '%-I:%M %p %Z' unless action
+        return @subreddit.now.strftime '%-I:%M %p' unless action
 
-        italic "#{action} at #{@subreddit.now.strftime '%-I:%M %p %Z'}."
+        italic "#{action} at #{@subreddit.now.strftime '%-I:%M %p'}."
       end
     end
   end
