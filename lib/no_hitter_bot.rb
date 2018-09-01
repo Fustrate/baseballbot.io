@@ -73,7 +73,7 @@ class NoHitterBot
     game.dig('flags', 'noHitter') || game.dig('flags', 'perfectGame')
   end
 
-  # Check the away team if it's after the top of the 6th or later
+  # Check the away team if it's after the top of the target inning or later
   def away_team_being_no_hit?(game, inning, half)
     return unless game.dig('linescore', 'teams', 'away', 'hits').zero?
 
@@ -86,7 +86,7 @@ class NoHitterBot
     false
   end
 
-  # Check the home team if it's the end of the 6th or later
+  # Check the home team if it's the end of the target inning or later
   def home_team_being_no_hit?(game, inning, half)
     return unless game.dig('linescore', 'teams', 'home', 'hits').zero?
 
@@ -126,12 +126,10 @@ class NoHitterBot
   end
 
   def update_thread!(post_id, game, flag)
-    body, = @subreddit.template_for('no_hitter_update')
-
     submission = @subreddit.load_submission(id: post_id)
 
     template = Baseballbot::Template::NoHitter.new(
-      body: body,
+      body: @subreddit.template_for('no_hitter_update'),
       subreddit: @subreddit,
       game_pk: game['gamePk'],
       flag: flag,
@@ -143,10 +141,7 @@ class NoHitterBot
       @bot.redis.hdel "no_hitter_#{game['gamePk']}", flag
     end
 
-    @subreddit.edit(
-      id: post_id,
-      body: template.replace_in(submission)
-    )
+    @subreddit.edit id: post_id, body: template.replace_in(submission)
   end
 end
 

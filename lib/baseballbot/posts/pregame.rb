@@ -17,6 +17,7 @@ class Baseballbot
         @bot.use_account(@subreddit.account.name)
 
         @template = pregame_template
+
         @submission = @subreddit.submit(
           title: @template.title,
           text: @template.body
