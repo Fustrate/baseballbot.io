@@ -21,6 +21,14 @@ class Baseballbot
       ORDER BY post_id ASC
     SQL
 
+    POSTED_GAME_THREADS_QUERY = <<~SQL
+      SELECT game_threads.id, game_pk, subreddits.name, post_id
+      FROM game_threads
+      JOIN subreddits ON (subreddits.id = subreddit_id)
+      WHERE status = 'Posted'
+      ORDER BY post_id ASC
+    SQL
+
     def post_game_threads!(names: [])
       names = names.map(&:downcase)
 
@@ -48,11 +56,7 @@ class Baseballbot
     end
 
     def update_game_threads!(names: [])
-      names = names.map(&:downcase)
-
-      active_game_threads.each do |row|
-        next unless names.empty? || names.include?(row['name'].downcase)
-
+      game_threads_to_update(names).each do |row|
         update_game_thread!(
           name: row['name'],
           id: row['id'],
@@ -81,12 +85,27 @@ class Baseballbot
       Honeybadger.notify(ex, context: { game_pk: game_pk, post_id: post_id })
     end
 
+    # Every 10 minutes, update every game thread no matter what.
+    def game_threads_to_update(names)
+      names = names.map(&:downcase)
+
+      return posted_game_threads if names.include?('posted')
+
+      active_game_threads.select do |row|
+        names.empty? || names.include?(row['name'].downcase)
+      end
+    end
+
     def active_game_threads
       @active_game_threads ||= @db.exec(ACTIVE_GAME_THREADS_QUERY)
     end
 
     def unposted_game_threads
       @unposted_game_threads ||= @db.exec(UNPOSTED_GAME_THREADS_QUERY)
+    end
+
+    def posted_game_threads
+      @posted_game_threads ||= @db.exec(POSTED_GAME_THREADS_QUERY)
     end
   end
 end
