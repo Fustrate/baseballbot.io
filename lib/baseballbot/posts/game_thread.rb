@@ -107,9 +107,9 @@ class Baseballbot
       # If this subreddit has flair settings, apply them at the end of the game
       def set_postgame_flair!
         if @template.won?
-          @subreddit.set_post_flair @submission, game_thread_flair('won')
+          update_flair game_thread_flair('won')
         elsif @template.lost?
-          @subreddit.set_post_flair @submission, game_thread_flair('lost')
+          update_flair game_thread_flair('lost')
         end
       end
 
