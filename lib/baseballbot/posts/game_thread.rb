@@ -55,10 +55,6 @@ class Baseballbot
         update_flair game_thread_flair('default')
       end
 
-      def game_thread_flair(type)
-        @subreddit.options.dig('game_threads', 'flair', type)
-      end
-
       def update_game_thread_post!
         @subreddit.edit(
           id: @post_id,
@@ -121,20 +117,6 @@ class Baseballbot
         post_postgame!
       end
 
-      def template_for(type)
-        Template::GameThread.new(
-          body: @subreddit.template_for(type),
-          subreddit: @subreddit,
-          game_pk: @game_pk,
-          title: @title && !@title.empty? ? @title : default_title,
-          post_id: @post_id
-        )
-      end
-
-      def default_title
-        @subreddit.options.dig('game_threads', 'title')
-      end
-
       # Create a postgame thread if the subreddit is set to have them
       #
       # @param game_pk [String] the MLB game ID
@@ -148,6 +130,24 @@ class Baseballbot
           game_pk: @game_pk,
           subreddit: @subreddit
         ).create!
+      end
+
+      def game_thread_flair(type)
+        @subreddit.options.dig('game_threads', 'flair', type)
+      end
+
+      def default_title
+        @subreddit.options.dig('game_threads', 'title')
+      end
+
+      def template_for(type)
+        Template::GameThread.new(
+          body: @subreddit.template_for(type),
+          subreddit: @subreddit,
+          game_pk: @game_pk,
+          title: @title && !@title.empty? ? @title : default_title,
+          post_id: @post_id
+        )
       end
     end
   end
