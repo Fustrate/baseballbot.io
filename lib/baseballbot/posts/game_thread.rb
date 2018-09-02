@@ -3,8 +3,6 @@
 class Baseballbot
   module Posts
     class GameThread < Base
-      attr_accessor :title
-
       def initialize(id:, game_pk:, subreddit:, title: nil, post_id: nil)
         super(subreddit: subreddit, title: title)
 

@@ -33,6 +33,10 @@ class Baseballbot
         @content ||= @bot.api.content @game_pk
       end
 
+      def title=(new_title)
+        @title = format_title new_title
+      end
+
       def feed
         @feed ||= @bot.api.live_feed @game_pk
       end
