@@ -9,6 +9,9 @@ class Baseballbot
       def create!
         @template = postgame_template
 
+        # The title uses the template to see who won
+        @template.title = postgame_title
+
         @submission = @subreddit.submit(
           title: @template.title,
           text: @template.body
@@ -28,8 +31,7 @@ class Baseballbot
         Template::GameThread.new(
           body: @subreddit.template_for('postgame'),
           subreddit: @subreddit,
-          game_pk: @game_pk,
-          title: postgame_title
+          game_pk: @game_pk
         )
       end
 
