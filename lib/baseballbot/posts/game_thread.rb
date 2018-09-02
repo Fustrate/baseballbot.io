@@ -99,7 +99,7 @@ class Baseballbot
 
         info "[END] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
 
-        @subreddit.post_postgame!
+        post_postgame!
 
         set_postgame_flair!
       end
@@ -118,7 +118,7 @@ class Baseballbot
 
         info "[PPD] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
 
-        @subreddit.post_postgame!
+        post_postgame!
       end
 
       def template_for(type)
@@ -146,7 +146,7 @@ class Baseballbot
         Baseballbot::Posts::Postgame.new(
           id: @id,
           game_pk: @game_pk,
-          subreddit: self
+          subreddit: @subreddit
         ).create!
       end
     end
