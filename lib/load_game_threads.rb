@@ -4,6 +4,7 @@ require 'pg'
 require 'json'
 require 'open-uri'
 require 'chronic'
+require 'mlb_stats_api'
 
 class GameThreadLoader
   def initialize
