@@ -56,7 +56,7 @@ class PostseasonGameLoader
     data = row_data(game_pk, gametime, title)
 
     conn.exec_params(
-      "INSERT INTO gamechats (#{data.keys.join(', ')})" \
+      "INSERT INTO game_threads (#{data.keys.join(', ')})" \
       "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
       data.values
     )

@@ -88,7 +88,7 @@ class CheckMessages
     game_data = @bot.api.schedule(
       sportId: 1,
       date: Time.now.strftime('%m/%d/%Y'),
-      hydrate: 'game(content(summary)),linescore,flags,team',
+      hydrate: 'game(content(summary)),linescore,flags,team'
     ).dig('dates', 0, 'games')
 
     game_data.each do |game|

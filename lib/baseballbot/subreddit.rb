@@ -35,8 +35,6 @@ class Baseballbot
     end
 
     def post_off_day_thread?
-      return false unless @options.dig('off_day', 'enabled')
-
       @bot.api.schedule(
         sportId: 1,
         teamId: @team_id,
@@ -50,8 +48,8 @@ class Baseballbot
     # Miscellaneous
     # --------------------------------------------------------------------------
 
-    def sticky_gamechats?
-      @options.dig('gamechats', 'sticky') != false
+    def sticky_game_threads?
+      @options.dig('game_threads', 'sticky') != false
     end
 
     def generate_sidebar

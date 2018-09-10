@@ -15,7 +15,7 @@ class Baseballbot
         def todays_games(date)
           @date = date || @subreddit.now
 
-          load_gamechats
+          load_game_threads
 
           @bot.api.schedule(
             sportId: 1,
@@ -79,9 +79,9 @@ class Baseballbot
             game['gameNumber']
           ].join('_')
 
-          gamechat = @gamechats["#{gid}_#{subreddit(code)}".downcase]
+          post_id = @game_threads["#{gid}_#{subreddit(code)}".downcase]
 
-          return "[^★](/#{gamechat} \"team-#{code.downcase}\")" if gamechat
+          return "[^★](/#{post_id} \"team-#{code.downcase}\")" if post_id
 
           "[][#{code}]"
         end
@@ -131,15 +131,15 @@ class Baseballbot
           link_to text, url: "https://www.mlb.com/gameday/#{game_pk}"
         end
 
-        def load_gamechats
-          @gamechats = {}
+        def load_game_threads
+          @game_threads = {}
 
           @bot.redis.keys(@date.strftime('%Y_%m_%d_*')).each do |key|
             # _, game_pk = key.split('_').last
 
             @bot.redis.hgetall(key).each do |subreddit, link_id|
-              # @gamechats["#{game_pk}_#{subreddit}".downcase] = link_id
-              @gamechats["#{key}_#{subreddit}".downcase] = link_id
+              # @game_threads["#{game_pk}_#{subreddit}".downcase] = link_id
+              @game_threads["#{key}_#{subreddit}".downcase] = link_id
             end
           end
         end

@@ -2,19 +2,22 @@
 
 class Baseballbot
   module Posts
-    class Postgame < GameChat
+    class Postgame < GameThread
       DEFAULT_TITLE = 'Postgame Thread: ' \
                       '%{away_name} %{away_runs} @ %{home_name} %{home_runs}'
 
       def create!
         @template = postgame_template
 
+        # The title uses the template to see who won
+        @template.title = postgame_title
+
         @submission = @subreddit.submit(
           title: @template.title,
           text: @template.body
         )
 
-        update_sticky @subreddit.sticky_gamechats?
+        update_sticky @subreddit.sticky_game_threads?
         update_flair postgame_flair
 
         info "[PST] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
@@ -25,16 +28,17 @@ class Baseballbot
       protected
 
       def postgame_template
-        Template::Gamechat.new(
+        Template::GameThread.new(
           body: @subreddit.template_for('postgame'),
           subreddit: @subreddit,
-          game_pk: @game_pk,
-          title: postgame_title
+          game_pk: @game_pk
         )
       end
 
       def postgame_flair
         flairs = @subreddit.options.dig('postgame', 'flair')
+
+        return unless flairs
 
         return flairs['won'] if @template.won? && flairs['won']
         return flairs['lost'] if @template.lost? && flairs['lost']

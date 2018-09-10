@@ -22,20 +22,15 @@ class Baseballbot
     def update_sidebar!(name)
       subreddit = name_to_subreddit(name)
 
-      subreddit.modify_settings description: subreddit.generate_sidebar
-    rescue Redd::InvalidAccess
-      puts "Could not update #{subreddit.name} due to invalid credentials:"
-      puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
-      puts "\tCurrent: #{Time.now.strftime '%F %T'}"
+      description = subreddit.generate_sidebar
 
+      subreddit.modify_settings description: description
+    rescue Redd::InvalidAccess
       refresh_access!
 
-      puts "\tExpires: #{current_account.access.expires_at.strftime '%F %T'}"
-
-      subreddit.modify_settings description: subreddit.generate_sidebar
-    rescue Redd::ServerError, ::OpenURI::HTTPError
-      # do nothing, it's not the end of the world
-      nil
+      subreddit.modify_settings description: description
+    rescue => ex
+      Honeybadger.notify(ex, context: { name: name, description: description })
     end
   end
 end

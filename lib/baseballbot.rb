@@ -16,7 +16,7 @@ require_relative 'baseballbot/subreddit'
 require_relative 'baseballbot/account'
 
 require_relative 'baseballbot/accounts'
-require_relative 'baseballbot/gamechats'
+require_relative 'baseballbot/game_threads'
 require_relative 'baseballbot/off_day'
 require_relative 'baseballbot/pregames'
 require_relative 'baseballbot/sidebars'
@@ -26,9 +26,19 @@ Dir.glob(
   File.join(File.dirname(__FILE__), 'baseballbot/{template,posts}/*.rb')
 ).sort.each { |file| require_relative file }
 
+IGNORED_EXCEPTIONS = [::Redd::ServerError, ::OpenURI::HTTPError].freeze
+
+Honeybadger.configure do |config|
+  config.before_notify do |notice|
+    if IGNORED_EXCEPTIONS.any? { |klass| notice.exception.is_a?(klass) }
+      notice.halt!
+    end
+  end
+end
+
 class Baseballbot
   include Accounts
-  include Gamechats
+  include GameThreads
   include OffDay
   include Pregames
   include Sidebars
@@ -38,12 +48,7 @@ class Baseballbot
 
   def initialize(options = {})
     @client = Redd::APIClient.new(
-      Redd::AuthStrategies::Web.new(
-        client_id: options[:reddit][:client_id],
-        secret: options[:reddit][:secret],
-        redirect_uri: options[:reddit][:redirect_uri],
-        user_agent: options[:reddit][:user_agent]
-      ),
+      redd_auth_strategy(options[:reddit]),
       limit_time: 0
     )
     @session = Redd::Models::Session.new(@client)
@@ -54,6 +59,15 @@ class Baseballbot
     @logger = options[:logger] || Logger.new(STDOUT)
 
     @api = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
+  end
+
+  def redd_auth_strategy(config)
+    Redd::AuthStrategies::Web.new(
+      client_id: config[:client_id],
+      secret: config[:secret],
+      redirect_uri: config[:redirect_uri],
+      user_agent: config[:user_agent]
+    )
   end
 
   def inspect

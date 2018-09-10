@@ -3,7 +3,7 @@
 # Home page, full of nothing right now
 class HomeController < ApplicationController
   def home
-    @gamechats = Gamechat
+    @game_threads = GameThread
       .where('DATE(post_at) = ?', Time.zone.today)
       .includes(:subreddit)
   end

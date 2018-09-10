@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module Postgame
         def winning_team
           home_rhe['runs'] > away_rhe['runs'] ? 'home' : 'away'

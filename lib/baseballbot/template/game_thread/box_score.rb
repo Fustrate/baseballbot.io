@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module BoxScore
         def probable_away_starter
           pitcher_id = game_data.dig('probablePitchers', 'away', 'id')

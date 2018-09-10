@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class Gamechat
+    class GameThread
       module Teams
         def away_record
           game_data.dig('teams', 'away', 'record')

@@ -2,7 +2,7 @@
 
 class Baseballbot
   module Template
-    class NoHitter < Gamechat
+    class NoHitter < GameThread
       def initialize(body:, title:, subreddit:, game_pk:, flag:, post_id: nil)
         super(
           body: body,

@@ -3,8 +3,8 @@
 class Baseballbot
   module Pregames
     UNPOSTED_PREGAMES_QUERY = <<~SQL
-      SELECT gamechats.id, game_pk, subreddits.name
-      FROM gamechats
+      SELECT game_threads.id, game_pk, subreddits.name
+      FROM game_threads
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Future'
         AND (options#>>'{pregame,enabled}')::boolean IS TRUE
@@ -20,13 +20,13 @@ class Baseballbot
       ORDER BY post_at ASC, game_pk ASC
     SQL
 
-    def post_pregames!(names: [])
+    def post_pregame_threads!(names: [])
       names = names.map(&:downcase)
 
       @db.exec(UNPOSTED_PREGAMES_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        post_pregame!(
+        post_pregame_thread!(
           id: row['id'],
           name: row['name'],
           game_pk: row['game_pk']
@@ -34,17 +34,12 @@ class Baseballbot
       end
     end
 
-    def post_pregame!(id:, name:, game_pk:)
-      return unless @subreddit.options.dig('pregame', 'enabled')
-
+    def post_pregame_thread!(id:, name:, game_pk:)
       Baseballbot::Posts::Pregame.new(
         id: id,
         game_pk: game_pk,
         subreddit: name_to_subreddit(name)
       ).create!
-    rescue Redd::ServerError, ::OpenURI::HTTPError
-      # Waiting an extra 2 minutes won't kill anyone.
-      nil
     rescue => ex
       Honeybadger.notify(ex, context: { name: name })
     end

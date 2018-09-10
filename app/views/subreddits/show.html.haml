@@ -24,10 +24,10 @@
             Pregame Threads
             = post_at_format @subreddit.options['pregame']['post_at']
 
-        - if @subreddit.post_gamechats?
+        - if @subreddit.post_game_threads?
           %li
-            Gamechats
-            = post_at_format @subreddit.options['gamechats']['post_at']
+            Game Threads
+            = post_at_format @subreddit.options['game_threads']['post_at']
 
         - if @subreddit.post_postgame?
           %li Postgame Threads

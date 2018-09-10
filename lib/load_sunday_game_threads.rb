@@ -8,7 +8,7 @@ require 'open-uri'
 require 'chronic'
 require 'tzinfo'
 
-class SundayGamechatLoader
+class SundayGameThreadLoader
   R_BASEBALL_ID = 15
   URL = 'http://gdx.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
         'miniscoreboard.json'
@@ -63,7 +63,7 @@ class SundayGamechatLoader
     data = game_data(game_pk, gametime)
 
     conn.exec_params(
-      "INSERT INTO gamechats (#{data.keys.join(', ')})" \
+      "INSERT INTO game_threads (#{data.keys.join(', ')})" \
       "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
       data.values
     )
@@ -88,4 +88,4 @@ class SundayGamechatLoader
   end
 end
 
-SundayGamechatLoader.new.run
+SundayGameThreadLoader.new.run
