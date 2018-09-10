@@ -11,6 +11,8 @@ class GamechatLoader
     @failures = 0
 
     @right_now = Time.now.strftime('%Y-%m-%d %H:%M:%S')
+
+    @api = MLBStatsAPI::Client.new
   end
 
   def run
@@ -32,7 +34,7 @@ class GamechatLoader
   end
 
   def schedule_url(team_id)
-    @bot.api.schedule(
+    @api.schedule(
       sportId: 1,
       season: @start_date.year,
       startDate: @start_date.strftime('%Y-%m-%d'),
