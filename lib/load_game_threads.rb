@@ -34,8 +34,8 @@ class GameThreadLoader
     )
   end
 
-  def schedule_url(team_id)
-    @api.schedule(
+  def load_schedule(subreddit_id, team_id, post_at)
+    data = @api.schedule(
       sportId: 1,
       season: @start_date.year,
       startDate: @start_date.strftime('%Y-%m-%d'),
@@ -44,10 +44,6 @@ class GameThreadLoader
       eventTypes: 'primary',
       scheduleTypes: 'games,events,xref'
     )
-  end
-
-  def load_schedule(subreddit_id, team_id, post_at)
-    data = JSON.parse URI.parse(schedule_url(team_id)).open.read
 
     process_games data.dig('dates'), subreddit_id, adjust_time_proc(post_at)
   end
