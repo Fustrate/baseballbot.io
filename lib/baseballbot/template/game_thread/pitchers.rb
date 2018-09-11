@@ -51,6 +51,20 @@ class Baseballbot
           full_zip home_pitchers, away_pitchers
         end
 
+        def pitchers_table(stats: %i[ip h r er bb so p-s era])
+          headers = stats.map(&:to_s).map(&:upcase).join('|')
+
+          rows = pitchers.map do |one, two|
+            [pitcher_row(one, stats), pitcher_row(two, stats)].join('||')
+          end
+
+          <<~TABLE
+            **#{home_team.code}**||#{headers}||**#{away_team.code}**||#{headers}
+            -#{'|:-:' * stats.count}|-|-#{'|:-:' * stats.count}
+            #{rows.join("\n")}
+          TABLE
+        end
+
         def home_pitchers_table(stats: %i[ip h r er bb so p-s era])
           rows = home_pitchers.map { |pitcher| pitcher_row(pitcher, stats) }
 
@@ -71,7 +85,7 @@ class Baseballbot
           TABLE
         end
 
-        def pitcher_row(pitcher, stats)
+        def pitcher_row(pitcher, stats = %i[ip h r er bb so p-s era])
           return " #{'|' * stats.count}" unless pitcher
 
           today = game_stats(pitcher)['pitching']
@@ -94,7 +108,6 @@ class Baseballbot
                  losses: pitcher.dig('seasonStats', 'pitching', 'losses').to_i,
                  era: pitcher.dig('seasonStats', 'pitching', 'era')
         end
-
       end
     end
   end

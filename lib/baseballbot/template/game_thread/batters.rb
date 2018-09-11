@@ -42,6 +42,20 @@ class Baseballbot
           full_zip home_batters, away_batters
         end
 
+        def batters_table(stats: %i[ab r h rbi bb so ba])
+          headers = stats.map(&:to_s).map(&:upcase).join('|')
+
+          rows = batters.map do |one, two|
+            [batter_row(one, stats), batter_row(two, stats)].join('||')
+          end
+
+          <<~TABLE
+            **#{home_team.code}**||#{headers}||**#{away_team.code}**||#{headers}
+            -|-#{'|:-:' * stats.count}|-|-|-#{'|:-:' * stats.count}
+            #{rows.join("\n")}
+          TABLE
+        end
+
         def home_batters_table(stats: %i[ab r h rbi bb so ba])
           rows = home_batters.map { |batter| batter_row(batter, stats) }
 
@@ -62,7 +76,7 @@ class Baseballbot
           TABLE
         end
 
-        def batter_row(batter, stats)
+        def batter_row(batter, stats = %i[ab r h rbi bb so ba])
           return " |#{'|' * stats.count}" unless batter
 
           replacement = (batting_order(batter) % 100).positive?
@@ -79,7 +93,6 @@ class Baseballbot
             .concat(cells)
             .join '|'
         end
-
       end
     end
   end
