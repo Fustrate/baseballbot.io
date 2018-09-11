@@ -10,11 +10,12 @@ class Baseballbot
 
       using TemplateRefinements
 
-      include Template::GameThread::BoxScore
+      include Template::GameThread::Batters
       include Template::GameThread::Game
       include Template::GameThread::Highlights
       include Template::GameThread::LineScore
       include Template::GameThread::Media
+      include Template::GameThread::Pitchers
       include Template::GameThread::Postgame
       include Template::GameThread::ScoringPlays
       include Template::GameThread::Teams
