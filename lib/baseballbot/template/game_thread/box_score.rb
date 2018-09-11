@@ -33,7 +33,7 @@ class Baseballbot
         def home_batters
           return [] unless started? && boxscore
 
-          boxscore['teams']['home']['players']
+          @home_batters ||= boxscore['teams']['home']['players']
             .values
             .select { |batter| batting_order(batter).positive? }
             .sort_by { |batter| batting_order batter }
@@ -42,7 +42,7 @@ class Baseballbot
         def away_batters
           return [] unless started? && boxscore
 
-          boxscore['teams']['away']['players']
+          @away_batters ||= boxscore['teams']['away']['players']
             .values
             .select { |batter| batting_order(batter).positive? }
             .sort_by { |batter| batting_order batter }
@@ -70,6 +70,38 @@ class Baseballbot
 
         def pitchers
           full_zip home_pitchers, away_pitchers
+        end
+
+        def home_batters_table
+          <<~TABLE
+            **#{home_team.code}**||AB|R|H|RBI|BB|SO|BA
+            -|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:
+            #{home_batters.map { |batter| batter_row(batter) }.join("\n")}
+          TABLE
+        end
+
+        def away_batters_table
+          <<~TABLE
+            **#{away_team.code}**||AB|R|H|RBI|BB|SO|BA
+            -|-|:-:|:-:|:-:|:-:|:-:|:-:|:-:
+            #{away_batters.map { |batter| batter_row(batter) }.join("\n")}
+          TABLE
+        end
+
+        def home_pitchers_table
+          <<~TABLE
+            **#{home_team.code}**|IP|H|R|ER|BB|SO|P-S|ERA
+            -|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:
+            #{home_pitchers.map { |pitcher| pitcher_row(pitcher) }.join("\n")}
+          TABLE
+        end
+
+        def away_pitchers_table
+          <<~TABLE
+            **#{away_team.code}**|IP|H|R|ER|BB|SO|P-S|ERA
+            -|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:
+            #{away_pitchers.map { |pitcher| pitcher_row(pitcher) }.join("\n")}
+          TABLE
         end
 
         def batter_row(batter)
