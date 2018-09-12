@@ -48,12 +48,27 @@ class NoHitterBot
     # Game hasn't started yet
     return unless inning
 
-    post_thread!(game, 'home') if away_team_being_no_hit?(game, inning, half)
-    post_thread!(game, 'away') if home_team_being_no_hit?(game, inning, half)
+    post_thread!(game, 'home') if post_home_thread?(game, inning, half)
+    post_thread!(game, 'away') if post_away_thread?(game, inning, half)
+  end
+
+  def post_home_thread?(game, inning, half)
+    return false if @bot.redis.hget("no_hitters_#{gamePk}", 'home')
+
+    away_team_being_no_hit?(game, inning, half)
+  end
+
+  def post_away_thread?(game, inning, half)
+    return false if @bot.redis.hget("no_hitters_#{gamePk}", 'away')
+
+    home_team_being_no_hit?(game, inning, half)
   end
 
   # Checking for a perfect game is likely redundant
   def no_hitter?(game)
+    # The flag doesn't get set until 6 innings are done
+    return true if MIN_INNINGS < 6
+
     game.dig('flags', 'noHitter') || game.dig('flags', 'perfectGame')
   end
 
@@ -109,6 +124,8 @@ class NoHitterBot
     insert_game_thread!(submission, game)
 
     submission.set_suggested_sort 'new'
+
+    @bot.redis.hset "no_hitters_#{game['gamePk']}", flag, submission.id
   end
 
   def insert_game_thread!(submission, game)
