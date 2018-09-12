@@ -10,9 +10,15 @@ class NoHitterBot
     @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
   end
 
-  def post_no_hitters!
-    return unless perform_check?
+  def run
+    @bot.redis.get('next_no_hitter_check') do |value|
+      post_no_hitters! unless value && Time.parse(value) > Time.now
+    end
+  end
 
+  protected
+
+  def post_no_hitters!
     # Default to checking again in 10 minutes
     @next_check = [Time.now + 600]
 
@@ -24,18 +30,6 @@ class NoHitterBot
     JSON.parse(schedule).dig('dates', 0, 'games')
       .each { |game| process_game(game) }
 
-    update_next_check_time!
-  end
-
-  protected
-
-  def perform_check?
-    @bot.redis.get('next_no_hitter_check') do |value|
-      !value || Time.parse(value) < Time.now
-    end
-  end
-
-  def update_next_check_time!
     @bot.redis.set 'next_no_hitter_check', @next_check.min.strftime('%F %T')
   end
 
