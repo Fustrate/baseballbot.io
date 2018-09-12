@@ -134,11 +134,4 @@ class NoHitterBot
   end
 end
 
-@no_hitter_bot = NoHitterBot.new
-
-case ARGV[0]
-when 'post'
-  @no_hitter_bot.post_no_hitters!
-when 'update'
-  @no_hitter_bot.update_no_hitters!
-end
+NoHitterBot.new.post_no_hitters!
