@@ -5,7 +5,6 @@ require_relative 'default_bot'
 class NoHitterBot
   MIN_INNINGS = 1
   SUBREDDIT_NAME = 'baseballtest'
-  HYDRATE = 'game(content(summary)),linescore,flags,team'
 
   def initialize
     @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
@@ -19,24 +18,13 @@ class NoHitterBot
 
     schedule = @bot.api.schedule(
       date: Time.now.strftime('%m/%d/%Y'),
-      hydrate: HYDRATE
+      hydrate: 'game(content(summary)),linescore,flags,team'
     )
 
     JSON.parse(schedule).dig('dates', 0, 'games')
       .each { |game| process_game(game) }
-  end
 
-  def update_no_hitters!
-    @bot.redis.keys('no_hitter_*').each do |key|
-      game_pk = key[10..-1]
-
-      @bot.redis.hgetall(key) do |flag, post_id|
-        game = @bot.api.schedule(gamePk: game_pk, hydrate: HYDRATE)
-          .dig('dates', 0, 'games', 0)
-
-        update_thread!(post_id, game, flag)
-      end
-    end
+    update_next_check_time!
   end
 
   protected
@@ -47,8 +35,8 @@ class NoHitterBot
     end
   end
 
-  def update_next_check_time!(new_time)
-    @bot.redis.set 'next_no_hitter_check', new_time.strftime('%F %T')
+  def update_next_check_time!
+    @bot.redis.set 'next_no_hitter_check', @next_check.min.strftime('%F %T')
   end
 
   def subreddit
@@ -103,45 +91,46 @@ class NoHitterBot
     @next_check << Time.now + seconds
   end
 
-  def post_thread!(game, flag)
-    template = Baseballbot::Template::NoHitter.new(
-      body: @subreddit.template_for('no_hitter'),
+  def no_hitter_template(game, flag)
+    Baseballbot::Template::NoHitter.new(
+      body: subreddit.template_for('no_hitter'),
       title: 'No-H****r Alert - %{pitcher_names} (%{pitching_team})',
-      subreddit: @subreddit,
+      subreddit: subreddit,
       game_pk: game['gamePk'],
       flag: flag
     )
+  end
 
-    submission = @subreddit.submit(
+  def post_thread!(game, flag)
+    template = no_hitter_template(game, flag)
+
+    submission = subreddit.submit(
       template.title,
       text: template.text,
       sendreplies: false
     )
 
-    @bot.redis.hdel "no_hitter_#{game['gamePk']}", flag if template.final?
+    insert_game_thread!(submission, game)
 
     submission.set_suggested_sort 'new'
-
-    @bot.redis.hset "no_hitter_#{game['gamePk']}", flag, submission.id
   end
 
-  def update_thread!(post_id, game, flag)
-    submission = @subreddit.load_submission(id: post_id)
+  def insert_game_thread!(submission, game)
+    data = [
+      Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+      subreddit.id,
+      game['gamePk'],
+      submission.id,
+      submission.title
+    ]
 
-    template = Baseballbot::Template::NoHitter.new(
-      body: @subreddit.template_for('no_hitter_update'),
-      subreddit: @subreddit,
-      game_pk: game['gamePk'],
-      flag: flag,
-      post_id: post_id
-    )
-
-    # Stop updating if the game is over
-    if template.final? || template.postponed?
-      @bot.redis.hdel "no_hitter_#{game['gamePk']}", flag
-    end
-
-    @subreddit.edit id: post_id, body: template.replace_in(submission)
+    @bot.db.exec_params(<<~SQL, data)
+      INSERT INTO game_threads (
+        post_at, starts_at, created_at, updated_at, subreddit_id, game_pk,
+        post_id, title, status, special
+      )
+      VALUES ($1, $1, $1, $1, $2, $3, $4, $5, 'Posted', 'no_hitter')
+    SQL
   end
 end
 

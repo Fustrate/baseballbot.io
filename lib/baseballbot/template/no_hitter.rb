@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
+# This template is only used when initially posting a no-hitter thread. Updates
+# are handled like normal game threads.
 class Baseballbot
   module Template
     class NoHitter < GameThread
-      def initialize(body:, title:, subreddit:, game_pk:, flag:, post_id: nil)
+      def initialize(body:, title:, subreddit:, game_pk:, flag:)
         super(
           body: body,
           subreddit: subreddit,
           game_pk: game_pk,
-          title: title,
-          post_id: post_id
+          title: title
         )
 
         @flag = flag
