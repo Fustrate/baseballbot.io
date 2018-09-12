@@ -10,27 +10,29 @@ class NoHitterBot
     @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
   end
 
-  def run
-    @bot.redis.get('next_no_hitter_check') do |value|
-      post_no_hitters! unless value && Time.parse(value) > Time.now
-    end
-  end
-
-  protected
-
   def post_no_hitters!
+    return unless perform_check?
+
     # Default to checking again in 10 minutes
     @next_check = [Time.now + 600]
 
     schedule = @bot.api.schedule(
       date: Time.now.strftime('%m/%d/%Y'),
-      hydrate: 'game(content(summary)),linescore,flags,team'
+      hydrate: 'game(content(summary)),linescore,flags,team',
+      sportId: 1
     )
 
-    JSON.parse(schedule).dig('dates', 0, 'games')
-      .each { |game| process_game(game) }
+    schedule.dig('dates', 0, 'games').each { |game| process_game(game) }
 
     @bot.redis.set 'next_no_hitter_check', @next_check.min.strftime('%F %T')
+  end
+
+  protected
+
+  def perform_check?
+    value = @bot.redis.get 'next_no_hitter_check'
+
+    !value || Time.parse(value) < Time.now
   end
 
   def subreddit
