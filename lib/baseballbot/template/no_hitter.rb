@@ -6,14 +6,14 @@ class Baseballbot
   module Template
     class NoHitter < GameThread
       def initialize(body:, title:, subreddit:, game_pk:, flag:)
+        @flag = flag
+
         super(
           body: body,
           subreddit: subreddit,
           game_pk: game_pk,
           title: title
         )
-
-        @flag = flag
       end
 
       def inspect

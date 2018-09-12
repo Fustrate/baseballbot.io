@@ -13,8 +13,8 @@ class NoHitterBot
   def post_no_hitters!
     return unless perform_check?
 
-    # Default to checking again in 10 minutes
-    @next_check = [Time.now + 600]
+    # Default to checking again in 30 minutes
+    @next_check = [Time.now + 1800]
 
     schedule = @bot.api.schedule(
       date: Time.now.strftime('%m/%d/%Y'),
