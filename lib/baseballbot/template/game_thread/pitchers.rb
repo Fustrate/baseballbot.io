@@ -59,7 +59,7 @@ class Baseballbot
           end
 
           <<~TABLE
-            **#{home_team.code}**||#{headers}||**#{away_team.code}**||#{headers}
+            **#{home_team.code}**|#{headers}||**#{away_team.code}**|#{headers}
             -#{'|:-:' * stats.count}|-|-#{'|:-:' * stats.count}
             #{rows.join("\n")}
           TABLE
