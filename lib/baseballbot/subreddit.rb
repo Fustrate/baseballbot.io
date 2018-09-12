@@ -93,10 +93,10 @@ class Baseballbot
     # @return [Redd::Models::Submission] the successfully created submission
     #
     # @todo Restore ability to pass captcha
-    def submit(title:, text:)
+    def submit(title:, text:, sendreplies: false)
       @bot.use_account @account.name
 
-      subreddit.submit title, text: text, sendreplies: false
+      subreddit.submit title, text: text, sendreplies: sendreplies
     end
 
     def edit(id:, body: nil)

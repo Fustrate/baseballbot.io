@@ -36,7 +36,7 @@ class NoHitterBot
   end
 
   def subreddit
-    @subreddit ||= @bot.session.subreddit(SUBREDDIT_NAME)
+    @subreddit ||= @bot.name_to_subreddit(SUBREDDIT_NAME)
   end
 
   def process_game(game)
@@ -115,11 +115,7 @@ class NoHitterBot
   def post_thread!(game, flag)
     template = no_hitter_template(game, flag)
 
-    submission = subreddit.submit(
-      template.title,
-      text: template.text,
-      sendreplies: false
-    )
+    submission = subreddit.submit title: template.title, text: template.text
 
     insert_game_thread!(submission, game)
 
