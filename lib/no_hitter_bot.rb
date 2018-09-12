@@ -53,13 +53,13 @@ class NoHitterBot
   end
 
   def post_home_thread?(game, inning, half)
-    return false if @bot.redis.hget("no_hitters_#{gamePk}", 'home')
+    return false if @bot.redis.hget("no_hitters_#{game['gamePk']}", 'home')
 
     away_team_being_no_hit?(game, inning, half)
   end
 
   def post_away_thread?(game, inning, half)
-    return false if @bot.redis.hget("no_hitters_#{gamePk}", 'away')
+    return false if @bot.redis.hget("no_hitters_#{game['gamePk']}", 'away')
 
     home_team_being_no_hit?(game, inning, half)
   end
