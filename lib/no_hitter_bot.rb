@@ -3,7 +3,7 @@
 require_relative 'default_bot'
 
 class NoHitterBot
-  MIN_INNINGS = 1
+  MIN_INNINGS = 2
   SUBREDDIT_NAME = 'baseballtest'
 
   def initialize
