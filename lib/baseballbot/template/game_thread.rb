@@ -14,6 +14,7 @@ class Baseballbot
       include Template::GameThread::Game
       include Template::GameThread::Highlights
       include Template::GameThread::LineScore
+      include Template::GameThread::Links
       include Template::GameThread::Media
       include Template::GameThread::Pitchers
       include Template::GameThread::Postgame
@@ -22,12 +23,13 @@ class Baseballbot
 
       attr_reader :title, :post_id, :game_pk
 
-      def initialize(body:, subreddit:, game_pk:, title: '', post_id: nil)
-        super(body: body, subreddit: subreddit)
+      def initialize(type:, subreddit:, game_pk:, title: '', post_id: nil)
+        super(body: subreddit.template_for(type), subreddit: subreddit)
 
         @game_pk = game_pk
         @title = format_title title
         @post_id = post_id
+        @type = type
       end
 
       def content
@@ -64,10 +66,6 @@ class Baseballbot
         %(#<Baseballbot::Template::GameThread @game_pk="#{@game_pk}">)
       end
 
-      def player_url(id)
-        "http://mlb.mlb.com/team/player.jsp?player_id=#{id}"
-      end
-
       def player_name(player)
         return 'TBA' unless player
 
@@ -78,31 +76,6 @@ class Baseballbot
         end
 
         game_data.dig('players', "ID#{player['person']['id']}", 'boxscoreName')
-      end
-
-      def player_link(player, title: nil)
-        url = player_url(player['id'] || player.dig('person', 'id'))
-        link_to player_name(player), url: url, title: title
-      end
-
-      def gameday_link
-        "https://www.mlb.com/gameday/#{game_pk}"
-      end
-
-      def game_graph_link
-        'http://www.fangraphs.com/livewins.aspx?' \
-        "date=#{date.strftime '%Y-%m-%d'}&team=#{team.name}&" \
-        "dh=#{game_data.dig('game', 'gameNumber') - 1}&season=#{date.year}"
-      end
-
-      def strikezone_map_link
-        'http://www.brooksbaseball.net/pfxVB/zoneTrack.php?' \
-        "#{date.strftime 'month=%m&day=%d&year=%Y'}&game=gid_#{gid}%2F"
-      end
-
-      def game_notes_link(mlb_team)
-        'http://www.mlb.com/mlb/presspass/gamenotes.jsp?' \
-        "c_id=#{mlb_team.file_code}"
       end
 
       protected
@@ -116,29 +89,44 @@ class Baseballbot
         format title, title_interpolations
       end
 
-      # rubocop:disable Metrics/MethodLength
       def title_interpolations
         {
-          home_full_name: home_team.full_name,
-          home_name: home_team.name,
-          home_record: home_record,
-          home_pitcher: player_name(probable_home_starter),
-          home_runs: home_rhe['runs'],
+          start_time: start_time_local.strftime('%-I:%M %p'),
+          start_time_et: start_time_et.strftime('%-I:%M %p')
+        }.merge(
+          **team_interpolations,
+          **postseason_interpolations,
+          **postgame_interpolations
+        )
+      end
+
+      def team_interpolations
+        {
           away_full_name: away_team.full_name,
           away_name: away_team.name,
-          away_record: away_record,
           away_pitcher: player_name(probable_away_starter),
+          away_record: away_record,
+          home_full_name: home_team.full_name,
+          home_name: home_team.name,
+          home_pitcher: player_name(probable_home_starter),
+          home_record: home_record
+        }
+      end
+
+      def postgame_interpolations
+        {
           away_runs: away_rhe['runs'],
-          start_time: start_time_local.strftime('%-I:%M %p'),
-          # /r/baseball always displays ET
-          start_time_et: start_time_et.strftime('%-I:%M %p'),
-          # Postseason
+          home_runs: home_rhe['runs']
+        }
+      end
+
+      def postseason_interpolations
+        {
           series_game: '?', # @linescore.xpath('//game/@description').text,
           home_wins: '?',   # @linescore.xpath('//game/@home_wins').text,
           away_wins: '?'    # @linescore.xpath('//game/@away_wins').text
         }
       end
-      # rubocop:enable Metrics/MethodLength
     end
   end
 end

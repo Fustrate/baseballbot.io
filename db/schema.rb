@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_12_155358) do
+ActiveRecord::Schema.define(version: 2018_09_12_201118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(version: 2018_09_12_155358) do
     t.datetime "updated_at"
     t.integer "subreddit_id", null: false
     t.integer "game_pk"
-    t.string "special"
-    t.index "game_pk, subreddit_id, date_trunc('day'::text, starts_at), special", name: "index_game_threads_on_game_pk_subreddit_date_special_unique", unique: true
+    t.string "type"
+    t.index "game_pk, subreddit_id, date_trunc('day'::text, starts_at), type", name: "index_game_threads_on_game_pk_subreddit_date_type_unique", unique: true
   end
 
   create_table "scheduled_posts", id: :serial, force: :cascade do |t|

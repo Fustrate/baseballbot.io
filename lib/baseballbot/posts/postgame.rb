@@ -29,9 +29,9 @@ class Baseballbot
 
       def postgame_template
         Template::GameThread.new(
-          body: @subreddit.template_for('postgame'),
           subreddit: @subreddit,
-          game_pk: @game_pk
+          game_pk: @game_pk,
+          type: 'postgame'
         )
       end
 

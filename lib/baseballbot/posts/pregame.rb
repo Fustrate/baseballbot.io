@@ -31,10 +31,10 @@ class Baseballbot
 
       def pregame_template
         Template::GameThread.new(
-          body: @subreddit.template_for('pregame'),
           subreddit: @subreddit,
           game_pk: @game_pk,
-          title: @subreddit.options.dig('pregame', 'title')
+          title: @subreddit.options.dig('pregame', 'title'),
+          type: 'pregame'
         )
       end
     end

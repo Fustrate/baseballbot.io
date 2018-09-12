@@ -3,16 +3,21 @@
 class Baseballbot
   module Posts
     class GameThread < Base
-      def initialize(id:, game_pk:, subreddit:, title: nil, post_id: nil)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(
+        id:, game_pk:, subreddit:, title: nil, post_id: nil, type: nil
+      )
         super(subreddit: subreddit, title: title)
 
         @id = id
         @game_pk = game_pk
         @post_id = post_id
+        @type = type || 'game_thread'
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def create!
-        @template = template_for('game_thread')
+        @template = template_for(@type)
 
         return change_status(id, nil, 'Postponed') if @template.postponed?
 
@@ -26,7 +31,7 @@ class Baseballbot
       end
 
       def update!
-        @template = template_for('game_thread_update')
+        @template = template_for("#{@type}_update")
         @submission = @subreddit.load_submission(id: @post_id)
 
         update_game_thread_post!
@@ -125,6 +130,9 @@ class Baseballbot
       def post_postgame!
         return unless @subreddit.options.dig('postgame', 'enabled')
 
+        # Only game threads get post game threads, right?
+        return unless @type == 'game_thread'
+
         Baseballbot::Posts::Postgame.new(
           id: @id,
           game_pk: @game_pk,
@@ -142,11 +150,11 @@ class Baseballbot
 
       def template_for(type)
         Template::GameThread.new(
-          body: @subreddit.template_for(type),
           subreddit: @subreddit,
           game_pk: @game_pk,
           title: @title && !@title.empty? ? @title : default_title,
-          post_id: @post_id
+          post_id: @post_id,
+          type: type
         )
       end
     end

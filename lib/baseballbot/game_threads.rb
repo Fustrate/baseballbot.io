@@ -3,7 +3,7 @@
 class Baseballbot
   module GameThreads
     UNPOSTED_GAME_THREADS_QUERY = <<~SQL
-      SELECT game_threads.id, game_pk, subreddits.name, title
+      SELECT game_threads.id, game_pk, subreddits.name, title, type
       FROM game_threads
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status IN ('Pregame', 'Future')
@@ -13,7 +13,7 @@ class Baseballbot
     SQL
 
     ACTIVE_GAME_THREADS_QUERY = <<~SQL
-      SELECT game_threads.id, game_pk, subreddits.name, post_id
+      SELECT game_threads.id, game_pk, subreddits.name, post_id, type
       FROM game_threads
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted'
@@ -22,7 +22,7 @@ class Baseballbot
     SQL
 
     POSTED_GAME_THREADS_QUERY = <<~SQL
-      SELECT game_threads.id, game_pk, subreddits.name, post_id
+      SELECT game_threads.id, game_pk, subreddits.name, post_id, type
       FROM game_threads
       JOIN subreddits ON (subreddits.id = subreddit_id)
       WHERE status = 'Posted'
@@ -35,34 +35,25 @@ class Baseballbot
       unposted_game_threads.each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        post_game_thread!(
-          id: row['id'],
-          name: row['name'],
-          game_pk: row['game_pk'],
-          title: row['title']
-        )
+        post_game_thread! row
       end
     end
 
-    def post_game_thread!(id:, name:, game_pk:, title:)
+    def post_game_thread!(data)
       Baseballbot::Posts::GameThread.new(
-        id: id,
-        game_pk: game_pk,
-        title: title,
-        subreddit: name_to_subreddit(name)
+        id: data['id'],
+        game_pk: data['game_pk'],
+        title: data['title'],
+        subreddit: name_to_subreddit(data['name']),
+        type: data['type']
       ).create!
     rescue => ex
-      Honeybadger.notify(ex, context: { name: name, game_pk: game_pk })
+      Honeybadger.notify(ex, context: { data: data })
     end
 
     def update_game_threads!(names: [])
       game_threads_to_update(names).each do |row|
-        update_game_thread!(
-          name: row['name'],
-          id: row['id'],
-          game_pk: row['game_pk'],
-          post_id: row['post_id']
-        )
+        update_game_thread! row
       end
     end
 
@@ -72,17 +63,18 @@ class Baseballbot
     # @param id [String] The baseballbot id of the game thread
     # @param game_pk [Integer] The mlb id of the game
     # @param post_id [String] The reddit id of the post to update
-    def update_game_thread!(name:, id:, game_pk:, post_id:)
+    def update_game_thread!(data)
       Baseballbot::Posts::GameThread.new(
-        id: id,
-        game_pk: game_pk,
-        post_id: post_id,
-        subreddit: name_to_subreddit(name)
+        id: data['id'],
+        game_pk: data['game_pk'],
+        post_id: data['post_id'],
+        subreddit: name_to_subreddit(data['name']),
+        type: data['type']
       ).update!
     rescue Redd::InvalidAccess
       refresh_access!
     rescue => ex
-      Honeybadger.notify(ex, context: { game_pk: game_pk, post_id: post_id })
+      Honeybadger.notify(ex, context: { data: data })
     end
 
     # Every 10 minutes, update every game thread no matter what.
