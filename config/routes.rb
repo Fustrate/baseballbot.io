@@ -17,4 +17,7 @@ Rails.application.routes.draw do
     get 'reddit-callback'
     get 'debug'
   end
+
+  # Temporary? Ha.
+  get :gamechats, to: 'game_threads#index'
 end

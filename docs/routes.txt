@@ -15,3 +15,4 @@
                 gameday GET    /gameday(.:format)                 home#gameday
 discord_reddit_callback GET    /discord/reddit-callback(.:format) discord#reddit_callback
           discord_debug GET    /discord/debug(.:format)           discord#debug
+              gamechats GET    /gamechats(.:format)               game_threads#index
