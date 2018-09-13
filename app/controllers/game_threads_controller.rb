@@ -7,7 +7,9 @@ class GameThreadsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @game_threads = GameThread.where('DATE(starts_at) = ?', Time.zone.today)
+        @game_threads = GameThread
+          .where('DATE(starts_at) = ?', Time.zone.today)
+          .includes(:subreddit)
       end
     end
   end
