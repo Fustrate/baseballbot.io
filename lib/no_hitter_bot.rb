@@ -5,6 +5,7 @@ require_relative 'default_bot'
 class NoHitterBot
   MIN_INNINGS = 6
   SUBREDDIT_NAME = 'baseball'
+  WAIT_TIMES = [0, 3600, 3600, 1800, 1200, 600, 30].freeze
 
   def initialize
     @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
@@ -40,7 +41,7 @@ class NoHitterBot
   end
 
   def process_game(game)
-    return unless no_hitter?(game)
+    # return unless no_hitter?(game)
 
     inning = game.dig('linescore', 'currentInning')
     half = game.dig('linescore', 'inningHalf')
@@ -80,7 +81,7 @@ class NoHitterBot
       return true
     end
 
-    wait_for [0, 3600, 3600, 1800, 1200, 600, 30].last(MIN_INNINGS + 1)[inning]
+    @next_check << Time.now + WAIT_TIMES.last(MIN_INNINGS + 1)[inning]
 
     false
   end
@@ -93,13 +94,9 @@ class NoHitterBot
       return true
     end
 
-    wait_for [0, 3600, 3600, 1800, 1200, 600, 30].last(MIN_INNINGS + 1)[inning]
+    @next_check << Time.now + WAIT_TIMES.last(MIN_INNINGS + 1)[inning]
 
     false
-  end
-
-  def wait_for(seconds)
-    @next_check << Time.now + seconds
   end
 
   def no_hitter_template(game, flag)
