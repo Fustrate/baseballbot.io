@@ -23,9 +23,9 @@ class Baseballbot
 
         create_game_thread_post!
 
-        @bot.redis.hset(@template.gid, @subreddit.name.downcase, @submission.id)
+        info "[NEW] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
 
-        info "Posted #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
+        @bot.redis.hset(@template.gid, @subreddit.name.downcase, @submission.id)
 
         @submission
       end
@@ -57,7 +57,7 @@ class Baseballbot
 
         update_sticky @subreddit.sticky_game_threads?
         update_suggested_sort 'new'
-        update_flair game_thread_flair('default')
+        # update_flair game_thread_flair('default')
       end
 
       def update_game_thread_post!
