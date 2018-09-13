@@ -3,8 +3,8 @@
 require_relative 'default_bot'
 
 class NoHitterBot
-  MIN_INNINGS = 2
-  SUBREDDIT_NAME = 'baseballtest'
+  MIN_INNINGS = 6
+  SUBREDDIT_NAME = 'baseball'
 
   def initialize
     @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
