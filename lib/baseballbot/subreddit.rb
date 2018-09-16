@@ -15,11 +15,7 @@ class Baseballbot
       @submissions = {}
       @options = options
 
-      @timezone = begin
-        TZInfo::Timezone.get options['timezone']
-      rescue TZInfo::InvalidTimezoneIdentifier
-        TZInfo::Timezone.get 'America/Los_Angeles'
-      end
+      @timezone = parse_timezone options['timezone']
     end
 
     def team
@@ -157,6 +153,12 @@ class Baseballbot
         # sidebar is X characters too long.
         puts "New length is #{new_settings[error[2].to_sym].length}"
       end
+    end
+
+    def parse_timezone(tz)
+      TZInfo::Timezone.get tz
+    rescue TZInfo::InvalidTimezoneIdentifier
+      TZInfo::Timezone.get 'America/Los_Angeles'
     end
   end
 end
