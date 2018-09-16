@@ -1,15 +1,27 @@
 # frozen_string_literal: true
 
 require 'pg'
-require 'json'
-require 'open-uri'
 require 'chronic'
 require 'mlb_stats_api'
 
 class GameThreadLoader
+  INSERT_GAME_THREAD = <<~SQL
+    INSERT INTO game_threads (
+      post_at, starts_at, subreddit_id, game_pk, status
+    ) VALUES ($1, $2, $3, $4, 'Future')
+  SQL
+
+  UPDATE_GAME_THREAD = <<~SQL
+    UPDATE game_threads
+    SET post_at = $1, starts_at = $2, updated_at = $3
+    WHERE subreddit_id = $4 AND game_pk = $5 AND (
+      starts_at != $2 OR post_at != $1
+    )
+  SQL
+
   def initialize
-    @attempts = 0
-    @failures = 0
+    @created = 0
+    @updated = 0
 
     @right_now = Time.now.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -21,7 +33,7 @@ class GameThreadLoader
 
     load_game_threads
 
-    puts "Added #{@attempts - @failures} of #{@attempts}"
+    puts "Added #{@created} / Updated #{@updated}"
   end
 
   protected
@@ -49,8 +61,6 @@ class GameThreadLoader
   end
 
   def process_games(dates, subreddit_id, adjusted_time)
-    # If there's only one game in this month (like 10/2017) then the API only
-    # returns a hash *not* wrapped in an array.
     dates.each do |date|
       date['games'].each do |game|
         gametime = Chronic.parse(game['gameDate']) - (7 * 3_600)
@@ -67,30 +77,34 @@ class GameThreadLoader
   end
 
   def insert_game(subreddit_id, game, post_at, gametime)
-    @attempts += 1
-
     data = row_data(game, gametime, post_at, subreddit_id)
 
     conn.exec_params(
-      "INSERT INTO game_threads (#{data.keys.join(', ')})" \
-      "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
-      data.values
+      INSERT_GAME_THREAD,
+      data.values_at(:post_at, :starts_at, :subreddit_id, :game_pk)
     )
+
+    @created += 1
   rescue PG::UniqueViolation
-    @failures += 1
+    update_game(data)
+  end
+
+  def update_game(data)
+    result = conn.exec_params(
+      UPDATE_GAME_THREAD,
+      data.values_at(:post_at, :starts_at, :updated_at, :subreddit_id, :game_pk)
+    )
+
+    @updated += result.cmd_tuples
   end
 
   def row_data(game, gametime, post_at, subreddit_id)
-    game_pk = game['gamePk'].to_i
-
     {
       post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
       starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
-      status: 'Future',
-      created_at: @right_now,
       updated_at: @right_now,
       subreddit_id: subreddit_id,
-      game_pk: game_pk
+      game_pk: game['gamePk'].to_i
     }
   end
 
@@ -132,12 +146,12 @@ class GameThreadLoader
   end
 
   def enabled_subreddits
-    conn.exec(
-      "SELECT id, name, team_id, options#>>'{game_threads,post_at}' AS post_at
+    conn.exec(<<~SQL)
+      SELECT id, name, team_id, options#>>'{game_threads,post_at}' AS post_at
       FROM subreddits
       WHERE team_id IS NOT NULL
-      AND (options#>>'{game_threads,enabled}')::boolean IS TRUE"
-    )
+      AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
+    SQL
   end
 
   def adjust_time_proc(post_at)
