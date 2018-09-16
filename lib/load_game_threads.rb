@@ -16,7 +16,7 @@ class GameThreadLoader
     SET post_at = $1, starts_at = $2, updated_at = $3
     WHERE subreddit_id = $4 AND game_pk = $5 AND (
       starts_at != $2 OR post_at != $1
-    )
+    ) AND EXTRACT(doy FROM starts_at) = EXTRACT(doy FROM $2)
   SQL
 
   def initialize
