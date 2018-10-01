@@ -10,14 +10,14 @@ require_relative 'default_bot'
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
 
-  flairs = @subreddit.flair_listing(limit: 1000, after: after)
+  res = @subreddit.client.get('/r/baseball/api/flairlist', params).body
 
-  flairs.each { |flair| @counts[flair[:flair_css_class]] += 1 }
+  res[:users].each { |flair| @counts[flair[:flair_css_class]] += 1 }
 
-  if flairs.after
+  if res[:next]
     sleep 5
 
-    return load_flairs after: flairs.after
+    return load_flairs after: res[:next]
   end
 
   @counts.each { |name, count| puts "\"#{name}\",#{count}" }
