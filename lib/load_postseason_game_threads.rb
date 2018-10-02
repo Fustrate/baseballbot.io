@@ -83,7 +83,7 @@ class PostseasonGameLoader
   end
 
   def game_title(row)
-    if row['game_type'] == 'F'
+    if row['gameType'] == 'F'
       # Wild Card game
       return 'Game Thread: %<series_game>s ⚾ %<away_name>s @ ' \
              '%<home_name>s - %<start_time_et>s PM ET'

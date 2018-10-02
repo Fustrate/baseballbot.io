@@ -48,8 +48,8 @@ class GameThreadLoader
 
   def load_schedule(subreddit_id, team_id, post_at)
     data = @api.schedule(
+      :default,
       sportId: 1,
-      season: @start_date.year,
       startDate: @start_date.strftime('%Y-%m-%d'),
       endDate: @end_date.strftime('%Y-%m-%d'),
       teamId: team_id,
