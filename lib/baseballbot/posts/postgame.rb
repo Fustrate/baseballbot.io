@@ -3,9 +3,6 @@
 class Baseballbot
   module Posts
     class Postgame < GameThread
-      DEFAULT_TITLE = 'Postgame Thread: ' \
-                      '%{away_name} %{away_runs} @ %{home_name} %{home_runs}'
-
       def create!
         @template = postgame_template
 
@@ -47,13 +44,19 @@ class Baseballbot
       end
 
       def postgame_title
-        titles = @subreddit.options.dig('postgame', 'title') || DEFAULT_TITLE
+        titles = @subreddit.options.dig('postgame', 'title')
 
-        return titles['won'] if @template.won? && titles['won']
-        return titles['lost'] if @template.lost? && titles['lost']
+        return titles if titles.is_a?(String)
 
-        # Spring training games can end in a tie.
-        titles['tie'] || titles
+        playoffs = %w[F D L W].include? @template.game_data.dig('game', 'type')
+
+        titles[playoffs ? 'postseason' : 'default'] || titles.values.first
+
+        # return titles['won'] if @template.won? && titles['won']
+        # return titles['lost'] if @template.lost? && titles['lost']
+        #
+        # # Spring training games can end in a tie.
+        # titles['tie'] || titles
       end
     end
   end

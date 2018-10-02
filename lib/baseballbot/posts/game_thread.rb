@@ -21,6 +21,9 @@ class Baseballbot
 
         return change_status(id, nil, 'Postponed') if @template.postponed?
 
+        # default_title uses @template
+        @template.title = (@title && !@title.empty? ? @title : default_title)
+
         create_game_thread_post!
 
         info "[NEW] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
@@ -145,14 +148,19 @@ class Baseballbot
       end
 
       def default_title
-        @subreddit.options.dig('game_threads', 'title')
+        titles = @subreddit.options.dig('game_threads', 'title')
+
+        return titles if titles.is_a?(String)
+
+        playoffs = %w[F D L W].include? @template.game_data.dig('game', 'type')
+
+        titles[playoffs ? 'postseason' : 'default'] || titles.values.first
       end
 
       def template_for(type)
         Template::GameThread.new(
           subreddit: @subreddit,
           game_pk: @game_pk,
-          title: @title && !@title.empty? ? @title : default_title,
           post_id: @post_id,
           type: type
         )

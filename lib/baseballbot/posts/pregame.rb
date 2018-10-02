@@ -18,6 +18,9 @@ class Baseballbot
 
         @template = pregame_template
 
+        # The title uses @template
+        @template.title = pregame_title
+
         @submission = @subreddit.submit(
           title: @template.title,
           text: @template.body
@@ -29,11 +32,20 @@ class Baseballbot
         update_flair @subreddit.options.dig('pregame', 'flair')
       end
 
+      def pregame_title
+        titles = @subreddit.options.dig('pregame', 'title')
+
+        return titles if titles.is_a?(String)
+
+        playoffs = %w[F D L W].include? @template.game_data.dig('game', 'type')
+
+        titles[playoffs ? 'postseason' : 'default'] || titles.values.first
+      end
+
       def pregame_template
         Template::GameThread.new(
           subreddit: @subreddit,
           game_pk: @game_pk,
-          title: @subreddit.options.dig('pregame', 'title'),
           type: 'pregame'
         )
       end
