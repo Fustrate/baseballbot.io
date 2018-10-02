@@ -31,7 +31,7 @@ class PostseasonGameLoader
   end
 
   def load_schedule
-    data = JSON.parse URI.parse(Date.today.strftime(URL)).open.read
+    data = @bot.api.schedule(:postseason, hydrate: 'team,metadata,seriesStatus')
 
     data['dates'].each do |date|
       date['games'].each do |game|
