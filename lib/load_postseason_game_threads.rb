@@ -46,11 +46,11 @@ class PostseasonGameLoader
   end
 
   def add_game_to_schedule?(game)
-    return false if game.dig('game', 'status', 'startTimeTBD')
+    return false if game.dig('status', 'startTimeTBD')
 
     # If the team is undetermined, their division will be blank
-    return false unless game.dig('game', 'teams', 'away', 'team', 'division')
-    return false unless game.dig('game', 'teams', 'home', 'team', 'division')
+    return false unless game.dig('teams', 'away', 'team', 'division')
+    return false unless game.dig('teams', 'home', 'team', 'division')
 
     true
   end
