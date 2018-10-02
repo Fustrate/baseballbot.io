@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require 'pg'
-require 'json'
-require 'open-uri'
-require 'chronic'
+require 'mlb_stats_api'
 
 class PostseasonGameLoader
   SUBREDDIT_ID = 15

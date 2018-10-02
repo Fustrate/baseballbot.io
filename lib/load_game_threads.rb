@@ -63,7 +63,7 @@ class GameThreadLoader
   def process_games(dates, subreddit_id, adjusted_time)
     dates.each do |date|
       date['games'].each do |game|
-        gametime = Chronic.parse(game['gameDate']) - (7 * 3_600)
+        gametime = Time.parse(game['gameDate']) - (7 * 3_600)
 
         # next if game['game_time_et'][11..15] == '03:33'
 
