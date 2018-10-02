@@ -7,16 +7,14 @@ class PostseasonGameLoader
   SUBREDDIT_ID = 15
 
   WILDCARD_TITLE = 'Game Thread: %<series_game>s ⚾ %%<away_name>s @ ' \
-                   '%%<home_name>s - %%<start_time_et>s PM ET'
+                   '%%<home_name>s - %%<start_time_et>s'
 
   TITLE = 'Game Thread: %<series_game>s ⚾ %%<away_name>s (%%<away_wins>d) @ ' \
-          '%%<home_name>s (%%<home_wins>d) - %%<start_time_et>s PM ET'
+          '%%<home_name>s (%%<home_wins>d) - %%<start_time_et>s'
 
   def initialize
     @attempts = 0
     @failures = 0
-
-    @right_now = Time.now.strftime '%Y-%m-%d %H:%M:%S'
 
     @api = MLBStatsAPI::Client.new
   end
@@ -80,9 +78,6 @@ class PostseasonGameLoader
       game_pk: game_pk,
       post_at: (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
       starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
-      status: 'Future',
-      created_at: @right_now,
-      updated_at: @right_now,
       subreddit_id: SUBREDDIT_ID,
       title: title
     }
