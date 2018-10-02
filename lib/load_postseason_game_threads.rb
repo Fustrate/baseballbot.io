@@ -35,7 +35,7 @@ class PostseasonGameLoader
 
     data['dates'].each do |date|
       date['games'].each do |game|
-        next unless add_game_to_schedule?
+        next unless add_game_to_schedule?(game)
 
         gametime = Time.parse(game['gameDate']) - (7 * 3600)
 
@@ -46,7 +46,7 @@ class PostseasonGameLoader
     end
   end
 
-  def add_game_to_schedule?
+  def add_game_to_schedule?(game)
     return false if game.dig('game', 'status', 'startTimeTBD')
 
     # If the team is undetermined, their division will be blank
