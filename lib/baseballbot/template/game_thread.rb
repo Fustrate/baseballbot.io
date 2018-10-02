@@ -121,10 +121,13 @@ class Baseballbot
       end
 
       def postseason_interpolations
+        psdata = @bot.api.schedule(gamePk: @game_pk, hydrate: 'seriesStatus')
+          .dig('dates', 0, 'games', 0)
+
         {
-          series_game: '?', # @linescore.xpath('//game/@description').text,
-          home_wins: '?',   # @linescore.xpath('//game/@home_wins').text,
-          away_wins: '?'    # @linescore.xpath('//game/@away_wins').text
+          series_game: psdata.dig('seriesStatus', 'shortDescription'),
+          home_wins: psdata.dig('teams', 'home', 'leagueRecord', 'wins'),
+          away_wins: psdata.dig('teams', 'away', 'leagueRecord', 'wins')
         }
       end
     end
