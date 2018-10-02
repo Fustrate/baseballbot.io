@@ -7,8 +7,7 @@ require 'chronic'
 
 class PostseasonGameLoader
   SUBREDDIT_ID = 15
-  URL = 'http://m.mlb.com/gdcross/components/game/mlb/year_%Y/' \
-        'postseason_scoreboard.json'
+  URL = 'https://statsapi.mlb.com/api/v1/schedule/postseason?season=%Y'
 
   def initialize
     @right_now = Time.now.strftime '%Y-%m-%d %H:%M:%S'
@@ -34,20 +33,27 @@ class PostseasonGameLoader
   def load_schedule
     data = JSON.parse URI.parse(Date.today.strftime(URL)).open.read
 
-    data['games'].each do |game|
-      # Game time is not yet set or something is TBD
-      next if game['time'] == '3:33' || game['tbd_flag'] == 'Y'
-      # If the team is undetermined, their division will be blank
-      next if game['home_division'] == '' || game['away_division'] == ''
+    data['dates'].each do |date|
+      date['games'].each do |game|
+        next unless add_game_to_schedule?
 
-      gametime = Chronic.parse(
-        "#{game['original_date']} #{game['first_pitch_et']} PM"
-      ) - 10_800
+        gametime = Time.parse(game['gameDate']) - (7 * 3600)
 
-      next if gametime < Time.now
+        next if gametime < Time.now
 
-      insert_game game['game_pk'], gametime, game_title(game)
+        insert_game game['gamePk'], gametime, game_title(game)
+      end
     end
+  end
+
+  def add_game_to_schedule?
+    return false if game.dig('game', 'status', 'startTimeTBD')
+
+    # If the team is undetermined, their division will be blank
+    return false unless game.dig('game', 'teams', 'away', 'team', 'division')
+    return false unless game.dig('game', 'teams', 'home', 'team', 'division')
+
+    true
   end
 
   def insert_game(game_pk, gametime, title)
@@ -80,12 +86,12 @@ class PostseasonGameLoader
   def game_title(row)
     if row['game_type'] == 'F'
       # Wild Card game
-      return "Game Thread: #{row['series']} ⚾ #{row['away_team_name']} @ " \
-             "#{row['home_team_name']} - #{row['first_pitch_et']} PM ET"
+      return 'Game Thread: %<series_game>s ⚾ %<away_name>s @ ' \
+             '%<home_name>s - %<start_time_et>s PM ET'
     end
 
-    'Game Thread: %<series_game>s ⚾ %<away_name>s (%<away_record>s) @ ' \
-    '%<home_name>s (%<home_record>s) - %<start_time_et>s PM ET'
+    'Game Thread: %<series_game>s ⚾ %<away_name>s (%<away_wins>d) @ ' \
+    '%<home_name>s (%<home_wins>d) - %<start_time_et>s PM ET'
   end
 end
 
