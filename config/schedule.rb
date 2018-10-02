@@ -11,9 +11,9 @@ def step_minutes_by(step, except: [])
   end
 end
 
-every :minute do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby no_hitter_bot.rb"
-end
+# every :minute do
+#   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby no_hitter_bot.rb"
+# end
 
 every 1.hour do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby sidebars.rb update"
@@ -43,9 +43,9 @@ step_minutes_by(30) do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby game_threads.rb update posted"
 end
 
-every :saturday do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_sunday_game_threads.rb"
-end
+# every :saturday do
+#   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_sunday_game_threads.rb"
+# end
 
 every 1.day, at: '5:30 am' do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby around_the_horn.rb"
