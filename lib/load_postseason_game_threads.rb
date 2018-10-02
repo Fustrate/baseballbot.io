@@ -7,13 +7,14 @@ require 'chronic'
 
 class PostseasonGameLoader
   SUBREDDIT_ID = 15
-  URL = 'https://statsapi.mlb.com/api/v1/schedule/postseason?season=%Y'
 
   def initialize
-    @right_now = Time.now.strftime '%Y-%m-%d %H:%M:%S'
-
     @attempts = 0
     @failures = 0
+
+    @right_now = Time.now.strftime '%Y-%m-%d %H:%M:%S'
+
+    @api = MLBStatsAPI::Client.new
   end
 
   def conn
@@ -31,7 +32,7 @@ class PostseasonGameLoader
   end
 
   def load_schedule
-    data = @bot.api.schedule(:postseason, hydrate: 'team,metadata,seriesStatus')
+    data = @api.schedule(:postseason, hydrate: 'team,metadata,seriesStatus')
 
     data['dates'].each do |date|
       date['games'].each do |game|
