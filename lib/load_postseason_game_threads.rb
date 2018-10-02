@@ -6,6 +6,12 @@ require 'mlb_stats_api'
 class PostseasonGameLoader
   SUBREDDIT_ID = 15
 
+  WILDCARD_TITLE = 'Game Thread: %<series_game>s ⚾ %%<away_name>s @ ' \
+                   '%%<home_name>s - %%<start_time_et>s PM ET'
+
+  TITLE = 'Game Thread: %<series_game>s ⚾ %%<away_name>s (%%<away_wins>d) @ ' \
+          '%%<home_name>s (%%<home_wins>d) - %%<start_time_et>s PM ET'
+
   def initialize
     @attempts = 0
     @failures = 0
@@ -82,15 +88,12 @@ class PostseasonGameLoader
     }
   end
 
-  def game_title(row)
-    if row['gameType'] == 'F'
-      # Wild Card game
-      return 'Game Thread: %<series_game>s ⚾ %<away_name>s @ ' \
-             '%<home_name>s - %<start_time_et>s PM ET'
-    end
-
-    'Game Thread: %<series_game>s ⚾ %<away_name>s (%<away_wins>d) @ ' \
-    '%<home_name>s (%<home_wins>d) - %<start_time_et>s PM ET'
+  def game_title(game)
+    # Only interpolate the series game title
+    format(
+      game['gameType'] == 'F' ? WILDCARD_TITLE : TITLE,
+      series_game: game.dig('seriesStatus', 'shortDescription')
+    )
   end
 end
 
