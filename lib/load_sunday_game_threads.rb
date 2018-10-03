@@ -57,10 +57,10 @@ class SundayGameThreadLoader
     end
   end
 
-  def insert_game(game_pk, gametime)
+  def insert_game(game_pk, starts_at)
     @attempts += 1
 
-    data = game_data(game_pk, gametime)
+    data = game_data(game_pk, starts_at)
 
     conn.exec_params(
       "INSERT INTO game_threads (#{data.keys.join(', ')})" \
@@ -75,11 +75,11 @@ class SundayGameThreadLoader
     puts "- #{game_pk}"
   end
 
-  def game_data(game_pk, gametime)
+  def game_data(game_pk, starts_at)
     {
       game_pk: game_pk,
-      post_at: (gametime - 3600).strftime('%Y-%m-%d %H:%M:%S'),
-      starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
+      post_at: (starts_at - 3600).strftime('%F %T'),
+      starts_at: starts_at.strftime('%F %T'),
       status: 'Future',
       created_at: @timestamp,
       updated_at: @timestamp,

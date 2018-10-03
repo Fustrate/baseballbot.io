@@ -35,7 +35,7 @@ class Baseballbot
         WHERE refresh_token = $3',
         [
           @client.access.access_token,
-          new_expiration.strftime('%Y-%m-%d %H:%M:%S'),
+          new_expiration.strftime('%F %T'),
           @client.access.refresh_token
         ]
       )

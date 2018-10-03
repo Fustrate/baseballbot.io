@@ -23,7 +23,7 @@ class GameThreadLoader
     @created = 0
     @updated = 0
 
-    @right_now = Time.now.strftime('%Y-%m-%d %H:%M:%S')
+    @right_now = Time.now.strftime('%F %T')
 
     @api = MLBStatsAPI::Client.new
   end
@@ -98,8 +98,8 @@ class GameThreadLoader
 
   def row_data(game, starts_at, post_at, subreddit_id)
     {
-      post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
-      starts_at: starts_at.strftime('%Y-%m-%d %H:%M:%S'),
+      post_at: post_at.strftime('%F %T'),
+      starts_at: starts_at.strftime('%F %T'),
       updated_at: @right_now,
       subreddit_id: subreddit_id,
       game_pk: game['gamePk'].to_i

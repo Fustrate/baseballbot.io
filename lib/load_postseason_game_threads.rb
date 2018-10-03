@@ -108,9 +108,10 @@ class PostseasonGameLoader
   def row_data(game, starts_at, post_at, title, subreddit_id)
     {
       game_pk: game['gamePk'],
-      post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
-      starts_at: starts_at.strftime('%Y-%m-%d %H:%M:%S'),
+      post_at: post_at.strftime('%F %T'),
+      starts_at: starts_at.strftime('%F %T'),
       subreddit_id: subreddit_id,
+      status: 'Future',
       title: title
     }
   end
