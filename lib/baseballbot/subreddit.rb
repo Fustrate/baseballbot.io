@@ -158,8 +158,8 @@ class Baseballbot
       end
     end
 
-    def parse_timezone(tz)
-      TZInfo::Timezone.get tz
+    def parse_timezone(name)
+      TZInfo::Timezone.get name
     rescue TZInfo::InvalidTimezoneIdentifier
       TZInfo::Timezone.get 'America/Los_Angeles'
     end

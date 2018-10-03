@@ -41,7 +41,7 @@ class PostseasonGameLoader
 
     return if starts_at < Time.now
 
-    insert_game game, starts_at, starts_at - 3600, title(game), R_BASEBALL
+    insert_game game, starts_at, starts_at - 3600, post_title(game), R_BASEBALL
 
     insert_team_game game, starts_at
   end
@@ -112,7 +112,7 @@ class PostseasonGameLoader
     }
   end
 
-  def title(game)
+  def post_title(game)
     return baseball_subreddit_titles['wildcard'] if game['gameType'] == 'F'
 
     baseball_subreddit_titles['postseason']
