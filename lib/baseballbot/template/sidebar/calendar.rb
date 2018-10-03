@@ -120,7 +120,7 @@ class Baseballbot
 
           calendar_dates(start_date, end_date).each do |calendar_date|
             calendar_date['games'].each do |game|
-              next unless current_team_game?(game)
+              next unless current_team_game?(game) && game['ifNecessary'] != 'Y'
 
               date = Baseballbot::Utility.parse_time(
                 game['gameDate'],
