@@ -30,9 +30,9 @@ class SundayGameThreadLoader
 
   def conn
     @conn ||= PG::Connection.new(
-      user: ENV['PG_USERNAME'],
-      dbname: ENV['PG_DATABASE'],
-      password: ENV['PG_PASSWORD']
+      user: ENV['ROBOSCORE_PG_USERNAME'],
+      dbname: ENV['ROBOSCORE_PG_DATABASE'],
+      password: ENV['ROBOSCORE_PG_PASSWORD']
     )
   end
 
