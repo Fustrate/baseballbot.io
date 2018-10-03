@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require 'pg'
-require 'baseballbot'
-require 'mlb_stats_api'
+require_relative 'baseballbot'
 
 class PostseasonGameLoader
-  R_BASEBALL_ID = 15
+  R_BASEBALL = 15
 
   def initialize
     @attempts = 0
@@ -32,18 +30,20 @@ class PostseasonGameLoader
     data = @api.schedule(:postseason, hydrate: 'team,metadata,seriesStatus')
 
     data['dates'].each do |date|
-      date['games'].each do |game|
-        next unless add_game_to_schedule?(game)
-
-        starts_at = Time.parse(game['gameDate']) - (7 * 3600)
-
-        next if starts_at < Time.now
-
-        insert_game game['gamePk'], starts_at, starts_at - 3600, title(game), R_BASEBALL_ID
-
-        insert_team_game game['gamePk'], starts_at
-      end
+      date['games'].each { |game| process_game(game) }
     end
+  end
+
+  def process_game(game)
+    return unless add_game_to_schedule?(game)
+
+    starts_at = Time.parse(game['gameDate']) - (7 * 3600)
+
+    return if starts_at < Time.now
+
+    insert_game game, starts_at, starts_at - 3600, title(game), R_BASEBALL
+
+    insert_team_game game, starts_at
   end
 
   def team_subreddits
@@ -63,16 +63,16 @@ class PostseasonGameLoader
     SQL
   end
 
-  def insert_team_game(game_pk, starts_at)
+  def insert_team_game(game, starts_at)
     %w[away home].each do |flag|
-      team_id = game.dig('teams', flag, 'team', 'id')
+      subreddits = team_subreddits[game.dig('teams', flag, 'team', 'id').to_s]
 
-      next unless team_subreddits[team_id]
+      next unless subreddits
 
-      team_subreddits[team_id].each do |row|
+      subreddits.each do |row|
         post_at = Baseballbot.adjust_time_proc(row['post_at']).call starts_at
 
-        insert_game(game_pk, starts_at, post_at, row['title'], row['id'])
+        insert_game game, starts_at, post_at, row['title'], row['id']
       end
     end
   end
@@ -87,10 +87,10 @@ class PostseasonGameLoader
     true
   end
 
-  def insert_game(game_pk, starts_at, post_at, title, subreddit_id)
+  def insert_game(game, starts_at, post_at, title, subreddit_id)
     @attempts += 1
 
-    data = row_data(game_pk, starts_at, post_at, title, subreddit_id)
+    data = row_data(game, starts_at, post_at, title, subreddit_id)
 
     conn.exec_params(
       "INSERT INTO game_threads (#{data.keys.join(', ')})" \
@@ -101,9 +101,9 @@ class PostseasonGameLoader
     @failures += 1
   end
 
-  def row_data(game_pk, starts_at, post_at, title, subreddit_id)
+  def row_data(game, starts_at, post_at, title, subreddit_id)
     {
-      game_pk: game_pk,
+      game_pk: game['gamePk'],
       post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
       starts_at: starts_at.strftime('%Y-%m-%d %H:%M:%S'),
       subreddit_id: subreddit_id,
@@ -123,7 +123,7 @@ class PostseasonGameLoader
         options#>>'{game_threads,title,postseason}' AS postseason,
         options#>>'{game_threads,title,wildcard}' AS wildcard
       FROM subreddits
-      WHERE id = 15
+      WHERE id = #{R_BASEBALL}
     SQL
   end
 end
