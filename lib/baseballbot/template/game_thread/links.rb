@@ -19,7 +19,7 @@ class Baseballbot
 
         def game_graph_link
           'http://www.fangraphs.com/livewins.aspx?' \
-          "date=#{date.strftime '%Y-%m-%d'}&team=#{team.name}&" \
+          "date=#{date.strftime '%F'}&team=#{team.name}&" \
           "dh=#{game_data.dig('game', 'gameNumber') - 1}&season=#{date.year}"
         end
 

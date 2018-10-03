@@ -47,10 +47,8 @@ class Baseballbot
       protected
 
       def create_game_thread_post!
-        @submission = @subreddit.submit(
-          title: @template.title,
-          text: @template.body
-        )
+        @submission = @subreddit
+          .submit(title: @template.title, text: @template.body)
 
         # Mark as posted right away so that it won't post again
         change_status 'Posted'
@@ -64,10 +62,7 @@ class Baseballbot
       end
 
       def update_game_thread_post!
-        @subreddit.edit(
-          id: @post_id,
-          body: @template.replace_in(@submission)
-        )
+        @subreddit.edit id: @post_id, body: @template.replace_in(@submission)
 
         return postpone_game_thread! if @template.postponed?
 
@@ -136,11 +131,9 @@ class Baseballbot
         # Only game threads get post game threads, right?
         return unless @type == 'game_thread'
 
-        Baseballbot::Posts::Postgame.new(
-          id: @id,
-          game_pk: @game_pk,
-          subreddit: @subreddit
-        ).create!
+        Baseballbot::Posts::Postgame
+          .new(id: @id, game_pk: @game_pk, subreddit: @subreddit)
+          .create!
       end
 
       def game_thread_flair(type)

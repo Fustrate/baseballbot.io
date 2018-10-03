@@ -19,11 +19,16 @@ class GameThreadLoader
     ) AND date_trunc('day', starts_at) = date_trunc('day', $2)
   SQL
 
+  ENABLED_SUBREDDITS = <<~SQL
+    SELECT id, name, team_id, options#>>'{game_threads,post_at}' AS post_at
+    FROM subreddits
+    WHERE team_id IS NOT NULL
+    AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
+  SQL
+
   def initialize
     @created = 0
     @updated = 0
-
-    @right_now = Time.now.strftime('%F %T')
 
     @api = MLBStatsAPI::Client.new
   end
@@ -48,8 +53,8 @@ class GameThreadLoader
 
   def load_schedule(subreddit_id, team_id, post_at)
     data = @api.schedule(
-      startDate: @start_date.strftime('%Y-%m-%d'),
-      endDate: @end_date.strftime('%Y-%m-%d'),
+      startDate: @start_date.strftime('%F'),
+      endDate: @end_date.strftime('%F'),
       teamId: team_id,
       eventTypes: 'primary',
       scheduleTypes: 'games,events,xref'
@@ -100,7 +105,7 @@ class GameThreadLoader
     {
       post_at: post_at.strftime('%F %T'),
       starts_at: starts_at.strftime('%F %T'),
-      updated_at: @right_now,
+      updated_at: Time.now.strftime('%F %T'),
       subreddit_id: subreddit_id,
       game_pk: game['gamePk'].to_i
     }
@@ -136,22 +141,13 @@ class GameThreadLoader
   end
 
   def load_game_threads
-    enabled_subreddits.each do |row|
+    conn.exec(ENABLED_SUBREDDITS).each do |row|
       next unless @names.empty? || @names.include?(row['name'].downcase)
 
       post_at = Baseballbot::Utility.adjust_time_proc row['post_at']
 
       load_schedule row['id'], row['team_id'], post_at
     end
-  end
-
-  def enabled_subreddits
-    conn.exec(<<~SQL)
-      SELECT id, name, team_id, options#>>'{game_threads,post_at}' AS post_at
-      FROM subreddits
-      WHERE team_id IS NOT NULL
-      AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
-    SQL
   end
 
   class InvalidParametersError < RuntimeError

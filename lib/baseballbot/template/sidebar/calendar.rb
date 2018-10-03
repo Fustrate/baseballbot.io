@@ -73,7 +73,7 @@ class Baseballbot
         end
 
         def next_game
-          upcoming_games(1)[0]
+          upcoming_games(1).first
         end
 
         def next_game_str(date_format: '%-m/%-d')
@@ -165,9 +165,7 @@ class Baseballbot
         def outcome(game)
           return 'Tied' if game[:score][0] == game[:score][1]
 
-          return 'Won' if game[:score][0] > game[:score][1]
-
-          'Lost'
+          game[:score][0] > game[:score][1] ? 'Won' : 'Lost'
         end
 
         def process_game(game, date)
@@ -210,9 +208,7 @@ class Baseballbot
 
           return 'T' if game[:score][0] == game[:score][1]
 
-          return 'W' if game[:score][0] > game[:score][1]
-
-          'L'
+          game[:score][0] > game[:score][1] ? 'W' : 'L'
         end
 
         def game_opponent(game)

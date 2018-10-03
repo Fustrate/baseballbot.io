@@ -123,7 +123,7 @@ class NoHitterBot
 
   def insert_game_thread!(submission, game)
     data = [
-      Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+      Time.now.strftime('%F %T'),
       subreddit.id,
       game['gamePk'],
       submission.id,
@@ -132,10 +132,9 @@ class NoHitterBot
 
     @bot.db.exec_params(<<~SQL, data)
       INSERT INTO game_threads (
-        post_at, starts_at, created_at, updated_at, subreddit_id, game_pk,
-        post_id, title, status, type
+        post_at, starts_at, subreddit_id, game_pk, post_id, title, status, type
       )
-      VALUES ($1, $1, $1, $1, $2, $3, $4, $5, 'Posted', 'no_hitter')
+      VALUES ($1, $1, $2, $3, $4, $5, 'Posted', 'no_hitter')
     SQL
   end
 end
