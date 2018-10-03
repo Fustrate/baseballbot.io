@@ -7,17 +7,16 @@ require 'json'
 require 'open-uri'
 require 'chronic'
 require 'tzinfo'
+require 'mlb_stats_api'
 
 class SundayGameThreadLoader
   R_BASEBALL_ID = 15
-  URL = 'http://gdx.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/' \
-        'miniscoreboard.json'
 
   def initialize
     @attempts = 0
     @failures = 0
 
-    @timestamp = Time.now.strftime '%Y-%m-%d %H:%M:%S'
+    @api = MLBStatsAPI::Client.new
   end
 
   def run
@@ -37,24 +36,34 @@ class SundayGameThreadLoader
   end
 
   def load_espn_game(date)
-    data = JSON.parse URI.parse(date.strftime(URL)).open.read
-
-    data.dig('data', 'games', 'game').each do |game|
+    sunday_games(date).each do |game|
       # Game time is not yet set or something is TBD
-      next unless game['game_type'] == 'R' && game['tv_station'] == 'ESPN'
+      next unless game['gameType'] == 'R' && espn_game?(game)
 
-      zulu = Time.parse game.dig('game_media', 'media', 'start')
+      starts_at = Baseballbot::Utility.parse_time(
+        game['gameDate'],
+        in_time_zone: 'America/Los_Angeles'
+      )
 
-      offset = TZInfo::Timezone.get('America/Los_Angeles')
-        .period_for_utc(zulu)
-        .utc_total_offset
+      next if starts_at < Time.now
 
-      gametime = zulu + offset
-
-      next if gametime < Time.now
-
-      insert_game game['game_pk'], gametime
+      insert_game game['game_pk'], starts_at
     end
+  end
+
+  def sunday_games(date)
+    @api.schedule(
+      sportId: 1,
+      date: date.strftime('%m/%d/%Y'),
+      hydrate: 'game(content(media(epg)))'
+    ).dig('dates', 0, 'games')
+  end
+
+  def espn_game?(game)
+    game.dig('content', 'media', 'epg')
+      .select { |content| content['title'] == 'MLBTV' }
+      .dig('items')
+      .any? { |station| station['callLetters'] == 'ESPN' }
   end
 
   def insert_game(game_pk, starts_at)
@@ -81,8 +90,6 @@ class SundayGameThreadLoader
       post_at: (starts_at - 3600).strftime('%F %T'),
       starts_at: starts_at.strftime('%F %T'),
       status: 'Future',
-      created_at: @timestamp,
-      updated_at: @timestamp,
       subreddit_id: R_BASEBALL_ID
     }
   end

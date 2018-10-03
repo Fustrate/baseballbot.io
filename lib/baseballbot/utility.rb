@@ -4,7 +4,14 @@ class Baseballbot
   module Utility
     def self.parse_time(utc, in_time_zone:)
       utc = Time.parse(utc).utc unless utc.is_a? Time
-      period = in_time_zone.period_for_utc(utc)
+
+      time_zone = if in_time_zone.is_a?(TZInfo::DataTimezone)
+                    in_time_zone
+                  else
+                    TZInfo::Timezone.get(in_time_zone)
+                  end
+
+      period = time_zone.period_for_utc(utc)
       with_offset = utc + period.utc_total_offset
 
       Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
