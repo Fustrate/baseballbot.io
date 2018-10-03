@@ -2,6 +2,9 @@
 
 require_relative 'baseballbot/utility'
 
+require 'mlb_stats_api'
+require 'pg'
+
 class PostseasonGameLoader
   R_BASEBALL = 15
 
