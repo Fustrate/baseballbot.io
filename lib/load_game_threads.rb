@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'pg'
 require 'chronic'
 require 'mlb_stats_api'
+require 'pg'
 
 class GameThreadLoader
   INSERT_GAME_THREAD = <<~SQL

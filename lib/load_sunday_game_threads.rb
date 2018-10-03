@@ -2,12 +2,9 @@
 
 # This file really needs to be cleaned up, as does the entire /lib/ directory.
 
-require 'pg'
-require 'json'
-require 'open-uri'
 require 'chronic'
-require 'tzinfo'
 require 'mlb_stats_api'
+require 'pg'
 
 class SundayGameThreadLoader
   R_BASEBALL_ID = 15
@@ -47,7 +44,7 @@ class SundayGameThreadLoader
 
       next if starts_at < Time.now
 
-      insert_game game['game_pk'], starts_at
+      insert_game game, starts_at
     end
   end
 
@@ -66,10 +63,10 @@ class SundayGameThreadLoader
       .any? { |station| station['callLetters'] == 'ESPN' }
   end
 
-  def insert_game(game_pk, starts_at)
+  def insert_game(game, starts_at)
     @attempts += 1
 
-    data = game_data(game_pk, starts_at)
+    data = game_data(game, starts_at)
 
     conn.exec_params(
       "INSERT INTO game_threads (#{data.keys.join(', ')})" \
@@ -77,16 +74,16 @@ class SundayGameThreadLoader
       data.values
     )
 
-    puts "+ #{game_pk}"
+    puts "+ #{game['gamePk']}"
   rescue PG::UniqueViolation
     @failures += 1
 
-    puts "- #{game_pk}"
+    puts "- #{game['gamePk']}"
   end
 
-  def game_data(game_pk, starts_at)
+  def game_data(game, starts_at)
     {
-      game_pk: game_pk,
+      game_pk: game['gamePk'],
       post_at: (starts_at - 3600).strftime('%F %T'),
       starts_at: starts_at.strftime('%F %T'),
       status: 'Future',
