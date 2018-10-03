@@ -139,7 +139,7 @@ class GameThreadLoader
     enabled_subreddits.each do |row|
       next unless @names.empty? || @names.include?(row['name'].downcase)
 
-      post_at = Baseballbot.adjust_time_proc row['post_at']
+      post_at = Baseballbot::Utility.adjust_time_proc row['post_at']
 
       load_schedule row['id'], row['team_id'], post_at
     end

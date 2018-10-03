@@ -113,7 +113,7 @@ class Baseballbot
             return innings == 9 ? 'F' : "F/#{innings}"
           end
 
-          Baseballbot
+          Baseballbot::Utility
             .parse_time(game['gameDate'], in_time_zone: @subreddit.timezone)
             .strftime('%-I:%M')
         end

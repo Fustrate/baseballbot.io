@@ -29,14 +29,14 @@ class Baseballbot
         end
 
         def start_time_et
-          Baseballbot.parse_time(
+          Baseballbot::Utility.parse_time(
             start_time_utc,
             in_time_zone: TZInfo::Timezone.get('America/New_York')
           )
         end
 
         def start_time_local
-          Baseballbot.parse_time(
+          Baseballbot::Utility.parse_time(
             start_time_utc,
             in_time_zone: @subreddit.timezone
           )

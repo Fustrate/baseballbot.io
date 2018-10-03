@@ -122,7 +122,7 @@ class Baseballbot
             calendar_date['games'].each do |game|
               next unless current_team_game?(game)
 
-              date = Baseballbot.parse_time(
+              date = Baseballbot::Utility.parse_time(
                 game['gameDate'],
                 in_time_zone: @subreddit.timezone
               )

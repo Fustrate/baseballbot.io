@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'baseballbot'
+require_relative 'baseballbot/utility'
 
 class PostseasonGameLoader
   R_BASEBALL = 15
@@ -70,7 +70,8 @@ class PostseasonGameLoader
       next unless subreddits
 
       subreddits.each do |row|
-        post_at = Baseballbot.adjust_time_proc(row['post_at']).call starts_at
+        post_at = Baseballbot::Utility.adjust_time_proc(row['post_at'])
+          .call starts_at
 
         insert_game game, starts_at, post_at, row['title'], row['id']
       end
