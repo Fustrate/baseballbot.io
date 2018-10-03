@@ -12,9 +12,9 @@ def default_bot(purpose: nil, account: nil)
       redirect_uri: ENV['REDDIT_REDIRECT_URI']
     },
     db: {
-      user: ENV['ROBOSCORE_PG_USERNAME'],
-      dbname: ENV['ROBOSCORE_PG_DATABASE'],
-      password: ENV['ROBOSCORE_PG_PASSWORD']
+      user: ENV['BASEBALLBOT_PG_USERNAME'],
+      dbname: ENV['BASEBALLBOT_PG_DATABASE'],
+      password: ENV['BASEBALLBOT_PG_PASSWORD']
     },
     logger: Logger.new(log_location)
   )

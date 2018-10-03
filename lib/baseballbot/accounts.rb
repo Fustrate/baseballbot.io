@@ -17,8 +17,18 @@ class Baseballbot
     def refresh_access!
       @client.refresh
 
+      return if @client.access.to_h[:error]
+
       new_expiration = Time.now + @client.access.expires_in
 
+      update_token_expiration!(new_expiration)
+
+      client
+    end
+
+    protected
+
+    def update_token_expiration!(new_expiration)
       @db.exec_params(
         'UPDATE accounts
         SET access_token = $1, expires_at = $2
@@ -29,11 +39,7 @@ class Baseballbot
           @client.access.refresh_token
         ]
       )
-
-      client
     end
-
-    protected
 
     def load_accounts
       @db.exec('SELECT * FROM accounts')
