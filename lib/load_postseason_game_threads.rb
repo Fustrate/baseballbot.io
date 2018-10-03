@@ -132,4 +132,4 @@ class PostseasonGameLoader
   end
 end
 
-# PostseasonGameLoader.new.run
+PostseasonGameLoader.new.run
