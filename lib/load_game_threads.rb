@@ -48,7 +48,6 @@ class GameThreadLoader
 
   def load_schedule(subreddit_id, team_id, post_at)
     data = @api.schedule(
-      sportId: 1,
       startDate: @start_date.strftime('%Y-%m-%d'),
       endDate: @end_date.strftime('%Y-%m-%d'),
       teamId: team_id,
@@ -56,7 +55,7 @@ class GameThreadLoader
       scheduleTypes: 'games,events,xref'
     )
 
-    process_games data.dig('dates'), subreddit_id, adjust_time_proc(post_at)
+    process_games data.dig('dates'), subreddit_id, post_at
   end
 
   def process_games(dates, subreddit_id, adjusted_time)
@@ -140,7 +139,9 @@ class GameThreadLoader
     enabled_subreddits.each do |row|
       next unless @names.empty? || @names.include?(row['name'].downcase)
 
-      load_schedule row['id'], row['team_id'], row['post_at']
+      post_at = Baseballbot.adjust_time_proc row['post_at']
+
+      load_schedule row['id'], row['team_id'], post_at
     end
   end
 
@@ -151,27 +152,6 @@ class GameThreadLoader
       WHERE team_id IS NOT NULL
       AND (options#>>'{game_threads,enabled}')::boolean IS TRUE
     SQL
-  end
-
-  def adjust_time_proc(post_at)
-    if post_at =~ /\A\-?\d{1,2}\z/
-      ->(time) { time - Regexp.last_match[0].to_i.abs * 3600 }
-    elsif post_at =~ /(1[012]|\d)(:\d\d|) ?(am|pm)/i
-      constant_time(Regexp.last_match)
-    else
-      # Default to 3 hours before game time
-      ->(time) { time - 3 * 3600 }
-    end
-  end
-
-  def constant_time(match_data)
-    lambda do |time|
-      hours = match_data[1].to_i
-      hours += 12 if hours != 12 && match_data[3].casecmp('pm').zero?
-      minutes = (match_data[2] || ':00')[1..2].to_i
-
-      Time.new(time.year, time.month, time.day, hours, minutes, 0)
-    end
   end
 
   class InvalidParametersError < RuntimeError
