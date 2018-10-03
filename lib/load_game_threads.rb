@@ -61,21 +61,21 @@ class GameThreadLoader
   def process_games(dates, subreddit_id, adjusted_time)
     dates.each do |date|
       date['games'].each do |game|
-        gametime = Time.parse(game['gameDate']) - (7 * 3_600)
+        next if game.dig('status', 'startTimeTBD')
 
-        # next if game['game_time_et'][11..15] == '03:33'
+        starts_at = Time.parse(game['gameDate']) - (7 * 3_600)
 
-        post_at = adjusted_time.call(gametime)
+        post_at = adjusted_time.call(starts_at)
 
         next if post_at < Time.now
 
-        insert_game subreddit_id, game, post_at, gametime
+        insert_game subreddit_id, game, post_at, starts_at
       end
     end
   end
 
-  def insert_game(subreddit_id, game, post_at, gametime)
-    data = row_data(game, gametime, post_at, subreddit_id)
+  def insert_game(subreddit_id, game, post_at, starts_at)
+    data = row_data(game, starts_at, post_at, subreddit_id)
 
     conn.exec_params(
       INSERT_GAME_THREAD,
@@ -96,10 +96,10 @@ class GameThreadLoader
     @updated += result.cmd_tuples
   end
 
-  def row_data(game, gametime, post_at, subreddit_id)
+  def row_data(game, starts_at, post_at, subreddit_id)
     {
       post_at: post_at.strftime('%Y-%m-%d %H:%M:%S'),
-      starts_at: gametime.strftime('%Y-%m-%d %H:%M:%S'),
+      starts_at: starts_at.strftime('%Y-%m-%d %H:%M:%S'),
       updated_at: @right_now,
       subreddit_id: subreddit_id,
       game_pk: game['gamePk'].to_i
