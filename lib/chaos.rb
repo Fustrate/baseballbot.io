@@ -16,27 +16,31 @@ puts "Removing #{@remove_flairs.join(', ')}"
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
 
-  flairs = @subreddit.flair_listing(limit: 1000, after: after)
+  res = @subreddit.client
+    .get('/r/baseball/api/flairlist', after: after, limit: 1000)
+    .body
 
-  flairs.each do |flair|
-    next unless @remove_flairs.include?(flair[:flair_css_class])
+  res[:users].each { |flair| update_flair(flair) }
 
-    puts "\tChanging #{flair[:user]} from #{flair[:flair_css_class]} to CHAOS"
-
-    @removed[flair[:flair_css_class]] += 1
-
-    @subreddit.set_flair(
-      Redd::Models::User.new(nil, name: flair[:user]),
-      'Team Chaos',
-      css_class: 'CHAOS-wagon'
-    )
-  end
-
-  return unless flairs.after
+  return unless res[:next]
 
   sleep 5
 
-  load_flairs after: flairs.after
+  load_flairs after: res[:next]
+end
+
+def update_flair(flair)
+  return unless @remove_flairs.include?(flair[:flair_css_class])
+
+  puts "\tChanging #{flair[:user]} from #{flair[:flair_css_class]} to CHAOS"
+
+  @removed[flair[:flair_css_class]] += 1
+
+  @subreddit.set_flair(
+    Redd::Models::User.new(nil, name: flair[:user]),
+    'Team Chaos',
+    css_class: 'CHAOS-wagon'
+  )
 end
 
 load_flairs after: arguments[:after]
