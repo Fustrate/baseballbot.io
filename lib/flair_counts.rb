@@ -2,15 +2,23 @@
 
 require_relative 'default_bot'
 
-@bot = default_bot(purpose: 'Flair Stats', account: 'BaseballBot')
-@subreddit = @bot.session.subreddit('baseball')
+@name = ARGV[0]
+
+raise 'Please enter a subreddit name' unless @name
+
+@bot = default_bot(purpose: 'Flair Stats')
+@subreddit = @bot.session.subreddit(@name)
+
+@bot.use_account @bot.name_to_subreddit(@name).account.name
 
 @counts = Hash.new { |h, k| h[k] = 0 }
 
 def load_flairs(after: nil)
   puts "Loading flairs#{after ? " after #{after}" : ''}"
 
-  res = @subreddit.client.get('/r/baseball/api/flairlist', params).body
+  res = @subreddit.client
+    .get("/r/#{@name}/api/flairlist", after: after, limit: 1000)
+    .body
 
   res[:users].each { |flair| @counts[flair[:flair_css_class]] += 1 }
 
