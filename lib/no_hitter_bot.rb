@@ -8,7 +8,7 @@ class NoHitterBot
   WAIT_TIMES = [0, 3600, 3600, 1800, 1200, 600, 30].freeze
 
   def initialize
-    @bot = default_bot(purpose: 'No Hitter Bot', account: 'BaseballBot')
+    @bot = DefaultBot.create(purpose: 'No Hitter Bot', account: 'BaseballBot')
   end
 
   def post_no_hitters!

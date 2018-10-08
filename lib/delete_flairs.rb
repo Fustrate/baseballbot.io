@@ -4,7 +4,7 @@ require_relative 'default_bot'
 
 @delete = %w[CHC-wagon SEA-wagon CHAOS-wagon].freeze
 
-@bot = default_bot(purpose: 'Delete Flairs', account: 'BaseballBot')
+@bot = DefaultBot.create(purpose: 'Delete Flairs', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')
 
 def load_flairs(after: nil)
@@ -30,4 +30,4 @@ def process_flair(flair)
   @subreddit.delete_flair flair[:user]
 end
 
-load_flairs after: arguments[:after]
+load_flairs after: ARGV[0]

@@ -1,26 +1,14 @@
 # frozen_string_literal: true
 
-require_relative 'baseballbot/utility'
-
-require 'mlb_stats_api'
-require 'pg'
+require_relative 'baseballbot'
 
 class PostseasonGameLoader
   R_BASEBALL = 15
 
   def initialize
-    @attempts = 0
-    @failures = 0
+    @attempts = @failures = 0
 
-    @api = MLBStatsAPI::Client.new
-  end
-
-  def conn
-    @conn ||= PG::Connection.new(
-      user: ENV['BASEBALLBOT_PG_USERNAME'],
-      dbname: ENV['BASEBALLBOT_PG_DATABASE'],
-      password: ENV['BASEBALLBOT_PG_PASSWORD']
-    )
+    @bot = BaseballBot.new
   end
 
   def run
@@ -29,8 +17,10 @@ class PostseasonGameLoader
     puts "Added #{@attempts - @failures} of #{@attempts}"
   end
 
+  protected
+
   def load_schedule
-    data = @api.schedule(:postseason, hydrate: 'team,metadata,seriesStatus')
+    data = @bot.api.schedule(:postseason, hydrate: 'team,metadata,seriesStatus')
 
     data['dates'].each do |date|
       date['games'].each { |game| process_game(game) }
@@ -54,7 +44,7 @@ class PostseasonGameLoader
   end
 
   def team_subreddits_data
-    conn.exec(<<~SQL)
+    @bot.db.exec(<<~SQL)
       SELECT id, team_id, options#>>'{game_threads,post_at}' AS post_at,
         COALESCE(
           options#>>'{game_threads,title,postseason}',
@@ -96,7 +86,7 @@ class PostseasonGameLoader
 
     data = row_data(game, starts_at, post_at, title, subreddit_id)
 
-    conn.exec_params(
+    @bot.db.exec_params(
       "INSERT INTO game_threads (#{data.keys.join(', ')})" \
       "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
       data.values
@@ -123,7 +113,7 @@ class PostseasonGameLoader
   end
 
   def baseball_subreddit_titles
-    @baseball_subreddit_titles ||= conn.exec(<<~SQL).first
+    @baseball_subreddit_titles ||= @bot.db.exec(<<~SQL).first
       SELECT
         options#>>'{game_threads,title,postseason}' AS postseason,
         options#>>'{game_threads,title,wildcard}' AS wildcard

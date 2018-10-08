@@ -45,30 +45,46 @@ class Baseballbot
   include Sidebars
   include Subreddits
 
-  attr_reader :db, :api, :client, :session, :redis, :logger
-
   def initialize(options = {})
-    @client = Redd::APIClient.new(
-      redd_auth_strategy(options[:reddit]),
-      limit_time: 0
-    )
-    @session = Redd::Models::Session.new(@client)
-
-    @db = PG::Connection.new options[:db]
-    @redis = Redis.new
-
-    @logger = options[:logger] || Logger.new(STDOUT)
-
-    @api = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
+    @options = options
   end
 
-  def redd_auth_strategy(config)
-    Redd::AuthStrategies::Web.new(
-      client_id: config[:client_id],
-      secret: config[:secret],
-      redirect_uri: config[:redirect_uri],
-      user_agent: config[:user_agent]
+  def api
+    @api ||= MLBStatsAPI::Client.new logger: logger, cache: redis
+  end
+
+  def client
+    unless @options[:reddit]
+      raise 'BaseballBot was not initialized with a reddit configuration.'
+    end
+
+    return @client if @client
+
+    @client = Redd::APIClient.new redd_auth_strategy, limit_time: 0
+  end
+
+  def db
+    @db ||= PG::Connection.new(
+      user: ENV['BASEBALLBOT_PG_USERNAME'],
+      dbname: ENV['BASEBALLBOT_PG_DATABASE'],
+      password: ENV['BASEBALLBOT_PG_PASSWORD']
     )
+  end
+
+  def logger
+    @logger ||= @options[:logger] || Logger.new(STDOUT)
+  end
+
+  def redis
+    @redis ||= Redis.new
+  end
+
+  def session
+    unless @options[:reddit]
+      raise 'BaseballBot was not initialized with a reddit configuration.'
+    end
+
+    @session ||= Redd::Models::Session.new client
   end
 
   def inspect
@@ -81,5 +97,16 @@ class Baseballbot
 
   def subreddits
     @subreddits ||= load_subreddits
+  end
+
+  protected
+
+  def redd_auth_strategy
+    Redd::AuthStrategies::Web.new(
+      client_id: @options.dig(:reddit, :client_id),
+      secret: @options.dig(:reddit, :secret),
+      redirect_uri: @options.dig(:reddit, :redirect_uri),
+      user_agent: @options.dig(:reddit, :user_agent)
+    )
   end
 end

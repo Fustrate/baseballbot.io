@@ -2,18 +2,15 @@
 
 # This file really needs to be cleaned up, as does the entire /lib/ directory.
 
-require 'chronic'
-require 'mlb_stats_api'
-require 'pg'
+require_relative 'baseballbot'
 
 class SundayGameThreadLoader
   R_BASEBALL_ID = 15
 
   def initialize
-    @attempts = 0
-    @failures = 0
+    @attempts = @failures = 0
 
-    @api = MLBStatsAPI::Client.new
+    @bot = BaseballBot.new
   end
 
   def run
@@ -23,14 +20,6 @@ class SundayGameThreadLoader
   end
 
   protected
-
-  def conn
-    @conn ||= PG::Connection.new(
-      user: ENV['BASEBALLBOT_PG_USERNAME'],
-      dbname: ENV['BASEBALLBOT_PG_DATABASE'],
-      password: ENV['BASEBALLBOT_PG_PASSWORD']
-    )
-  end
 
   def load_espn_game(date)
     sunday_games(date).each do |game|
@@ -49,7 +38,7 @@ class SundayGameThreadLoader
   end
 
   def sunday_games(date)
-    @api.schedule(
+    @bot.api.schedule(
       sportId: 1,
       date: date.strftime('%m/%d/%Y'),
       hydrate: 'game(content(media(epg)))'
@@ -68,7 +57,7 @@ class SundayGameThreadLoader
 
     data = game_data(game, starts_at)
 
-    conn.exec_params(
+    @bot.db.exec_params(
       "INSERT INTO game_threads (#{data.keys.join(', ')})" \
       "VALUES (#{(1..data.size).map { |n| "$#{n}" }.join(', ')})",
       data.values

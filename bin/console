@@ -4,6 +4,6 @@
 require 'irb'
 require_relative '../lib/default_bot'
 
-@bot = default_bot(purpose: 'REPL for testing')
+@bot = DefaultBot.create(purpose: 'REPL for testing')
 
 IRB.start(__FILE__)

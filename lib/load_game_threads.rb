@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require 'chronic'
-require 'mlb_stats_api'
-require 'pg'
+require_relative 'baseballbot'
 
 class GameThreadLoader
   INSERT_GAME_THREAD = <<~SQL
-    INSERT INTO game_threads (
-      post_at, starts_at, subreddit_id, game_pk, status
-    ) VALUES ($1, $2, $3, $4, 'Future')
+    INSERT INTO game_threads (post_at, starts_at, subreddit_id, game_pk, status)
+    VALUES ($1, $2, $3, $4, 'Future')
   SQL
 
   UPDATE_GAME_THREAD = <<~SQL
@@ -27,10 +24,9 @@ class GameThreadLoader
   SQL
 
   def initialize
-    @created = 0
-    @updated = 0
+    @created = @updated = 0
 
-    @api = MLBStatsAPI::Client.new
+    @bot = BaseballBot.new
   end
 
   def run
@@ -43,18 +39,35 @@ class GameThreadLoader
 
   protected
 
-  def conn
-    @conn ||= PG::Connection.new(
-      user: ENV['BASEBALLBOT_PG_USERNAME'],
-      dbname: ENV['BASEBALLBOT_PG_DATABASE'],
-      password: ENV['BASEBALLBOT_PG_PASSWORD']
-    )
+  def calculate_dates
+    if ARGV.count > 2
+      raise 'Please pass 2 arguments: ruby load_schedule.rb ' \
+            '[6/2015 [mariners,dodgers]]'
+    end
+
+    @date = if ARGV[0] =~ %r{\A(\d{1,2})/(\d{4})\z}
+              Date.new(Regexp.last_match[2], Regexp.last_match[1], 1)
+            else
+              Date.today
+            end
+
+    @names = (ARGV[1] || '').split(%r{[+/,]}).map(&:downcase)
+  end
+
+  def load_game_threads
+    @bot.db.exec(ENABLED_SUBREDDITS).each do |row|
+      next unless @names.empty? || @names.include?(row['name'].downcase)
+
+      post_at = Baseballbot::Utility.adjust_time_proc row['post_at']
+
+      load_schedule row['id'], row['team_id'], post_at
+    end
   end
 
   def load_schedule(subreddit_id, team_id, post_at)
-    data = @api.schedule(
-      startDate: @start_date.strftime('%F'),
-      endDate: @end_date.strftime('%F'),
+    data = @bot.api.schedule(
+      startDate: @date.strftime('%F'),
+      endDate: (Date.new(@date.year, @date.month + 1, 1) - 1).strftime('%F'),
       teamId: team_id,
       eventTypes: 'primary',
       scheduleTypes: 'games,events,xref'
@@ -82,7 +95,7 @@ class GameThreadLoader
   def insert_game(subreddit_id, game, post_at, starts_at)
     data = row_data(game, starts_at, post_at, subreddit_id)
 
-    conn.exec_params(
+    @bot.db.exec_params(
       INSERT_GAME_THREAD,
       data.values_at(:post_at, :starts_at, :subreddit_id, :game_pk)
     )
@@ -90,15 +103,6 @@ class GameThreadLoader
     @created += 1
   rescue PG::UniqueViolation
     update_game(data)
-  end
-
-  def update_game(data)
-    result = conn.exec_params(
-      UPDATE_GAME_THREAD,
-      data.values_at(:post_at, :starts_at, :updated_at, :subreddit_id, :game_pk)
-    )
-
-    @updated += result.cmd_tuples
   end
 
   def row_data(game, starts_at, post_at, subreddit_id)
@@ -111,52 +115,13 @@ class GameThreadLoader
     }
   end
 
-  def calculate_dates
-    if ARGV.count == 2
-      two_parameters_passed
-    elsif ARGV.count == 1
-      single_parameter_passed
-    else
-      raise InvalidParametersError
-    end
+  def update_game(data)
+    result = @bot.db.exec_params(
+      UPDATE_GAME_THREAD,
+      data.values_at(:post_at, :starts_at, :updated_at, :subreddit_id, :game_pk)
+    )
 
-    @start_date = Chronic.parse "#{@month}/1/#{@year}"
-    @end_date = Chronic.parse("#{@month.to_i + 1}/1/#{@year}") - 86_400
-  end
-
-  def single_parameter_passed
-    if ARGV[0] =~ %r{(\d+)/(\d+)}
-      _, @month, @year = Regexp.last_match.to_a
-      @names = []
-    else
-      @month = Time.now.month
-      @year = Time.now.year
-      @names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
-    end
-  end
-
-  def two_parameters_passed
-    @month, @year = ARGV[1].split(%r{[-/]}).map(&:to_i)
-    @names = ARGV[0].split(%r{[+/,]}).map(&:downcase)
-  end
-
-  def load_game_threads
-    conn.exec(ENABLED_SUBREDDITS).each do |row|
-      next unless @names.empty? || @names.include?(row['name'].downcase)
-
-      post_at = Baseballbot::Utility.adjust_time_proc row['post_at']
-
-      load_schedule row['id'], row['team_id'], post_at
-    end
-  end
-
-  class InvalidParametersError < RuntimeError
-    DEFAULT_ERROR_MESSAGE = 'Please pass 2 arguments: ' \
-                            'ruby load_schedule.rb mariners,dodgers 6/2015'
-
-    def initialize(msg = DEFAULT_ERROR_MESSAGE)
-      super
-    end
+    @updated += result.cmd_tuples
   end
 end
 

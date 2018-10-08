@@ -6,9 +6,8 @@ require_relative 'default_bot'
 
 raise 'Please enter a subreddit name' unless @name
 
-@bot = default_bot(purpose: 'Flair Stats')
+@bot = DefaultBot.create(purpose: 'Flair Stats')
 @subreddit = @bot.session.subreddit(@name)
-
 @bot.use_account @bot.name_to_subreddit(@name).account.name
 
 @counts = Hash.new { |h, k| h[k] = 0 }
@@ -31,4 +30,5 @@ def load_flairs(after: nil)
   @counts.each { |name, count| puts "\"#{name}\",#{count}" }
 end
 
-load_flairs after: arguments[:after]
+# We can't restart this, so start from the beginning
+load_flairs

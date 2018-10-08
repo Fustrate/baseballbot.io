@@ -2,7 +2,7 @@
 
 require_relative 'default_bot'
 
-@bot = default_bot(purpose: 'Around the Horn', account: 'BaseballBot')
+@bot = DefaultBot.create(purpose: 'Around the Horn', account: 'BaseballBot')
 @subreddit = @bot.session.subreddit('baseball')
 
 title = Time.now.strftime '[General Discussion] Around the Horn - %-m/%-d/%y'

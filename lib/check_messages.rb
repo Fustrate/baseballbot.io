@@ -9,7 +9,7 @@ class CheckMessages
   GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
 
   def initialize
-    @bot = default_bot(purpose: 'Messages', account: 'BaseballBot')
+    @bot = DefaultBot.create(purpose: 'Messages', account: 'BaseballBot')
   end
 
   def run!(retry_on_failure: true)

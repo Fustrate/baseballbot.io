@@ -2,7 +2,7 @@
 
 require_relative 'default_bot'
 
-@bot = default_bot(purpose: 'Refresh Tokens')
+@bot = DefaultBot.create(purpose: 'Refresh Tokens')
 
 @bot.accounts.each_value do |account|
   unless account.access.expired?
