@@ -1,34 +1,28 @@
 # frozen_string_literal: true
 
-require_relative 'default_bot'
+require_relative 'flair_bot'
 
-@name = ARGV[0]
+class FlairCounts < FlairBot
+  def initialize
+    raise 'Please enter a subreddit name' unless ARGV[0]
 
-raise 'Please enter a subreddit name' unless @name
+    super(purpose: 'Flair Stats', subreddit: ARGV[0])
 
-@bot = DefaultBot.create(purpose: 'Flair Stats')
-@subreddit = @bot.session.subreddit(@name)
-@bot.use_account @bot.name_to_subreddit(@name).account.name
-
-@counts = Hash.new { |h, k| h[k] = 0 }
-
-def load_flairs(after: nil)
-  puts "Loading flairs#{after ? " after #{after}" : ''}"
-
-  res = @subreddit.client
-    .get("/r/#{@name}/api/flairlist", after: after, limit: 1000)
-    .body
-
-  res[:users].each { |flair| @counts[flair[:flair_css_class]] += 1 }
-
-  if res[:next]
-    sleep 5
-
-    return load_flairs after: res[:next]
+    @counts = Hash.new { |h, k| h[k] = 0 }
   end
 
-  @counts.each { |name, count| puts "\"#{name}\",#{count}" }
+  def run(after: nil)
+    super
+
+    @counts.each { |name, count| puts "\"#{name}\",#{count}" }
+  end
+
+  protected
+
+  def process_flair(flair)
+    @counts[flair[:flair_css_class]] += 1
+  end
 end
 
 # We can't restart this, so start from the beginning
-load_flairs
+FlairCounts.new.run

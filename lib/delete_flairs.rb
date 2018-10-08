@@ -1,33 +1,30 @@
 # frozen_string_literal: true
 
-require_relative 'default_bot'
+require_relative 'flair_bot'
 
-@delete = %w[CHC-wagon SEA-wagon CHAOS-wagon].freeze
+class DeleteFlairs < FlairBot
+  def initialize
+    super(purpose: 'Delete Flairs', subreddit: 'baseball')
 
-@bot = DefaultBot.create(purpose: 'Delete Flairs', account: 'BaseballBot')
-@subreddit = @bot.session.subreddit('baseball')
+    @classes = ARGV[0].split(',')
+  end
 
-def load_flairs(after: nil)
-  puts "Loading flairs#{after ? " after #{after}" : ''}"
+  def run(after:)
+    return if @classes.none?
 
-  flairs = @subreddit.flair_listing(limit: 1000, after: after)
+    super
+  end
 
-  flairs.each { |flair| process_flair(flair) }
+  protected
 
-  return unless flairs.after
+  def process_flair(flair)
+    return unless @classes.include? flair[:flair_css_class]
 
-  sleep 5
+    puts "\tDeleting #{flair[:user]}'s flair " \
+         "('#{flair[:flair_css_class]}', '#{flair[:flair_text]}')"
 
-  load_flairs after: flairs.after
+    @subreddit.delete_flair flair[:user]
+  end
 end
 
-def process_flair(flair)
-  return unless @delete.include? flair[:flair_css_class]
-
-  puts "\tDeleting #{flair[:user]}'s flair " \
-       "('#{flair[:flair_css_class]}', '#{flair[:flair_text]}')"
-
-  @subreddit.delete_flair flair[:user]
-end
-
-load_flairs after: ARGV[0]
+DeleteFlairs.new.run after: ARGV[1]
