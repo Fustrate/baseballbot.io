@@ -90,17 +90,11 @@ class Baseballbot
           status = game.dig('status', 'detailedState')
 
           case status
-          when 'In Progress'
-            game_inning game
-          when 'Postponed'
-            italic 'PPD'
-            # italic game.dig('status', 'statusCode')
-          when 'Delayed Start'
-            delay_type game
-          when 'Delayed'
-            "#{delay_type game} #{game_inning game}"
-          when 'Warmup'
-            'Warmup'
+          when 'In Progress' then game_inning game
+          when 'Postponed' then italic 'PPD'
+          when 'Delayed Start' then delay_type game
+          when 'Delayed' then "#{delay_type game} #{game_inning game}"
+          when 'Warmup' then 'Warmup'
           else
             pre_or_post_game_status(game, status)
           end

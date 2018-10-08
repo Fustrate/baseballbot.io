@@ -63,9 +63,7 @@ class SundayGameThreadLoader
 
     puts "+ #{game['gamePk']}"
   rescue PG::UniqueViolation
-    @failures += 1
-
-    puts "- #{game['gamePk']}"
+    failed_to_insert(game)
   end
 
   def game_data(game, starts_at)
@@ -76,6 +74,12 @@ class SundayGameThreadLoader
       status: 'Future',
       subreddit_id: R_BASEBALL_ID
     }
+  end
+
+  def failed_to_insert(game)
+    @failures += 1
+
+    puts "- #{game['gamePk']}"
   end
 end
 

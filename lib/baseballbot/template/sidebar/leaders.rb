@@ -66,12 +66,12 @@ class Baseballbot
           qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
 
           %w[h xbh hr rbi bb sb r].each do |key|
-            stats[key] = high_stat(key, all_hitters, count: count)
+            stats[key] = high_stat(key, all_hitters).first(count)
               .map { |s| { name: s[0], value: s[1].to_i } }
           end
 
           %w[avg obp slg ops].each do |key|
-            stats[key] = high_stat(key, qualifying, count: count)
+            stats[key] = high_stat(key, qualifying).first(count)
               .map { |s| { name: s[0], value: pct(s[1]) } }
           end
 
@@ -84,41 +84,39 @@ class Baseballbot
           qualifying = pitchers(year: year, type: type, pool: 'QUALIFIER')
 
           %w[w sv hld so].each do |key|
-            stats[key] = high_stat(key, all_pitchers, count: count)
+            stats[key] = high_stat(key, all_pitchers).first(count)
               .map { |s| { name: s[0], value: s[1].to_i } }
           end
 
-          stats['ip'] = high_stat('ip', all_pitchers, count: count)
+          stats['ip'] = high_stat('ip', all_pitchers).first(count)
             .map { |s| { name: s[0], value: s[1] } }
 
-          stats['avg'] = low_stat('avg', qualifying, count: count)
+          stats['avg'] = low_stat('avg', qualifying).first(count)
             .map { |s| { name: s[0], value: pct(s[1]) } }
 
           %w[whip era].each do |key|
-            stats[key] = low_stat(key, qualifying, count: 3)
+            stats[key] = low_stat(key, qualifying).first(3)
               .map { |s| { name: s[0], value: s[1].to_s.sub(/\A0+/, '') } }
           end
 
           stats
         end
 
-        def high_stat(key, players, count: 1)
+        def high_stat(key, players)
           return [['', 0]] unless players
 
           players
             .map { |player| player.values_at 'name_display_last_init', key }
             .sort_by { |player| player[1].to_f }
             .reverse
-            .first count
         end
 
-        def low_stat(key, players, count: 1)
+        def low_stat(key, players)
           return [['', 0]] unless players
 
           players
             .map { |player| player.values_at 'name_display_last_init', key }
             .sort_by { |player| player[1].to_f }
-            .first count
         end
 
         def hitters(year:, type:, pool: 'ALL')

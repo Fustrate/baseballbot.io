@@ -128,7 +128,7 @@ class Baseballbot
           division_leaders = teams.count { |team| team[:division_lead] }
 
           # 5 or more division leaders means no wildcards
-          return [] if division_leaders >= 5
+          return if division_leaders >= 5
 
           allowed_wildcards = 5 - division_leaders
 
