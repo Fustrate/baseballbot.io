@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'default_bot'
-require 'honeybadger/ruby'
 
 class CheckMessages
   TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i

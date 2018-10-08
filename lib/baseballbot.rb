@@ -103,10 +103,10 @@ class Baseballbot
 
   def redd_auth_strategy
     Redd::AuthStrategies::Web.new(
-      client_id: @options.dig(:reddit, :client_id),
-      secret: @options.dig(:reddit, :secret),
-      redirect_uri: @options.dig(:reddit, :redirect_uri),
-      user_agent: @options.dig(:reddit, :user_agent)
+      client_id: ENV['REDDIT_CLIENT_ID'],
+      secret: ENV['REDDIT_SECRET'],
+      redirect_uri: ENV['REDDIT_REDIRECT_URI'],
+      user_agent: @options[:user_agent]
     )
   end
 end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# This file really needs to be cleaned up, as does the entire /lib/ directory.
-
 require_relative 'baseballbot'
 
 class SundayGameThreadLoader
