@@ -4,11 +4,11 @@ class Baseballbot
   module Template
     class GameThread
       module Postgame
-        def winning_team
+        def winner_flag
           home_rhe['runs'] > away_rhe['runs'] ? 'home' : 'away'
         end
 
-        def losing_team
+        def loser_flag
           home_rhe['runs'] > away_rhe['runs'] ? 'away' : 'home'
         end
 
@@ -19,8 +19,7 @@ class Baseballbot
 
           return unless pitcher_id
 
-          data = boxscore
-            .dig('teams', winning_team, 'players', "ID#{pitcher_id}")
+          data = boxscore.dig 'teams', winner_flag, 'players', "ID#{pitcher_id}"
           stats = data['seasonStats']['pitching']
 
           {
@@ -37,8 +36,7 @@ class Baseballbot
 
           return unless pitcher_id
 
-          data = boxscore
-            .dig('teams', losing_team, 'players', "ID#{pitcher_id}")
+          data = boxscore.dig 'teams', loser_flag, 'players', "ID#{pitcher_id}"
           stats = data['seasonStats']['pitching']
 
           {
@@ -55,8 +53,7 @@ class Baseballbot
 
           return unless pitcher_id
 
-          data = boxscore
-            .dig('teams', winning_team, 'players', "ID#{pitcher_id}")
+          data = boxscore.dig 'teams', winner_flag, 'players', "ID#{pitcher_id}"
 
           {
             name: player_name(data),
