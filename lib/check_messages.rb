@@ -84,13 +84,7 @@ class CheckMessages
   def load_possible_games
     games = Hash.new { |h, k| h[k] = [] }
 
-    game_data = @bot.api.schedule(
-      sportId: 1,
-      date: Time.now.strftime('%m/%d/%Y'),
-      hydrate: 'game(content(summary)),linescore,flags,team'
-    ).dig('dates', 0, 'games')
-
-    game_data.each do |game|
+    todays_games.each do |game|
       gid = gid_for_game(game)
 
       games[game.dig('teams', 'away', 'team', 'abbreviation')] << gid
@@ -98,6 +92,14 @@ class CheckMessages
     end
 
     games
+  end
+
+  def todays_games
+    @bot.api.schedule(
+      sportId: 1,
+      date: Time.now.strftime('%m/%d/%Y'),
+      hydrate: 'game(content(summary)),linescore,flags,team'
+    ).dig('dates', 0, 'games')
   end
 
   # This is no longer included in the data - we might have to switch to

@@ -36,10 +36,8 @@ class Baseballbot
         end
 
         def start_time_local
-          Baseballbot::Utility.parse_time(
-            start_time_utc,
-            in_time_zone: @subreddit.timezone
-          )
+          Baseballbot::Utility
+            .parse_time(start_time_utc, in_time_zone: @subreddit.timezone)
         end
 
         def gid
@@ -73,9 +71,7 @@ class Baseballbot
         end
 
         def wind
-          data = game_data.dig('weather') || {}
-
-          data['wind']
+          game_data.dig('weather', 'wind')
         end
 
         def attendance
@@ -111,9 +107,7 @@ class Baseballbot
         end
 
         def outs
-          return unless live? && linescore
-
-          linescore['outs']
+          linescore['outs'] if live? && linescore
         end
 
         def runners
