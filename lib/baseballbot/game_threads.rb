@@ -30,41 +30,23 @@ class Baseballbot
     SQL
 
     def post_game_threads!(names: [])
-      names = names.map(&:downcase)
-
-      unposted_game_threads.each do |row|
-        next unless names.empty? || names.include?(row['name'].downcase)
-
-        post_game_thread! build_game_thread(row)
+      unposted_game_threads(names).each do |row|
+        build_game_thread(row).create!
+      rescue Redd::InvalidAccess
+        refresh_access!
+      rescue => ex
+        Honeybadger.notify(ex)
       end
-    end
-
-    # Create a game thread
-    #
-    # @param game_thread [Baseballbot::Posts::GameThread]
-    def post_game_thread!(game_thread)
-      game_thread.create!
-    rescue Redd::InvalidAccess
-      refresh_access!
-    rescue => ex
-      Honeybadger.notify(ex)
     end
 
     def update_game_threads!(names: [])
       game_threads_to_update(names).each do |row|
-        update_game_thread! build_game_thread(row)
+        build_game_thread(row).update!
+      rescue Redd::InvalidAccess
+        refresh_access!
+      rescue => ex
+        Honeybadger.notify(ex)
       end
-    end
-
-    # Update a game thread - also starts the "game over" process if necessary
-    #
-    # @param game_thread [Baseballbot::Posts::GameThread]
-    def update_game_thread!(game_thread)
-      game_thread.update!
-    rescue Redd::InvalidAccess
-      refresh_access!
-    rescue => ex
-      Honeybadger.notify(ex)
     end
 
     def build_game_thread(row)
@@ -93,7 +75,11 @@ class Baseballbot
       @active_game_threads ||= @db.exec(ACTIVE_GAME_THREADS_QUERY)
     end
 
-    def unposted_game_threads
+    def unposted_game_threads(names)
+      names = names.map(&:downcase)
+
+      next unless names.empty? || names.include?(row['name'].downcase)
+
       @unposted_game_threads ||= @db.exec(UNPOSTED_GAME_THREADS_QUERY)
     end
 

@@ -48,11 +48,7 @@ class Baseballbot
     end
 
     def process_account_row(row)
-      Account.new(
-        bot: self,
-        name: row['name'],
-        access: account_access(row)
-      )
+      Account.new bot: self, name: row['name'], access: account_access(row)
     end
 
     def account_access(row)
