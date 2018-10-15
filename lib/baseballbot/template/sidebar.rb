@@ -25,12 +25,6 @@ class Baseballbot
       def wildcard(wcgb)
         wcgb.to_f * (wcgb[0] == '+' ? -1 : 1)
       end
-
-      def open_url(url, interpolations = {})
-        interpolations[:team_id] = @subreddit.team.id
-
-        URI.parse(format(url, interpolations)).open.read
-      end
     end
   end
 end

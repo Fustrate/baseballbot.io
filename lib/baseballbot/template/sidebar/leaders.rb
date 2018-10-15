@@ -138,6 +138,12 @@ class Baseballbot
           # Array(players) doesn't work because hashes have a #to_a method
           players.is_a?(Hash) ? [players] : players
         end
+
+        def open_url(url, interpolations = {})
+          interpolations[:team_id] = @subreddit.team.id
+
+          URI.parse(format(url, interpolations)).open.read
+        end
       end
     end
   end
