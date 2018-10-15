@@ -33,6 +33,20 @@ class Baseballbot
         def team
           @subreddit.team || home_team
         end
+
+        def home?
+          return true unless @subreddit.team
+
+          @home = home_team.id == @subreddit.team.id
+        end
+
+        def won?
+          home? == (home_rhe['runs'] > away_rhe['runs']) if final?
+        end
+
+        def lost?
+          home? == (home_rhe['runs'] < away_rhe['runs']) if final?
+        end
       end
     end
   end

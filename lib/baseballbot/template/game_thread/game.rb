@@ -82,24 +82,6 @@ class Baseballbot
           nil
         end
 
-        def home?
-          return true unless @subreddit.team
-
-          @home = home_team.id == @subreddit.team.id
-        end
-
-        def won?
-          return unless final?
-
-          home? == (home_rhe['runs'] > away_rhe['runs'])
-        end
-
-        def lost?
-          return unless final?
-
-          home? == (home_rhe['runs'] < away_rhe['runs'])
-        end
-
         def preview?
           game_data.dig('status', 'abstractGameState') == 'Preview'
         end
