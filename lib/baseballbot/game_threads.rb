@@ -35,46 +35,47 @@ class Baseballbot
       unposted_game_threads.each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        post_game_thread! row
+        post_game_thread! build_game_thread(row)
       end
     end
 
-    def post_game_thread!(data)
-      Baseballbot::Posts::GameThread.new(
-        id: data['id'],
-        game_pk: data['game_pk'],
-        title: data['title'],
-        subreddit: name_to_subreddit(data['name']),
-        type: data['type']
-      ).create!
+    # Create a game thread
+    #
+    # @param game_thread [Baseballbot::Posts::GameThread]
+    def post_game_thread!(game_thread)
+      game_thread.create!
+    rescue Redd::InvalidAccess
+      refresh_access!
     rescue => ex
-      Honeybadger.notify(ex, context: { data: data })
+      Honeybadger.notify(ex)
     end
 
     def update_game_threads!(names: [])
       game_threads_to_update(names).each do |row|
-        update_game_thread! row
+        update_game_thread! build_game_thread(row)
       end
     end
 
     # Update a game thread - also starts the "game over" process if necessary
     #
-    # @param name [String] The name of the subreddit to post in
-    # @param id [String] The baseballbot id of the game thread
-    # @param game_pk [Integer] The mlb id of the game
-    # @param post_id [String] The reddit id of the post to update
-    def update_game_thread!(data)
-      Baseballbot::Posts::GameThread.new(
-        id: data['id'],
-        game_pk: data['game_pk'],
-        post_id: data['post_id'],
-        subreddit: name_to_subreddit(data['name']),
-        type: data['type']
-      ).update!
+    # @param game_thread [Baseballbot::Posts::GameThread]
+    def update_game_thread!(game_thread)
+      game_thread.update!
     rescue Redd::InvalidAccess
       refresh_access!
     rescue => ex
-      Honeybadger.notify(ex, context: { data: data })
+      Honeybadger.notify(ex)
+    end
+
+    def build_game_thread(row)
+      Baseballbot::Posts::GameThread.new(
+        id: row['id'],
+        game_pk: row['game_pk'],
+        post_id: row['post_id'],
+        title: data['title'],
+        subreddit: name_to_subreddit(row['name']),
+        type: row['type']
+      )
     end
 
     # Every 10 minutes, update every game thread no matter what.
