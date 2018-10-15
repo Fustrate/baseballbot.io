@@ -122,10 +122,8 @@ class Baseballbot
             calendar_date['games'].each do |game|
               next unless current_team_game?(game) && game['ifNecessary'] != 'Y'
 
-              date = Baseballbot::Utility.parse_time(
-                game['gameDate'],
-                in_time_zone: @subreddit.timezone
-              )
+              date = Baseballbot::Utility
+                .parse_time(game['gameDate'], in_time_zone: @subreddit.timezone)
 
               days[date.strftime('%F')][:games] << process_game(game, date)
             end
@@ -169,18 +167,7 @@ class Baseballbot
         end
 
         def process_game(game, date)
-          team = game.dig('teams', home_team?(game) ? 'home' : 'away')
-          opponent = game.dig('teams', home_team?(game) ? 'away' : 'home')
-
-          info = {
-            date: date,
-            home: home_team?(game),
-            opponent: game_opponent(game),
-            score: [team['score'], opponent['score']],
-            tv: tv_stations(game),
-            status_code: game['status']['statusCode'],
-            game_pk: game['gamePk']
-          }
+          info = calendar_game_info(game, date)
 
           info[:over] = %w[F C D FT FR].include? info[:status_code]
           info[:outcome] = outcome(info) if info[:over]
@@ -188,6 +175,25 @@ class Baseballbot
           info[:result] = game_result(info)
 
           info
+        end
+
+        def calendar_game_info(game, date)
+          {
+            date: date,
+            home: home_team?(game),
+            opponent: game_opponent(game),
+            score: calendar_game_score(game),
+            tv: tv_stations(game),
+            status_code: game['status']['statusCode'],
+            game_pk: game['gamePk']
+          }
+        end
+
+        def calendar_game_score(game)
+          team = game.dig('teams', home_team?(game) ? 'home' : 'away')
+          opponent = game.dig('teams', home_team?(game) ? 'away' : 'home')
+
+          [team['score'], opponent['score']]
         end
 
         def tv_stations(game)
