@@ -16,6 +16,9 @@ gem 'sass-rails'
 gem 'sprockets-rails'
 gem 'uglifier', '~> 4.0'
 
+# Faster json generation
+gem 'oj'
+
 gem 'fustrate-rails',
     git: 'https://github.com/Fustrate/fustrate-rails',
     ref: '00499a'
@@ -39,15 +42,18 @@ group :development do
   gem 'guard-bundler', require: false
   gem 'guard-rails'
   gem 'guard-rspec', require: false
-  gem 'rubocop'
   gem 'ruby_gntp'
-  gem 'web-console', '~> 3.5'
+  gem 'web-console', '~> 3.6'
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.10', require: false
-  gem 'capistrano-bundler'
-  gem 'capistrano-rails'
-  gem 'capistrano-rbenv', '~> 2.1'
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rbenv', '~> 2.1', require: false
+
+  # Linters
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do
@@ -57,9 +63,9 @@ group :test do
 end
 
 group :development, :test do
-  gem 'database_cleaner', '~> 1.6'
-  gem 'factory_bot_rails'
-  gem 'launchy'
+  # gem 'database_cleaner', '~> 1.6'
+  # gem 'factory_bot_rails'
+  # gem 'launchy'
   gem 'rspec', '~> 3.7'
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
