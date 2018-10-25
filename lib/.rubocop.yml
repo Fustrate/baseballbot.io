@@ -15,6 +15,3 @@ Style/Documentation:
 
 Style/RescueStandardError:
   Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
