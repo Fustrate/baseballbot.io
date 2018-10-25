@@ -72,19 +72,18 @@ class Baseballbot
     end
 
     def active_game_threads
-      @active_game_threads ||= @db.exec(ACTIVE_GAME_THREADS_QUERY)
+      @db.exec(ACTIVE_GAME_THREADS_QUERY)
     end
 
     def unposted_game_threads(names)
       names = names.map(&:downcase)
 
-      next unless names.empty? || names.include?(row['name'].downcase)
-
-      @unposted_game_threads ||= @db.exec(UNPOSTED_GAME_THREADS_QUERY)
+      @db.exec(UNPOSTED_GAME_THREADS_QUERY)
+        .select { |row| names.empty? || names.include?(row['name'].downcase) }
     end
 
     def posted_game_threads
-      @posted_game_threads ||= @db.exec(POSTED_GAME_THREADS_QUERY)
+      @db.exec(POSTED_GAME_THREADS_QUERY)
     end
   end
 end
