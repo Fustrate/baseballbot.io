@@ -6,23 +6,26 @@ class Subreddit < ApplicationRecord
 
   belongs_to :account
 
+  has_many :subreddit_users, dependent: :destroy
+  has_many :users, through: :subreddit_users
+
   def url
-    "http://reddit.com/r/#{name}"
+    "https://reddit.com/r/#{name}"
   end
 
   def update_sidebar?
-    @update_sidebar ||= options['sidebar'].try(:[], 'enabled')
+    @update_sidebar ||= options.dig('sidebar', 'enabled')
   end
 
   def post_game_threads?
-    @post_game_threads ||= options['game_threads'].try(:[], 'enabled')
+    @post_game_threads ||= options.dig('game_threads', 'enabled')
   end
 
   def post_pregame?
-    @post_pregame ||= options['pregame'].try(:[], 'enabled')
+    @post_pregame ||= options.dig('pregame', 'enabled')
   end
 
   def post_postgame?
-    @post_postgame ||= options['postgame'].try(:[], 'enabled')
+    @post_postgame ||= options.dig('postgame', 'enabled')
   end
 end
