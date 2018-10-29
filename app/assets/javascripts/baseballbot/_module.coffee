@@ -4,6 +4,6 @@
 
 class window.Baseballbot extends Fustrate
   constructor: ->
-    super
+    super()
 
     moment.tz.setDefault moment.tz.guess()
