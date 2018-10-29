@@ -1,7 +1,6 @@
 GIT
-  remote: https://github.com/Fustrate/fustrate-rails
-  revision: 00499acad74581fe98c39457747274829a962d72
-  ref: 00499a
+  remote: https://github.com/Fustrate/fustrate-rails.git
+  revision: c44296378273b875544cfc3080d0c660457b2912
   specs:
     fustrate-rails (0.5.0)
       bourbon
@@ -9,13 +8,12 @@ GIT
       i18n-js
       jbuilder (>= 2.7)
       js-routes
-      modernizr-rails
       momentjs-rails
-      railties (>= 4, < 5.3)
+      railties (>= 5.2.0.rc1, < 5.3)
       sass (>= 3.4)
 
 GIT
-  remote: https://github.com/Fustrate/mlb_stats_api
+  remote: https://github.com/Fustrate/mlb_stats_api.git
   revision: df378961118c4882fb6893cbcdf3ef7c7196c028
   specs:
     mlb_stats_api (0.2.1)
@@ -230,7 +228,6 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     mock_redis (0.19.0)
-    modernizr-rails (2.7.1)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
     moneta (1.0.0)

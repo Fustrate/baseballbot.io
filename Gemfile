@@ -19,15 +19,13 @@ gem 'uglifier', '~> 4.0'
 # Faster json generation
 gem 'oj'
 
-gem 'fustrate-rails',
-    git: 'https://github.com/Fustrate/fustrate-rails',
-    ref: '00499a'
+gem 'fustrate-rails', github: 'Fustrate/fustrate-rails'
 
 # Use Unicorn as the app server
 gem 'unicorn'
 
 # Reddit interaction
-gem 'mlb_stats_api', git: 'https://github.com/Fustrate/mlb_stats_api' # '~> 0.1'
+gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api' # '~> 0.1'
 gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
 group :production do
