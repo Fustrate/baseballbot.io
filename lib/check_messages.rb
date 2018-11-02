@@ -3,9 +3,9 @@
 require_relative 'default_bot'
 
 class CheckMessages
-  TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i
-  LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i
-  GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/
+  TITLE = /(?:game ?(?:thread|chat|day)|gdt)/i.freeze
+  LINK = %r{(?:redd\.it|/comments|reddit\.com)/([a-z0-9]{6})}i.freeze
+  GID = /(?:gid_)?(\d{4}_\d{2}_\d{2}_[a-z]{6}_[a-z]{6}_\d)/.freeze
 
   def initialize
     @bot = DefaultBot.create(purpose: 'Messages', account: 'BaseballBot')

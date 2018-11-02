@@ -84,24 +84,24 @@ class Baseballbot
 
           {
             division_champ: row['divisionChamp'],
-            division_lead:  row['divisionLeader'],
-            elim_wildcard:  row['wildCardEliminationNumber'].to_i,
-            elim:           row['eliminationNumber'],
-            games_back:     row['divisionGamesBack'],
-            home_record:    records['home'],
-            last_ten:       records['lastTen'],
-            losses:         row['losses'],
-            percent:        row['leagueRecord']['pct'].to_f,
-            road_record:    records['away'],
-            run_diff:       row['runDifferential'],
-            streak:         row['streak']['streakCode'],
-            subreddit:      subreddit(row['team']['abbreviation']),
-            team:           row['team'],
+            division_lead: row['divisionLeader'],
+            elim_wildcard: row['wildCardEliminationNumber'].to_i,
+            elim: row['eliminationNumber'],
+            games_back: row['divisionGamesBack'],
+            home_record: records['home'],
+            last_ten: records['lastTen'],
+            losses: row['losses'],
+            percent: row['leagueRecord']['pct'].to_f,
+            road_record: records['away'],
+            run_diff: row['runDifferential'],
+            streak: row['streak']['streakCode'],
+            subreddit: subreddit(row['team']['abbreviation']),
+            team: row['team'],
             wildcard_champ: false,
-            wildcard_gb:    row['wildCardGamesBack'],
-            wildcard_rank:  row['wildCardRank'].to_i,
-            wildcard:       row['hasWildcard'] && !row['divisionLeader'],
-            wins:           row['wins']
+            wildcard_gb: row['wildCardGamesBack'],
+            wildcard_rank: row['wildCardRank'].to_i,
+            wildcard: row['hasWildcard'] && !row['divisionLeader'],
+            wins: row['wins']
           }.tap do |info|
             # Used for sorting teams in the standings. Lowest losing %, most
             # wins, least losses, and then fall back to three letter code

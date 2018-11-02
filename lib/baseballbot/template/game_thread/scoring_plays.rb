@@ -28,11 +28,11 @@ class Baseballbot
 
         def format_play(play)
           {
-            side:   play['about']['halfInning'] == 'top' ? 'T' : 'B',
-            team:   play['about']['halfInning'] == 'top' ? opponent : team,
+            side: play['about']['halfInning'] == 'top' ? 'T' : 'B',
+            team: play['about']['halfInning'] == 'top' ? opponent : team,
             inning: play['about']['inning'],
-            event:  play['result']['description'],
-            score:  [play['result']['homeScore'], play['result']['awayScore']]
+            event: play['result']['description'],
+            score: [play['result']['homeScore'], play['result']['awayScore']]
           }
         end
 
