@@ -17,7 +17,7 @@ class Baseballbot
       'BOS' => 'RedSox',
       'CHC' => 'CHICubs',
       'CIN' => 'Reds',
-      'CLE' => 'WahoosTipi',
+      'CLE' => 'ClevelandIndians',
       'COL' => 'ColoradoRockies',
       'CWS' => 'WhiteSox',
       'DET' => 'MotorCityKitties',
