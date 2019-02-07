@@ -7,14 +7,14 @@ gem 'rails', '5.2.2'
 
 gem 'pg'
 
-gem 'coffee-rails'
+gem 'coffee-rails', '~> 4.2'
 gem 'execjs'
 gem 'haml-rails'
 gem 'jbuilder'
 gem 'jquery-rails'
-gem 'sass-rails'
+gem 'sassc-rails', '~> 2.1'
 gem 'sprockets-rails'
-gem 'uglifier', '~> 4.0'
+gem 'uglifier', '~> 4.1'
 
 # Faster json generation
 gem 'oj'
