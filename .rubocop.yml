@@ -3,7 +3,7 @@ AllCops:
     - bin/**/*
     - db/**/*
     - db/schema.rb
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
   TargetRailsVersion: 5.2
 
 Rails:
