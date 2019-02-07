@@ -1,0 +1,32 @@
+{
+    "[coffeescript]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "[erb]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "[haml]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "[javascript]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "[ruby]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "[scss]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "[yaml]": {
+        "editor.tabSize": 2,
+        "editor.rulers": [80]
+    },
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
+}
