@@ -3,21 +3,7 @@
 Rails.application.routes.draw do
   root to: 'home#home'
 
-  namespace :accounts do
-    get :authenticate
+  Dir[Rails.root.join('config', 'routes', '*.rb')].sort.each do |file|
+    instance_eval File.read(file)
   end
-
-  resources :game_threads
-  resources :subreddits, only: %i[index show]
-  resources :templates, only: %i[show]
-
-  get :gameday, to: 'home#gameday'
-
-  namespace :discord do
-    get 'reddit-callback'
-    get 'debug'
-  end
-
-  # Temporary? Ha.
-  get :gamechats, to: 'game_threads#index'
 end
