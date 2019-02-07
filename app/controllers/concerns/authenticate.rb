@@ -5,7 +5,7 @@ module Authenticate
   extend ActiveSupport::Concern
 
   included do
-    before_action :require_login, :setup_current_user, :add_honeybadger_context
+    before_action :setup_current_user, :add_honeybadger_context
   end
 
   def add_honeybadger_context
