@@ -3,10 +3,10 @@
 require 'sorcery/engine'
 
 # Other available submodules are:
-#   :user_activation, :http_basic_auth, :external
+#   :http_basic_auth, :external
 Rails.application.config.sorcery.submodules = %i[
   remember_me reset_password activity_logging brute_force_protection
-  session_timeout
+  session_timeout user_activation
 ]
 
 # Here you can configure each submodule's features.
