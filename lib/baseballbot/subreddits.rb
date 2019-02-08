@@ -50,7 +50,7 @@ class Baseballbot
     protected
 
     def load_subreddits
-      @db.exec(BOT_SUBREDDITS_QUERY)
+      db.exec(BOT_SUBREDDITS_QUERY)
         .map { |row| [row['name'].downcase, process_subreddit_row(row)] }
         .to_h
     end

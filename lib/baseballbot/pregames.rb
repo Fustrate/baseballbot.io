@@ -23,7 +23,7 @@ class Baseballbot
     def post_pregame_threads!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(UNPOSTED_PREGAMES_QUERY).each do |row|
+      db.exec(UNPOSTED_PREGAMES_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         post_pregame_thread!(

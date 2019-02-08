@@ -29,7 +29,7 @@ class Baseballbot
     protected
 
     def update_token_expiration!(new_expiration)
-      @db.exec_params(
+      db.exec_params(
         'UPDATE accounts
         SET access_token = $1, expires_at = $2
         WHERE refresh_token = $3',
@@ -42,7 +42,7 @@ class Baseballbot
     end
 
     def load_accounts
-      @db.exec('SELECT * FROM accounts')
+      db.exec('SELECT * FROM accounts')
         .map { |row| [row['id'], process_account_row(row)] }
         .to_h
     end

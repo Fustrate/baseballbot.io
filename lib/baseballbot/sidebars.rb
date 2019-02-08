@@ -12,7 +12,7 @@ class Baseballbot
     def update_sidebars!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(SUBREDDITS_WITH_SIDEBARS_QUERY).each do |row|
+      db.exec(SUBREDDITS_WITH_SIDEBARS_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         update_sidebar! subreddits[row['name']]

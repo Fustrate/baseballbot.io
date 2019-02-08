@@ -20,7 +20,7 @@ class Baseballbot
     def post_off_day_threads!(names: [])
       names = names.map(&:downcase)
 
-      @db.exec(UNPOSTED_OFF_DAY_QUERY).each do |row|
+      db.exec(UNPOSTED_OFF_DAY_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
         post_off_day_thread! name: row['name']
@@ -42,7 +42,7 @@ class Baseballbot
     def off_day_check_was_run!(subreddit)
       subreddit.options['off_day']['last_run_at'] = Time.now.strftime('%F %T')
 
-      @db.exec_params(
+      db.exec_params(
         'UPDATE subreddits SET options = $1 WHERE id = $2',
         [JSON.dump(subreddit.options), subreddit.id]
       )
