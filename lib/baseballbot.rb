@@ -58,9 +58,7 @@ class Baseballbot
       raise 'BaseballBot was not initialized with a reddit configuration.'
     end
 
-    return @client if @client
-
-    @client = Redd::APIClient.new redd_auth_strategy, limit_time: 0
+    @client ||= Redd::APIClient.new redd_auth_strategy, limit_time: 0
   end
 
   def db

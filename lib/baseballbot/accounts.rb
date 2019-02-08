@@ -8,18 +8,18 @@ class Baseballbot
       unless @current_account&.name == name
         @current_account = accounts.values.find { |acct| acct.name == name }
 
-        @client.access = @current_account.access
+        client.access = @current_account.access
       end
 
       refresh_access! if @current_account.access.expired?
     end
 
     def refresh_access!
-      @client.refresh
+      client.refresh
 
-      return if @client.access.to_h[:error]
+      return if client.access.to_h[:error]
 
-      new_expiration = Time.now + @client.access.expires_in
+      new_expiration = Time.now + client.access.expires_in
 
       update_token_expiration!(new_expiration)
 
@@ -34,9 +34,9 @@ class Baseballbot
         SET access_token = $1, expires_at = $2
         WHERE refresh_token = $3',
         [
-          @client.access.access_token,
+          client.access.access_token,
           new_expiration.strftime('%F %T'),
-          @client.access.refresh_token
+          client.access.refresh_token
         ]
       )
     end
@@ -55,7 +55,7 @@ class Baseballbot
       expires_at = Chronic.parse row['expires_at']
 
       Redd::Models::Access.new(
-        @client,
+        client,
         access_token: row['access_token'],
         refresh_token: row['refresh_token'],
         scope: row['scope'][1..-2].split(','),
