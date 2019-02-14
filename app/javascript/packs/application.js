@@ -9,4 +9,6 @@
 
 // console.log('Hello World from Webpacker')
 
-import 'baseballbot';
+import BaseballBot from '../baseballbot';
+
+BaseballBot.start();

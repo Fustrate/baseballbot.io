@@ -2,6 +2,10 @@ import Fustrate from '../fustrate/fustrate'
 import moment from 'moment-timezone'
 
 class BaseballBot extends Fustrate {
+  static start() {
+    Fustrate.start('BaseballBot');
+  }
+
   initialize() {
     super.initialize()
 
@@ -10,7 +14,5 @@ class BaseballBot extends Fustrate {
 }
 
 window.BaseballBot = BaseballBot;
-
-Fustrate.start('BaseballBot');
 
 export default BaseballBot
