@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Fustrate/fustrate-rails.git
-  revision: f992e07721f1e6be4a7d2cd6fc6b12846c58b80e
+  revision: 9ae100a52716d36f2e0ff20514b1a79baf90d8e5
   specs:
     fustrate-rails (0.5.0)
       coffee-script (>= 2.4)
@@ -76,7 +76,7 @@ GEM
     authority (3.3.0)
       activesupport (>= 3.0.0)
     bcrypt (3.1.12)
-    better_errors (2.5.0)
+    better_errors (2.5.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
@@ -320,7 +320,7 @@ GEM
       rspec-mocks (~> 3.8.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
-    rubocop (0.63.1)
+    rubocop (0.64.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
