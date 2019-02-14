@@ -9,10 +9,11 @@
 !/log/.keep
 /tmp
 /config/database.yml
-/config/secrets.yml
 /config/skylight.yml
 
+# Pro assets can't be uploaded to the repo
 /app/assets/fonts/FontAwesome/*
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+.DS_Store
