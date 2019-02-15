@@ -99,7 +99,7 @@ class Fustrate {
       processData: false,
       contentType: false,
       dataType: 'script',
-      beforeSend: xhr => Rails.CSRFProtection(xhr),
+      beforeSend: Rails.CSRFProtection,
     });
   }
 
