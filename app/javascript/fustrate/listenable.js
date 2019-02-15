@@ -4,21 +4,21 @@ class Listenable {
   }
 
   on(eventNames, callback) {
-    for (let eventName of eventNames.split(' ')) {
+    eventNames.split(' ').forEach((eventName) => {
       if (!this.listeners[eventName]) {
         this.listeners[eventName] = [];
       }
 
       this.listeners[eventName].push(callback);
-    }
+    });
 
     return this;
   }
 
   off(eventNames) {
-    for (let eventName of eventNames.split(' ')) {
+    eventNames.split(' ').forEach((eventName) => {
       this.listeners[eventName] = [];
-    }
+    });
 
     return this;
   }
@@ -28,12 +28,12 @@ class Listenable {
       return this;
     }
 
-    for (let event of this.listeners[name]) {
-      event.apply(this, args);
-    }
+    this.listeners[name].forEach((callback) => {
+      callback.apply(this, args);
+    });
 
     return this;
   }
 }
 
-export default Listenable
+export default Listenable;

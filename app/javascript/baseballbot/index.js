@@ -1,12 +1,13 @@
-import Fustrate from '../fustrate/fustrate'
-import moment from 'moment-timezone'
+import moment from 'moment-timezone';
+
+import Fustrate from '../fustrate/fustrate';
 
 class BaseballBot extends Fustrate {
   initialize() {
-    super.initialize()
+    super.initialize();
 
-    moment.tz.setDefault(moment.tz.guess())
+    moment.tz.setDefault(moment.tz.guess());
   }
 }
 
-export default BaseballBot
+export default BaseballBot;

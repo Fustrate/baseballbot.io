@@ -1,14 +1,16 @@
-import BasicObject from './basic_object'
+import $ from 'jquery';
+import moment from 'moment-timezone';
+
+import Fustrate from './fustrate';
+import BasicObject from './basic_object';
 
 class Record extends BasicObject {
-  static get classname() {
-    return null;
-  }
+  static get classname() { return null; }
 
   constructor(data) {
     super(data);
 
-    this._loaded = false;
+    this.isLoaded = false;
 
     if (typeof data === 'number' || typeof data === 'string') {
       // If the parameter was a number or string, it's likely the record ID
@@ -20,52 +22,49 @@ class Record extends BasicObject {
   }
 
   reload({ force } = {}) {
-    if (this._loaded && !force) {
+    if (this.isLoaded && !force) {
       return $.when();
     }
 
-    return $.get(this.path({ format: 'json' })).done(response => {
+    return $.get(this.path({ format: 'json' })).done((response) => {
       this.extractFromData(response);
 
-      this._loaded = true;
+      this.isLoaded = true;
     });
   }
 
   update(attributes = {}) {
-    var url;
+    let url;
 
     if (this.id) {
       url = this.path({ format: 'json' });
     } else {
       this.extractFromData(attributes);
 
-      url = Routes[this.constructor.create_path]({ format: 'json' });
+      url = this.constructor.create_path({ format: 'json' });
     }
 
-    if (this.community && attributes.community_id === void 0) {
+    if (this.community && attributes.community_id === undefined) {
       attributes.community_id = this.community.id;
     }
 
-    var formData = this._toFormData(
-      new FormData,
+    const formData = this.toFormData(
+      new FormData(),
       attributes,
-      this.constructor.paramKey()
+      this.constructor.paramKey(),
     );
 
     return $.ajax({
-      url: url,
+      url,
       data: formData,
       processData: false,
       contentType: false,
       method: this.id ? 'PATCH' : 'POST',
       xhr: () => {
-        var xhr;
-        xhr = $.ajaxSettings.xhr();
-        xhr.upload.onprogress = e => {
-          return this.trigger('upload_progress', e);
-        };
+        const xhr = $.ajaxSettings.xhr();
+        xhr.upload.onprogress = e => this.trigger('upload_progress', e);
         return xhr;
-      }
+      },
     }).done(this.extractFromData);
   }
 
@@ -74,36 +73,36 @@ class Record extends BasicObject {
   }
 
   _toFormData(data, object, namespace) {
-    for (let field of Object.getOwnPropertyNames(object)) {
+    Object.getOwnPropertyNames(object).forEach((field) => {
       if (!(typeof object[field] !== 'undefined')) {
-        continue;
+        return;
       }
 
-      let key = namespace ? `${namespace}[${field}]` : field;
+      const key = namespace ? `${namespace}[${field}]` : field;
 
       if (object[field] && typeof object[field] === 'object') {
-        this._appendObjectToFormData(data, key, object[field]);
+        this.appendObjectToFormData(data, key, object[field]);
       } else if (typeof object[field] === 'boolean') {
         data.append(key, Number(object[field]));
-      } else if (object[field] !== null && object[field] !== void 0) {
+      } else if (object[field] !== null && object[field] !== undefined) {
         data.append(key, object[field]);
       }
-    }
+    });
 
     return data;
   }
 
-  _appendObjectToFormData(data, key, value) {
+  appendObjectToFormData(data, key, value) {
     if (value instanceof Array) {
-      for (let array_item of value) {
-        data.append(`${key}[]`, array_item)
-      }
+      value.forEach((item) => {
+        data.append(`${key}[]`, item);
+      });
     } else if (value instanceof File) {
       data.append(key, value);
     } else if (moment.isMoment(value)) {
       data.append(key, value.format());
     } else if (!(value instanceof Fustrate.Record)) {
-      this._toFormData(data, value, key);
+      this.toFormData(data, value, key);
     }
   }
 
@@ -112,9 +111,9 @@ class Record extends BasicObject {
   }
 
   static create(attributes) {
-    var record = new this;
+    const record = new this();
 
-    return $.Deferred(deferred => {
+    return $.Deferred((deferred) => {
       record.update(attributes).fail(deferred.reject).done(() => {
         this.deferred.resolve(record);
       });
@@ -122,5 +121,4 @@ class Record extends BasicObject {
   }
 }
 
-export default Record
-
+export default Record;

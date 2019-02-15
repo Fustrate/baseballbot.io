@@ -1,4 +1,6 @@
-import Listenable from './listenable'
+import $ from 'jquery';
+
+import Listenable from './listenable';
 
 class Component extends Listenable {
   static initialize() {
@@ -6,4 +8,4 @@ class Component extends Listenable {
   }
 }
 
-export default Component
+export default Component;

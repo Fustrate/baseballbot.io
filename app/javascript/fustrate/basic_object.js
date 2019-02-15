@@ -1,5 +1,7 @@
-import Listenable from './listenable'
-import moment from 'moment'
+import moment from 'moment';
+import $ from 'jquery';
+
+import Listenable from './listenable';
 
 class BasicObject extends Listenable {
   constructor(data) {
@@ -12,12 +14,12 @@ class BasicObject extends Listenable {
   // Formats a few common attributes as dates with moment.js
   extractFromData(data) {
     if (!data) {
-      return
+      return;
     }
 
-    for (let key in data) {
+    Object.keys(data).forEach((key) => {
       this[key] = data[key];
-    }
+    });
 
     if (this.date) {
       this.date = moment(this.date);
@@ -32,18 +34,9 @@ class BasicObject extends Listenable {
     }
   }
 
-  // Instantiate a new object of type klass for each item in items
-  _createList(items, klass, additional_attributes = {}) {
-    return items.map(item => {
-      return new klass($.extend(true, {}, item, additional_attributes));
-    })
-  }
-
-  static buildList(items, additional_attributes = {}) {
-    return items.map(item => {
-      return new this($.extend(true, {}, item, additional_attributes));
-    })
+  static buildList(items, attributes = {}) {
+    return items.map(item => new this($.extend(true, {}, item, attributes)));
   }
 }
 
-export default BasicObject
+export default BasicObject;

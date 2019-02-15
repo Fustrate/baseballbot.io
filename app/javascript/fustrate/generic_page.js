@@ -1,37 +1,37 @@
-import {Success, Warning, Info } from './components/flash'
+import $ from 'jquery';
 
 class GenericPage {
   constructor(root) {
     this.root = root;
 
-    this._reloadUIElements();
+    this.reloadUIElements();
     this.addEventListeners();
     this.initialize();
   }
 
   include(concern) {
-    var instance = new concern;
+    const instance = new concern();
 
-    for (let name of Object.getOwnPropertyNames(instance.constructor)) {
+    Object.getOwnPropertyNames(instance.constructor).forEach((key) => {
       if (key === 'included' || key === 'initialize') {
-        continue;
+        return;
       }
 
       if (!this.constructor[key]) {
         this.constructor[key] = instance.constructor[key];
       }
-    }
+    });
 
     // Assign properties to the prototype
-    for (let key in concern.prototype) {
+    Object.getOwnPropertyNames(concern.prototype).forEach((key) => {
       if (key === 'included' || key === 'initialize') {
-        continue;
+        return;
       }
 
       if (!this[key]) {
         this[key] = concern.prototype[key].bind(this);
       }
-    }
+    });
 
     if (instance.included != null) {
       instance.included.apply(this);
@@ -39,43 +39,31 @@ class GenericPage {
   }
 
   addEventListeners() {
-    for (let name in this) {
+    Object.getOwnPropertyNames(this).forEach((name) => {
       // Edge returns true for /one.+two/.test('onetwo'), 2017-10-21
       if (/^add..*EventListeners$/.test(name)) {
         this[name].apply(this);
       }
-    }
+    });
   }
 
   // Once the interface is loaded and the event listeners are active, run any
   // other tasks.
   initialize() {}
 
-  _reloadUIElements() {
+  reloadUIElements() {
     this.fields = {};
     this.buttons = {};
 
     $('[data-field]', this.root).not('.modal [data-field]')
-      .each(i, element => {
+      .each((i, element) => {
         this.fields[element.dataset.field] = $(element);
       });
 
     $('[data-button]', this.root).not('.modal [data-button]')
-      .each(i, element => {
+      .each((i, element) => {
         this.buttons[element.dataset.button] = $(element);
       });
-  }
-
-  flashSuccess(message, {icon} = {}) {
-    new Success(message, { icon: icon });
-  }
-
-  flashWarning(message, {icon} = {}) {
-    new Warning(message, { icon: icon });
-  }
-
-  flashInfo(message, {icon} = {}) {
-    new Info(message, { icon: icon });
   }
 
   setHeader(text) {
@@ -84,10 +72,12 @@ class GenericPage {
 
   // Calls all methods matching /refresh.+/
   refresh() {
-    for (let name of Object.getOwnPropertyNames(this)) {
+    Object.getOwnPropertyNames(this).forEach((name) => {
       if (name.indexOf('refresh') === 0 && name !== 'refresh') {
         this[name]();
       }
-    }
+    });
   }
-};
+}
+
+export default GenericPage;

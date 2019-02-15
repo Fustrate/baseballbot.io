@@ -1,31 +1,27 @@
 // Replicate a few common prototype methods on default objects
-import $ from 'jquery'
-import moment from 'moment'
+import $ from 'jquery';
+import moment from 'moment-timezone';
 
 Array.prototype.compact = (strings = true) => {
   this.forEach((el, index) => {
-    if (!(el === void 0 || el === null || (strings && el === ''))) {
+    if (!(el === undefined || el === null || (strings && el === ''))) {
       return;
     }
 
-    return this.splice(index, 1);
+    this.splice(index, 1);
   });
 
   return this;
 };
 
-Array.prototype.first = () => {
-  return this[0];
-};
+Array.prototype.first = () => this[0];
 
-Array.prototype.last = () => {
-  return this[this.length - 1];
-};
+Array.prototype.last = () => this[this.length - 1];
 
 Array.prototype.peek = Array.prototype.last;
 
-Array.prototype.remove = object => {
-  var index = this.indexOf(object);
+Array.prototype.remove = (object) => {
+  const index = this.indexOf(object);
 
   if (index !== -1) {
     this.splice(index, 1);
@@ -46,13 +42,13 @@ Array.prototype.toSentence = () => {
 };
 
 Function.prototype.debounce = (delay = 250) => {
-  var timeout = null;
-  var self = this;
+  let timeout = null;
+  const self = this;
 
   return (...args) => {
-    var context = this;
+    const context = this;
 
-    var delayedFunc = () => {
+    const delayedFunc = () => {
       self.apply(context, args);
 
       timeout = null;
@@ -62,7 +58,7 @@ Function.prototype.debounce = (delay = 250) => {
       clearTimeout(timeout);
     }
 
-    return timeout = setTimeout(delayedFunc, delay);
+    timeout = setTimeout(delayedFunc, delay);
   };
 };
 
@@ -74,9 +70,9 @@ Function.prototype.define = (name, methods) => {
 Number.prototype.accountingFormat = () => {
   if (this < 0) {
     return `($${(this * -1).toFixed(2)})`;
-  } else {
-    return `$${this.toFixed(2)}`;
   }
+
+  return `$${this.toFixed(2)}`;
 };
 
 Number.prototype.bytesToString = () => {
@@ -93,9 +89,9 @@ Number.prototype.bytesToString = () => {
 };
 
 Number.prototype.ordinalize = () => {
-  var s, v;
-  s = ['th', 'st', 'nd', 'rd'];
-  v = this % 100;
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = this % 100;
+
   return this + (s[(v - 20) % 10] || s[v] || 'th');
 };
 
@@ -107,50 +103,55 @@ String.prototype.capitalize = () => {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-String.prototype.dasherize = () => {
-  return this.replace(/_/g, '-');
-};
+String.prototype.dasherize = () => this.replace(/_/g, '-');
 
 String.prototype.humanize = () => {
-  return this.replace(/[a-z][A-Z]/, (match) => {
-    return `${match[0]} ${match[1]}`;
-  }).replace('_', ' ').toLowerCase();
+  return this
+    .replace(/[a-z][A-Z]/, match => `${match[0]} ${match[1]}`)
+    .replace('_', ' ')
+    .toLowerCase();
 };
 
-String.prototype.isBlank = () => {
-  return this.trim() === '';
-};
+String.prototype.isBlank = () => this.trim() === '';
 
+// Turn unwanted chars into the separator,
+// No more than one of the separator in a row,
+// Remove leading/trailing separator.
 String.prototype.parameterize = () => {
-  return this.replace(/[a-z][A-Z]/, (match) => {
-    return `${match[0]}_${match[1]}`;
-  }).replace(/[^a-zA-Z0-9\-_]+/, '-').replace(/\-{2,}/, '-').replace(/^\-|\-$/, '').toLowerCase(); // Turn unwanted chars into the separator // No more than one of the separator in a row. // Remove leading/trailing separator.
+  return this
+    .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
+    .replace(/[^a-zA-Z0-9\-_]+/, '-')
+    .replace(/-{2,}/, '-')
+    .replace(/^-|-$/, '')
+    .toLowerCase();
 };
 
 String.prototype.phoneFormat = () => {
   if (/^1?\d{10}$/.test(this)) {
     return this.replace(/1?(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-  } else if (/^\d{7}$/.test(this)) {
-    return this.replace(/(\d{3})(\d{4})/, '$1-$2');
-  } else {
-    return this;
   }
+
+  if (/^\d{7}$/.test(this)) {
+    return this.replace(/(\d{3})(\d{4})/, '$1-$2');
+  }
+
+  return this;
 };
 
 // This is far too simple for most cases, but it works for the few things we need
 String.prototype.pluralize = () => {
   if (this[this.length - 1] === 'y') {
-    return this.substr(0, this.length - 1) + 'ies';
+    return `${this.substr(0, this.length - 1)}ies`;
   }
-  return this + 's';
+  return `${this}s`;
 };
 
 String.prototype.presence = () => {
   if (this.isBlank()) {
     return null;
-  } else {
-    return this;
   }
+
+  return this;
 };
 
 String.prototype.strip = () => {
@@ -158,15 +159,16 @@ String.prototype.strip = () => {
 };
 
 String.prototype.titleize = () => {
-  return this.replace(/_/g, ' ').replace(/\b[a-z]/g, char => {
-    return char.toUpperCase();
-  });
+  return this
+    .replace(/_/g, ' ')
+    .replace(/\b[a-z]/g, char => char.toUpperCase());
 };
 
 String.prototype.underscore = () => {
-  return this.replace(/[a-z][A-Z]/, match => {
-    return `${match[0]}_${match[1]}`;
-  }).replace('::', '/').toLowerCase();
+  return this
+    .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
+    .replace('::', '/')
+    .toLowerCase();
 };
 
 $.fn.outerHTML = () => {
