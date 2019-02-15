@@ -14,18 +14,20 @@ default: &default
   cache_manifest: false
 
   extensions:
-    - .js
-    - .sass
-    - .scss
     - .css
-    - .module.sass
-    - .module.scss
-    - .module.css
-    - .png
-    - .svg
+    - .erb
     - .gif
     - .jpeg
     - .jpg
+    - .js
+    - .js.erb
+    - .module.css
+    - .module.sass
+    - .module.scss
+    - .png
+    - .sass
+    - .scss
+    - .svg
 
 development:
   <<: *default
