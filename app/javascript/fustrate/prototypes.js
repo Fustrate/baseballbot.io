@@ -140,16 +140,20 @@ String.prototype.presence = () => (this.isBlank() ? null : this);
 
 String.prototype.strip = () => this.replace(/^\s+|\s+$/g, '');
 
-String.prototype.titleize = () => this
-  .replace(/_/g, ' ')
-  .replace(/\b[a-z]/g, char => char.toUpperCase());
+function titleize() {
+  return this
+    .replace(/_/g, ' ')
+    .replace(/\b[a-z]/g, char => char.toUpperCase());
+}
+
+String.prototype.titleize = titleize;
 
 String.prototype.underscore = () => this
   .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
   .replace('::', '/')
   .toLowerCase();
 
-$.fn.outerHTML = () => {
+function outerHTML() {
   if (!this.length) {
     return '';
   }
@@ -159,7 +163,9 @@ $.fn.outerHTML = () => {
   }
 
   return $('<div>').append(this[0].clone()).remove().html();
-};
+}
+
+$.fn.outerHTML = outerHTML;
 
 moment.fn.toHumanDate = (time = false) => {
   const year = this.year() !== moment().year() ? '/YY' : '';

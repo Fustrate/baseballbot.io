@@ -1,19 +1,17 @@
 - title "/r/#{@subreddit.name}"
 - html_data subreddit: @subreddit.id
 
-%h4 /r/#{@subreddit.name}
+%h1.text-center /r/#{@subreddit.name}
 
 .grid
   .medium-6.columns
-    %h5.text-center Templates
+    %h2.text-center Templates
 
     .panel
-      %ul
-        - @subreddit.templates.each do |template|
-          %li= link_to "» #{template.type.titleize}", template_path(template)
+      %ul{ 'data-field' => 'templates' }
 
   .medium-6.columns
-    %h5.text-center Settings
+    %h2.text-center Settings
 
     .panel
       %ul.disc{ 'data-field' => 'options' }

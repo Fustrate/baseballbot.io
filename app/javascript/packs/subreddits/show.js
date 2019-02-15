@@ -1,6 +1,7 @@
 import BaseballBot from '../../baseballbot';
 import GenericPage from '../../fustrate/generic_page';
 import Subreddit from '../../baseballbot/subreddit';
+import Template from '../../baseballbot/template';
 
 class ShowSubreddit extends GenericPage {
   initialize() {
@@ -13,6 +14,7 @@ class ShowSubreddit extends GenericPage {
 
   refresh() {
     this.refreshSettings();
+    this.refreshTemplates();
   }
 
   refreshSettings() {
@@ -29,9 +31,9 @@ class ShowSubreddit extends GenericPage {
     }
 
     if (this.subreddit.options.pregame && this.subreddit.options.pregame.enabled) {
-      //   %li
-      //     Pregame Threads
-      //     = post_at_format @subreddit.options['pregame']['post_at']
+      const postAt = this.subreddit.options.pregame.post_at;
+
+      listItems.push(`<li>Pregame Threads ${this.constructor.postAtFormat(postAt)}</li>`);
     }
 
     if (this.subreddit.options.postgame && this.subreddit.options.postgame.enabled) {
@@ -39,6 +41,14 @@ class ShowSubreddit extends GenericPage {
     }
 
     this.fields.options.empty().append(listItems);
+  }
+
+  refreshTemplates() {
+    const listItems = this.subreddit.templates
+      .map(template => new Template(template))
+      .map(template => `<li>${BaseballBot.linkTo(template.type.titleize(), template.path())}</li>`);
+
+    this.fields.templates.empty().append(listItems);
   }
 
   static postAtFormat(postAt) {
