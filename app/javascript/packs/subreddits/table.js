@@ -34,23 +34,27 @@ class SubredditsTable extends GenericTable {
     $('.account', row).text(subreddit.account.name);
 
     if (subreddit.options.sidebar && subreddit.options.sidebar.enabled) {
-      $('.sidebar', row).text('✓');
+      $('.sidebar', row).html(BaseballBot.icon('check'));
     }
 
     if (subreddit.options.game_threads && subreddit.options.game_threads.enabled) {
       const postAt = subreddit.options.game_threads.post_at;
 
-      $('.game_threads', row).text('✓').attr('title', Subreddit.postAtFormat(postAt));
+      $('.game_threads', row)
+        .html(BaseballBot.icon('check'))
+        .attr('title', Subreddit.postAtFormat(postAt));
     }
 
     if (subreddit.options.pregame && subreddit.options.pregame.enabled) {
       const postAt = subreddit.options.pregame.post_at;
 
-      $('.pregames', row).text('✓').attr('title', Subreddit.postAtFormat(postAt));
+      $('.pregames', row)
+        .html(BaseballBot.icon('check'))
+        .attr('title', Subreddit.postAtFormat(postAt));
     }
 
     if (subreddit.options.postgame && subreddit.options.postgame.enabled) {
-      $('.postgames', row).text('✓');
+      $('.postgames', row).html(BaseballBot.icon('check'));
     }
 
     return row;
