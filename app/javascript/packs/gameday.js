@@ -11,4 +11,4 @@
 
 import Gameday from '../gameday';
 
-Gameday();
+Gameday.start();

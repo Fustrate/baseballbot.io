@@ -6,16 +6,24 @@ import GameCard from './game_card';
 const gdx = 'http://gdx.mlb.com/components/game/mlb';
 
 class Gameday {
-  constructor() {
+  static start() {
+    Gameday.instance = new this();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      Gameday.instance.initialize();
+    });
+  }
+
+  initialize() {
     this.loading = $('.loading');
 
     this.date = moment();
 
-    this.reloadGameInfo(this.date, this.createGameCards);
+    // this.reloadGameInfo(this.date, this.createGameCards);
 
-    window.setInterval(() => {
-      this.reloadGameInfo(this.date, this.updateGameCards);
-    }, 15000);
+    // window.setInterval(() => {
+    //   this.reloadGameInfo(this.date, this.updateGameCards);
+    // }, 15000);
   }
 
   createGameCards(gameNodes) {
@@ -24,7 +32,7 @@ class Gameday {
     const spacer = document.createElement('div');
     spacer.className = 'card-spacer';
 
-    gameNodes.forEach((element) => {
+    gameNodes.each((index, element) => {
       nodes.push((new GameCard(this.constructor.elementAttributes(element))).render());
     });
 
@@ -43,18 +51,6 @@ class Gameday {
     });
   }
 
-  static elementAttributes(element) {
-    const attributes = {};
-
-    element.attributes.forEach((attribute) => {
-      if (attribute.specified) {
-        attributes[attribute.name] = attribute.value;
-      }
-    });
-
-    return attributes;
-  }
-
   reloadGameInfo(date, onLoad = () => {}) {
     this.loading.show();
 
@@ -66,6 +62,20 @@ class Gameday {
       this.loading.hide();
     });
   }
+
+  static elementAttributes(element) {
+    const attributes = {};
+
+    element.attributes.forEach((attribute) => {
+      if (attribute.specified) {
+        attributes[attribute.name] = attribute.value;
+      }
+    });
+
+    return attributes;
+  }
 }
+
+window.Gameday = Gameday;
 
 export default Gameday;
