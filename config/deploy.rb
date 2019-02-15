@@ -17,7 +17,7 @@ set :linked_files, %w[
 ]
 
 set :linked_dirs, %w[
-  assets/fonts log tmp/pids tmp/cache tmp/sockets public/system
+  app/assets/fonts log tmp/pids tmp/cache tmp/sockets public/system
 ]
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
