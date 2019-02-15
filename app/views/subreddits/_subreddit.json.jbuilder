@@ -7,3 +7,7 @@ unless local_assigns[:templates] == false
     json.call template, :id, :type, :body
   end
 end
+
+json.abbreviation @api.team(subreddit.team_id).abbreviation
+
+json.account subreddit.account, :id, :name

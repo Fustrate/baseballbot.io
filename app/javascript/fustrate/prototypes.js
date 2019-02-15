@@ -1,8 +1,8 @@
 // Replicate a few common prototype methods on default objects
 import $ from 'jquery';
-import moment from 'moment-timezone';
+import moment from 'moment';
 
-Array.prototype.compact = (strings = true) => {
+function arrayCompact(strings = true) {
   this.forEach((el, index) => {
     if (!(el === undefined || el === null || (strings && el === ''))) {
       return;
@@ -12,23 +12,25 @@ Array.prototype.compact = (strings = true) => {
   });
 
   return this;
-};
+}
 
-Array.prototype.first = () => this[0];
+function arrayFirst() {
+  return this[0];
+}
 
-Array.prototype.last = () => this[this.length - 1];
+function arrayLast() {
+  return this[this.length - 1];
+}
 
-Array.prototype.peek = Array.prototype.last;
-
-Array.prototype.remove = (object) => {
+function arrayRemove(object) {
   const index = this.indexOf(object);
 
   if (index !== -1) {
     this.splice(index, 1);
   }
-};
+}
 
-Array.prototype.toSentence = () => {
+function arrayToSentence() {
   switch (this.length) {
     case 0:
       return '';
@@ -39,9 +41,16 @@ Array.prototype.toSentence = () => {
     default:
       return `${this.slice(0, -1).join(', ')}, and ${this[this.length - 1]}`;
   }
-};
+}
 
-Function.prototype.debounce = (delay = 250) => {
+Array.prototype.compact = arrayCompact;
+Array.prototype.first = arrayFirst;
+Array.prototype.last = arrayLast;
+Array.prototype.peek = arrayLast;
+Array.prototype.remove = arrayRemove;
+Array.prototype.toSentence = arrayToSentence;
+
+function functionDebounce(delay = 250) {
   let timeout = null;
   const self = this;
 
@@ -60,20 +69,25 @@ Function.prototype.debounce = (delay = 250) => {
 
     timeout = setTimeout(delayedFunc, delay);
   };
-};
+}
 
 // Used to define getters and setters
-Function.prototype.define = (name, methods) => Object.defineProperty(this.prototype, name, methods);
+function functionDefine(name, methods) {
+  Object.defineProperty(this.prototype, name, methods)
+}
 
-Number.prototype.accountingFormat = () => {
+Function.prototype.debounce = functionDebounce;
+Function.prototype.define = functionDefine;
+
+function numberAccountingFormat() {
   if (this < 0) {
     return `($${(this * -1).toFixed(2)})`;
   }
 
   return `$${this.toFixed(2)}`;
-};
+}
 
-Number.prototype.bytesToString = () => {
+function numberBytesToString() {
   if (this < 1000) {
     return `${this} B`;
   }
@@ -84,39 +98,56 @@ Number.prototype.bytesToString = () => {
     return `${(this / 1000000).truncate()} MB`;
   }
   return `${(this / 1000000000).truncate()} GB`;
-};
+}
 
-Number.prototype.ordinalize = () => {
+function numberOrdinalize() {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = this % 100;
 
   return this + (s[(v - 20) % 10] || s[v] || 'th');
-};
+}
 
-Number.prototype.truncate = (digits = 2) => this.toFixed(digits).replace(/\.?0+$/, '');
+function numberTruncate(digits = 2) {
+  return this.toFixed(digits).replace(/\.?0+$/, '');
+}
 
-String.prototype.capitalize = () => this.charAt(0).toUpperCase() + this.slice(1);
+Number.prototype.accountingFormat = numberAccountingFormat;
+Number.prototype.bytesToString = numberBytesToString;
+Number.prototype.ordinalize = numberOrdinalize;
+Number.prototype.truncate = numberTruncate;
 
-String.prototype.dasherize = () => this.replace(/_/g, '-');
+function stringCapitalize() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
-String.prototype.humanize = () => this
-  .replace(/[a-z][A-Z]/, match => `${match[0]} ${match[1]}`)
-  .replace('_', ' ')
-  .toLowerCase();
+function stringDasherize() {
+  return this.replace(/_/g, '-');
+}
 
-String.prototype.isBlank = () => this.trim() === '';
+function stringHumanize() {
+  return this
+    .replace(/[a-z][A-Z]/, match => `${match[0]} ${match[1]}`)
+    .replace('_', ' ')
+    .toLowerCase();
+}
+
+function stringIsBlank() {
+  return this.trim() === '';
+}
 
 // Turn unwanted chars into the separator,
 // No more than one of the separator in a row,
 // Remove leading/trailing separator.
-String.prototype.parameterize = () => this
-  .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
-  .replace(/[^a-zA-Z0-9\-_]+/, '-')
-  .replace(/-{2,}/, '-')
-  .replace(/^-|-$/, '')
-  .toLowerCase();
+function stringParameterize() {
+  return this
+    .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
+    .replace(/[^a-zA-Z0-9\-_]+/, '-')
+    .replace(/-{2,}/, '-')
+    .replace(/^-|-$/, '')
+    .toLowerCase();
+}
 
-String.prototype.phoneFormat = () => {
+function stringPhoneFormat() {
   if (/^1?\d{10}$/.test(this)) {
     return this.replace(/1?(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
   }
@@ -126,34 +157,51 @@ String.prototype.phoneFormat = () => {
   }
 
   return this;
-};
+}
 
 // This is far too simple for most cases, but it works for the few things we need
-String.prototype.pluralize = () => {
+function stringPluralize() {
   if (this[this.length - 1] === 'y') {
     return `${this.substr(0, this.length - 1)}ies`;
   }
+
   return `${this}s`;
-};
+}
 
-String.prototype.presence = () => (this.isBlank() ? null : this);
+function stringPresence() {
+  return this.isBlank() ? null : this;
+}
 
-String.prototype.strip = () => this.replace(/^\s+|\s+$/g, '');
+function stringStrip() {
+  return this.replace(/^\s+|\s+$/g, '');
+}
 
-function titleize() {
+function stringTitleize() {
   return this
     .replace(/_/g, ' ')
     .replace(/\b[a-z]/g, char => char.toUpperCase());
 }
 
-String.prototype.titleize = titleize;
+function stringUnderscore() {
+  return this
+    .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
+    .replace('::', '/')
+    .toLowerCase();
+}
 
-String.prototype.underscore = () => this
-  .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
-  .replace('::', '/')
-  .toLowerCase();
+String.prototype.capitalize = stringCapitalize;
+String.prototype.dasherize = stringDasherize;
+String.prototype.humanize = stringHumanize;
+String.prototype.isBlank = stringIsBlank;
+String.prototype.parameterize = stringParameterize;
+String.prototype.phoneFormat = stringPhoneFormat;
+String.prototype.pluralize = stringPluralize;
+String.prototype.presence = stringPresence;
+String.prototype.strip = stringStrip;
+String.prototype.titleize = stringTitleize;
+String.prototype.underscore = stringUnderscore;
 
-function outerHTML() {
+function jqueryOuterHTML() {
   if (!this.length) {
     return '';
   }
@@ -165,10 +213,12 @@ function outerHTML() {
   return $('<div>').append(this[0].clone()).remove().html();
 }
 
-$.fn.outerHTML = outerHTML;
+$.fn.outerHTML = jqueryOuterHTML;
 
-moment.fn.toHumanDate = (time = false) => {
+function momentToHumanDate(time = false) {
   const year = this.year() !== moment().year() ? '/YY' : '';
 
   return this.format(`M/D${year}${(time ? ' h:mm A' : '')}`);
-};
+}
+
+moment.fn.toHumanDate = momentToHumanDate;

@@ -2,23 +2,17 @@
 
 %h4 Subreddits
 
-%table
+%table.subreddits
   %thead
     %tr
       %th Name
       %th Team
       %th Account
-      %th Sidebar
-      %th Game Threads
-      %th Pregame
-      %th Postgame
+      %th.text-center Sidebar
+      %th.text-center Game Threads
+      %th.text-center Pregame
+      %th.text-center Postgame
   %tbody
-    - @subreddits.each do |subreddit|
-      %tr
-        %td= link_to subreddit.name, subreddit.url
-        %td= @api.team(subreddit.team_id).abbreviation if subreddit.team_id
-        %td= subreddit.account.name
-        %td.text-center= '✓' if subreddit.update_sidebar?
-        %td.text-center= '✓' if subreddit.post_game_threads?
-        %td.text-center{ title: (subreddit.options['pregame']['post_at'] if subreddit.post_pregame?) }= '✓' if subreddit.post_pregame?
-        %td.text-center= '✓' if subreddit.post_postgame?
+    %tr.loading Loading subreddits...
+
+= javascript_packs_with_chunks_tag 'subreddits/table'

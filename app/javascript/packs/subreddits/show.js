@@ -27,13 +27,13 @@ class ShowSubreddit extends GenericPage {
     if (this.subreddit.options.game_threads && this.subreddit.options.game_threads.enabled) {
       const postAt = this.subreddit.options.game_threads.post_at;
 
-      listItems.push(`<li>Game Threads ${this.constructor.postAtFormat(postAt)}</li>`);
+      listItems.push(`<li>Game Threads ${Subreddit.postAtFormat(postAt)}</li>`);
     }
 
     if (this.subreddit.options.pregame && this.subreddit.options.pregame.enabled) {
       const postAt = this.subreddit.options.pregame.post_at;
 
-      listItems.push(`<li>Pregame Threads ${this.constructor.postAtFormat(postAt)}</li>`);
+      listItems.push(`<li>Pregame Threads ${Subreddit.postAtFormat(postAt)}</li>`);
     }
 
     if (this.subreddit.options.postgame && this.subreddit.options.postgame.enabled) {
@@ -49,23 +49,6 @@ class ShowSubreddit extends GenericPage {
       .map(template => `<li>${BaseballBot.linkTo(template.type.titleize(), template.path())}</li>`);
 
     this.fields.templates.empty().append(listItems);
-  }
-
-  static postAtFormat(postAt) {
-    if (!postAt) {
-      return '3 Hours Pregame';
-    }
-
-    if (/^-?\d{1,2}$/.test(postAt)) {
-      return `${Math.abs(parseInt(postAt, 10))} Hours Pregame`;
-    }
-
-    if (/(1[012]|\d)(:\d\d|) ?(am|pm)/i.test(postAt)) {
-      return `at ${postAt}`;
-    }
-
-    // Bad format, default back to 3 hours pregame
-    return '3 Hours Pregame';
   }
 }
 

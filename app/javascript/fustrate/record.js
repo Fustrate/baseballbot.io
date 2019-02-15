@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import moment from 'moment-timezone';
+import moment from 'moment';
 
 import Fustrate from './fustrate';
 import BasicObject from './basic_object';
