@@ -12,7 +12,7 @@ class GenericPage {
   include(concern) {
     var instance = new concern;
 
-    for (var name in Object.getOwnPropertyNames(instance.constructor)) {
+    for (let name of Object.getOwnPropertyNames(instance.constructor)) {
       if (key === 'included' || key === 'initialize') {
         continue;
       }
@@ -23,7 +23,7 @@ class GenericPage {
     }
 
     // Assign properties to the prototype
-    for (var key in concern.prototype) {
+    for (let key in concern.prototype) {
       if (key === 'included' || key === 'initialize') {
         continue;
       }
@@ -39,7 +39,7 @@ class GenericPage {
   }
 
   addEventListeners() {
-    for (var name in this) {
+    for (let name in this) {
       // Edge returns true for /one.+two/.test('onetwo'), 2017-10-21
       if (/^add..*EventListeners$/.test(name)) {
         this[name].apply(this);
@@ -56,12 +56,12 @@ class GenericPage {
     this.buttons = {};
 
     $('[data-field]', this.root).not('.modal [data-field]')
-      .each((i, element) => {
+      .each(i, element => {
         this.fields[element.dataset.field] = $(element);
       });
 
     $('[data-button]', this.root).not('.modal [data-button]')
-      .each((i, element) => {
+      .each(i, element => {
         this.buttons[element.dataset.button] = $(element);
       });
   }
@@ -84,7 +84,7 @@ class GenericPage {
 
   // Calls all methods matching /refresh.+/
   refresh() {
-    for (var name in Object.getOwnPropertyNames(this)) {
+    for (let name of Object.getOwnPropertyNames(this)) {
       if (name.indexOf('refresh') === 0 && name !== 'refresh') {
         this[name]();
       }

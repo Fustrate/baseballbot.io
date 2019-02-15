@@ -56,7 +56,7 @@ class GameCard {
 
     outs = parseInt(this.game.outs, 10);
 
-    elements = (function() {
+    elements = (() => {
       var i, ref, results;
       if (outs < 3) {
         results = [];

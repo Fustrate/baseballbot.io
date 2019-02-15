@@ -1,6 +1,10 @@
 import BasicObject from './basic_object'
 
 class Record extends BasicObject {
+  static get classname() {
+    return null;
+  }
+
   constructor(data) {
     super(data);
 
@@ -20,7 +24,7 @@ class Record extends BasicObject {
       return $.when();
     }
 
-    return $.get(this.path({ format: 'json' })).done((response) => {
+    return $.get(this.path({ format: 'json' })).done(response => {
       this.extractFromData(response);
 
       this._loaded = true;
@@ -57,7 +61,7 @@ class Record extends BasicObject {
       xhr: () => {
         var xhr;
         xhr = $.ajaxSettings.xhr();
-        xhr.upload.onprogress = (e) => {
+        xhr.upload.onprogress = e => {
           return this.trigger('upload_progress', e);
         };
         return xhr;
@@ -70,7 +74,7 @@ class Record extends BasicObject {
   }
 
   _toFormData(data, object, namespace) {
-    for (var field in Object.getOwnPropertyNames(object)) {
+    for (let field of Object.getOwnPropertyNames(object)) {
       if (!(typeof object[field] !== 'undefined')) {
         continue;
       }
@@ -91,7 +95,7 @@ class Record extends BasicObject {
 
   _appendObjectToFormData(data, key, value) {
     if (value instanceof Array) {
-      for (var array_item in value) {
+      for (let array_item of value) {
         data.append(`${key}[]`, array_item)
       }
     } else if (value instanceof File) {
@@ -110,19 +114,13 @@ class Record extends BasicObject {
   static create(attributes) {
     var record = new this;
 
-    return $.Deferred((deferred) => {
-      return record.update(attributes).fail(deferred.reject).done(() => {
-        return this.deferred.resolve(record);
+    return $.Deferred(deferred => {
+      record.update(attributes).fail(deferred.reject).done(() => {
+        this.deferred.resolve(record);
       });
     });
   }
 }
-
-Record.define('class', {
-  get: function() {
-    return this.constructor.class
-  }
-})
 
 export default Record
 

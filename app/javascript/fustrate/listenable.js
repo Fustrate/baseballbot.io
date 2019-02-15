@@ -4,7 +4,7 @@ class Listenable {
   }
 
   on(eventNames, callback) {
-    for (var eventName in eventNames.split(' ')) {
+    for (let eventName of eventNames.split(' ')) {
       if (!this.listeners[eventName]) {
         this.listeners[eventName] = [];
       }
@@ -16,23 +16,19 @@ class Listenable {
   }
 
   off(eventNames) {
-    for (var eventName in eventNames.split(' ')) {
+    for (let eventName of eventNames.split(' ')) {
       this.listeners[eventName] = [];
     }
 
     return this;
   }
 
-  trigger() {
-    var args, event, name;
-
-    [name, ...args] = arguments;
-
+  trigger(name, ...args) {
     if (!(name && this.listeners[name])) {
       return this;
     }
 
-    for (event in this.listeners[name]) {
+    for (let event of this.listeners[name]) {
       event.apply(this, args);
     }
 

@@ -15,7 +15,7 @@ class BasicObject extends Listenable {
       return
     }
 
-    for (var key in data) {
+    for (let key in data) {
       this[key] = data[key];
     }
 
@@ -28,25 +28,21 @@ class BasicObject extends Listenable {
     }
 
     if (this.updated_at) {
-      return this.updated_at = moment(this.updated_at);
+      this.updated_at = moment(this.updated_at);
     }
   }
 
   // Instantiate a new object of type klass for each item in items
   _createList(items, klass, additional_attributes = {}) {
-    return items.map(function(item) {
+    return items.map(item => {
       return new klass($.extend(true, {}, item, additional_attributes));
     })
   }
 
   static buildList(items, additional_attributes = {}) {
-    var results = [];
-
-    items.forEach(function(item) {
-      results.push(new this($.extend(true, {}, item, additional_attributes)));
+    return items.map(item => {
+      return new this($.extend(true, {}, item, additional_attributes));
     })
-
-    return results;
   }
 }
 

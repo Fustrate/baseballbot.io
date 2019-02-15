@@ -20,7 +20,7 @@ class Flash extends Component {
       .prependTo($('#flashes'))
       .fadeIn(settings.fadeInSpeed)
       .delay(settings.displayTime)
-      .fadeOut(settings.fadeOutSpeed, function() {
+      .fadeOut(settings.fadeOutSpeed, () => {
         return bar.remove();
       });
   }

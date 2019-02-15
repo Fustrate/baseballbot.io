@@ -6,11 +6,11 @@ import Component from './component'
 require('./prototypes')
 
 class Fustrate {
-  static start(name) {
-    Fustrate.class = window[name];
+  static start() {
+    Fustrate.class = this;
     Fustrate.instance = new Fustrate.class;
 
-    document.addEventListener('DOMContentLoaded', function(){
+    document.addEventListener('DOMContentLoaded', () => {
       Fustrate.instance.initialize();
     });
   }
@@ -41,10 +41,10 @@ class Fustrate {
 
     Component.initialize()
 
-    document.querySelectorAll('[data-js-class]').forEach(function(element) {
+    for (let element of document.querySelectorAll('[data-js-class]')) {
       // klass = Fustrate._stringToClass(element.dataset.jsClass);
       // element.object = new klass($(element));
-    });
+    }
 
     $.ajaxSetup({
       cache: false,
@@ -88,7 +88,7 @@ class Fustrate {
       processData: false,
       contentType: false,
       dataType: 'script',
-      beforeSend: function(xhr) {
+      beforeSend: xhr => {
         return Rails.CSRFProtection(xhr);
       }
     });
@@ -111,7 +111,7 @@ class Fustrate {
   }
 
   static icon(types, style = 'regular') {
-    const classes = types.split(' ').map(function(thing) {
+    const classes = types.split(' ').map(thing => {
       return `fa-${thing}`
     }).join(' ')
 
@@ -123,8 +123,8 @@ class Fustrate {
       return '';
     }
 
-    return String(string).replace(/[&<>"'`=\/]/g, function(s) {
-      return Fustrate.entityMap[s];
+    return String(string).replace(/[&<>"'`=\/]/g, entity => {
+      return Fustrate.entityMap[entity];
     });
   }
 
@@ -133,7 +133,7 @@ class Fustrate {
       return '';
     }
 
-    return String(string).split(/\r?\n/).map(function(line) {
+    return String(string).split(/\r?\n/).map(line => {
       return Fustrate.escapeHtml(line);
     }).join('<br />');
   }
@@ -141,9 +141,9 @@ class Fustrate {
   static redirectTo(href) {
     let path = href.path ? href.path() : href;
 
-    window.setTimeout((function() {
+    window.setTimeout(() => {
       return window.location.href = path;
-    }), 750);
+    }, 750);
   }
 }
 
