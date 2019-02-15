@@ -6,37 +6,36 @@ class GenericPage {
 
     this.reloadUIElements();
     this.addEventListeners();
-    this.initialize();
   }
 
-  include(concern) {
-    const instance = new concern();
+  // include(concern) {
+  //   const instance = new concern();
 
-    Object.getOwnPropertyNames(instance.constructor).forEach((key) => {
-      if (key === 'included' || key === 'initialize') {
-        return;
-      }
+  //   Object.getOwnPropertyNames(instance.constructor).forEach((key) => {
+  //     if (key === 'included' || key === 'initialize') {
+  //       return;
+  //     }
 
-      if (!this.constructor[key]) {
-        this.constructor[key] = instance.constructor[key];
-      }
-    });
+  //     if (!this.constructor[key]) {
+  //       this.constructor[key] = instance.constructor[key];
+  //     }
+  //   });
 
-    // Assign properties to the prototype
-    Object.getOwnPropertyNames(concern.prototype).forEach((key) => {
-      if (key === 'included' || key === 'initialize') {
-        return;
-      }
+  //   // Assign properties to the prototype
+  //   Object.getOwnPropertyNames(concern.prototype).forEach((key) => {
+  //     if (key === 'included' || key === 'initialize') {
+  //       return;
+  //     }
 
-      if (!this[key]) {
-        this[key] = concern.prototype[key].bind(this);
-      }
-    });
+  //     if (!this[key]) {
+  //       this[key] = concern.prototype[key].bind(this);
+  //     }
+  //   });
 
-    if (instance.included != null) {
-      instance.included.apply(this);
-    }
-  }
+  //   if (instance.included != null) {
+  //     instance.included.apply(this);
+  //   }
+  // }
 
   addEventListeners() {
     Object.getOwnPropertyNames(this).forEach((name) => {
@@ -49,7 +48,7 @@ class GenericPage {
 
   // Once the interface is loaded and the event listeners are active, run any
   // other tasks.
-  initialize() {}
+  initialize() {} // eslint-disable-line class-methods-use-this
 
   reloadUIElements() {
     this.fields = {};
@@ -71,13 +70,7 @@ class GenericPage {
   }
 
   // Calls all methods matching /refresh.+/
-  refresh() {
-    Object.getOwnPropertyNames(this).forEach((name) => {
-      if (name.indexOf('refresh') === 0 && name !== 'refresh') {
-        this[name]();
-      }
-    });
-  }
+  refresh() {} // eslint-disable-line class-methods-use-this
 }
 
 export default GenericPage;

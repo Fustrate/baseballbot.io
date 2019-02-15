@@ -16,7 +16,7 @@ gem 'sassc-rails', '~> 2.1'
 gem 'sprockets-rails'
 gem 'uglifier', '~> 4.1'
 
-gem 'webpacker', '~> 3.5'
+gem 'webpacker', '4.0.0.rc.7'
 
 # Faster json generation
 gem 'oj'

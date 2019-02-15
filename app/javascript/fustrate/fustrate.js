@@ -1,10 +1,11 @@
-import Rails from 'rails-ujs';
 import moment from 'moment-timezone';
 import $ from 'jquery';
 
 import Component from './component';
 
 require('./prototypes');
+
+// const Rails = require('@rails/ujs');
 
 const entityMap = {
   '&': '&amp;',
@@ -18,12 +19,13 @@ const entityMap = {
 };
 
 class Fustrate {
-  static start() {
-    Fustrate.class = this;
-    Fustrate.instance = new this();
+  static start(instance) {
+    Fustrate.instance = instance;
 
     document.addEventListener('DOMContentLoaded', () => {
-      this.initialize();
+      // Rails.start();
+
+      instance.initialize();
     });
   }
 
@@ -49,18 +51,17 @@ class Fustrate {
   }
 
   static initialize() {
-    Rails.start();
-
     Component.initialize();
 
-    // document.querySelectorAll('[data-js-class]').forEach((element) => {
-    //   klass = Fustrate.stringToClass(element.dataset.jsClass);
-    //   element.object = new klass($(element));
-    // });
+    if (document.body.dataset.jsClass) {
+      document.body.object = new (Fustrate.stringToClass(document.body.dataset.jsClass))(
+        $(document.body),
+      );
+    }
 
     $.ajaxSetup({
       cache: false,
-      beforeSend: Rails.CSRFProtection,
+      // beforeSend: Rails.CSRFProtection,
     });
 
     $('table').wrap('<div class="responsive-table"></div>');
@@ -99,7 +100,7 @@ class Fustrate {
       processData: false,
       contentType: false,
       dataType: 'script',
-      beforeSend: Rails.CSRFProtection,
+      // beforeSend: Rails.CSRFProtection,
     });
   }
 

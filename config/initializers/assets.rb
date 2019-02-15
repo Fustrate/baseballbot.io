@@ -12,7 +12,7 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 # Precompile additional assets.
-Rails.application.config.assets.precompile += %w[gameday.coffee gameday.sass]
+Rails.application.config.assets.precompile += %w[gameday.sass]
 
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
