@@ -10,7 +10,7 @@ const settings = {
 
 class Pagination extends Component {
   constructor({
-    current_page, total_pages, total_entries, per_page
+    current_page, total_pages, total_entries, per_page,
   }) {
     super();
 

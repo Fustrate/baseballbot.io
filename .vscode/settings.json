@@ -13,7 +13,7 @@
     },
     "[javascript]": {
         "editor.tabSize": 2,
-        "editor.rulers": [80]
+        "editor.rulers": [100]
     },
     "[ruby]": {
         "editor.tabSize": 2,

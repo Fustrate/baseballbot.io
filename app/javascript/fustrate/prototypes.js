@@ -63,9 +63,7 @@ Function.prototype.debounce = (delay = 250) => {
 };
 
 // Used to define getters and setters
-Function.prototype.define = (name, methods) => {
-  return Object.defineProperty(this.prototype, name, methods);
-};
+Function.prototype.define = (name, methods) => Object.defineProperty(this.prototype, name, methods);
 
 Number.prototype.accountingFormat = () => {
   if (this < 0) {
@@ -95,36 +93,28 @@ Number.prototype.ordinalize = () => {
   return this + (s[(v - 20) % 10] || s[v] || 'th');
 };
 
-Number.prototype.truncate = (digits = 2) => {
-  return this.toFixed(digits).replace(/\.?0+$/, '');
-};
+Number.prototype.truncate = (digits = 2) => this.toFixed(digits).replace(/\.?0+$/, '');
 
-String.prototype.capitalize = () => {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
+String.prototype.capitalize = () => this.charAt(0).toUpperCase() + this.slice(1);
 
 String.prototype.dasherize = () => this.replace(/_/g, '-');
 
-String.prototype.humanize = () => {
-  return this
-    .replace(/[a-z][A-Z]/, match => `${match[0]} ${match[1]}`)
-    .replace('_', ' ')
-    .toLowerCase();
-};
+String.prototype.humanize = () => this
+  .replace(/[a-z][A-Z]/, match => `${match[0]} ${match[1]}`)
+  .replace('_', ' ')
+  .toLowerCase();
 
 String.prototype.isBlank = () => this.trim() === '';
 
 // Turn unwanted chars into the separator,
 // No more than one of the separator in a row,
 // Remove leading/trailing separator.
-String.prototype.parameterize = () => {
-  return this
-    .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
-    .replace(/[^a-zA-Z0-9\-_]+/, '-')
-    .replace(/-{2,}/, '-')
-    .replace(/^-|-$/, '')
-    .toLowerCase();
-};
+String.prototype.parameterize = () => this
+  .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
+  .replace(/[^a-zA-Z0-9\-_]+/, '-')
+  .replace(/-{2,}/, '-')
+  .replace(/^-|-$/, '')
+  .toLowerCase();
 
 String.prototype.phoneFormat = () => {
   if (/^1?\d{10}$/.test(this)) {
@@ -146,30 +136,18 @@ String.prototype.pluralize = () => {
   return `${this}s`;
 };
 
-String.prototype.presence = () => {
-  if (this.isBlank()) {
-    return null;
-  }
+String.prototype.presence = () => (this.isBlank() ? null : this);
 
-  return this;
-};
+String.prototype.strip = () => this.replace(/^\s+|\s+$/g, '');
 
-String.prototype.strip = () => {
-  return this.replace(/^\s+|\s+$/g, '');
-};
+String.prototype.titleize = () => this
+  .replace(/_/g, ' ')
+  .replace(/\b[a-z]/g, char => char.toUpperCase());
 
-String.prototype.titleize = () => {
-  return this
-    .replace(/_/g, ' ')
-    .replace(/\b[a-z]/g, char => char.toUpperCase());
-};
-
-String.prototype.underscore = () => {
-  return this
-    .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
-    .replace('::', '/')
-    .toLowerCase();
-};
+String.prototype.underscore = () => this
+  .replace(/[a-z][A-Z]/, match => `${match[0]}_${match[1]}`)
+  .replace('::', '/')
+  .toLowerCase();
 
 $.fn.outerHTML = () => {
   if (!this.length) {
