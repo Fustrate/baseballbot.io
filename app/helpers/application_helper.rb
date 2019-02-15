@@ -19,4 +19,12 @@ module ApplicationHelper
       "at #{time.strftime('%-I:%M %p')}"
     end
   end
+
+  def html_data(html_data = {})
+    @data ||= {}
+
+    @data.merge!(html_data) if html_data.any?
+
+    @data
+  end
 end

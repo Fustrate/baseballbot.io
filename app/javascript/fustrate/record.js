@@ -15,7 +15,7 @@ class Record extends BasicObject {
     }
   }
 
-  reload({force} = {}) {
+  reload({ force } = {}) {
     if (this._loaded && !force) {
       return $.when();
     }
@@ -70,27 +70,19 @@ class Record extends BasicObject {
   }
 
   _toFormData(data, object, namespace) {
-    var field, key, value;
-
-    for (field in object) {
-      if (!object.hasOwnProperty(field)) {
+    for (var field in Object.getOwnPropertyNames(object)) {
+      if (!(typeof object[field] !== 'undefined')) {
         continue;
       }
 
-      value = object[field];
+      let key = namespace ? `${namespace}[${field}]` : field;
 
-      if (!(typeof value !== 'undefined')) {
-        continue;
-      }
-
-      key = namespace ? `${namespace}[${field}]` : field;
-
-      if (value && typeof value === 'object') {
-        this._appendObjectToFormData(data, key, value);
-      } else if (typeof value === 'boolean') {
-        data.append(key, Number(value));
-      } else if (value !== null && value !== void 0) {
-        data.append(key, value);
+      if (object[field] && typeof object[field] === 'object') {
+        this._appendObjectToFormData(data, key, object[field]);
+      } else if (typeof object[field] === 'boolean') {
+        data.append(key, Number(object[field]));
+      } else if (object[field] !== null && object[field] !== void 0) {
+        data.append(key, object[field]);
       }
     }
 

@@ -1,14 +1,18 @@
 import Rails from 'rails-ujs'
 import moment from 'moment-timezone'
 import $ from 'jquery'
+import Component from './component'
 
 require('./prototypes')
 
 class Fustrate {
   static start(name) {
-    this.class = window[name];
-    this.instance = new this.class;
-    this.instance.initialize();
+    Fustrate.class = window[name];
+    Fustrate.instance = new Fustrate.class;
+
+    document.addEventListener('DOMContentLoaded', function(){
+      Fustrate.instance.initialize();
+    });
   }
 
   constructor() {
@@ -35,9 +39,11 @@ class Fustrate {
   initialize() {
     Rails.start();
 
-    document.querySelectorAll('[data-js-class]').forEach(element => {
-      klass = Fustrate._stringToClass(element.dataset.jsClass);
-      element.object = new klass($(element));
+    Component.initialize()
+
+    document.querySelectorAll('[data-js-class]').forEach(function(element) {
+      // klass = Fustrate._stringToClass(element.dataset.jsClass);
+      // element.object = new klass($(element));
     });
 
     $.ajaxSetup({
@@ -153,5 +159,6 @@ Fustrate.entityMap = {
 }
 
 window.Fustrate = Fustrate
+window.$ = $
 
 export default Fustrate

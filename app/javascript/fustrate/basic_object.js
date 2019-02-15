@@ -40,14 +40,11 @@ class BasicObject extends Listenable {
   }
 
   static buildList(items, additional_attributes = {}) {
-    var i, item, len, results;
+    var results = [];
 
-    results = [];
-
-    for (i = 0, len = items.length; i < len; i++) {
-      item = items[i];
+    items.forEach(function(item) {
       results.push(new this($.extend(true, {}, item, additional_attributes)));
-    }
+    })
 
     return results;
   }
