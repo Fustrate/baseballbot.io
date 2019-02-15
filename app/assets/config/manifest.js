@@ -1,4 +1,4 @@
 //= link application.sass
 //= link gameday.sass
 //
-//= link_directory ../fonts .ttf .woff .woff2
+//= link_directory ../fonts .eot .svg .ttf .woff .woff2
