@@ -1,4 +1,4 @@
-import Fustrate from '../fustrate/fustrate';
+import Fustrate from '../fustrate';
 
 class BaseballBot extends Fustrate {
 }
