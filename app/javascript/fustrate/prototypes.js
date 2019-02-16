@@ -73,7 +73,7 @@ function functionDebounce(delay = 250) {
 
 // Used to define getters and setters
 function functionDefine(name, methods) {
-  Object.defineProperty(this.prototype, name, methods)
+  Object.defineProperty(this.prototype, name, methods);
 }
 
 Function.prototype.debounce = functionDebounce;
