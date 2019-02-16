@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import Fustrate from '../fustrate';
+import Fustrate from '..';
 import Component from '../component';
 
 const settings = {
