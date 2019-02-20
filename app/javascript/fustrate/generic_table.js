@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 import GenericPage from './generic_page';
 import Pagination from './components/pagination';
 
@@ -7,7 +5,9 @@ class GenericTable extends GenericPage {
   initialize() {
     super.initialize();
 
-    this.tbody = $('tbody', this.table);
+    this.tbody = this.table.querySelector('tbody');
+    this.loadingRow = this.tbody.querySelector('tr.loading');
+    this.noRecordsRow = this.tbody.querySelector('tr.no-records');
 
     this.reloadTable();
   }
@@ -15,7 +15,11 @@ class GenericTable extends GenericPage {
   reloadTable() {} // eslint-disable-line class-methods-use-this
 
   createRow(item) {
-    return this.constructor.updateRow($(this.constructor.blankRow), item);
+    const template = document.createElement('template');
+
+    template.innerHTML = this.constructor.blankRow.trim();
+
+    return this.constructor.updateRow(template.content.firstChild, item);
   }
 
   static sortRows(rows, sortFunction = () => {}) {
@@ -26,11 +30,7 @@ class GenericTable extends GenericPage {
         return 0;
       }
 
-      if (x[0] > y[0]) {
-        return 1;
-      }
-
-      return -1;
+      return x[0] > y[0] ? 1 : -1;
     });
 
     return rowsWithSortOrder.map(row => row[1]);
@@ -41,19 +41,25 @@ class GenericTable extends GenericPage {
   }
 
   reloadRows(rows, { sort } = { sort: null }) {
-    $('tr.loading', this.tbody).hide();
+    if (this.loadingRow) {
+      this.loadingRow.style.display = 'none';
+    }
 
     if (rows) {
-      $('tr:not(.no-records):not(.loading)', this.tbody).remove();
+      this.tbody.querySelectorAll('tr:not(.no-records):not(.loading)').forEach((row) => {
+        row.parentNode.removeChild(row);
+      });
 
-      this.tbody.append(sort ? this.sortRows(rows, sort) : rows);
+      (sort ? this.sortRows(rows, sort) : rows).forEach((row) => {
+        this.tbody.appendChild(row);
+      });
     }
 
     this.updated();
   }
 
   addRow(row) {
-    this.tbody.append(row);
+    this.tbody.appendChild(row);
 
     this.updated();
   }
@@ -67,12 +73,21 @@ class GenericTable extends GenericPage {
   }
 
   updated() {
-    $('tr.no-records', this.tbody)
-      .toggle($('tr:not(.no-records):not(.loading)', this.tbody).length < 1);
+    if (!this.noRecordsRow) {
+      return;
+    }
+
+    const hasRecords = this.tbody.querySelectorAll('tr:not(.no-records):not(.loading)').length > 0;
+
+    if (hasRecords) {
+      this.noRecordsRow.style.display = 'none';
+    } else {
+      this.noRecordsRow.style.display = '';
+    }
   }
 
   getCheckedIds() {
-    return $('td:first-child input:checked', this.tbody).map(() => this.value);
+    return [...this.tbody.querySelectorAll('td:first-child input:checked')].map(() => this.value);
   }
 
   // This should be fed a response from a JSON request for a paginated
@@ -84,7 +99,11 @@ class GenericTable extends GenericPage {
 
     this.pagination = new Pagination(response);
 
-    $('.pagination', this.root).replaceWith(this.pagination.generate());
+    const paginationHTML = this.pagination.generate();
+
+    this.root.querySelectorAll('.pagination').forEach((pagination) => {
+      pagination.outerHTML = paginationHTML;
+    });
   }
 }
 

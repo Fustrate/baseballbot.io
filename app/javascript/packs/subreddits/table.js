@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 import BaseballBot from '../../baseballbot';
 import GenericTable from '../../fustrate/generic_table';
 import Subreddit from '../../baseballbot/subreddit';
@@ -19,7 +17,7 @@ class SubredditsTable extends GenericTable {
   constructor(root) {
     super(root);
 
-    this.table = $(root).find('table.subreddits');
+    this.table = root.querySelector('table.subreddits');
   }
 
   reloadTable() {
@@ -29,32 +27,30 @@ class SubredditsTable extends GenericTable {
   }
 
   static updateRow(row, subreddit) {
-    $('.name', row).html(BaseballBot.linkTo(subreddit.name, subreddit));
-    $('.team', row).text(subreddit.abbreviation);
-    $('.account', row).text(subreddit.account.name);
+    row.querySelector('.name').innerHTML = BaseballBot.linkTo(subreddit.name, subreddit);
+    row.querySelector('.team').textContent = subreddit.abbreviation;
+    row.querySelector('.account').textContent = subreddit.account.name;
 
     if (subreddit.options.sidebar && subreddit.options.sidebar.enabled) {
-      $('.sidebar', row).html(BaseballBot.icon('check'));
+      row.querySelector('.sidebar').innerHTML = BaseballBot.icon('check');
     }
 
     if (subreddit.options.game_threads && subreddit.options.game_threads.enabled) {
       const postAt = subreddit.options.game_threads.post_at;
 
-      $('.game_threads', row)
-        .html(BaseballBot.icon('check'))
-        .attr('title', Subreddit.postAtFormat(postAt));
+      row.querySelector('.game_threads').setAttribute('title', Subreddit.postAtFormat(postAt));
+      row.querySelector('.game_threads').innerHTML = BaseballBot.icon('check');
     }
 
     if (subreddit.options.pregame && subreddit.options.pregame.enabled) {
       const postAt = subreddit.options.pregame.post_at;
 
-      $('.pregames', row)
-        .html(BaseballBot.icon('check'))
-        .attr('title', Subreddit.postAtFormat(postAt));
+      row.querySelector('.pregames').setAttribute('title', Subreddit.postAtFormat(postAt));
+      row.querySelector('.pregames').innerHTML = BaseballBot.icon('check');
     }
 
     if (subreddit.options.postgame && subreddit.options.postgame.enabled) {
-      $('.postgames', row).html(BaseballBot.icon('check'));
+      row.querySelector('.postgames').innerHTML = BaseballBot.icon('check');
     }
 
     return row;
