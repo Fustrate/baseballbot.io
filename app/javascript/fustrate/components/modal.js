@@ -41,9 +41,9 @@ class Modal extends Component {
   constructor({ content, settings } = {}) {
     super();
 
-    this.modal = this.constructor.createModal();
     this.settings = $.extend(true, defaultSettings, settings != null ? settings : {});
     this.settings.previousModal = $();
+    this.modal = this.createModal();
 
     this.setTitle(this.constructor.title, { icon: this.constructor.icon });
     this.setContent(content, false);
@@ -61,16 +61,12 @@ class Modal extends Component {
     this.fields = {};
     this.buttons = {};
 
-    $('[data-field]', this.modal).each((index, element) => {
-      const field = $(element);
-
-      this.fields[field.data('field')] = field;
+    this.modal[0].querySelectorAll('[data-field]').forEach((element) => {
+      this.fields[element.dataset.field] = element;
     });
 
-    $('[data-button]', this.modal).each((index, element) => {
-      const button = $(element);
-
-      this.buttons[button.data('button')] = button;
+    this.modal[0].querySelectorAll('[data-button]').forEach((element) => {
+      this.buttons[element.dataset.button] = element;
     });
   }
 
@@ -117,32 +113,16 @@ class Modal extends Component {
 
     buttons.forEach((button) => {
       if (typeof button === 'string') {
-        list.push(`<button data-button="${button}" class="${button} expand">\n  ${button.titleize()}\n</button>`);
+        list.push(`
+          <button data-button="${button}" class="${button} expand">
+            ${button.titleize()}
+          </button>`);
       } else if (typeof button === 'object') {
         Object.keys(button).forEach((name) => {
-          let text;
-
-          const options = button[name];
-
-          if (typeof options === 'object') {
-            ({ text } = options);
-          } else if (typeof options === 'string') {
-            text = options;
-          }
-
-          if (text == null) {
-            text = name.titleize();
-          }
-
-          const jButton = $(`<button data-button="${name}" class="expand">`)
-            .text(text)
-            .addClass(options.type != null ? options.type : name)
-            .outerHTML();
-
-          list.push(jButton);
-        });
+          list.push(constructor.createButton(name, button[name]));
+        }, this);
       }
-    });
+    }, this);
 
     const columns = list.map(element => `<div class="columns">${element}</div>`);
 
@@ -156,6 +136,30 @@ class Modal extends Component {
     }
   }
 
+  static createButton(name, options) {
+    let text;
+    let type;
+
+    if (typeof options === 'object') {
+      ({ text, type } = options);
+    } else if (typeof options === 'string') {
+      text = options;
+    }
+
+    if (text == null) {
+      text = name.titleize();
+    }
+
+    if (type == null) {
+      type = name;
+    }
+
+    return `
+      <button data-button="${name}" class="expand ${type}">
+        ${Fustrate.escapeHtml(text)}
+      </button>`;
+  }
+
   addEventListeners() {
     this.modal
       .off('.modal')
@@ -165,12 +169,12 @@ class Modal extends Component {
       .on('opened.modal', this.focusFirstInput)
       .on('click.modal', '.modal-close', this.constructor.closeButtonClicked);
 
-    // TODO: Re-enable when modals are fully converted
-    //   .off '.modal'
-    $(document).on('click.modal touchstart.modal', '.modal-overlay', this.constructor.backgroundClicked);
+    $(document)
+      .off('.modal', '.modal-overlay')
+      .on('click.modal touchstart.modal', '.modal-overlay', this.constructor.backgroundClicked);
 
     if (this.buttons.cancel) {
-      this.buttons.cancel.on('click', this.cancel);
+      this.buttons.cancel.addEventListener('click', this.cancel);
     }
   }
 
@@ -293,13 +297,13 @@ class Modal extends Component {
     return this.modal.hide();
   }
 
-  static createModal() {
+  createModal() {
     const classes = this.defaultClasses().join(' ');
 
     return $(template).addClass(classes).appendTo(this.settings.appendTo);
   }
 
-  static defaultClasses() {
+  defaultClasses() {
     return [this.size, this.type].filter(klass => klass !== null);
   }
 
