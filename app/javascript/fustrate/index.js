@@ -25,6 +25,7 @@ class Fustrate {
     document.addEventListener('DOMContentLoaded', () => {
       // Rails.start();
 
+      this.initialize();
       instance.initialize();
     });
   }
@@ -52,12 +53,6 @@ class Fustrate {
 
   static initialize() {
     Component.initialize();
-
-    if (document.body.dataset.jsClass) {
-      document.body.object = new (Fustrate.stringToClass(document.body.dataset.jsClass))(
-        $(document.body),
-      );
-    }
 
     $.ajaxSetup({
       cache: false,

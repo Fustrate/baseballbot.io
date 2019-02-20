@@ -44,13 +44,15 @@ class Record extends BasicObject {
       url = this.constructor.create_path({ format: 'json' });
     }
 
+    const recordAttributes = attributes;
+
     if (this.community && attributes.community_id === undefined) {
-      attributes.community_id = this.community.id;
+      recordAttributes.community_id = this.community.id;
     }
 
     const formData = this.toFormData(
       new FormData(),
-      attributes,
+      recordAttributes,
       this.constructor.paramKey(),
     );
 

@@ -3,12 +3,9 @@ import Awesomplete from 'awesomplete';
 
 import Component from '../component';
 
-class Autocomplete extends Component {
-  static initialize() {
-    // Override the default sort
-    Awesomplete.SORT_BYLENGTH = () => {};
-  }
+Awesomplete.SORT_BYLENGTH = () => {};
 
+class Autocomplete extends Component {
   constructor(input, types) {
     super();
 
@@ -83,8 +80,8 @@ class Autocomplete extends Component {
         if (source.filter(datum, this.value)) {
           this.items.push(this.createListItem(datum, source));
         }
-      });
-    });
+      }, this);
+    }, this);
 
     this.awesomplete.list = this.items;
   }
@@ -134,7 +131,7 @@ class Autocomplete extends Component {
     }
 
     // Don't perform the same search twice in a row
-    if (!(value !== this.value && value.length >= 2)) {
+    if (value === this.value || value.length < 3) {
       return;
     }
 
@@ -149,22 +146,22 @@ class Autocomplete extends Component {
           if (source.filter(datum, this.value)) {
             this.items.push(this.createListItem(datum, source));
           }
-        });
+        }, this);
 
         this.awesomplete.list = this.items;
       }
-    });
+    }, this);
   }
 
   performSearch(source) {
-    return $.get(source.url({
+    $.get(source.url({
       search: this.value,
       commit: 1,
       format: 'json',
     })).done((response) => {
-      for (let i = 0, len = response.length; i < len; i += 1) {
-        this.items.push(this.createListItem(response[i], source));
-      }
+      response.forEach((item) => {
+        this.items.push(this.createListItem(item, source));
+      }, this);
 
       this.awesomplete.list = this.items;
     });
@@ -196,9 +193,9 @@ class Autocomplete extends Component {
   }
 
   static addTypes(types) {
-    types.getOwnPropertyNames().forEach((name) => {
+    Object.getOwnPropertyNames(types).forEach((name) => {
       this.addType(name, types[name]);
-    });
+    }, this);
   }
 }
 

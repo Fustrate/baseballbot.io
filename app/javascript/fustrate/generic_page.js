@@ -19,7 +19,7 @@ class GenericPage {
   //     if (!this.constructor[key]) {
   //       this.constructor[key] = instance.constructor[key];
   //     }
-  //   });
+  //   }, this);
 
   //   // Assign properties to the prototype
   //   Object.getOwnPropertyNames(concern.prototype).forEach((key) => {
@@ -30,7 +30,7 @@ class GenericPage {
   //     if (!this[key]) {
   //       this[key] = concern.prototype[key].bind(this);
   //     }
-  //   });
+  //   }, this);
 
   //   if (instance.included != null) {
   //     instance.included.apply(this);
@@ -54,17 +54,19 @@ class GenericPage {
     this.fields = {};
     this.buttons = {};
 
-    this.root.querySelectorAll('[data-field]')
-      .filter(element => !element.matches('.modal [data-field]'))
-      .forEach((element) => {
-        this.fields[element.dataset.field] = element;
-      });
+    Array.prototype.filter.call(
+      this.root.querySelectorAll('[data-field]'),
+      element => !element.matches('.modal [data-field]'),
+    ).forEach((element) => {
+      this.fields[element.dataset.field] = element;
+    });
 
-    this.root.querySelectorAll('[data-button]')
-      .filter(element => !element.matches('.modal [data-button]'))
-      .forEach((element) => {
-        this.buttons[element.dataset.button] = element;
-      });
+    Array.prototype.filter.call(
+      this.root.querySelectorAll('[data-button]'),
+      element => !element.matches('.modal [data-button]'),
+    ).forEach((element) => {
+      this.buttons[element.dataset.button] = element;
+    });
   }
 
   setHeader(text) {

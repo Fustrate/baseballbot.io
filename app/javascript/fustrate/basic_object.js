@@ -19,7 +19,7 @@ class BasicObject extends Listenable {
 
     Object.keys(data).forEach((key) => {
       this[key] = data[key];
-    });
+    }, this);
 
     if (this.date) {
       this.date = moment(this.date);

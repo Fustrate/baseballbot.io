@@ -21,6 +21,12 @@ class Flash extends Component {
       .delay(settings.displayTime)
       .fadeOut(settings.fadeOutSpeed, () => bar.remove());
   }
+
+  static initialize() {
+    const flashes = document.createElement('div');
+    flashes.id = 'flashes';
+    document.body.appendChild(flashes);
+  }
 }
 
 class Warning extends Flash {
@@ -40,6 +46,8 @@ class Success extends Flash {
     super(message, { type: 'success', icon });
   }
 }
+
+Component.register(Flash);
 
 export {
   Flash,

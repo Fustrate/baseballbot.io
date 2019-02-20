@@ -1,5 +1,4 @@
-import $ from 'jquery';
-
+import Rails from '@rails/ujs';
 import GenericPage from './generic_page';
 
 class GenericForm extends GenericPage {
@@ -12,13 +11,8 @@ class GenericForm extends GenericPage {
   reloadUIElements() {
     super.reloadUIElements();
 
-    const namedFields = $('[name]', this.root);
-
-    for (let i = 0, len = namedFields.length; i < len; i += 1) {
-      const domObject = namedFields[i];
-      const element = $(domObject);
-      const name = element.prop('name');
-
+    document.querySelectorAll('[name]').forEach((element) => {
+      const { name } = element;
       const captures = name.match(/\[([a-z0-9_]+)\]/g);
 
       if (captures) {
@@ -26,21 +20,7 @@ class GenericForm extends GenericPage {
       } else {
         this.fields[name] = element;
       }
-    }
-  }
-
-  validate() { return true; } // eslint-disable-line class-methods-use-this
-
-  onSubmit(e) {
-    if (this.validate()) {
-      return true;
-    }
-
-    e.preventDefault();
-
-    setTimeout((() => $.rails.enableFormElements(this.root)), 100);
-
-    return false;
+    }, this);
   }
 
   // Modified to remove recursion - no need to pass elements around endlessly.
@@ -64,6 +44,20 @@ class GenericForm extends GenericPage {
     }
 
     context[piece] = element;
+  }
+
+  validate() { return true; } // eslint-disable-line class-methods-use-this
+
+  onSubmit(e) {
+    if (this.validate()) {
+      return true;
+    }
+
+    e.preventDefault();
+
+    setTimeout((() => Rails.enableFormElements(this.root)), 100);
+
+    return false;
   }
 }
 
