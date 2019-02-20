@@ -3,12 +3,9 @@
 require 'mlb_stats_api'
 
 class SubredditsController < ApplicationController
-  def index
-    @api = ::MLBStatsAPI::Client.new(
-      logger: Rails.logger,
-      cache: Rails.application.redis
-    )
+  before_action :load_api
 
+  def index
     @subreddits = Subreddit.order(:name).includes(:account)
   end
 
@@ -17,6 +14,13 @@ class SubredditsController < ApplicationController
   end
 
   protected
+
+  def load_api
+    @api = ::MLBStatsAPI::Client.new(
+      logger: Rails.logger,
+      cache: Rails.application.redis
+    )
+  end
 
   def load_subreddit
     return Subreddit.find(params[:id]) if /\A\d+\z/.match?(params[:id])
