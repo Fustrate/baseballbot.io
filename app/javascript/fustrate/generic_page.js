@@ -54,14 +54,16 @@ class GenericPage {
     this.fields = {};
     this.buttons = {};
 
-    $('[data-field]', this.root).not('.modal [data-field]')
-      .each((i, element) => {
-        this.fields[element.dataset.field] = $(element);
+    this.root.querySelectorAll('[data-field]')
+      .filter(element => !element.matches('.modal [data-field]'))
+      .forEach((element) => {
+        this.fields[element.dataset.field] = element;
       });
 
-    $('[data-button]', this.root).not('.modal [data-button]')
-      .each((i, element) => {
-        this.buttons[element.dataset.button] = $(element);
+    this.root.querySelectorAll('[data-button]')
+      .filter(element => !element.matches('.modal [data-button]'))
+      .forEach((element) => {
+        this.buttons[element.dataset.button] = element;
       });
   }
 

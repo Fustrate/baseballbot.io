@@ -222,3 +222,8 @@ function momentToHumanDate(time = false) {
 }
 
 moment.fn.toHumanDate = momentToHumanDate;
+
+if (!Element.prototype.matches) {
+  Element.prototype.matches = Element.prototype.msMatchesSelector
+    || Element.prototype.webkitMatchesSelector;
+}

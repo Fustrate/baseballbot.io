@@ -36,7 +36,7 @@ class ShowSubreddit extends GenericPage {
       listItems.push('<li>Postgame Threads</li>');
     }
 
-    this.fields.options.empty().append(listItems);
+    this.fields.options.innerHTML = listItems.join('');
   }
 
   refreshTemplates() {
@@ -44,7 +44,7 @@ class ShowSubreddit extends GenericPage {
       .map(template => new Template(template))
       .map(template => `<li>${BaseballBot.linkTo(template.type.titleize(), template.path())}</li>`);
 
-    this.fields.templates.empty().append(listItems);
+    this.fields.templates.innerHTML = listItems.join('');
   }
 }
 
