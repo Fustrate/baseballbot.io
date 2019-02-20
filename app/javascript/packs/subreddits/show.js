@@ -10,11 +10,7 @@ class ShowSubreddit extends GenericPage {
     this.subreddit.reload().done(() => {
       this.refresh();
     });
-  }
 
-  refresh() {
-    this.refreshSettings();
-    this.refreshTemplates();
   }
 
   refreshSettings() {

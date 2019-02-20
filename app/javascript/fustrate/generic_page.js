@@ -38,7 +38,7 @@ class GenericPage {
   // }
 
   addEventListeners() {
-    Object.getOwnPropertyNames(this).forEach((name) => {
+    Object.getOwnPropertyNames(Object.getPrototypeOf(this)).forEach((name) => {
       // Edge returns true for /one.+two/.test('onetwo'), 2017-10-21
       if (/^add..*EventListeners$/.test(name)) {
         this[name].apply(this);
@@ -70,7 +70,13 @@ class GenericPage {
   }
 
   // Calls all methods matching /refresh.+/
-  refresh() {} // eslint-disable-line class-methods-use-this
+  refresh() {
+    Object.getOwnPropertyNames(Object.getPrototypeOf(this)).forEach((name) => {
+      if (name !== 'refresh' && name.indexOf('refresh') === 0) {
+        this[name].apply(this);
+      }
+    });
+  }
 }
 
 export default GenericPage;
