@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+Jbuilder.key_format camelize: :lower
+
 class Jbuilder
   def collection!(collection, *options)
     if ::Kernel.block_given?

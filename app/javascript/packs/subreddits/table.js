@@ -35,15 +35,15 @@ class SubredditsTable extends GenericTable {
       row.querySelector('.sidebar').innerHTML = BaseballBot.icon('check');
     }
 
-    if (subreddit.options.game_threads && subreddit.options.game_threads.enabled) {
-      const postAt = subreddit.options.game_threads.post_at;
+    if (subreddit.options.gameThreads && subreddit.options.gameThreads.enabled) {
+      const { postAt } = subreddit.options.gameThreads;
 
       row.querySelector('.game_threads').setAttribute('title', Subreddit.postAtFormat(postAt));
       row.querySelector('.game_threads').innerHTML = BaseballBot.icon('check');
     }
 
     if (subreddit.options.pregame && subreddit.options.pregame.enabled) {
-      const postAt = subreddit.options.pregame.post_at;
+      const { postAt } = subreddit.options.pregame;
 
       row.querySelector('.pregames').setAttribute('title', Subreddit.postAtFormat(postAt));
       row.querySelector('.pregames').innerHTML = BaseballBot.icon('check');

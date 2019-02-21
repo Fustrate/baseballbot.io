@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import Record from '../fustrate/record';
 import Routes from './routes'; // eslint-disable-line import/no-unresolved
 
@@ -8,6 +10,13 @@ class GameThread extends Record {
 
   path({ format } = {}) {
     return Routes.game_thread_path(this.id, { format });
+  }
+
+  extractFromData(data) {
+    super.extractFromData(data);
+
+    this.postAt = moment(this.postAt);
+    this.startsAt = moment(this.startsAt);
   }
 }
 
