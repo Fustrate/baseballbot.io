@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 class GenericPage {
   constructor(root) {
     this.root = root;
@@ -22,13 +20,13 @@ class GenericPage {
   //   }, this);
 
   //   // Assign properties to the prototype
-  //   Object.getOwnPropertyNames(concern.prototype).forEach((key) => {
+  //   Object.getOwnPropertyNames(Object.getPrototypeOf(concern)).forEach((key) => {
   //     if (key === 'included' || key === 'initialize') {
   //       return;
   //     }
 
   //     if (!this[key]) {
-  //       this[key] = concern.prototype[key].bind(this);
+  //       this[key] = concern[key].bind(this);
   //     }
   //   }, this);
 
@@ -70,7 +68,7 @@ class GenericPage {
   }
 
   setHeader(text) {
-    $('.header > span', this.root).text(text);
+    this.root.querySelector('.header > span').textContent = text;
   }
 
   // Calls all methods matching /refresh.+/

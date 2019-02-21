@@ -9,6 +9,7 @@ const settings = {
 };
 
 class Pagination extends Component {
+  /* eslint-disable camelcase */
   constructor({
     current_page, total_pages, total_entries, per_page,
   }) {
@@ -21,6 +22,7 @@ class Pagination extends Component {
 
     this.base = this.constructor.getPreppedPaginationURL();
   }
+  /* eslint-enable camelcase */
 
   link(text, page, ...args) {
     return Fustrate.linkTo(text, `${this.base}page=${page}`, ...args);

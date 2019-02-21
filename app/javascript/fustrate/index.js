@@ -59,7 +59,14 @@ class Fustrate {
       // beforeSend: Rails.CSRFProtection,
     });
 
-    $('table').wrap('<div class="responsive-table"></div>');
+    document.querySelectorAll('table').forEach((table) => {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('responsive-table');
+
+      table.parentNode.insertBefore(wrapper, table);
+
+      wrapper.appendChild(table);
+    });
   }
 
   static stringToClass(name) {
@@ -116,9 +123,14 @@ class Fustrate {
       .compact()
       .join(' ')
       .toLowerCase()
-      .dasherize();
+      .dasherize()
+      .split(' ');
 
-    return $('<span>').text(text).prop('class', classes);
+    const span = document.createElement('span');
+    span.textContent = text;
+    span.classList.add(classes);
+
+    return span.outerHTML;
   }
 
   static icon(types, style = 'regular') {
@@ -149,10 +161,8 @@ class Fustrate {
   }
 
   static redirectTo(href) {
-    const path = href.path ? href.path() : href;
-
     window.setTimeout(() => {
-      window.location.href = path;
+      window.location.href = href.path ? href.path() : href;
     }, 750);
   }
 }

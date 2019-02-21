@@ -4,8 +4,7 @@ import Component from '../component';
 
 class Dropdown extends Component {
   static initialize() {
-    this.body = $('body');
-    return this.body.on('click.dropdowns', '.has-dropdown', this.open);
+    $(document.body).on('click.dropdowns', '.has-dropdown', this.open);
   }
 
   static open(event) {
@@ -15,22 +14,23 @@ class Dropdown extends Component {
 
     Dropdown.hide();
 
-    const button = $(event.currentTarget);
-    const dropdown = $('+ .dropdown', button);
+    const button = event.currentTarget;
+    const dropdown = button.nextElementSibling;
 
     Dropdown.locked = true;
 
-    if (button.position().top > (Dropdown.body.height() / 2)) {
-      top = button.position().top - dropdown.outerHeight() - 2;
+    if (button.offsetTop > (Dropdown.body.height() / 2)) {
+      top = button.offsetTop - dropdown.offsetHeight - 2;
     } else {
-      top = button.position().top + button.outerHeight() + 2;
+      top = button.offsetTop + button.offsetHeight + 2;
     }
-    if (button.position().left > (Dropdown.body.width() / 2)) {
+
+    if (button.offsetLeft > (Dropdown.body.width() / 2)) {
       left = 'inherit';
-      right = Dropdown.body.width() - button.position().left - button.outerWidth();
+      right = Dropdown.body.width() - button.offsetLeft - button.offsetWidth;
     } else {
       right = 'inherit';
-      ({ left } = button.position());
+      left = button.offsetLeft;
     }
 
     Dropdown.showDropdown(dropdown, { left, top, right });
@@ -39,9 +39,16 @@ class Dropdown extends Component {
   }
 
   static showDropdown(dropdown, css) {
-    return dropdown.addClass('visible').hide().css(css).fadeIn(200, () => {
-      this.locked = false;
-      this.body.one('click', this.hide);
+    dropdown.classList.add('visible');
+
+    dropdown.style.display = 'none';
+    dropdown.style.left = css.left;
+    dropdown.style.top = css.top;
+    dropdown.style.right = css.right;
+
+    $(dropdown).fadeIn(200, () => {
+      Dropdown.locked = false;
+      Dropdown.body.one('click', Dropdown.hide);
     });
   }
 
@@ -50,7 +57,11 @@ class Dropdown extends Component {
       return;
     }
 
-    $('.dropdown.visible').removeClass('visible').fadeOut(200);
+    const visibleDropdown = document.querySelector('.dropdown.visible');
+
+    visibleDropdown.classList.remove('visible');
+
+    $(visibleDropdown).fadeOut(200);
   }
 }
 
