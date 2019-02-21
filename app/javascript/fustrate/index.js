@@ -141,6 +141,14 @@ class Fustrate {
     return `<i class="fa${style[0]} ${classes}"></i>`;
   }
 
+  static elementFromString(string) {
+    const template = document.createElement('template');
+
+    template.innerHTML = string.trim();
+
+    return template.content.firstChild;
+  }
+
   static escapeHtml(string) {
     if (string === null || string === undefined) {
       return '';
