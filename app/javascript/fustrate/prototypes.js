@@ -1,5 +1,4 @@
 // Replicate a few common prototype methods on default objects
-import $ from 'jquery';
 import moment from 'moment';
 
 function arrayCompact(strings = true) {
@@ -200,20 +199,6 @@ String.prototype.presence = stringPresence;
 String.prototype.strip = stringStrip;
 String.prototype.titleize = stringTitleize;
 String.prototype.underscore = stringUnderscore;
-
-function jqueryOuterHTML() {
-  if (!this.length) {
-    return '';
-  }
-
-  if (this[0].outerHTML) {
-    return this[0].outerHTML;
-  }
-
-  return $('<div>').append(this[0].clone()).remove().html();
-}
-
-$.fn.outerHTML = jqueryOuterHTML;
 
 function momentToHumanDate(time = false) {
   const year = this.year() !== moment().year() ? '/YY' : '';

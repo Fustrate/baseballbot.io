@@ -75,10 +75,16 @@ class Fustrate {
   }
 
   static linkTo(text, href, options = {}) {
-    const path = href.path ? href.path() : href;
+    const element = document.createElement('a');
 
-    return $('<a>').prop('href', path).html(text).prop(options)
-      .outerHTML();
+    element.href = href.path ? href.path() : href;
+    element.innerHTML = text;
+
+    Object.keys(options).forEach((key) => {
+      element.setAttribute(key, options[key]);
+    });
+
+    return element.outerHTML;
   }
 
   static ajaxUpload(url, data) {
