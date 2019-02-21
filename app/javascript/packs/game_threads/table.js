@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import moment from 'moment';
 
 import BaseballBot from '../../baseballbot';
@@ -25,9 +24,11 @@ class GameThreadsTable extends GenericTable {
   }
 
   reloadTable() {
-    $.get(Routes.root_path({ format: 'json' })).done((response) => {
-      this.reloadRows(response.data.map(row => this.createRow(new GameThread(row))));
-    });
+    fetch(Routes.root_path({ format: 'json' }))
+      .then(response => response.json())
+      .then((response) => {
+        this.reloadRows(response.data.map(row => this.createRow(new GameThread(row))));
+      });
   }
 
   static updateRow(row, gameThread) {
