@@ -25,12 +25,12 @@ class BasicObject extends Listenable {
       this.date = moment(this.date);
     }
 
-    if (this.created_at) {
-      this.created_at = moment(this.created_at);
+    if (this.createdAt) {
+      this.createdAt = moment(this.createdAt);
     }
 
-    if (this.updated_at) {
-      this.updated_at = moment(this.updated_at);
+    if (this.updatedAt) {
+      this.updatedAt = moment(this.updatedAt);
     }
   }
 
