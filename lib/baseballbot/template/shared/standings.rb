@@ -134,9 +134,9 @@ class Baseballbot
 
           ranked = ranked_wildcard_teams(teams)
 
-          firsts = mark_wildcards teams, ranked[0], 1
+          teams_in_first_wc = mark_wildcards teams, ranked[0], 1
 
-          return unless firsts.count < allowed_wildcards
+          return unless teams_in_first_wc < allowed_wildcards
 
           mark_wildcards teams, ranked[1], 2
         end
