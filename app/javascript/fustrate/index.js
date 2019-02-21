@@ -119,7 +119,7 @@ class Fustrate {
   }
 
   static label(text, type) {
-    const classes = ['label', text.replace(/\s+/g, '-'), type]
+    const classes = ['label', type, text.replace(/\s+/g, '-')]
       .compact()
       .join(' ')
       .toLowerCase()
@@ -128,7 +128,7 @@ class Fustrate {
 
     const span = document.createElement('span');
     span.textContent = text;
-    span.classList.add(classes);
+    span.classList.add(...classes);
 
     return span.outerHTML;
   }
