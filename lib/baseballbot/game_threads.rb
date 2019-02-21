@@ -35,7 +35,7 @@ class Baseballbot
       rescue Redd::InvalidAccess
         refresh_access!
       rescue => ex
-        Honeybadger.notify(ex)
+        Honeybadger.notify(ex, context: { row: row })
       end
     end
 
@@ -54,7 +54,7 @@ class Baseballbot
         id: row['id'],
         game_pk: row['game_pk'],
         post_id: row['post_id'],
-        title: data['title'],
+        title: row['title'],
         subreddit: name_to_subreddit(row['name']),
         type: row['type']
       )
