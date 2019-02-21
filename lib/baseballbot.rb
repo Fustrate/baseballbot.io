@@ -53,6 +53,11 @@ class Baseballbot
     @api ||= MLBStatsAPI::Client.new logger: logger, cache: redis
   end
 
+  # Returns one of 'postseason', 'regular_season', 'offseason', 'preseason'
+  def season_state
+    @season_state ||= @api.leagues(sportId: 1).dig('leagues', 0, 'seasonState')
+  end
+
   def client
     unless @options[:user_agent]
       raise 'BaseballBot was not initialized with :user_agent.'

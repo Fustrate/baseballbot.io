@@ -26,7 +26,7 @@ class GameThreadLoader
   def initialize
     @created = @updated = 0
 
-    @bot = BaseballBot.new
+    @bot = ::BaseballBot.new
   end
 
   def run
