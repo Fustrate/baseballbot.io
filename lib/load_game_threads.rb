@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'baseballbot'
+require_relative 'default_bot'
 
 class GameThreadLoader
   INSERT_GAME_THREAD = <<~SQL
@@ -26,7 +26,10 @@ class GameThreadLoader
   def initialize
     @created = @updated = 0
 
-    @bot = ::BaseballBot.new
+    @bot = DefaultBot.create(
+      purpose: 'Game Thread Loader',
+      account: 'BaseballBot'
+    )
   end
 
   def run
