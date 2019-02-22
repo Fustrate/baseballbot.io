@@ -74,13 +74,12 @@ class GameCard {
       return;
     }
 
-    const outs = parseInt(this.game.outs, 10);
     const elements = [];
 
     const outSpan = document.createElement('span');
     outSpan.classList.add('out');
 
-    for (let i = 3; i > outs; i -= 1) {
+    for (let i = this.game.linescore.outs; i < 3; i += 1) {
       elements.push(outSpan.cloneNode());
     }
 
@@ -88,11 +87,11 @@ class GameCard {
   }
 
   inProgress() {
-    return inProgressStatuses.includes(this.game.status);
+    return inProgressStatuses.includes(this.game.status.detailedState);
   }
 
   pregame() {
-    return pregameStatuses.includes(this.game.status);
+    return pregameStatuses.includes(this.game.status.detailedState);
   }
 
   gameStatus() {
@@ -118,8 +117,8 @@ class GameCard {
     this.refreshOuts();
     this.refreshRunners();
 
-    this.card.querySelector('.home-team .runs').textContent = this.game.home_team_runs;
-    this.card.querySelector('.away-team .runs').textContent = this.game.away_team_runs;
+    this.card.querySelector('.home-team .runs').textContent = this.game.linescore.teams.home.runs;
+    this.card.querySelector('.away-team .runs').textContent = this.game.linescore.teams.away.runs;
 
     this.card.querySelector('.status').textContent = this.gameStatus();
   }
