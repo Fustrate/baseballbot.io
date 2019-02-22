@@ -23,10 +23,10 @@ class Autocomplete extends Component {
 
     this.sources = Object.keys(defaultTypes).map((key) => {
       const options = defaultTypes[key];
-      return $.extend({}, this.constructor.types[key], options);
+      return Object.deepExtend({}, this.constructor.types[key], options);
     });
 
-    if ($.isPlainObject(this.sources)) {
+    if (this.sources.length === undefined) {
       this.sources = [this.sources];
     }
 
@@ -87,28 +87,28 @@ class Autocomplete extends Component {
   }
 
   onHighlight() {
-    const item = $('+ ul li[aria-selected="true"]', this.input);
+    const item = this.input[0].querySelector('+ ul li[aria-selected="true"]');
 
-    if (!item[0]) {
+    if (!item) {
       return;
     }
 
-    item[0].scrollIntoView(false);
+    item.scrollIntoView(false);
 
-    this.replace(item.data('datum').displayValue);
+    this.replace(item.dataset.datum.displayValue);
   }
 
   onSelect(e) {
     // aria-selected isn't set on click
-    const item = $(e.originalEvent.origin).closest('li');
+    const item = e.originalEvent.origin.closest('li');
     const datum = item.data('datum');
 
     this.replace(datum.displayValue);
 
     this.awesomplete.close();
 
-    $('~ input:hidden[name*="_id"]', this.awesomplete.container).val(datum.id);
-    $('~ input:hidden[name*="_type"]', this.awesomplete.container).val(datum.type);
+    this.awesomplete.container.querySelector('~ input:hidden[name*="_id"]').value = datum.id;
+    this.awesomplete.container.querySelector('~ input:hidden[name*="_type"]').value = datum.type;
 
     this.input.data({ datum }).trigger('finished.autocomplete');
 
@@ -173,7 +173,9 @@ class Autocomplete extends Component {
     listItemDatum.displayValue = datum[source.displayKey];
     listItemDatum.type = source.type;
 
-    return $(source.item.call(this, listItemDatum, this.value)).data({ listItemDatum }).get(0);
+    const listItem = source.item.call(this, listItemDatum, this.value);
+
+    return $(listItem).data({ listItemDatum }).get(0);
   }
 
   highlight(text) {
