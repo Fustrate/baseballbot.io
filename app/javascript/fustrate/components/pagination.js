@@ -38,7 +38,7 @@ class Pagination extends Component {
   }
 
   nextLink() {
-    if (this.currentPage < this.totalPages) {
+    if (this.currentPage === this.totalPages) {
       return `
         <li class="next_page unavailable">
           <a href="#">${settings.nextText}</a>
