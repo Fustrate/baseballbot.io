@@ -1,5 +1,4 @@
 import moment from 'moment';
-import $ from 'jquery';
 
 import Listenable from './listenable';
 
@@ -17,7 +16,7 @@ class BasicObject extends Listenable {
       return;
     }
 
-    Object.keys(data).forEach((key) => {
+    Object.getOwnPropertyNames(data).forEach((key) => {
       this[key] = data[key];
     }, this);
 
@@ -35,7 +34,7 @@ class BasicObject extends Listenable {
   }
 
   static buildList(items, attributes = {}) {
-    return items.map(item => new this($.extend(true, {}, item, attributes)));
+    return items.map(item => new this(Object.deepExtend({}, item, attributes)));
   }
 }
 

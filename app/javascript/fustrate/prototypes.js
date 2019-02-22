@@ -115,6 +115,22 @@ Number.prototype.bytesToString = numberBytesToString;
 Number.prototype.ordinalize = numberOrdinalize;
 Number.prototype.truncate = numberTruncate;
 
+function objectDeepExtend(out, ...rest) {
+  out = out || {};
+
+  rest
+    .filter(obj => obj)
+    .forEach((obj) => {
+      Object.getOwnPropertyNames(obj).forEach((key) => {
+        out[key] = (typeof obj[key] === 'object') ? objectDeepExtend(out[key], obj[key]) : obj[key];
+      });
+    });
+
+  return out;
+}
+
+Object.deepExtend = objectDeepExtend;
+
 function stringCapitalize() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 }
