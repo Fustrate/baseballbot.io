@@ -16,6 +16,8 @@ const blankRow = `
     <td class="status"></td>
   </tr>`;
 
+const redditIcon = BaseballBot.icon('reddit', 'brands');
+
 class GameThreadsTable extends GenericTable {
   constructor(root, reloadUrl) {
     super(root);
@@ -41,10 +43,9 @@ class GameThreadsTable extends GenericTable {
       Routes.subreddit_path(gameThread.subreddit),
     );
 
-    row.querySelector('.title').innerHTML = BaseballBot.linkTo(
-      gameThread.title,
-      `http://redd.it/${gameThread.postId}`,
-    );
+    if (gameThread.title) {
+      row.querySelector('.title').innerHTML = this.gameThreadLink(gameThread);
+    }
 
     row.querySelector('.game_pk').innerHTML = BaseballBot.linkTo(
       gameThread.gamePk,
@@ -57,6 +58,13 @@ class GameThreadsTable extends GenericTable {
     row.querySelector('.status').innerHTML = this.statusLabel(gameThread);
 
     return row;
+  }
+
+  static gameThreadLink(gameThread) {
+    return BaseballBot.linkTo(
+      `${redditIcon} ${gameThread.title}`,
+      `http://redd.it/${gameThread.postId}`,
+    );
   }
 
   static get blankRow() {

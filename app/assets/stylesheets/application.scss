@@ -11,6 +11,7 @@
 @import 'FontAwesome/light';
 @import 'FontAwesome/regular';
 @import 'FontAwesome/solid';
+@import 'FontAwesome/brands';
 
 @import 'vendor/highlight';
 
@@ -49,3 +50,9 @@
 //     @include label-style($bg: $secondary-color);
 //   }
 // }
+
+a {
+  .fa-reddit {
+    color: #ff4500;
+  }
+}
