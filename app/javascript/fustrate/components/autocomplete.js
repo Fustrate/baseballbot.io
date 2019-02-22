@@ -61,8 +61,8 @@ class Autocomplete extends Component {
 
     this.awesomplete.close();
 
-    $('~ input:hidden[name*="_id"]', this.awesomplete.container).val(null);
-    $('~ input:hidden[name*="_type"]', this.awesomplete.container).val(null);
+    this.awesomplete.container.querySelector('~ input:hidden[name*="_id"]').value = null;
+    this.awesomplete.container.querySelector('~ input:hidden[name*="_type"]').value = null;
 
     this.input.trigger('blanked.autocomplete');
   }
