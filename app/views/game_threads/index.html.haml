@@ -1,0 +1,22 @@
+- title 'Game Threads'
+
+.pagination
+
+%table.game_threads
+  %thead
+    %tr
+      %th PK
+      %th Title
+      %th Subreddit
+      %th Post At
+      %th Starts At
+      %th Status
+  %tbody
+    %tr.loading
+      %td{ colspan: 7 } Loading game threads...
+
+%p All times are Pacific.
+
+.pagination
+
+= javascript_packs_with_chunks_tag 'game_threads/table'

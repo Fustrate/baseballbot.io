@@ -90,13 +90,11 @@ class GenericTable extends GenericPage {
   // This should be fed a response from a JSON request for a paginated
   // collection.
   updatePagination(response) {
-    if (!response.total_pages) {
+    if (!response.totalPages) {
       return;
     }
 
-    this.pagination = new Pagination(response);
-
-    const paginationHTML = this.pagination.generate();
+    const paginationHTML = (new Pagination(response)).generate();
 
     this.root.querySelectorAll('.pagination').forEach((pagination) => {
       pagination.outerHTML = paginationHTML;

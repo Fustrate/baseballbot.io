@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 import Fustrate from '..';
 import Component from '../component';
 
@@ -34,9 +32,7 @@ class Pagination extends Component {
         </li>`;
     }
 
-    const previous = this.link(settings.previousText, this.currentPage - 1, {
-      rel: 'prev',
-    });
+    const previous = this.link(settings.previousText, this.currentPage - 1, { rel: 'prev' });
 
     return `<li class="previous_page">${previous}</li>`;
   }
@@ -49,16 +45,14 @@ class Pagination extends Component {
         </li>`;
     }
 
-    const next = this.link(settings.nextText, this.currentPage + 1, {
-      rel: 'next',
-    });
+    const next = this.link(settings.nextText, this.currentPage + 1, { rel: 'next' });
 
     return `<li class="next_page">${next}</li>`;
   }
 
   generate() {
     if (this.totalPages === 1) {
-      return $('<ul class="pagination">');
+      return '<ul class="pagination"></ul>';
     }
 
     const pages = this.windowedPageNumbers().map((page) => {
@@ -76,7 +70,7 @@ class Pagination extends Component {
     pages.unshift(this.previousLink());
     pages.push(this.nextLink());
 
-    return $('<ul class="pagination">').html(pages.join(' '));
+    return `<ul class="pagination">${pages.join('')}</ul>`;
   }
 
   windowedPageNumbers() {
