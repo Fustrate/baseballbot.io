@@ -19,14 +19,14 @@ class ShowSubreddit extends GenericPage {
       listItems.push('<li>Hourly Sidebar Updates</li>');
     }
 
-    if (this.subreddit.options.game_threads && this.subreddit.options.game_threads.enabled) {
-      const postAt = this.subreddit.options.game_threads.post_at;
+    if (this.subreddit.options.gameThreads && this.subreddit.options.gameThreads.enabled) {
+      const { postAt } = this.subreddit.options.gameThreads;
 
       listItems.push(`<li>Game Threads ${Subreddit.postAtFormat(postAt)}</li>`);
     }
 
     if (this.subreddit.options.pregame && this.subreddit.options.pregame.enabled) {
-      const postAt = this.subreddit.options.pregame.post_at;
+      const { postAt } = this.subreddit.options.pregame;
 
       listItems.push(`<li>Pregame Threads ${Subreddit.postAtFormat(postAt)}</li>`);
     }

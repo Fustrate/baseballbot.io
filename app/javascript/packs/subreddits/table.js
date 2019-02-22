@@ -8,7 +8,7 @@ const blankRow = `
     <td class="team"></td>
     <td class="account"></td>
     <td class="sidebar text-center"></td>
-    <td class="game_threads text-center"></td>
+    <td class="game-threads text-center"></td>
     <td class="pregames text-center"></td>
     <td class="postgames text-center"></td>
   </tr>`;
@@ -38,7 +38,7 @@ class SubredditsTable extends GenericTable {
     if (subreddit.options.gameThreads && subreddit.options.gameThreads.enabled) {
       const { postAt } = subreddit.options.gameThreads;
 
-      row.querySelector('.game_threads').textContent = Subreddit.postAtFormat(postAt);
+      row.querySelector('.game-threads').textContent = Subreddit.postAtFormat(postAt);
     }
 
     if (subreddit.options.pregame && subreddit.options.pregame.enabled) {

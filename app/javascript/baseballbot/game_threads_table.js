@@ -20,7 +20,7 @@ class GameThreadsTable extends GenericTable {
   constructor(root, reloadUrl) {
     super(root);
 
-    this.table = root.querySelector('table.game_threads');
+    this.table = root.querySelector('table.game-threads');
 
     this.reloadUrl = reloadUrl;
   }
