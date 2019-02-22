@@ -32,25 +32,23 @@ class SubredditsTable extends GenericTable {
     row.querySelector('.account').textContent = subreddit.account.name;
 
     if (subreddit.options.sidebar && subreddit.options.sidebar.enabled) {
-      row.querySelector('.sidebar').innerHTML = BaseballBot.icon('check');
+      row.querySelector('.sidebar').innerHTML = BaseballBot.label('', 'yes');
     }
 
     if (subreddit.options.gameThreads && subreddit.options.gameThreads.enabled) {
       const { postAt } = subreddit.options.gameThreads;
 
-      row.querySelector('.game_threads').setAttribute('title', Subreddit.postAtFormat(postAt));
-      row.querySelector('.game_threads').innerHTML = BaseballBot.icon('check');
+      row.querySelector('.game_threads').textContent = Subreddit.postAtFormat(postAt);
     }
 
     if (subreddit.options.pregame && subreddit.options.pregame.enabled) {
       const { postAt } = subreddit.options.pregame;
 
-      row.querySelector('.pregames').setAttribute('title', Subreddit.postAtFormat(postAt));
-      row.querySelector('.pregames').innerHTML = BaseballBot.icon('check');
+      row.querySelector('.pregames').textContent = Subreddit.postAtFormat(postAt);
     }
 
     if (subreddit.options.postgame && subreddit.options.postgame.enabled) {
-      row.querySelector('.postgames').innerHTML = BaseballBot.icon('check');
+      row.querySelector('.postgames').innerHTML = BaseballBot.label('', 'yes');
     }
 
     return row;
