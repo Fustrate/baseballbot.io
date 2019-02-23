@@ -132,8 +132,10 @@ class GameCard {
     this.refreshOuts();
     this.refreshRunners();
 
-    this.card.querySelector('.home-team .runs').textContent = this.game.linescore.teams.home.runs;
-    this.card.querySelector('.away-team .runs').textContent = this.game.linescore.teams.away.runs;
+    if (!this.pregame()) {
+      this.card.querySelector('.home-team .runs').textContent = this.game.linescore.teams.home.runs;
+      this.card.querySelector('.away-team .runs').textContent = this.game.linescore.teams.away.runs;
+    }
 
     this.card.querySelector('.status').textContent = this.gameStatus();
   }
