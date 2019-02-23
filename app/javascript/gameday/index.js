@@ -38,6 +38,10 @@ class Gameday {
 
       return gameCard;
     });
+
+    for (let i = 0; i < 5; i += 1) {
+      this.container.appendChild(spacer.cloneNode());
+    }
   }
 
   updateGameCards(games) {

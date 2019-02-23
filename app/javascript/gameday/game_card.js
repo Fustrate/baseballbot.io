@@ -1,3 +1,5 @@
+import GameModal from './game_modal';
+
 const pregameStatuses = ['Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
 
@@ -34,7 +36,17 @@ class GameCard {
     this.card.querySelector('.home-team .name').textContent = this.game.teams.home.team.abbreviation;
     this.card.querySelector('.away-team .name').textContent = this.game.teams.away.team.abbreviation;
 
+    this.card.addEventListener('click', this.openGameModal.bind(this));
+
     this.refresh();
+  }
+
+  openGameModal() {
+    if (!this.modal) {
+      this.modal = new GameModal(this.game);
+    }
+
+    this.modal.open();
   }
 
   refreshRunners() {

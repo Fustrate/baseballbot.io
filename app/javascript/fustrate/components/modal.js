@@ -163,10 +163,10 @@ class Modal extends Component {
   addEventListeners() {
     this.modal
       .off('.modal')
-      .on('close.modal', this.close)
-      .on('open.modal', this.open)
-      .on('hide.modal', this.hide)
-      .on('opened.modal', this.focusFirstInput)
+      .on('close.modal', this.close.bind(this))
+      .on('open.modal', this.open.bind(this))
+      .on('hide.modal', this.hide.bind(this))
+      .on('opened.modal', this.focusFirstInput.bind(this))
       .on('click.modal', '.modal-close', this.constructor.closeButtonClicked);
 
     $(document)
@@ -304,7 +304,7 @@ class Modal extends Component {
   }
 
   defaultClasses() {
-    return [this.size, this.type].filter(klass => klass !== null);
+    return [this.constructor.size, this.constructor.type].filter(klass => klass !== null);
   }
 
   static toggleBackground(visible = true) {
