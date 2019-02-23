@@ -62,19 +62,19 @@ class GameCard {
       return;
     }
 
-    // 0: Bases empty
-    // 1: Runner on 1st
-    // 2: Runner on 2nd
-    // 3: Runner on 3rd
-    // 4: Runners on 1st and 2nd
-    // 5: Runners on 1st and 3rd
-    // 6: Runners on 2nd and 3rd
-    // 7: Bases loaded
-    const index = parseInt(this.game.runner_on_base_status, 10);
+    this.constructor.setBaseRunner(this.card.querySelector('.first'), this.game.linescore.offense.first);
+    this.constructor.setBaseRunner(this.card.querySelector('.second'), this.game.linescore.offense.second);
+    this.constructor.setBaseRunner(this.card.querySelector('.third'), this.game.linescore.offense.third);
+  }
 
-    this.card.querySelector('.first').classList.toggle('runner', [1, 4, 5, 7].includes(index));
-    this.card.querySelector('.second').classList.toggle('runner', [2, 4, 6, 7].includes(index));
-    this.card.querySelector('.third').classList.toggle('runner', [3, 5, 6, 7].includes(index));
+  static setBaseRunner(element, runner) {
+    if (runner) {
+      element.classList.add('runner');
+      element.title = runner.fullName;
+    } else {
+      element.classList.remove('runner');
+      element.title = '';
+    }
   }
 
   refreshOuts() {
@@ -90,14 +90,13 @@ class GameCard {
 
     const elements = [];
 
-    const outSpan = document.createElement('span');
-    outSpan.classList.add('out');
+    const outSpan = '<span class="out"></span>';
 
     for (let i = this.game.linescore.outs; i < 3; i += 1) {
-      elements.push(outSpan.cloneNode());
+      elements.push(outSpan);
     }
 
-    this.card.querySelector('.outs').innerHTML = elements;
+    this.card.querySelector('.outs').innerHTML = elements.join('');
   }
 
   inProgress() {
@@ -123,10 +122,7 @@ class GameCard {
       return this.game.status.detailedState;
     }
 
-    const sides = this.game.outs === '3' ? ['Mid', 'End'] : ['Top', 'Bot'];
-    const side = this.game.top_inning === 'Y' ? sides[0] : sides[1];
-
-    return `${side} ${this.game.inning}`;
+    return `${this.game.linescore.inningState} ${this.game.linescore.currentInning}`;
   }
 
   refresh() {
