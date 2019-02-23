@@ -3,7 +3,7 @@ import moment from 'moment';
 import GameCard from './game_card';
 
 const secondsBetweenReloads = 30;
-const apiEndpoint = 'http://statsapi.mlb.com/api/v1/schedule/?sportId=1&hydrate=game(content(summary)),linescore,flags,team';
+const apiEndpoint = 'https://statsapi.mlb.com/api/v1/schedule/?sportId=1&hydrate=game(content(summary)),linescore,flags,team';
 
 class Gameday {
   static start() {
