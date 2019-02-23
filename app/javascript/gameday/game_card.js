@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import GameModal from './game_modal';
 
 const pregameStatuses = ['Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
@@ -112,7 +114,8 @@ class GameCard {
     }
 
     if (this.pregame()) {
-      return `${this.game.time} - ${this.game.status.detailedState}`;
+      const gameTime = moment(this.game.gameDate).format('h:mm');
+      return `${gameTime} - ${this.game.status.detailedState}`;
     }
 
     if (!this.inProgress()) {
