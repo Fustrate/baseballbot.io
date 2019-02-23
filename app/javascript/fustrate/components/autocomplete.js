@@ -46,6 +46,9 @@ class Autocomplete extends Component {
       sort: false, // Items are fed in the intended order
     });
 
+    this.id_field = this.awesomplete.container.querySelector('~ input:hidden[name*="_id"]');
+    this.type_field = this.awesomplete.container.querySelector('~ input:hidden[name*="_type"]');
+
     this.input
       .data('awesomplete', this)
       .on('awesomplete-highlight', this.onHighlight)
@@ -61,8 +64,13 @@ class Autocomplete extends Component {
 
     this.awesomplete.close();
 
-    this.awesomplete.container.querySelector('~ input:hidden[name*="_id"]').value = null;
-    this.awesomplete.container.querySelector('~ input:hidden[name*="_type"]').value = null;
+    if (this.id_field) {
+      this.id_field.value = null;
+    }
+
+    if (this.type_field) {
+      this.type_field.value = null;
+    }
 
     this.input.trigger('blanked.autocomplete');
   }
@@ -107,8 +115,13 @@ class Autocomplete extends Component {
 
     this.awesomplete.close();
 
-    this.awesomplete.container.querySelector('~ input:hidden[name*="_id"]').value = datum.id;
-    this.awesomplete.container.querySelector('~ input:hidden[name*="_type"]').value = datum.type;
+    if (this.id_field) {
+      this.id_field.value = datum.id;
+    }
+
+    if (this.type_field) {
+      this.type_field.value = datum.type;
+    }
 
     this.input.data({ datum }).trigger('finished.autocomplete');
 
