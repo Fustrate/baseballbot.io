@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import GameModal from './game_modal';
 
-const pregameStatuses = ['Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
+const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
 
 const template = `
@@ -111,7 +111,7 @@ class GameCard {
   gameStatus() {
     const gameTime = moment(this.game.gameDate).format('h:mm');
 
-    if (['Preview', 'Scheduled'].includes(this.game.status.detailedState)) {
+    if (['Preview', 'Scheduled', 'Pre-Game'].includes(this.game.status.detailedState)) {
       return gameTime;
     }
 
