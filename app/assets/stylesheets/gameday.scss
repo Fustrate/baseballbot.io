@@ -40,7 +40,7 @@ $team-colors: (
   was: #ba122b #fff,
   nym: #002d70 #fc4c00,
   phi: #ba0c2e #fff,
-  mia: #0482cc #f9423b,
+  mia: #000 #00A3E0,
   bal: #fc4c00 #000,
   bos: #c60c30 #024,
   nyy: #1c2841 #fff,
@@ -94,7 +94,6 @@ $team-colors: (
 
     .away-team,
     .home-team {
-      display: inline-block;
       float: left;
       font-size: 1.6rem;
       padding: .75rem;
