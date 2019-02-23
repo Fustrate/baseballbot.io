@@ -1,9 +1,5 @@
-import moment from 'moment';
-
+import Game from './game';
 import GameModal from './game_modal';
-
-const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
-const inProgressStatuses = ['In Progress', 'Manager Challenge'];
 
 const template = `
   <div class="game-card">
@@ -28,7 +24,7 @@ const template = `
 
 class GameCard {
   constructor(game) {
-    this.game = game;
+    this.game = new Game(game);
 
     this.card = this.constructor.elementFromString(template);
 
@@ -52,13 +48,11 @@ class GameCard {
   }
 
   refreshRunners() {
-    if (this.inProgress()) {
+    if (this.game.isInProgress) {
       this.card.querySelector('.runners').style.display = '';
     } else {
       this.card.querySelector('.runners').style.display = 'none';
-    }
 
-    if (!this.inProgress()) {
       return;
     }
 
@@ -78,13 +72,13 @@ class GameCard {
   }
 
   refreshOuts() {
-    if (this.inProgress()) {
+    if (this.game.isInProgress) {
       this.card.querySelector('.outs').style.display = '';
     } else {
       this.card.querySelector('.outs').style.display = 'none';
     }
 
-    if (!this.inProgress()) {
+    if (!this.game.isInProgress) {
       return;
     }
 
@@ -99,26 +93,18 @@ class GameCard {
     this.card.querySelector('.outs').innerHTML = elements.join('');
   }
 
-  inProgress() {
-    return inProgressStatuses.includes(this.game.status.detailedState);
-  }
-
-  pregame() {
-    return pregameStatuses.includes(this.game.status.detailedState);
-  }
-
   gameStatus() {
-    const gameTime = moment(this.game.gameDate).format('h:mm');
+    const gameTime = this.game.gameDate.format('h:mm');
 
     if (['Preview', 'Scheduled', 'Pre-Game'].includes(this.game.status.detailedState)) {
       return gameTime;
     }
 
-    if (this.pregame()) {
+    if (this.game.isPregame) {
       return `${gameTime} - ${this.game.status.detailedState}`;
     }
 
-    if (!this.inProgress()) {
+    if (!this.game.isInProgress) {
       return this.game.status.detailedState;
     }
 
@@ -129,7 +115,7 @@ class GameCard {
     this.refreshOuts();
     this.refreshRunners();
 
-    if (!this.pregame()) {
+    if (!this.game.isPregame) {
       this.card.querySelector('.home-team .runs').textContent = this.game.linescore.teams.home.runs;
       this.card.querySelector('.away-team .runs').textContent = this.game.linescore.teams.away.runs;
     }
@@ -137,8 +123,8 @@ class GameCard {
     this.card.querySelector('.status').textContent = this.gameStatus();
   }
 
-  update(game) {
-    this.game = game;
+  update(data) {
+    this.game.updateData(data);
 
     this.refresh();
   }

@@ -18,28 +18,37 @@ class GameModal extends Modal {
     super({ content: template });
 
     this.game = game;
+
+    this.setTitle(`⚾ ${this.game.teams.away.team.name} @ ${this.game.teams.home.team.name}`);
   }
 
   open() {
-    this.setTitle(`⚾ ${this.game.teams.away.team.name} @ ${this.game.teams.home.team.name}`);
-
     this.modal.find('.linescore').html(this.linescore());
 
     super.open();
   }
 
   linescore() {
+    if (this.game.isPregame) {
+      return 'Line score begins at game time.';
+    }
+
     let headers = ['<th></th>'];
     let away = [`<th>${this.game.teams.away.team.teamName}</th>`];
     let home = [`<th>${this.game.teams.home.team.teamName}</th>`];
 
-    for (let i = 1; i <= this.game.linescore.currentInning; i += 1) {
+    const inningsToShow = Math.max(
+      this.game.linescore.scheduledInnings,
+      this.game.linescore.currentInning,
+    );
+
+    for (let i = 1; i <= inningsToShow; i += 1) {
       headers.push(`<th>${i}</th>`);
 
       const inning = this.game.linescore.innings[i - 1];
 
-      away.push(`<td>${inning.away.runs !== undefined ? inning.away.runs : ''}</td>`);
-      home.push(`<td>${inning.home.runs !== undefined ? inning.home.runs : ''}</td>`);
+      away.push(this.constructor.inningCell(inning, 'away'));
+      home.push(this.constructor.inningCell(inning, 'home'));
     }
 
     if (this.game.status.abstractGameState === 'Final' && home[home.length - 1] === '<td></td>') {
@@ -48,10 +57,10 @@ class GameModal extends Modal {
 
     headers = headers.concat('<th>R</th>', '<th>H</th>', '<th>E</th>', '<th>LOB</th>');
     away = away.concat(
-      this.constructor.linescoreTotals(this.game.linescore.teams.away).map(text => `<th>${text}</th>`)
+      this.constructor.linescoreTotals(this.game.linescore.teams.away).map(text => `<th>${text}</th>`),
     );
     home = home.concat(
-      this.constructor.linescoreTotals(this.game.linescore.teams.home).map(text => `<th>${text}</th>`)
+      this.constructor.linescoreTotals(this.game.linescore.teams.home).map(text => `<th>${text}</th>`),
     );
 
     return `
@@ -62,6 +71,14 @@ class GameModal extends Modal {
           <tr>${home.join('')}</tr>
         </tbody>
       </table>`;
+  }
+
+  static inningCell(inning, side) {
+    if (!inning || inning[side].runs === undefined) {
+      return '<td></td>';
+    }
+
+    return `<td>${inning[side].runs !== undefined ? inning[side].runs : ''}</td>`;
   }
 
   static linescoreTotals(team) {

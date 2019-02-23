@@ -45,14 +45,14 @@ class Gameday {
   }
 
   updateGameCards(games) {
-    const things = {};
+    const dataByPk = {};
 
-    games.forEach((game) => {
-      things[game.gamePk] = game;
+    games.forEach((gameData) => {
+      dataByPk[gameData.gamePk] = gameData;
     });
 
     this.gameCards.forEach((gameCard) => {
-      gameCard.update(things[gameCard.game.gamePk]);
+      gameCard.update(dataByPk[gameCard.game.gamePk]);
     });
   }
 
