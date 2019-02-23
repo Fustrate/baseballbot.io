@@ -16,10 +16,20 @@ class Baseballbot
 
         @bot.use_account @subreddit.account.name
 
+        return update_flair_template(flair) if flair['flair_template_id']
+
         @subreddit.set_flair(
           @submission,
           flair['text'],
           css_class: flair['class']
+        )
+      end
+
+      def update_flair_template(flair)
+        @subreddit.set_flair_template(
+          @submission,
+          flair['flair_template_id'],
+          text: flair['text']
         )
       end
 
