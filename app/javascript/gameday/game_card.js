@@ -109,12 +109,13 @@ class GameCard {
   }
 
   gameStatus() {
-    if (this.game.status.detailedState === 'Preview') {
-      return this.game.time;
+    const gameTime = moment(this.game.gameDate).format('h:mm');
+
+    if (['Preview', 'Scheduled'].includes(this.game.status.detailedState)) {
+      return gameTime;
     }
 
     if (this.pregame()) {
-      const gameTime = moment(this.game.gameDate).format('h:mm');
       return `${gameTime} - ${this.game.status.detailedState}`;
     }
 
