@@ -27,16 +27,6 @@ Dir.glob(
   File.join(File.dirname(__FILE__), 'baseballbot/{template,posts}/*.rb')
 ).sort.each { |file| require_relative file }
 
-IGNORED_EXCEPTIONS = [::Redd::ServerError, ::OpenURI::HTTPError].freeze
-
-Honeybadger.configure do |config|
-  config.before_notify do |notice|
-    if IGNORED_EXCEPTIONS.any? { |klass| notice.exception.is_a?(klass) }
-      notice.halt!
-    end
-  end
-end
-
 class Baseballbot
   include Accounts
   include GameThreads
@@ -45,8 +35,25 @@ class Baseballbot
   include Sidebars
   include Subreddits
 
+  IGNORED_EXCEPTIONS = [::Redd::ServerError, ::OpenURI::HTTPError].freeze
+
   def initialize(options = {})
     @options = options
+
+    configure_honeybadger
+  end
+
+  def configure_honeybadger
+    Honeybadger.configure do |config|
+      # For some reason, this isn't getting pulled from ENV. Do some research.
+      config.api_key = ENV['HONEYBADGER_API_KEY']
+
+      config.before_notify do |notice|
+        if IGNORED_EXCEPTIONS.any? { |klass| notice.exception.is_a?(klass) }
+          notice.halt!
+        end
+      end
+    end
   end
 
   def api
