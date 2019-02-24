@@ -94,7 +94,7 @@ class Baseballbot
             percent: row['leagueRecord']['pct'].to_f,
             road_record: records['away'],
             run_diff: row['runDifferential'],
-            streak: row['streak']['streakCode'],
+            streak: row.dig('streak', 'streakCode') || '-',
             subreddit: subreddit(row['team']['abbreviation']),
             team: row['team'],
             wildcard_champ: false,
