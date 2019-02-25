@@ -41,6 +41,32 @@ module Baseballbot
       bundle_exec_ruby 'chaos.rb', @teams
     end
   end
+
+  class GameThreadsTask < Task
+    def initialize(action, subreddits)
+      raise 'Please provide an action to perform.' unless action
+
+      @action = action
+      @subreddits = subreddits&.split('+')
+    end
+
+    def run!
+      bundle_exec_ruby 'game_threads.rb', @action, *@subreddits
+    end
+  end
+
+  class SidebarsTask < Task
+    def initialize(action, subreddits)
+      raise 'Please provide an action to perform.' unless action
+
+      @action = action
+      @subreddits = subreddits&.split('+') || []
+    end
+
+    def run!
+      bundle_exec_ruby 'sidebars.rb', @action, *@subreddits
+    end
+  end
 end
 
 namespace :bot do
@@ -57,5 +83,15 @@ namespace :bot do
   desc 'Chaos!'
   task :chaos, %i[teams] do |_, args|
     Baseballbot::ChaosTask.new(args[:teams]).run!
+  end
+
+  desc 'Post/update game threads'
+  task :game_threads, %i[action subreddits] do |_, args|
+    Baseballbot::GameThreadsTask.new(args[:action], args[:subreddits]).run!
+  end
+
+  desc 'Subreddit sidebars'
+  task :game_threads, %i[action subreddits] do |_, args|
+    Baseballbot::SidebarsTask.new(args[:action], args[:subreddits]).run!
   end
 end

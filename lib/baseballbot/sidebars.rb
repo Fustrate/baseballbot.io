@@ -32,5 +32,9 @@ class Baseballbot
     rescue => ex
       Honeybadger.notify(ex, context: { name: name, description: description })
     end
+
+    def show_sidebar(name)
+      name_to_subreddit(name).generate_sidebar
+    end
   end
 end
