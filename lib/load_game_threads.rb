@@ -52,7 +52,7 @@ class GameThreadLoader
     end
 
     @date = if ARGV[0] =~ %r{\A(\d{1,2})/(\d{4})\z}
-              Date.new(Regexp.last_match[2], Regexp.last_match[1], 1)
+              Date.new(Regexp.last_match[2].to_i, Regexp.last_match[1].to_i, 1)
             else
               Date.today
             end
