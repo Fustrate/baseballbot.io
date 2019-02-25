@@ -91,7 +91,7 @@ namespace :bot do
   end
 
   desc 'Subreddit sidebars'
-  task :game_threads, %i[action subreddits] do |_, args|
+  task :sidebars, %i[action subreddits] do |_, args|
     Baseballbot::SidebarsTask.new(args[:action], args[:subreddits]).run!
   end
 end
