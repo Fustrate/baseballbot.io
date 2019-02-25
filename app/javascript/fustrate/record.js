@@ -5,7 +5,7 @@ import Fustrate from '.';
 import BasicObject from './basic_object';
 
 class Record extends BasicObject {
-  static get classname() { return null; }
+  // static get classname() { return 'Subreddit::GameThread'; }
 
   constructor(data) {
     super(data);
@@ -74,7 +74,9 @@ class Record extends BasicObject {
     return $.ajax(this.path({ format: 'json' }), { method: 'DELETE' });
   }
 
-  _toFormData(data, object, namespace) {
+  toFormData(object, namespace) {
+    const data = new FormData();
+
     Object.getOwnPropertyNames(object).forEach((field) => {
       if (!(typeof object[field] !== 'undefined')) {
         return;
@@ -109,16 +111,16 @@ class Record extends BasicObject {
   }
 
   static paramKey() {
-    return this.class.underscore().replace('/', '_');
+    return this.classname.underscore().replace('/', '_');
   }
 
   static create(attributes) {
     const record = new this();
 
     return $.Deferred((deferred) => {
-      record.update(attributes).fail(deferred.reject).done(() => {
-        this.deferred.resolve(record);
-      });
+      record.update(attributes)
+        .fail(deferred.reject)
+        .done(() => { this.deferred.resolve(record); });
     });
   }
 }

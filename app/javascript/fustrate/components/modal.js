@@ -41,7 +41,7 @@ class Modal extends Component {
   constructor({ content, settings } = {}) {
     super();
 
-    this.settings = $.extend(true, defaultSettings, settings != null ? settings : {});
+    this.settings = Object.deepExtend({}, defaultSettings, settings != null ? settings : {});
     this.settings.previousModal = $();
     this.modal = this.createModal();
 
@@ -71,19 +71,10 @@ class Modal extends Component {
   }
 
   setTitle(title, { icon } = {}) {
-    let iconToUse = icon;
+    const iconToUse = icon !== false && icon == null ? this.constructor.icon : icon;
 
-    if (icon !== false) {
-      if (icon == null) {
-        iconToUse = this.constructor.icon;
-      }
-    }
-
-    if (icon) {
-      $('.modal-title span', this.modal).html(`${Fustrate.icon(iconToUse)} ${title}`);
-    } else {
-      $('.modal-title span', this.modal).html(title);
-    }
+    this.modal[0].querySelector('.modal-title span')
+      .innerHTML = iconToUse ? `${Fustrate.icon(iconToUse)} ${title}` : title;
   }
 
   setContent(content, reload = true) {
@@ -93,7 +84,7 @@ class Modal extends Component {
       modalContent = modalContent();
     }
 
-    $('.modal-content', this.modal).html(modalContent);
+    this.modal[0].querySelector('.modal-content').innerHTML = modalContent;
 
     this.settings.cachedHeight = undefined;
 
@@ -104,7 +95,7 @@ class Modal extends Component {
 
   setButtons(buttons, reload = true) {
     if (buttons == null || buttons.length < 1) {
-      $('.modal-buttons', this.modal).empty();
+      this.modal[0].querySelector('.modal-buttons').innerHTML = '';
 
       return;
     }
@@ -124,10 +115,10 @@ class Modal extends Component {
       }
     }, this);
 
-    const columns = list.map(element => `<div class="columns">${element}</div>`);
+    const klass = `large-${12 / list.length}`;
+    const columns = list.map(element => `<div class="columns ${klass}">${element}</div>`);
 
-    $('.modal-buttons', this.modal).empty().html(`<div class="row">${columns.join('')}</div>`);
-    $('.modal-buttons .row .columns', this.modal).addClass(`large-${12 / columns.length}`);
+    this.modal[0].querySelector('.modal-buttons').innerHTML = `<div class="row">${columns.join('')}</div>`;
 
     this.settings.cachedHeight = undefined;
 
@@ -167,14 +158,14 @@ class Modal extends Component {
       .on('open.modal', this.open.bind(this))
       .on('hide.modal', this.hide.bind(this))
       .on('opened.modal', this.focusFirstInput.bind(this))
-      .on('click.modal', '.modal-close', this.constructor.closeButtonClicked);
+      .on('click.modal', '.modal-close', this.closeButtonClicked.bind(this));
 
     $(document)
       .off('.modal', '.modal-overlay')
       .on('click.modal touchstart.modal', '.modal-overlay', this.constructor.backgroundClicked);
 
     if (this.buttons.cancel) {
-      this.buttons.cancel.addEventListener('click', this.cancel);
+      this.buttons.cancel.addEventListener('click', this.cancel.bind(this));
     }
   }
 
@@ -191,11 +182,12 @@ class Modal extends Component {
   }
 
   open() {
-    if (this.modal.hasClass('locked') || this.modal.hasClass('open')) {
+    if (this.modal[0].classList.contains('locked') || this.modal[0].classList.contains('open')) {
       return;
     }
 
-    this.modal.addClass('locked');
+    this.modal[0].classList.add('locked');
+
 
     // If there is currently a modal being shown, store it and re-open it when
     // this modal closes.
@@ -203,7 +195,7 @@ class Modal extends Component {
 
     // These events only matter when the modal is visible
     $('body').off('keyup.modal').on('keyup.modal', (e) => {
-      if (this.modal.hasClass('locked') || e.which !== 27) {
+      if (this.modal[0].classList.contains('locked') || e.which !== 27) {
         return;
       }
 
@@ -240,11 +232,11 @@ class Modal extends Component {
   }
 
   close(openPrevious = true) {
-    if (this.modal.hasClass('locked') || !this.modal.hasClass('open')) {
+    if (this.modal[0].classList.contains('locked') || !this.modal[0].classList.contains('open')) {
       return;
     }
 
-    this.modal.addClass('locked');
+    this.modal[0].classList.add('locked');
 
     $('body').off('keyup.modal');
 
@@ -259,7 +251,10 @@ class Modal extends Component {
 
     setTimeout((() => {
       this.modal.animate(endCss, 250, 'linear', () => {
-        this.modal.css(this.settings.css.close).removeClass('locked').trigger('closed.modal');
+        this.modal
+          .css(this.settings.css.close)
+          .removeClass('locked')
+          .trigger('closed.modal');
         if (openPrevious) {
           this.openPreviousModal();
         } else {
@@ -294,7 +289,7 @@ class Modal extends Component {
   cacheHeight() {
     this.settings.cachedHeight = this.modal.show().height();
 
-    return this.modal.hide();
+    this.modal.hide();
   }
 
   createModal() {
@@ -342,14 +337,10 @@ class Modal extends Component {
     return false;
   }
 
-  static closeButtonClicked() {
-    const modal = $('.modal.open');
-
-    if (!modal || modal.hasClass('locked')) {
-      return false;
+  closeButtonClicked() {
+    if (this.modal[0].classList.contains('locked')) {
+      this.modal.trigger('close.modal');
     }
-
-    modal.trigger('close.modal');
 
     return false;
   }
