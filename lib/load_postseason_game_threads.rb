@@ -5,6 +5,9 @@ require_relative 'baseballbot'
 class PostseasonGameLoader
   R_BASEBALL = 15
 
+  # TODO: This is a bad fix - figure it out the right way
+  HOUR_OFFSET = 8
+
   def initialize
     @attempts = @failures = 0
 
@@ -30,7 +33,7 @@ class PostseasonGameLoader
   def process_game(game)
     return unless add_game_to_schedule?(game)
 
-    starts_at = Time.parse(game['gameDate']) - (7 * 3600)
+    starts_at = Time.parse(game['gameDate']) - (HOUR_OFFSET * 3600)
 
     return if starts_at < Time.now
 

@@ -3,6 +3,9 @@
 require_relative 'default_bot'
 
 class GameThreadLoader
+  # TODO: This is a bad fix - figure it out the right way
+  HOUR_OFFSET = 8
+
   INSERT_GAME_THREAD = <<~SQL
     INSERT INTO game_threads (post_at, starts_at, subreddit_id, game_pk, status)
     VALUES ($1, $2, $3, $4, 'Future')
@@ -84,7 +87,7 @@ class GameThreadLoader
       date['games'].each do |game|
         next if game.dig('status', 'startTimeTBD')
 
-        starts_at = Time.parse(game['gameDate']) - (7 * 3_600)
+        starts_at = Time.parse(game['gameDate']) - (HOUR_OFFSET * 3_600)
 
         post_at = adjusted_time.call(starts_at)
 
