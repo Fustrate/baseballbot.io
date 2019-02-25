@@ -2,6 +2,7 @@
 
 require_relative 'baseballbot'
 
+# Add the ESPN game of the week to /r/baseball's schedule
 class SundayGameThreadLoader
   R_BASEBALL_ID = 15
 
@@ -9,6 +10,8 @@ class SundayGameThreadLoader
     @attempts = @failures = 0
 
     @bot = BaseballBot.new
+
+    @utc_offset = Time.now.utc_offset
   end
 
   def run
@@ -24,10 +27,7 @@ class SundayGameThreadLoader
       # Game time is not yet set or something is TBD
       next unless game['gameType'] == 'R' && espn_game?(game)
 
-      starts_at = Baseballbot::Utility.parse_time(
-        game['gameDate'],
-        in_time_zone: 'America/Los_Angeles'
-      )
+      starts_at = Time.parse(game['gameDate']) + @utc_offset
 
       next if starts_at < Time.now
 

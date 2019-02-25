@@ -2,6 +2,8 @@
 
 require_relative 'baseballbot'
 
+# Load all postseason game threads for /r/baseball - team subs will load
+# normally via load_game_threads.rb
 class PostseasonGameLoader
   R_BASEBALL = 15
 
@@ -12,6 +14,8 @@ class PostseasonGameLoader
     @attempts = @failures = 0
 
     @bot = BaseballBot.new
+
+    @utc_offset = Time.now.utc_offset
   end
 
   def run
@@ -33,7 +37,7 @@ class PostseasonGameLoader
   def process_game(game)
     return unless add_game_to_schedule?(game)
 
-    starts_at = Time.parse(game['gameDate']) - (HOUR_OFFSET * 3600)
+    starts_at = Time.parse(game['gameDate']) + @utc_offset
 
     return if starts_at < Time.now
 
