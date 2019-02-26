@@ -31,7 +31,7 @@ class FlairBot
 
     sleep 5
 
-    load_flairs after: res[:next]
+    load_flair_page after: res[:next]
   end
 
   def process_flair(_flair); end
