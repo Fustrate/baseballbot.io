@@ -5,4 +5,6 @@ json.call(
   :created_at, :updated_at
 )
 
-json.subreddit game_thread.subreddit, :id, :name, :team_id
+unless local_assigns[:subreddit] == false
+  json.subreddit game_thread.subreddit, :id, :name, :team_id
+end

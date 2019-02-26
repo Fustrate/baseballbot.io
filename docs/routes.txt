@@ -1,21 +1,22 @@
-                 Prefix Verb   URI Pattern                        Controller#Action
-                   root GET    /                                  home#home
-  accounts_authenticate GET    /accounts/authenticate(.:format)   accounts#authenticate
-discord_reddit_callback GET    /discord/reddit-callback(.:format) discord#reddit_callback
-          discord_debug GET    /discord/debug(.:format)           discord#debug
-           game_threads GET    /game_threads(.:format)            game_threads#index
-                        POST   /game_threads(.:format)            game_threads#create
-        new_game_thread GET    /game_threads/new(.:format)        game_threads#new
-       edit_game_thread GET    /game_threads/:id/edit(.:format)   game_threads#edit
-            game_thread GET    /game_threads/:id(.:format)        game_threads#show
-                        PATCH  /game_threads/:id(.:format)        game_threads#update
-                        PUT    /game_threads/:id(.:format)        game_threads#update
-                        DELETE /game_threads/:id(.:format)        game_threads#destroy
-              gamechats GET    /gamechats(.:format)               game_threads#index
-                gameday GET    /gameday(.:format)                 home#gameday
-                 log_in GET    /log_in(.:format)                  sessions#log_in
-                        POST   /log_in(.:format)                  sessions#process_log_in
-               sign_out DELETE /sign_out(.:format)                sessions#sign_out
-             subreddits GET    /subreddits(.:format)              subreddits#index
-              subreddit GET    /subreddits/:id(.:format)          subreddits#show
-               template GET    /templates/:id(.:format)           templates#show
+                 Prefix Verb   URI Pattern                            Controller#Action
+                   root GET    /                                      home#home
+  accounts_authenticate GET    /accounts/authenticate(.:format)       accounts#authenticate
+discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#reddit_callback
+          discord_debug GET    /discord/debug(.:format)               discord#debug
+           game_threads GET    /game_threads(.:format)                game_threads#index
+                        POST   /game_threads(.:format)                game_threads#create
+        new_game_thread GET    /game_threads/new(.:format)            game_threads#new
+       edit_game_thread GET    /game_threads/:id/edit(.:format)       game_threads#edit
+            game_thread GET    /game_threads/:id(.:format)            game_threads#show
+                        PATCH  /game_threads/:id(.:format)            game_threads#update
+                        PUT    /game_threads/:id(.:format)            game_threads#update
+                        DELETE /game_threads/:id(.:format)            game_threads#destroy
+              gamechats GET    /gamechats(.:format)                   game_threads#index
+                gameday GET    /gameday(.:format)                     home#gameday
+                 log_in GET    /log_in(.:format)                      sessions#log_in
+                        POST   /log_in(.:format)                      sessions#process_log_in
+               sign_out DELETE /sign_out(.:format)                    sessions#sign_out
+ game_threads_subreddit GET    /subreddits/:id/game_threads(.:format) subreddits#game_threads
+             subreddits GET    /subreddits(.:format)                  subreddits#index
+              subreddit GET    /subreddits/:id(.:format)              subreddits#show
+               template GET    /templates/:id(.:format)               templates#show

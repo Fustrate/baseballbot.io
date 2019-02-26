@@ -1,4 +1,11 @@
-- title 'Game Threads'
+- title "/r/#{@subreddit.name} Game Threads"
+- html_data subreddit: @subreddit.id
+
+%h1.text-center
+  = link_to "https://reddit.com/r/#{@subreddit.name}" do
+    %i.fa.fab.fa-reddit
+    \/r/#{@subreddit.name}
+  Game Threads
 
 .pagination
 

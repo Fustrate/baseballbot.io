@@ -5,12 +5,23 @@ require 'mlb_stats_api'
 class SubredditsController < ApplicationController
   before_action :load_api
 
+  before_action :load_subreddit, except: %i[index]
+
   def index
     @subreddits = Subreddit.order(:name).includes(:account)
   end
 
   def show
-    @subreddit = load_subreddit
+  end
+
+  def game_threads
+    respond_to do |format|
+      format.html
+      format.json do
+        @game_threads = GameThreads::LoadPage
+          .call(scope: @subreddit.game_threads)
+      end
+    end
   end
 
   protected
@@ -23,8 +34,10 @@ class SubredditsController < ApplicationController
   end
 
   def load_subreddit
-    return Subreddit.find(params[:id]) if /\A\d+\z/.match?(params[:id])
-
-    Subreddit.find_by(name: params[:id].to_s.downcase)
+    @subreddit = if /\A\d+\z/.match?(params[:id])
+                   Subreddit.find(params[:id])
+                 else
+                   Subreddit.find_by(name: params[:id].to_s.downcase)
+                 end
   end
 end
