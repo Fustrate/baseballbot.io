@@ -1,4 +1,4 @@
-import Modal from '../fustrate/components/modal';
+import { Modal } from '@fustrate/rails';
 
 const template = `
   <section>

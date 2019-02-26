@@ -1,4 +1,4 @@
-import Fustrate from '../fustrate';
+import Fustrate from '@fustrate/rails';
 
 class BaseballBot extends Fustrate {
 }

@@ -1,7 +1,7 @@
 import moment from 'moment';
+import { GenericTable } from '@fustrate/rails';
 
 import BaseballBot from '.';
-import GenericTable from '../fustrate/generic_table';
 import GameThread from './game_thread';
 
 import Routes from './routes'; // eslint-disable-line import/no-unresolved

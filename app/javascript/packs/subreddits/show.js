@@ -1,5 +1,6 @@
+import { GenericPage } from '@fustrate/rails';
+
 import BaseballBot from '../../baseballbot';
-import GenericPage from '../../fustrate/generic_page';
 import Subreddit from '../../baseballbot/subreddit';
 import Template from '../../baseballbot/template';
 

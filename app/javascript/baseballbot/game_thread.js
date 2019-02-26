@@ -1,6 +1,6 @@
 import moment from 'moment';
+import { Record } from '@fustrate/rails';
 
-import Record from '../fustrate/record';
 import Routes from './routes'; // eslint-disable-line import/no-unresolved
 
 class GameThread extends Record {

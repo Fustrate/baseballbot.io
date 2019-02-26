@@ -1,4 +1,4 @@
-import Record from '../fustrate/record';
+import { Record } from '@fustrate/rails';
 import Routes from './routes'; // eslint-disable-line import/no-unresolved
 
 class Subreddit extends Record {

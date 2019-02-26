@@ -1,11 +1,8 @@
 {
   "dependencies": {
-    "@rails/ujs": "^6.0.0-alpha",
-    "@rails/webpacker": "4.0.0-rc.7",
-    "awesomplete": "^1.1.4",
-    "jquery": "^3.3.1",
-    "moment": "^2.24.0",
-    "rails-erb-loader": "^5.5.2"
+    "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js",
+    "@rails/webpacker": "^4.0.0-rc.7",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -20,6 +17,7 @@
     "eslint": "^5.13.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "mini-css-extract-plugin": "^0.5.0",
     "webpack": "^4.29.4",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"

@@ -1,5 +1,5 @@
+import { GenericTable } from '@fustrate/rails';
 import BaseballBot from '../../baseballbot';
-import GenericTable from '../../fustrate/generic_table';
 import Subreddit from '../../baseballbot/subreddit';
 
 const blankRow = `
