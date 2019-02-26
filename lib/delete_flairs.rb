@@ -4,9 +4,9 @@ require_relative 'flair_bot'
 
 class DeleteFlairs < FlairBot
   def initialize
-    super(purpose: 'Delete Flairs', subreddit: 'baseball')
+    super(purpose: 'Delete Flairs', subreddit: ARGV[0])
 
-    @classes = ARGV[0].split(',')
+    @classes = ARGV[1].split(',')
   end
 
   def run(after:)
