@@ -27,4 +27,4 @@ class DeleteFlairs < FlairBot
   end
 end
 
-DeleteFlairs.new.run after: ARGV[1]
+DeleteFlairs.new.run after: ARGV[2]
