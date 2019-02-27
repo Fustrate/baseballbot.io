@@ -18,7 +18,7 @@
 #   # policy.report_uri "/csp-violation-report-endpoint"
 
 #   # Webpacker
-#   policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
+#   policy.connect_src :self, :https, "http://localhost:3037", "ws://localhost:3037" if Rails.env.development?
 # end
 
 # If you are using UJS then enable automatic nonce generation
