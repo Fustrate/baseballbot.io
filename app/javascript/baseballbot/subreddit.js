@@ -1,5 +1,5 @@
 import { Record } from '@fustrate/rails';
-import Routes from './routes'; // eslint-disable-line import/no-unresolved
+import Routes from './routes.js.erb';
 
 class Subreddit extends Record {
   static get createPath() { return Routes.subreddits_path; }

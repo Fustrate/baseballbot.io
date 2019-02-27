@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Record } from '@fustrate/rails';
 
-import Routes from './routes'; // eslint-disable-line import/no-unresolved
+import Routes from './routes.js.erb';
 
 class GameThread extends Record {
   static get createPath() { return Routes.game_threads_path; }

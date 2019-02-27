@@ -4,7 +4,7 @@ import { GenericTable } from '@fustrate/rails';
 import BaseballBot from '.';
 import GameThread from './game_thread';
 
-import Routes from './routes'; // eslint-disable-line import/no-unresolved
+import Routes from './routes.js.erb';
 
 const blankRow = `
   <tr>
