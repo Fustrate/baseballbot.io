@@ -1,11 +1,6 @@
-scss_files: 'app/assets/stylesheets/**/*.scss'
+scss_files: 'app/frontend/stylesheets/**/*.scss'
 
 linters:
   Indentation:
     severity: warning
     width: 2
-
-  # On v0.57.1, the above exclude directive does not work in Atom's linter
-  Comment:
-    exclude:
-      - 'app/assets/stylesheets/FontAwesome/**'

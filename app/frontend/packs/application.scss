@@ -1,16 +1,14 @@
-@import 'functions';
+@import '../stylesheets/functions';
 @import '@fortawesome/fontawesome-pro/scss/_variables';
 
 @import '@fustrate/rails/src/css/fustrate/_colors';
-@import 'settings';
+@import '../stylesheets/settings';
 @import '@fustrate/rails/src/css/_fustrate';
 
-@import 'layout';
+@import '../stylesheets/layout';
 
 @import '@fortawesome/fontawesome-pro/scss/fontawesome';
 @import '@fortawesome/fontawesome-pro/scss/light';
 @import '@fortawesome/fontawesome-pro/scss/regular';
 @import '@fortawesome/fontawesome-pro/scss/solid';
 @import '@fortawesome/fontawesome-pro/scss/brands';
-
-@import 'vendor/highlight';

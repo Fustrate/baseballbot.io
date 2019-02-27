@@ -16,9 +16,7 @@ set :linked_files, %w[
   config/skylight.yml
 ]
 
-set :linked_dirs, %w[
-  app/assets/fonts log tmp/pids tmp/cache tmp/sockets public/system
-]
+set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets public/system]
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
 
