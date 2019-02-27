@@ -1,16 +1,16 @@
 @import 'functions';
-@import 'FontAwesome/variables';
+@import '@fortawesome/fontawesome-pro/scss/_variables';
 
-@import 'fustrate/colors';
+@import '@fustrate/rails/src/css/fustrate/_colors';
 @import 'settings';
-@import 'fustrate';
+@import '@fustrate/rails/src/css/_fustrate';
 
 @import 'layout';
 
-@import 'FontAwesome/fontawesome';
-@import 'FontAwesome/light';
-@import 'FontAwesome/regular';
-@import 'FontAwesome/solid';
-@import 'FontAwesome/brands';
+@import '@fortawesome/fontawesome-pro/scss/fontawesome';
+@import '@fortawesome/fontawesome-pro/scss/light';
+@import '@fortawesome/fontawesome-pro/scss/regular';
+@import '@fortawesome/fontawesome-pro/scss/solid';
+@import '@fortawesome/fontawesome-pro/scss/brands';
 
 @import 'vendor/highlight';
