@@ -115,7 +115,7 @@ class GameCard {
     this.refreshOuts();
     this.refreshRunners();
 
-    if (!this.game.isPregame) {
+    if (!this.game.isPregame && this.game.linescore) {
       this.card.querySelector('.home-team .runs').textContent = this.game.linescore.teams.home.runs;
       this.card.querySelector('.away-team .runs').textContent = this.game.linescore.teams.away.runs;
     }
