@@ -1,0 +1,11 @@
+$primary-color:   #0b2d4d;
+$secondary-color: #e7e7e7;
+$alert-color:     scale-color($red, $lightness: 15%);
+$success-color:   $green;
+$warning-color:   $orange;
+$info-color:      #d9edf7;
+$danger-color:    $red;
+
+$small-limit: 48em;
+$medium-limit: 80em;
+$large-limit: 100em;

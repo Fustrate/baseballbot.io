@@ -1,0 +1,32 @@
+@mixin font-awesome($unicode, $style: 'regular', $padding-right: 3px, $spin: false) {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  content: fa-content($unicode);
+  font-family: 'Font Awesome 5 Pro';
+  text-rendering: auto;
+
+  @if $style == 'solid' {
+    font-weight: 900;
+  } @else if $style == 'light' {
+    font-weight: 300;
+  } @else {
+    font-weight: 400;
+  }
+
+  @if $spin {
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
+    display: inline-block;
+    margin-right: $padding-right;
+  } @else {
+    padding-right: $padding-right;
+  }
+}
+
+@mixin clearfix {
+  &::after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+}

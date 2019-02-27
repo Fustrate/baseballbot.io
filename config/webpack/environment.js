@@ -1,5 +1,5 @@
 const { environment } = require('@rails/webpacker');
-const webpack = require('webpack');
+const webpack = require('webpack'); // eslint-disable-line import/no-extraneous-dependencies
 
 const erb = require('./loaders/erb');
 

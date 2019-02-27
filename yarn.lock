@@ -681,7 +681,7 @@
 
 "@fustrate/rails@https://github.com/Fustrate/fustrate-rails.js":
   version "0.1.0"
-  resolved "https://github.com/Fustrate/fustrate-rails.js#20d3ae58c212c11c5b050696681ee13c5c41970f"
+  resolved "https://github.com/Fustrate/fustrate-rails.js#43d575d14fb3acb514f75711c839f8415127425e"
   dependencies:
     "@rails/ujs" "^6.0.0-alpha"
     "@rails/webpacker" "4.0.0-rc.7"

@@ -1,15 +1,15 @@
-@import 'functions';
-@import 'FontAwesome/variables';
+@import '../stylesheets/functions';
+@import '../stylesheets/FontAwesome/variables';
 
-@import 'fustrate/colors';
-@import 'settings';
-@import 'fustrate';
-@import 'layout';
+@import '@fustrate/rails/src/css/fustrate/_colors';
+@import '../stylesheets/settings';
+@import '@fustrate/rails/src/css/_fustrate';
+@import '../stylesheets/layout';
 
-@import 'FontAwesome/fontawesome';
-@import 'FontAwesome/light';
-@import 'FontAwesome/regular';
-@import 'FontAwesome/solid';
+@import '../stylesheets/FontAwesome/fontawesome';
+@import '../stylesheets/FontAwesome/light';
+@import '../stylesheets/FontAwesome/regular';
+@import '../stylesheets/FontAwesome/solid';
 
 $card-bg: #fff;
 
