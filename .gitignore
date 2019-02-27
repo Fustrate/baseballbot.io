@@ -13,7 +13,6 @@
 
 # Pro assets can't be uploaded to the repo
 /app/assets/fonts/FontAwesome/*
-/app/frontend/fonts/FontAwesome/*
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key

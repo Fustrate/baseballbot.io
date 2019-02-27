@@ -679,6 +679,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@fortawesome/fontawesome-pro@^5.7.2":
+  version "5.7.2"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/fontawesome-pro-5.7.2.tgz#7455ec09f58d09ab4a638af57a7561d2a1d88da8"
+  integrity sha512-l9D5FTI18ixNC+WNY7d7hOQxt4aumSHJCGbFhbhG7mZpsvtY2Zm3hluoZgSyHLlG4yRRJRR3YriEwboChj6hFA==
+
 "@fustrate/rails@https://github.com/Fustrate/fustrate-rails.js":
   version "0.1.0"
   resolved "https://github.com/Fustrate/fustrate-rails.js#43d575d14fb3acb514f75711c839f8415127425e"
