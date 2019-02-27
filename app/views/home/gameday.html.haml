@@ -4,7 +4,7 @@
   %title Baseballbot Gameday
   %meta{ charset: 'utf-8' }
   %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
-  = stylesheet_pack_tag 'gameday.css'
+  = stylesheet_pack_tag 'scoreboard'
 %body
   %nav.toolbar{ role: 'navigation' }
     = link_to 'Baseballbot', root_path, class: 'branding'
@@ -19,4 +19,4 @@
 
   .loading
 
-= javascript_packs_with_chunks_tag 'gameday'
+= javascript_packs_with_chunks_tag 'scoreboard'

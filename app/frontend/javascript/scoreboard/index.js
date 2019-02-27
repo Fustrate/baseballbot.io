@@ -5,12 +5,12 @@ import GameCard from './game_card';
 const secondsBetweenReloads = 30;
 const apiEndpoint = 'https://statsapi.mlb.com/api/v1/schedule/?sportId=1&hydrate=game(content(summary)),linescore(runners),flags,team';
 
-class Gameday {
+class Scoreboard {
   static start() {
-    Gameday.instance = new this();
+    Scoreboard.instance = new this();
 
     document.addEventListener('DOMContentLoaded', () => {
-      Gameday.instance.initialize();
+      Scoreboard.instance.initialize();
     });
   }
 
@@ -69,6 +69,6 @@ class Gameday {
   }
 }
 
-window.Gameday = Gameday;
+window.Scoreboard = Scoreboard;
 
-export default Gameday;
+export default Scoreboard;

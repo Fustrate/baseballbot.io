@@ -1,5 +1,5 @@
-import BaseballBot from '../../baseballbot';
-import GameThreadsTable from '../../baseballbot/game_threads_table';
+import BaseballBot from '../../javascript/baseballbot';
+import GameThreadsTable from '../../javascript/baseballbot/game_threads_table';
 
 function getCurrentPageJson() {
   const pathname = window.location.pathname.replace(/\/+$/, '');

@@ -1,8 +1,8 @@
 import { GenericPage } from '@fustrate/rails';
 
-import BaseballBot from '../../baseballbot';
-import Subreddit from '../../baseballbot/subreddit';
-import Template from '../../baseballbot/template';
+import BaseballBot from '../../javascript/baseballbot';
+import Subreddit from '../../javascript/baseballbot/subreddit';
+import Template from '../../javascript/baseballbot/template';
 
 class ShowSubreddit extends GenericPage {
   initialize() {
