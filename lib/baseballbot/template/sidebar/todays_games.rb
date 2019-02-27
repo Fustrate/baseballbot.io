@@ -4,13 +4,10 @@ class Baseballbot
   module Template
     class Sidebar
       module TodaysGames
-        PREGAME_STATUSES = [
-          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
-        ].freeze
-
-        POSTGAME_STATUSES = [
-          'Final', 'Game Over', 'Postponed', 'Completed Early'
-        ].freeze
+        PREGAME_STATUSES = /
+          Preview|Warmup|Pre-Game|Delayed Start|Scheduled
+        /x.freeze
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def todays_games(date)
           @date = date || @subreddit.now
@@ -33,7 +30,7 @@ class Baseballbot
         def game_hash(game)
           status = game.dig('status', 'abstractGameState')
 
-          started = !PREGAME_STATUSES.include?(status)
+          started = !PREGAME_STATUSES.match?(status)
 
           {
             home: team_data(game, 'home', started),
@@ -54,14 +51,14 @@ class Baseballbot
         end
 
         def mark_winner_and_loser(data)
-          started = !PREGAME_STATUSES.include?(data[:raw_status])
+          started = !PREGAME_STATUSES.match?(data[:raw_status])
 
           return unless started && data[:home][:score] != data[:away][:score]
 
           home_team_winning = data[:home][:score] > data[:away][:score]
           winner, loser = home_team_winning ? %i[home away] : %i[away home]
 
-          over = POSTGAME_STATUSES.include?(data[:raw_status])
+          over = POSTGAME_STATUSES.match?(data[:raw_status])
 
           data[winner][:score] = bold data[winner][:score]
           data[loser][:score] = italic data[loser][:score] if over
@@ -101,7 +98,7 @@ class Baseballbot
         end
 
         def pre_or_post_game_status(game, status)
-          if POSTGAME_STATUSES.include?(status)
+          if POSTGAME_STATUSES.match?(status)
             innings = game.dig('linescore', 'currentInning')
 
             return innings == 9 ? 'F' : "F/#{innings}"
