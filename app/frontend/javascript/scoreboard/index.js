@@ -69,6 +69,4 @@ class Scoreboard {
   }
 }
 
-window.Scoreboard = Scoreboard;
-
 export default Scoreboard;

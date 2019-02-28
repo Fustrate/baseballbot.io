@@ -13,6 +13,8 @@ const blankRow = `
     <td class="postgames text-center"></td>
   </tr>`;
 
+const checkMark = BaseballBot.icon('check');
+
 class SubredditsTable extends GenericTable {
   constructor(root) {
     super(root);
@@ -32,7 +34,7 @@ class SubredditsTable extends GenericTable {
     row.querySelector('.account').textContent = subreddit.account.name;
 
     if (subreddit.options.sidebar && subreddit.options.sidebar.enabled) {
-      row.querySelector('.sidebar').innerHTML = BaseballBot.label('', 'yes');
+      row.querySelector('.sidebar').innerHTML = checkMark;
     }
 
     if (subreddit.options.gameThreads && subreddit.options.gameThreads.enabled) {
@@ -48,7 +50,7 @@ class SubredditsTable extends GenericTable {
     }
 
     if (subreddit.options.postgame && subreddit.options.postgame.enabled) {
-      row.querySelector('.postgames').innerHTML = BaseballBot.label('', 'yes');
+      row.querySelector('.postgames').innerHTML = checkMark;
     }
 
     return row;
