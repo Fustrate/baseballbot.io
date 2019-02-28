@@ -17,9 +17,9 @@ environment.config.merge({
   },
   performance: {
     hints: false,
-    // maxEntrypointSize: 400000,
+    maxEntrypointSize: 400000,
     // Don't warn about maps and fonts
-    // assetFilter: assetFilename => !(/\.(?:map|ttf|eot|svg|gz)$/.test(assetFilename)),
+    assetFilter: assetFilename => !(/\.(?:map|ttf|eot|svg|gz)$/.test(assetFilename)),
   },
 });
 

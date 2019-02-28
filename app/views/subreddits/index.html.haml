@@ -2,16 +2,16 @@
 
 %h4 Subreddits
 
-%table.subreddits
+%table.subreddits.listing
   %thead
     %tr
-      %th Name
-      %th Team
-      %th Account
-      %th.text-center Sidebar
-      %th.text-center Game Threads
-      %th.text-center Pregame
-      %th.text-center Postgame
+      %th{ 'data-column' => 'name' } Name
+      %th{ 'data-column' => 'team' } Team
+      %th{ 'data-column' => 'account' } Account
+      %th.text-center{ 'data-column' => 'sidebar' } Sidebar
+      %th.text-center{ 'data-column' => 'game_threads' } Game Threads
+      %th.text-center{ 'data-column' => 'pregame' } Pregame
+      %th.text-center{ 'data-column' => 'postgame' } Postgame
   %tbody
     %tr.loading
       %td{ colspan: 7 } Loading subreddits...

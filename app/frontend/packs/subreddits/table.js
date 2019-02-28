@@ -16,10 +16,10 @@ const blankRow = `
 const checkMark = BaseballBot.icon('check');
 
 class SubredditsTable extends GenericTable {
-  constructor(root) {
-    super(root);
+  constructor() {
+    super(document.body);
 
-    this.table = root.querySelector('table.subreddits');
+    this.table = this.root.querySelector('table.subreddits');
   }
 
   reloadTable() {
@@ -61,4 +61,4 @@ class SubredditsTable extends GenericTable {
   }
 }
 
-BaseballBot.start(new SubredditsTable(document.body));
+BaseballBot.start(new SubredditsTable());

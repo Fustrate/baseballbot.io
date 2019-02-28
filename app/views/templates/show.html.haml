@@ -1,9 +1,10 @@
 - title 'Template'
+- html_data template: @template.id
 
 %h4 /r/#{@template.subreddit.name} #{@template.type.titleize} Template
 
 %pre
-  %code.erb= @template.body
+  %code.erb{ 'data-field' => 'body' }
 
--# :javascript
--#   hljs.initHighlightingOnLoad();
+= javascript_packs_with_chunks_tag 'templates/show'
+= stylesheet_pack_tag 'highlight'
