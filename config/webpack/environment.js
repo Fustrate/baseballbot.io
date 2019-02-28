@@ -17,4 +17,14 @@ environment.config.merge({
   },
 });
 
+environment.config.merge({
+  performance: {
+    hints: false,
+    maxEntrypointSize: 400000,
+    assetFilter: (assetFilename) => {
+      return !(/\.(?:map|ttf|eot|svg|gz)$/.test(assetFilename));
+    },
+  },
+});
+
 module.exports = environment;
