@@ -29,5 +29,3 @@ namespace :deploy do
   after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
 end
-
-before 'deploy:assets:precompile', 'deploy:yarn_install'

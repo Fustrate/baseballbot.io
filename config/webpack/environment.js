@@ -15,15 +15,11 @@ environment.config.merge({
       chunks: 'all',
     },
   },
-});
-
-environment.config.merge({
   performance: {
     hints: false,
-    maxEntrypointSize: 400000,
-    assetFilter: (assetFilename) => {
-      return !(/\.(?:map|ttf|eot|svg|gz)$/.test(assetFilename));
-    },
+    // maxEntrypointSize: 400000,
+    // Don't warn about maps and fonts
+    // assetFilter: assetFilename => !(/\.(?:map|ttf|eot|svg|gz)$/.test(assetFilename)),
   },
 });
 
