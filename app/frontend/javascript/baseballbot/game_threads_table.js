@@ -20,9 +20,7 @@ const redditIcon = BaseballBot.icon('reddit', 'brands');
 
 class GameThreadsTable extends GenericTable {
   constructor(root, reloadUrl) {
-    super(root);
-
-    this.table = root.querySelector('table.game-threads');
+    super(root, root.querySelector('table.game-threads'));
 
     this.reloadUrl = reloadUrl;
   }

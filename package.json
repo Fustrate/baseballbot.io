@@ -20,6 +20,7 @@
     "eslint": "^5.13.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-lint-erb": "https://github.com/s4san/eslint-plugin-lint-erb",
     "mini-css-extract-plugin": "^0.5.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-import": "^12.0.1",

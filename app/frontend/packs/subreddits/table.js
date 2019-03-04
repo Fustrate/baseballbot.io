@@ -17,9 +17,7 @@ const checkMark = BaseballBot.icon('check');
 
 class SubredditsTable extends GenericTable {
   constructor() {
-    super(document.body);
-
-    this.table = this.root.querySelector('table.subreddits');
+    super(document.body, document.body.querySelector('table.subreddits'));
   }
 
   reloadTable() {

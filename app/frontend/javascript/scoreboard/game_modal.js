@@ -11,11 +11,14 @@ const template = `
     Box Score
   </section>`;
 
-class GameModal extends Modal {
-  static get size() { return 'small'; }
+const settings = {
+  size: 'small',
+  content: template,
+};
 
+class GameModal extends Modal {
   constructor(game) {
-    super({ content: template });
+    super({ settings });
 
     this.game = game;
 

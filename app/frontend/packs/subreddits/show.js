@@ -6,6 +6,8 @@ import Template from '../../javascript/baseballbot/template';
 
 class ShowSubreddit extends GenericPage {
   initialize() {
+    super.initialize();
+
     this.subreddit = new Subreddit(this.root.dataset.subreddit);
 
     this.subreddit.reload().done(() => {
