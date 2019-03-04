@@ -47,6 +47,7 @@ every :saturday do
   # command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_sunday_game_threads.rb"
 end
 
-every 1.day, at: '5:30 am' do
+# This is off by an hour. Investigate 5 years from now.
+every 1.day, at: '4:30 am' do
   command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby around_the_horn.rb"
 end
