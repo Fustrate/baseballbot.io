@@ -9,6 +9,8 @@ hljs.registerLanguage('javascript', erb);
 
 class ShowTemplate extends GenericPage {
   initialize() {
+    super.initialize();
+
     this.template = new Template(this.root.dataset.template);
 
     this.template.reload().done(() => {

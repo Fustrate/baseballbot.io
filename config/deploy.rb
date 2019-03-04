@@ -28,4 +28,14 @@ set :rbenv_map_bins, %w[rake gem bundle ruby rails honeybadger]
 namespace :deploy do
   after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
+
+  # Webpacker 4.0.0.rc8 broke this?
+  desc 'Run rake yarn:install'
+  task :yarn_install do
+    on roles(:web) do
+      within(release_path) { execute('yarn install') }
+    end
+  end
+
+  before 'assets:precompile', 'yarn_install'
 end
