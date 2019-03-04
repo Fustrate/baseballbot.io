@@ -11,43 +11,49 @@ def step_minutes_by(step, except: [])
   end
 end
 
-every :minute do
-  # command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby no_hitter_bot.rb"
+def bundle_exec_ruby(name, *arguments)
+  command(
+    "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby #{file}.rb #{arguments.join(' ')}"
+  )
 end
 
+# every :minute do
+#   bundle_exec_ruby :no_hitter_bot
+# end
+
 every 1.hour do
-  # command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby sidebars.rb update"
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby game_threads.rb off_day"
+  bundle_exec_ruby :sidebars, :update
+  bundle_exec_ruby :game_threads, :off_day
 end
 
 every 15.minutes do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby check_messages.rb"
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby game_threads.rb pregame"
+  bundle_exec_ruby :check_messages
+  bundle_exec_ruby :game_threads, :pregame
 end
 
 every 5.minutes do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby game_threads.rb post"
+  bundle_exec_ruby :game_threads, :post
 end
 
 # So we don't run twice on the hour
 step_minutes_by(5, except: 0) do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby sidebars.rb update baseball"
+  bundle_exec_ruby :sidebars, :update, :baseball
 end
 
 step_minutes_by(2, except: [0, 30]) do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby game_threads.rb update"
+  bundle_exec_ruby :game_threads, :update
 end
 
 step_minutes_by(30) do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby game_threads.rb update posted"
+  bundle_exec_ruby :game_threads, :update, :posted
 end
 
 every :saturday do
-  # command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_game_threads.rb"
-  # command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby load_sunday_game_threads.rb"
+  bundle_exec_ruby :load_game_threads
+  bundle_exec_ruby :load_sunday_game_threads
 end
 
 # This is off by an hour. Investigate 5 years from now.
 every 1.day, at: '4:30 am' do
-  command "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby around_the_horn.rb"
+  bundle_exec_ruby :around_the_horn
 end
