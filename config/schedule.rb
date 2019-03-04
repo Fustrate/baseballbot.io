@@ -13,7 +13,7 @@ end
 
 def bundle_exec_ruby(name, *arguments)
   command(
-    "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby #{file}.rb #{arguments.join(' ')}"
+    "cd #{DIRECTORY} && #{BUNDLE_EXEC} ruby #{name}.rb #{arguments.join(' ')}"
   )
 end
 
