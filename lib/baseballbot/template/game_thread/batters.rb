@@ -12,7 +12,7 @@ class Baseballbot
           bb: ->(_, game) { game['baseOnBalls'] },
           so: ->(_, game) { game['strikeOuts'] },
           ba: ->(season, _) { season['seasonStats']['batting']['avg'] },
-          sb: ->(, game) { game['stolenBases'] },
+          sb: ->(_, game) { game['stolenBases'] }
         }.freeze
 
         def batting_order(batter)
