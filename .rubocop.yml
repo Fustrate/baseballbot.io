@@ -3,6 +3,7 @@ AllCops:
     - bin/**/*
     - db/**/*
     - db/schema.rb
+    - node_modules/**/*
   TargetRubyVersion: 2.6
   TargetRailsVersion: 5.2
 
