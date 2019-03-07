@@ -9,6 +9,7 @@ environment.plugins.insert(
 const smp = new SpeedMeasurePlugin();
 
 environment.config.merge(smp.wrap({
+  devtool: false,
   optimization: {
     splitChunks: {
       chunks: 'all',
