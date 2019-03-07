@@ -1,4 +1,6 @@
 import { GenericTable } from '@fustrate/rails';
+import { getCurrentPageJson, icon, linkTo } from '@fustrate/rails/utilities';
+
 import BaseballBot from '../../javascript/baseballbot';
 import Subreddit from '../../javascript/baseballbot/subreddit';
 
@@ -13,7 +15,7 @@ const blankRow = `
     <td class="postgames text-center"></td>
   </tr>`;
 
-const checkMark = BaseballBot.icon('check');
+const checkMark = icon('check');
 
 class SubredditsTable extends GenericTable {
   constructor() {
@@ -21,13 +23,13 @@ class SubredditsTable extends GenericTable {
   }
 
   reloadTable() {
-    BaseballBot.getCurrentPageJson().done((response) => {
+    getCurrentPageJson().done((response) => {
       this.reloadRows(response.data.map(row => this.createRow(new Subreddit(row))));
     });
   }
 
-  static updateRow(row, subreddit) {
-    row.querySelector('.name').innerHTML = BaseballBot.linkTo(subreddit.name, subreddit);
+  updateRow(row, subreddit) {
+    row.querySelector('.name').innerHTML = linkTo(subreddit.name, subreddit);
     row.querySelector('.team').textContent = subreddit.abbreviation;
     row.querySelector('.account').textContent = subreddit.account.name;
 
@@ -50,8 +52,6 @@ class SubredditsTable extends GenericTable {
     if (subreddit.options.postgame && subreddit.options.postgame.enabled) {
       row.querySelector('.postgames').innerHTML = checkMark;
     }
-
-    return row;
   }
 
   static get blankRow() {

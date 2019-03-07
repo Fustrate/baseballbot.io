@@ -1,15 +1,15 @@
 import moment from 'moment';
 import { Record } from '@fustrate/rails';
 
-import Routes from './routes.js.erb';
+import { gameThreadPath, gameThreadsPath } from '../routes';
 
 class GameThread extends Record {
-  static get createPath() { return Routes.game_threads_path; }
+  static get createPath() { return gameThreadsPath; }
 
   static get class() { return 'GameThread'; }
 
   path({ format } = {}) {
-    return Routes.game_thread_path(this.id, { format });
+    return gameThreadPath(this.id, { format });
   }
 
   extractFromData(data) {

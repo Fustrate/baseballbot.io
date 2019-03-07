@@ -1,4 +1,5 @@
 import { GenericPage } from '@fustrate/rails';
+import { linkTo } from '@fustrate/rails/utilities';
 
 import BaseballBot from '../../javascript/baseballbot';
 import Subreddit from '../../javascript/baseballbot/subreddit';
@@ -44,7 +45,7 @@ class ShowSubreddit extends GenericPage {
   refreshTemplates() {
     const listItems = this.subreddit.templates
       .map(template => new Template(template))
-      .map(template => `<li>${BaseballBot.linkTo(template.type.titleize(), template.path())}</li>`);
+      .map(template => `<li>${linkTo(template.type.titleize(), template.path())}</li>`);
 
     this.fields.templates.innerHTML = listItems.join('');
   }

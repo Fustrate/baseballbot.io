@@ -1,5 +1,5 @@
 import BaseballBot from '../javascript/baseballbot';
 import GameThreadsTable from '../javascript/baseballbot/game_threads_table';
-import Routes from '../javascript/baseballbot/routes.js.erb';
+import { rootPath } from '../javascript/routes';
 
-BaseballBot.start(new GameThreadsTable(document.body, Routes.root_path({ format: 'json' })));
+BaseballBot.start(new GameThreadsTable(document.body, rootPath({ format: 'json' })));

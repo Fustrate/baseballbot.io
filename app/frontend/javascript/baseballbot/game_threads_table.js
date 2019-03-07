@@ -1,10 +1,10 @@
 import moment from 'moment';
 import { GenericTable } from '@fustrate/rails';
+import { icon, label, linkTo } from '@fustrate/rails/utilities';
 
-import BaseballBot from '.';
 import GameThread from './game_thread';
 
-import Routes from './routes.js.erb';
+import { subredditPath } from '../routes';
 
 const blankRow = `
   <tr>
@@ -16,7 +16,7 @@ const blankRow = `
     <td class="status"></td>
   </tr>`;
 
-const redditIcon = BaseballBot.icon('reddit', 'brands');
+const redditIcon = icon('reddit', 'brands');
 
 class GameThreadsTable extends GenericTable {
   constructor(root, reloadUrl) {
@@ -36,16 +36,16 @@ class GameThreadsTable extends GenericTable {
   }
 
   static updateRow(row, gameThread) {
-    row.querySelector('.subreddit').innerHTML = BaseballBot.linkTo(
+    row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
-      Routes.subreddit_path(gameThread.subreddit),
+      subredditPath(gameThread.subreddit),
     );
 
     if (gameThread.title) {
       row.querySelector('.title').innerHTML = this.gameThreadLink(gameThread);
     }
 
-    row.querySelector('.game_pk').innerHTML = BaseballBot.linkTo(
+    row.querySelector('.game_pk').innerHTML = linkTo(
       gameThread.gamePk,
       `https://www.mlb.com/gameday/${gameThread.gamePk}`,
     );
@@ -59,7 +59,7 @@ class GameThreadsTable extends GenericTable {
   }
 
   static gameThreadLink(gameThread) {
-    return BaseballBot.linkTo(
+    return linkTo(
       `${redditIcon} ${gameThread.title}`,
       `http://redd.it/${gameThread.postId}`,
     );
@@ -71,14 +71,14 @@ class GameThreadsTable extends GenericTable {
 
   static statusLabel(gameThread) {
     if (moment().isAfter(gameThread.postAt) && gameThread.status === 'Future') {
-      return BaseballBot.label('Error', 'fw game_thread');
+      return label('Error', 'fw game_thread');
     }
 
     if (moment().isAfter(gameThread.startsAt) && gameThread.status === 'Posted') {
-      return BaseballBot.label('Live', 'fw game_thread');
+      return label('Live', 'fw game_thread');
     }
 
-    return BaseballBot.label(gameThread.status, 'fw game_thread');
+    return label(gameThread.status, 'fw game_thread');
   }
 }
 

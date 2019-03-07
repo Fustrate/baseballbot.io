@@ -1,13 +1,13 @@
 import { Record } from '@fustrate/rails';
-import Routes from './routes.js.erb';
+import { subredditPath, subredditsPath } from '../routes';
 
 class Subreddit extends Record {
-  static get createPath() { return Routes.subreddits_path; }
+  static get createPath() { return subredditsPath; }
 
   static get class() { return 'Subreddit'; }
 
   path({ format } = {}) {
-    return Routes.subreddit_path(this.id, { format });
+    return subredditPath(this.id, { format });
   }
 
   static postAtFormat(postAt) {

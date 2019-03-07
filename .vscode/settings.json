@@ -3,10 +3,6 @@
         "editor.tabSize": 2,
         "editor.rulers": [80]
     },
-    "[erb]": {
-        "editor.tabSize": 2,
-        "editor.rulers": [80]
-    },
     "[haml]": {
         "editor.tabSize": 2,
         "editor.rulers": [80]
