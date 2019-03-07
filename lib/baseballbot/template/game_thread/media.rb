@@ -57,15 +57,17 @@ class Baseballbot
         protected
 
         def tv_feeds
-          @tv_feeds ||= content.dig('media', 'epg')
-            .detect { |media| media['title'] == 'MLBTV' }
-            .fetch('items') || []
+          @tv_feeds ||= media_with_title('MLBTV')
         end
 
         def radio_feeds
-          @radio_feeds ||= content.dig('media', 'epg')
-            .detect { |media| media['title'] == 'Audio' }
-            .fetch('items') || []
+          @radio_feeds ||= media_with_title('Audio')
+        end
+
+        def media_with_title(title)
+          content.dig('media', 'epg')
+            &.detect { |media| media['title'] == title }
+            &.fetch('items') || []
         end
 
         def radio_name(item)
