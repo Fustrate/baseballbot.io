@@ -35,14 +35,14 @@ class GameThreadsTable extends GenericTable {
       });
   }
 
-  static updateRow(row, gameThread) {
+  updateRow(row, gameThread) {
     row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
       subredditPath(gameThread.subreddit),
     );
 
     if (gameThread.title) {
-      row.querySelector('.title').innerHTML = this.gameThreadLink(gameThread);
+      row.querySelector('.title').innerHTML = this.constructor.gameThreadLink(gameThread);
     }
 
     row.querySelector('.game_pk').innerHTML = linkTo(
@@ -53,7 +53,7 @@ class GameThreadsTable extends GenericTable {
     row.querySelector('.post_at').textContent = gameThread.postAt.toHumanDate(true);
     row.querySelector('.starts_at').textContent = gameThread.startsAt.toHumanDate(true);
 
-    row.querySelector('.status').innerHTML = this.statusLabel(gameThread);
+    row.querySelector('.status').innerHTML = this.constructor.statusLabel(gameThread);
 
     return row;
   }
