@@ -23,19 +23,9 @@ set :default_env, path: '/opt/ruby/bin:$PATH'
 set :rbenv_ruby, File.read(File.expand_path('../.ruby-version', __dir__)).strip
 set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} " \
                    "#{fetch :rbenv_path}/bin/rbenv exec"
-set :rbenv_map_bins, %w[rake gem bundle ruby rails honeybadger]
+set :rbenv_map_bins, %w[rake gem bundle ruby rails honeybadger yarn]
 
 namespace :deploy do
   after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
-
-  # Webpacker 4.0.0.rc8 broke this?
-  desc 'Run rake yarn:install'
-  task :yarn_install do
-    on roles(:web) do
-      within(release_path) { execute('yarn install') }
-    end
-  end
-
-  before 'assets:precompile', 'yarn_install'
 end
