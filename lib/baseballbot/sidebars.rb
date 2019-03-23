@@ -20,11 +20,15 @@ class Baseballbot
     end
 
     def update_sidebar!(name)
+      logger.info "[Sidebar] Updating /r/#{name}"
+
       subreddit = name_to_subreddit(name)
 
       description = subreddit.generate_sidebar
 
       subreddit.modify_settings description: description
+
+      logger.info "[Sidebar] Updated /r/#{name}"
     rescue Redd::InvalidAccess
       refresh_access!
 
