@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_25_011756) do
+ActiveRecord::Schema.define(version: 2019_03_23_191654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,16 @@ ActiveRecord::Schema.define(version: 2018_10_25_011756) do
     t.string "refresh_token"
     t.string "scope", default: [], array: true
     t.datetime "expires_at"
+  end
+
+  create_table "bot_actions", force: :cascade do |t|
+    t.string "subject_type", null: false
+    t.bigint "subject_id", null: false
+    t.string "action", null: false
+    t.string "note"
+    t.json "data"
+    t.datetime "date", default: -> { "now()" }
+    t.index ["subject_type", "subject_id"], name: "index_bot_actions_on_subject_type_and_subject_id"
   end
 
   create_table "events", id: :serial, force: :cascade do |t|
@@ -39,8 +49,8 @@ ActiveRecord::Schema.define(version: 2018_10_25_011756) do
     t.string "status"
     t.string "title"
     t.string "post_id"
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "created_at", default: -> { "now()" }
+    t.datetime "updated_at", default: -> { "now()" }
     t.integer "subreddit_id", null: false
     t.integer "game_pk"
     t.string "type"

@@ -33,6 +33,16 @@ class Baseballbot
       )
     end
 
+    def log_action(action, note: '', data: {})
+      @bot.log_action(
+        subject_type: 'Subreddit',
+        subject_id: @id,
+        action: action,
+        note: note,
+        data: data
+      )
+    end
+
     def post_off_day_thread?
       @bot.api.schedule(
         sportId: 1,

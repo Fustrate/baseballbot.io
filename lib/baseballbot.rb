@@ -85,6 +85,14 @@ class Baseballbot
     @logger ||= @options[:logger] || Logger.new(STDOUT)
   end
 
+  def log_action(subject_type:, subject_id:, action:, note: nil, data: {})
+    db.exec_params(
+      'INSERT INTO bot_actions (subject_type, subject_id, action, note, data)
+      VALUES ($1, $2, $3, $4, $5)',
+      [subject_type, subject_id, action, note, data]
+    )
+  end
+
   def redis
     @redis ||= Redis.new
   end

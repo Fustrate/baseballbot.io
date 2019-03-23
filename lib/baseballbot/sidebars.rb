@@ -15,26 +15,26 @@ class Baseballbot
       db.exec(SUBREDDITS_WITH_SIDEBARS_QUERY).each do |row|
         next unless names.empty? || names.include?(row['name'].downcase)
 
-        update_sidebar! subreddits[row['name']]
+        update_sidebar! name_to_subreddit(subreddits[row['name']])
       end
     end
 
-    def update_sidebar!(name)
-      logger.info "[Sidebar] Updating /r/#{name}"
+    def update_sidebar!(subreddit)
+      settings = { description: subreddit.generate_sidebar }
 
-      subreddit = name_to_subreddit(name)
+      subreddit.modify_settings settings
 
-      description = subreddit.generate_sidebar
-
-      subreddit.modify_settings description: description
-
-      logger.info "[Sidebar] Updated /r/#{name}"
+      subreddit.log_action 'Finished sidebar update'
     rescue Redd::InvalidAccess
       refresh_access!
 
-      subreddit.modify_settings description: description
+      subreddit.modify_settings settings
+
+      subreddit.log_action 'Finished sidebar update', data: { attempt: 2 }
     rescue => ex
-      Honeybadger.notify(ex, context: { name: name, description: description })
+      id = Honeybadger.notify(ex, context: settings.merge(name: name))
+
+      subreddit.log_action 'Sidebar update failed', data: { honeybadger_id: id }
     end
 
     def show_sidebar(name)
