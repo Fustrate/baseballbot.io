@@ -32,24 +32,18 @@ class Baseballbot
     def post_game_threads!(names: [])
       unposted_game_threads(names).each do |row|
         build_game_thread(row).create!
-      rescue Redd::InvalidAccess
-        refresh_access!
-      rescue => ex
-        Honeybadger.notify(ex, context: { row: row })
       end
     end
 
     def update_game_threads!(names: [])
       game_threads_to_update(names).each do |row|
         build_game_thread(row).update!
-      rescue Redd::InvalidAccess
-        refresh_access!
-      rescue => ex
-        Honeybadger.notify(ex)
       end
     end
 
     def build_game_thread(row)
+      Honeybadger.context(subreddit: row['name'])
+
       Baseballbot::Posts::GameThread.new(
         id: row['id'],
         game_pk: row['game_pk'],

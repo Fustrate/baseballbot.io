@@ -35,13 +35,13 @@ class Baseballbot
     end
 
     def post_pregame_thread!(id:, name:, game_pk:)
+      Honeybadger.context(subreddit: name)
+
       Baseballbot::Posts::Pregame.new(
         id: id,
         game_pk: game_pk,
         subreddit: name_to_subreddit(name)
       ).create!
-    rescue => ex
-      Honeybadger.notify(ex, context: { name: name })
     end
   end
 end

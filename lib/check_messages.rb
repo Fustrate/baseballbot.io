@@ -21,8 +21,6 @@ class CheckMessages
     sleep 30
 
     run!(retry_on_failure: false)
-  rescue => ex
-    Honeybadger.notify(ex)
   end
 
   protected

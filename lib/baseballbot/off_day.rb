@@ -28,6 +28,8 @@ class Baseballbot
     end
 
     def post_off_day_thread!(name:)
+      Honeybadger.context(subreddit: name)
+
       subreddit = name_to_subreddit(name)
 
       off_day_check_was_run!(subreddit)
@@ -35,8 +37,6 @@ class Baseballbot
       return unless subreddit.post_off_day_thread?
 
       Baseballbot::Posts::OffDay.new(subreddit: subreddit).create!
-    rescue => ex
-      Honeybadger.notify(ex, context: { name: name })
     end
 
     def off_day_check_was_run!(subreddit)

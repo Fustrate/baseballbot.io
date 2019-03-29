@@ -1,2 +1,7 @@
 ---
 api_key: ''
+exceptions:
+  ignore:
+    - 'UserError'
+    - 'ActiveRecord::RecordInvalid'
+    - 'ActiveRecord::NotNullViolation'

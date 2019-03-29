@@ -22,14 +22,12 @@ class Baseballbot
     def update_sidebar!(subreddit)
       settings = { description: subreddit.generate_sidebar }
 
-      subreddit.modify_settings settings
-    rescue => ex
-      id = Honeybadger.notify(
-        ex,
-        context: (settings || {}).merge(name: subreddit.name)
+      Honeybadger.context(
+        subreddit: subreddit.name,
+        settings: settings
       )
 
-      subreddit.log_action 'Sidebar update failed', data: { honeybadger_id: id }
+      subreddit.modify_settings settings
     end
 
     def show_sidebar(name)
