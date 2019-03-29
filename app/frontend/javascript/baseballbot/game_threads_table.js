@@ -42,7 +42,7 @@ class GameThreadsTable extends GenericTable {
     );
 
     if (gameThread.title) {
-      row.querySelector('.title').innerHTML = this.constructor.gameThreadLink(gameThread);
+      this.constructor.populateGameThreadTitle(row.querySelector('.title'), gameThread);
     }
 
     row.querySelector('.game_pk').innerHTML = linkTo(
@@ -58,8 +58,14 @@ class GameThreadsTable extends GenericTable {
     return row;
   }
 
-  static gameThreadLink(gameThread) {
-    return linkTo(
+  static populateGameThreadTitle(cell, gameThread) {
+    if (!gameThread.postId) {
+      cell.textContent = gameThread.title;
+
+      return;
+    }
+
+    cell.innerHTML = linkTo(
       `${redditIcon} ${gameThread.title}`,
       `http://redd.it/${gameThread.postId}`,
     );
