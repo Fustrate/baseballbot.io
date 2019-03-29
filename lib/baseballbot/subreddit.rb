@@ -156,17 +156,16 @@ class Baseballbot
     # Logging
     # --------------------------------------------------------------------------
 
-    def log_errors(errors, new_settings)
+    def log_errors(errors, _new_settings)
       return unless errors&.count&.positive?
 
       errors.each do |error|
-        @bot.logger.info "#{@name}: #{error[0]}: #{error[1]} (#{error[2]})"
+        log_action 'Sidebar update error', data: { error: error }
 
-        next unless error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
-
-        # TODO: Message the moderators of the subreddit to tell them their
-        # sidebar is X characters too long.
-        puts "New length is #{new_settings[error[2].to_sym].length}"
+        # if error[0] == 'TOO_LONG' && error[1] =~ /max: \d+/
+        #   # TODO: Message the moderators of the subreddit to tell them their
+        #   # sidebar is X characters too long.
+        # end
       end
     end
 
