@@ -71,14 +71,14 @@ class GameThreadsTable extends GenericTable {
 
   static statusLabel(gameThread) {
     if (moment().isAfter(gameThread.postAt) && gameThread.status === 'Future') {
-      return label('Error', 'fw game_thread');
+      return label('Error', 'fw game-thread');
     }
 
     if (moment().isAfter(gameThread.startsAt) && gameThread.status === 'Posted') {
-      return label('Live', 'fw game_thread');
+      return label('Live', 'fw game-thread');
     }
 
-    return label(gameThread.status, 'fw game_thread');
+    return label(gameThread.status, 'fw game-thread');
   }
 }
 
