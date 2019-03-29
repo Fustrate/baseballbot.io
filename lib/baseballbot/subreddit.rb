@@ -66,7 +66,9 @@ class Baseballbot
     end
 
     def current_sidebar
-      raise Baseballbot::Error::NoSidebarText unless settings[:description]
+      unless settings[:description] && !settings[:description].strip.empty?
+        raise Baseballbot::Error::NoSidebarText
+      end
 
       CGI.unescapeHTML settings[:description]
     end
