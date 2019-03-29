@@ -9,11 +9,12 @@ class FlairBot
 
     @name = subreddit
     @subreddit = @bot.session.subreddit(@name)
-    @bot.use_account @bot.name_to_subreddit(@name).account.name
   end
 
   def run(after: nil)
-    load_flair_page(after: after)
+    @bot.with_reddit_account(@subreddit.account.name) do
+      load_flair_page(after: after)
+    end
   end
 
   protected

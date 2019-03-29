@@ -22,19 +22,12 @@ class Baseballbot
     def update_sidebar!(subreddit)
       settings = { description: subreddit.generate_sidebar }
 
-      raise 'Sidebar is blank.' if settings[:description].strip.empty?
-
       subreddit.modify_settings settings
-
-      subreddit.log_action 'Finished sidebar update'
-    rescue Redd::InvalidAccess
-      refresh_access!
-
-      subreddit.modify_settings settings
-
-      subreddit.log_action 'Finished sidebar update', data: { attempt: 2 }
     rescue => ex
-      id = Honeybadger.notify(ex, context: settings.merge(name: subreddit.name))
+      id = Honeybadger.notify(
+        ex,
+        context: (settings || {}).merge(name: subreddit.name)
+      )
 
       subreddit.log_action 'Sidebar update failed', data: { honeybadger_id: id }
     end

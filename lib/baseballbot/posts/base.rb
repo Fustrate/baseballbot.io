@@ -14,15 +14,15 @@ class Baseballbot
       def update_flair(flair)
         return unless flair
 
-        @bot.use_account @subreddit.account.name
+        @bot.with_reddit_account(@subreddit.account.name) do
+          return update_flair_template(flair) if flair['flair_template_id']
 
-        return update_flair_template(flair) if flair['flair_template_id']
-
-        @subreddit.subreddit.set_flair(
-          @submission,
-          flair['text'],
-          css_class: flair['class']
-        )
+          @subreddit.subreddit.set_flair(
+            @submission,
+            flair['text'],
+            css_class: flair['class']
+          )
+        end
       end
 
       def update_flair_template(flair)
@@ -34,21 +34,21 @@ class Baseballbot
       end
 
       def update_sticky(sticky = false)
-        @bot.use_account @subreddit.account.name
-
-        if @submission.stickied
-          @submission.remove_sticky if sticky == false
-        elsif sticky
-          @submission.make_sticky
+        @bot.with_reddit_account(@subreddit.account.name) do
+          if @submission.stickied
+            @submission.remove_sticky if sticky == false
+          elsif sticky
+            @submission.make_sticky
+          end
         end
       end
 
       def update_suggested_sort(sort = '')
-        @bot.use_account @subreddit.account.name
-
         return if sort == ''
 
-        @submission.set_suggested_sort sort
+        @bot.with_reddit_account(@subreddit.account.name) do
+          @submission.set_suggested_sort sort
+        end
       end
 
       protected

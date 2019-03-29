@@ -14,22 +14,22 @@ class Baseballbot
       protected
 
       def post_pregame_thread!
-        @bot.use_account(@subreddit.account.name)
+        @bot.with_reddit_account(@subreddit.account.name) do
+          @template = pregame_template
 
-        @template = pregame_template
+          # The title uses @template
+          @template.title = pregame_title
 
-        # The title uses @template
-        @template.title = pregame_title
+          @submission = @subreddit.submit(
+            title: @template.title,
+            text: @template.body
+          )
 
-        @submission = @subreddit.submit(
-          title: @template.title,
-          text: @template.body
-        )
+          change_status 'Pregame'
 
-        change_status 'Pregame'
-
-        update_sticky @subreddit.sticky_game_threads?
-        update_flair @subreddit.options.dig('pregame', 'flair')
+          update_sticky @subreddit.sticky_game_threads?
+          update_flair @subreddit.options.dig('pregame', 'flair')
+        end
       end
 
       def pregame_title

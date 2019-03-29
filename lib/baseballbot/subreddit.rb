@@ -80,20 +80,26 @@ class Baseballbot
     def settings
       return @settings if @settings
 
-      @bot.use_account @account.name
-
-      @settings = subreddit.settings
+      @bot.with_reddit_account(@account.name) do
+        @settings = subreddit.settings
+      end
     end
 
     # Update settings for the current subreddit
     #
     # @param new_settings [Hash] new settings to apply to the subreddit
     def modify_settings(new_settings = {})
-      @bot.use_account @account.name
+      if new_settings.key?(:description)
+        raise 'Sidebar is blank.' if new_settings[:description].strip.empty?
+      end
 
-      response = subreddit.modify_settings new_settings
+      @bot.with_reddit_account(@account.name) do
+        response = subreddit.modify_settings(new_settings)
 
-      log_errors response.body.dig(:json, :errors), new_settings
+        log_errors response.body.dig(:json, :errors), new_settings
+
+        log_action 'Updated settings', data: new_settings
+      end
     end
 
     # Submit a post to reddit in the current subreddit
@@ -105,15 +111,15 @@ class Baseballbot
     #
     # @todo Restore ability to pass captcha
     def submit(title:, text:, sendreplies: false)
-      @bot.use_account @account.name
-
-      subreddit.submit title, text: text, sendreplies: sendreplies
+      @bot.with_reddit_account(@account.name) do
+        subreddit.submit title, text: text, sendreplies: sendreplies
+      end
     end
 
     def edit(id:, body: nil)
-      @bot.use_account @account.name
-
-      load_submission(id: id).edit(body)
+      @bot.with_reddit_account(@account.name) do
+        load_submission(id: id).edit(body)
+      end
     end
 
     # Load a submission from reddit by its id
@@ -126,22 +132,21 @@ class Baseballbot
     def load_submission(id:)
       return @submissions[id] if @submissions[id]
 
-      @bot.use_account(@account.name)
+      @bot.with_reddit_account(@account.name) do
+        submission = @bot.session.from_ids("t3_#{id}")&.first
 
-      submission = @bot.session.from_ids("t3_#{id}")&.first
+        raise "Unable to load post #{id}." unless submission
 
-      raise "Unable to load post #{id}." unless submission
-
-      @submissions[id] = submission
+        @submissions[id] = submission
+      end
     end
 
     def template_for(type)
-      rows = @bot.db.exec_params(
-        "SELECT body
+      rows = @bot.db.exec_params(<<~SQL, [@id, type])
+        SELECT body
         FROM templates
-        WHERE subreddit_id = $1 AND type = $2",
-        [@id, type]
-      )
+        WHERE subreddit_id = $1 AND type = $2
+      SQL
 
       raise "/r/#{@name} does not have a #{type} template." if rows.count < 1
 

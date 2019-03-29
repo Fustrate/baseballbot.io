@@ -4,6 +4,19 @@ class Baseballbot
   module Accounts
     attr_reader :accounts, :current_account
 
+    def with_reddit_account(name)
+      tries ||= 0
+
+      use_account(name)
+
+      yield
+    rescue Redd::InvalidAccess
+      @bot.refresh_access!
+
+      # We *should* only get an invalid access error once, but let's be safe.
+      retry if (tries += 1) < 1
+    end
+
     def use_account(name)
       unless @current_account&.name == name
         @current_account = accounts.values.find { |acct| acct.name == name }
