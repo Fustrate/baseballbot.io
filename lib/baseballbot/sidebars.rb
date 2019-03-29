@@ -34,7 +34,7 @@ class Baseballbot
 
       subreddit.log_action 'Finished sidebar update', data: { attempt: 2 }
     rescue => ex
-      id = Honeybadger.notify(ex, context: settings.merge(name: name))
+      id = Honeybadger.notify(ex, context: settings.merge(name: subreddit.name))
 
       subreddit.log_action 'Sidebar update failed', data: { honeybadger_id: id }
     end
