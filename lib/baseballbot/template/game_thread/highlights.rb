@@ -7,7 +7,7 @@ class Baseballbot
         def highlights
           return [] unless started?
 
-          @highlights ||= content.dig('highlights', 'live', 'items')
+          @highlights ||= content.dig('highlights', 'highlights', 'items')
             &.sort_by { |media| media['id'] }
             &.map { |media| process_media(media) }
             &.compact || []
@@ -52,19 +52,23 @@ class Baseballbot
         def process_media(media)
           return unless media['type'] == 'video'
 
-          team_id = media['keywordsDisplay']
-            .find { |keyword| keyword['type'] == 'team_id' }
-            &.dig('value')
-            &.to_i
-
           {
-            code: team_id == home_team.id ? home_team.code : away_team.code,
+            code: media_team_code(media),
             headline: media['headline'].strip,
             blurb: media['blurb'].strip.gsub(/^[A-Z@]+: /, ''),
             duration: media['duration'].strip.gsub(/^00:0?/, ''),
             sd: playback(media, 'FLASH_1200K_640X360'),
             hd: playback(media, 'FLASH_2500K_1280X720')
           }
+        end
+
+        def media_team_code(media)
+          team_id = media['keywordsDisplay']
+            .find { |keyword| keyword['type'] == 'team_id' }
+            &.dig('value')
+            &.to_i
+
+          team_id == away_team.id ? away_team.code : home_team.code
         end
       end
     end
