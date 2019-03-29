@@ -32,12 +32,16 @@ class Baseballbot
     def post_game_threads!(names: [])
       unposted_game_threads(names).each do |row|
         build_game_thread(row).create!
+      rescue => ex
+        Honeybadger.notify(ex, context: { row: row })
       end
     end
 
     def update_game_threads!(names: [])
       game_threads_to_update(names).each do |row|
         build_game_thread(row).update!
+      rescue => ex
+        Honeybadger.notify(ex, context: { row: row })
       end
     end
 
