@@ -14,15 +14,22 @@ class Baseballbot
             cell(day[:date].day, day[:games], downcase: downcase)
           end
 
-          rows = [cells.shift(7 - dates.values.first[:date].wday).join('|')]
-
-          rows << cells.shift(7).join('|') while cells.any?
-
           <<~TABLE
             S|M|T|W|T|F|S
             :-:|:-:|:-:|:-:|:-:|:-:|:-:
-            #{' |' * dates.values.first[:date].wday}#{rows.join("\n")}
+            #{calendar_rows(cells, dates).join("\n")}
           TABLE
+        end
+
+        def calendar_rows(cells, dates)
+          rows = [cells.shift(7 - dates.values.first[:date].wday).join('|')]
+          rows << cells.shift(7).join('|') while cells.any?
+
+          # Fill out the beginning and end of the table
+          rows[0] = "#{' |' * dates.values.first[:date].wday}#{rows[0]}"
+          rows[-1] = "#{rows[-1]}#{' |' * (6 - dates.values.last[:date].wday)}"
+
+          rows
         end
 
         def month_games
