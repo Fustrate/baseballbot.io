@@ -22,6 +22,8 @@ class Baseballbot
     def update_sidebar!(subreddit)
       settings = { description: subreddit.generate_sidebar }
 
+      raise 'Sidebar is blank.' if settings[:description].blank?
+
       subreddit.modify_settings settings
 
       subreddit.log_action 'Finished sidebar update'
