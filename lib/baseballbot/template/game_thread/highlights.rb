@@ -16,11 +16,11 @@ class Baseballbot
         def highlights_list
           highlights
             .map do |highlight|
-              icon = link_to '', url: "/#{highlight[:code]}"
+              # icon = link_to '', url: "/#{highlight[:code]}"
               text = "#{highlight[:blurb]} (#{highlight[:duration]})"
               url = highlight[:hd]
 
-              "- #{icon} #{url ? link_to(text, url: url) : text}"
+              "- #{url ? link_to(text, url: url) : text}"
             end
             .join "\n"
         end
@@ -28,7 +28,7 @@ class Baseballbot
         def highlights_table
           lines = highlights.map do |highlight|
             [
-              link_to('', url: "/#{highlight[:code]}"),
+              # link_to('', url: "/#{highlight[:code]}"),
               highlight[:blurb],
               highlight[:duration],
               link_to('HD', url: highlight[:hd])
@@ -36,8 +36,8 @@ class Baseballbot
           end
 
           <<~HIGHLIGHTS
-            Team|Description|Length|HD
-            -|-|-|-
+            Description|Length|HD
+            -|-|-
             #{lines.join("\n")}
           HIGHLIGHTS
         end
@@ -54,7 +54,7 @@ class Baseballbot
           return unless media['type'] == 'video'
 
           {
-            code: media_team_code(media),
+            # code: media_team_code(media),
             headline: media['headline'].strip,
             blurb: media['blurb'].strip.gsub(/^[A-Z@]+: /, ''),
             duration: media['duration'].strip.gsub(/^00:0?/, ''),
