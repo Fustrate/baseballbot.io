@@ -31,22 +31,23 @@ class Baseballbot
               link_to('', url: "/#{highlight[:code]}"),
               highlight[:blurb],
               highlight[:duration],
-              link_to('SD', url: highlight[:sd]),
               link_to('HD', url: highlight[:hd])
             ].join('|')
           end
 
           <<~HIGHLIGHTS
-            Team|Description|Length|SD|HD
-            -|-|-|-|-
+            Team|Description|Length|HD
+            -|-|-|-
             #{lines.join("\n")}
           HIGHLIGHTS
         end
 
         protected
 
-        def playback(media, name)
-          media['playbacks'].find { |video| video['name'] == name }&.dig('url')
+        def hd_playback_url(media)
+          media['playbacks']
+            .find { |video| video['name'] == 'mp4Avc' }
+            &.dig('url')
         end
 
         def process_media(media)
@@ -57,8 +58,8 @@ class Baseballbot
             headline: media['headline'].strip,
             blurb: media['blurb'].strip.gsub(/^[A-Z@]+: /, ''),
             duration: media['duration'].strip.gsub(/^00:0?/, ''),
-            sd: playback(media, 'FLASH_1200K_640X360'),
-            hd: playback(media, 'FLASH_2500K_1280X720')
+            # sd: playback(media, 'FLASH_1200K_640X360'),
+            hd: hd_playback_url(media)
           }
         end
 
