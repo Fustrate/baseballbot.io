@@ -8,7 +8,7 @@ class Baseballbot
           return [] unless started?
 
           @highlights ||= content.dig('highlights', 'highlights', 'items')
-            &.sort_by { |media| media['id'] }
+            &.sort_by { |media| media['date'] }
             &.map { |media| process_media(media) }
             &.compact || []
         end
