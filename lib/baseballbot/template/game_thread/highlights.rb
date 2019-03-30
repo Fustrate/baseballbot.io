@@ -64,12 +64,7 @@ class Baseballbot
         end
 
         def media_team_code(media)
-          team_id = media['keywordsDisplay']
-            .find { |keyword| keyword['type'] == 'team_id' }
-            &.dig('value')
-            &.to_i
-
-          team_id == away_team.id ? away_team.code : home_team.code
+          media.dig('image', 'title')&.match(/^\d+([a-z]+)/i)&.captures&.first
         end
       end
     end
