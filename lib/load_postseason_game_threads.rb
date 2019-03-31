@@ -13,7 +13,7 @@ class PostseasonGameLoader
   def initialize
     @attempts = @failures = 0
 
-    @bot = BaseballBot.new
+    @bot = Baseballbot.new
 
     @utc_offset = Time.now.utc_offset
   end

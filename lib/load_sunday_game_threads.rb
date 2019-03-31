@@ -9,7 +9,7 @@ class SundayGameThreadLoader
   def initialize
     @attempts = @failures = 0
 
-    @bot = BaseballBot.new
+    @bot = Baseballbot.new
 
     @utc_offset = Time.now.utc_offset
   end
@@ -45,9 +45,9 @@ class SundayGameThreadLoader
 
   def espn_game?(game)
     game.dig('content', 'media', 'epg')
-      .select { |content| content['title'] == 'MLBTV' }
-      .dig('items')
-      .any? { |station| station['callLetters'] == 'ESPN' }
+      .find { |content| content['title'] == 'MLBTV' }
+      &.dig('items')
+      &.any? { |station| station['callLetters'] == 'ESPN' }
   end
 
   def insert_game(game, starts_at)
