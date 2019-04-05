@@ -4,7 +4,7 @@ require_relative 'default_bot'
 
 class NoHitterBot
   MIN_INNINGS = 6
-  SUBREDDIT_NAME = 'baseball'
+  SUBREDDIT_NAME = 'baseballtest'
   WAIT_TIMES = [0, 3600, 3600, 1800, 1200, 600, 30].freeze
 
   def initialize
@@ -19,7 +19,7 @@ class NoHitterBot
 
     schedule = @bot.api.schedule(
       date: Time.now.strftime('%m/%d/%Y'),
-      hydrate: 'game(content(summary)),linescore,flags,team',
+      hydrate: 'game,linescore,flags,team',
       sportId: 1
     )
 

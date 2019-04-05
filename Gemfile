@@ -7,7 +7,6 @@ gem 'rails', '5.2.3'
 
 gem 'pg'
 
-gem 'coffee-rails', '~> 4.2'
 gem 'execjs'
 gem 'haml-rails'
 gem 'jbuilder'
@@ -53,6 +52,7 @@ group :development do
 
   # Linters
   gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
   gem 'rubocop-rspec', require: false
 end
 
