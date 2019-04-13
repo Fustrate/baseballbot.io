@@ -19,6 +19,7 @@ end
 
 every :minute do
   bundle_exec_ruby :no_hitter_bot
+  bundle_exec_ruby :mod_queue_slack
 end
 
 every 1.hour do

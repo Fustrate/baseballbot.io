@@ -51,8 +51,8 @@ class ModQueue
     {
       text: "*#{item.author.name}* was reported for:",
       attachments: [
-        body_attachment,
-        reports_attachment(item)
+        body_attachment(item),
+        mod_queue_reason(item)
       ]
     }
   end
@@ -65,11 +65,12 @@ class ModQueue
     }
   end
 
-  def reports_attachment(item)
+  def mod_queue_reason(item)
     reports = item.mod_reports + item.user_reports
+    reasons = reports.map { |reason, number| "#{reason} (#{number})" }
 
     {
-      text: "Reports: #{reports.map { |reason, number| "#{reason} (#{number})" }.join(', ')}"
+      text: reports.any? ? "Reports: #{reasons.join(', ')}" : 'Spam?'
     }
   end
 
