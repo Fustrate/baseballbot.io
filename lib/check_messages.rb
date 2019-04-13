@@ -21,8 +21,8 @@ class CheckMessages
     sleep 30
 
     run!(retry_on_failure: false)
-  rescue => ex
-    Honeybadger.notify(ex)
+  rescue => e
+    Honeybadger.notify(e)
   end
 
   protected
@@ -56,7 +56,7 @@ class CheckMessages
   end
 
   def subreddit_to_code(name)
-    BaseballBot::Subreddits::DEFAULT_SUBREDDITS
+    Baseballbot::Subreddits::DEFAULT_SUBREDDITS
       .find { |_, subreddit| subreddit.casecmp(name).zero? }[0]
   end
 

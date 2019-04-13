@@ -42,8 +42,8 @@ class Baseballbot
         game_pk: game_pk,
         subreddit: name_to_subreddit(name)
       ).create!
-    rescue => ex
-      Honeybadger.notify(ex)
+    rescue => e
+      Honeybadger.notify(e)
     end
   end
 end

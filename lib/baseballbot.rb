@@ -67,7 +67,7 @@ class Baseballbot
 
   def client
     unless @options[:user_agent]
-      raise 'BaseballBot was not initialized with :user_agent.'
+      raise 'Baseballbot was not initialized with :user_agent.'
     end
 
     @client ||= Redd::APIClient.new redd_auth_strategy, limit_time: 0
@@ -99,7 +99,7 @@ class Baseballbot
 
   def session
     unless @options[:user_agent]
-      raise 'BaseballBot was not initialized with :user_agent.'
+      raise 'Baseballbot was not initialized with :user_agent.'
     end
 
     @session ||= Redd::Models::Session.new client
@@ -124,7 +124,7 @@ class Baseballbot
       client_id: ENV['REDDIT_CLIENT_ID'],
       secret: ENV['REDDIT_SECRET'],
       redirect_uri: ENV['REDDIT_REDIRECT_URI'],
-      user_agent: @options[:user_agent] || 'BaseballBot'
+      user_agent: @options[:user_agent] || 'Baseballbot'
     )
   end
 end

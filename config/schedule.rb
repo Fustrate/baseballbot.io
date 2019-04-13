@@ -17,9 +17,9 @@ def bundle_exec_ruby(name, *arguments)
   )
 end
 
-# every :minute do
-#   bundle_exec_ruby :no_hitter_bot
-# end
+every :minute do
+  bundle_exec_ruby :no_hitter_bot
+end
 
 every 1.hour do
   bundle_exec_ruby :sidebars, :update
