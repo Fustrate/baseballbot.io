@@ -29,7 +29,8 @@ class Baseballbot
 
         super.merge(
           pitcher_names: pitcher_names,
-          pitching_team: @flag == 'home' ? home_team.name : away_team.name
+          pitching_team: @flag == 'home' ? home_team.name : away_team.name,
+          batting_team: @flag == 'home' ? away_team.name : home_team.name
         )
       end
     end
