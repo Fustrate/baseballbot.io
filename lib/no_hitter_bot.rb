@@ -58,13 +58,13 @@ class NoHitterBot
   end
 
   def post_home_thread?(game, inning, half)
-    return false if @bot.redis.hget("no_hitters_#{game['gamePk']}", 'home')
+    return false if already_posted?(game['gamePk'], 'home')
 
     away_team_being_no_hit?(game, inning, half)
   end
 
   def post_away_thread?(game, inning, half)
-    return false if @bot.redis.hget("no_hitters_#{game['gamePk']}", 'away')
+    return false if already_posted?(game['gamePk'], 'away')
 
     home_team_being_no_hit?(game, inning, half)
   end
@@ -121,7 +121,15 @@ class NoHitterBot
 
     submission.set_suggested_sort 'new'
 
-    @bot.redis.hset "no_hitters_#{game['gamePk']}", flag, submission.id
+    @bot.redis.hset(
+      "#{SUBREDDIT_NAME}_no_hitters_#{game['gamePk']}",
+      flag,
+      submission.id
+    )
+  end
+
+  def already_posted?(game_pk, flag)
+    @bot.redis.hget("#{SUBREDDIT_NAME}_no_hitters_#{game_pk}", flag)
   end
 
   def insert_game_thread!(submission, game)
