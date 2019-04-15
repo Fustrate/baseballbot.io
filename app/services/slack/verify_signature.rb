@@ -37,7 +37,7 @@ module Slack
       timestamp.nil? || (Time.now.to_i - timestamp.to_i).abs > 300
     end
 
-    def self.signing_signature
+    def self.signing_secret
       Rails.application.config_for(:slack_dodgers)['signing_secret']
     end
   end
