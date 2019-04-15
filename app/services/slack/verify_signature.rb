@@ -38,7 +38,7 @@ module Slack
     end
 
     def self.signing_secret
-      Rails.application.config_for(:slack_dodgers)['signing_secret']
+      Rails.application.credentials.dig(:slack_dodgers, :signing_secret)
     end
   end
 end
