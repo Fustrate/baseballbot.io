@@ -9,8 +9,8 @@ module Slack
       return false unless signing_secret
 
       digest = OpenSSL::Digest::SHA256.new
-      signature_basestring = [VERSION, timestamp, body].join(':')
-      hex_hash = OpenSSL::HMAC.hexdigest(digest, signing_secret, signature_basestring)
+      signature_base = [VERSION, timestamp, body].join(':')
+      hex_hash = OpenSSL::HMAC.hexdigest(digest, signing_secret, signature_base)
       computed_signature = [VERSION, hex_hash].join('=')
 
       computed_signature == signature
@@ -18,18 +18,18 @@ module Slack
 
     # Request timestamp.
     def self.timestamp
-      @timestamp ||= request.headers['X-Slack-Request-Timestamp']
+      @timestamp ||= Current.request.headers['X-Slack-Request-Timestamp']
     end
 
-    # The signature is created by combining the signing secret with the body of the request
-    # Slack is sending using a standard HMAC-SHA256 keyed hash.
+    # The signature is created by combining the signing secret with the body of
+    # the request Slack is sending using a standard HMAC-SHA256 keyed hash.
     def self.signature
-      @signature ||= request.headers['X-Slack-Signature']
+      @signature ||= Current.request.headers['X-Slack-Signature']
     end
 
     # Request body.
     def self.body
-      @body ||= request.raw_post
+      @body ||= Current.request.raw_post
     end
 
     # Returns true if the signature coming from Slack has expired.
