@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Current < ActiveSupport::CurrentAttributes
-  attribute :user, :request_id, :user_agent, :ip_address, :params
+  attribute :user, :request, :params
 
   resets { Time.zone = 'America/Los_Angeles' }
 
