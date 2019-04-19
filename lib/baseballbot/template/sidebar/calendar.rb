@@ -46,9 +46,9 @@ class Baseballbot
 
           # Go backwards an extra week to account for off days
           end_date = Date.today
-          start_date = end_date - (7 * 86_400)
+          start_date = end_date - limit - 7
 
-          calendar_games(start_date, end_date).each_value do |day|
+          calendar_games(start_date, end_date).values.reverse_each do |day|
             next if day[:date] > Date.today
 
             day[:games].each { |game| @previous << game if game[:over] }
@@ -66,7 +66,7 @@ class Baseballbot
 
           # Go forward an extra week to account for off days
           start_date = Date.today
-          end_date = start_date + (7 * 86_400)
+          end_date = start_date + limit + 7
 
           calendar_games(start_date, end_date).each_value do |day|
             next if day[:date] < Date.today
