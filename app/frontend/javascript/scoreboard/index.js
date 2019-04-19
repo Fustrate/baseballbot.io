@@ -20,10 +20,10 @@ class Scoreboard {
     this.loading = document.querySelector('.loading');
     this.container = document.querySelector('.game-cards');
 
-    this.reloadGameInfo(this.date, this.createGameCards.bind(this));
+    this.reloadGameInfo(this.createGameCards.bind(this));
 
     window.setInterval(() => {
-      this.reloadGameInfo(this.date, this.updateGameCards.bind(this));
+      this.reloadGameInfo(this.updateGameCards.bind(this));
     }, secondsBetweenReloads * 1000);
   }
 
@@ -56,10 +56,10 @@ class Scoreboard {
     });
   }
 
-  reloadGameInfo(date, onLoad = () => {}) {
+  reloadGameInfo(onLoad = () => {}) {
     this.loading.style.display = '';
 
-    window.fetch(`${apiEndpoint}&date=${date.format('MM/DD/YYYY')}`)
+    window.fetch(`${apiEndpoint}&date=${this.date.format('MM/DD/YYYY')}`)
       .then(response => response.json())
       .then((json) => {
         onLoad(json.dates[0].games);
