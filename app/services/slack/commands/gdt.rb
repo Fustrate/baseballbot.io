@@ -47,7 +47,7 @@ module Slack
       def add_game_by_pk(game_pk, title = nil)
         live_feed = api.live_feed(game_pk)
 
-        return 'Invalid game PK' unless game
+        return 'Invalid game PK' unless live_feed
 
         status = live_feed.game_data.dig('status', 'abstractGameState')
 
