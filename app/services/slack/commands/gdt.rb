@@ -42,9 +42,6 @@ module Slack
         return 'There are no free games.' if free_games.none?
 
         add_game_by_pk free_games.dig(0, 'gamePk')
-
-        "Adding #{game.dig('teams', 'away', 'team', 'teamName')} @ " \
-          "#{game.dig('teams', 'home', 'team', 'teamName')} to the list"
       end
 
       def add_game_by_pk(game_pk, title = nil)
@@ -56,7 +53,15 @@ module Slack
 
         return 'Cannot add finished game' if POSTGAME_STATUSES.include?(status)
 
+        home_team = live_feed.dig('gameData', 'teams', 'home', 'teamName')
+        away_team = live_feed.dig('gameData', 'teams', 'away', 'teamName')
 
+        date = Time.zone
+          .parse(live_feed.dig('gameData', 'datetime', 'dateTime'))
+          .in_time_zone(ActiveSupport::TimeZone.new('America/New_York'))
+          .strftime('%-m/%-d at %-I:%m %p')
+
+        "Adding #{away_team} @ #{home_team} on #{date} to the list"
       end
 
       def find_games(text)
