@@ -182,7 +182,7 @@ GEM
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
-    httparty (0.16.4)
+    httparty (0.17.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     i18n (1.6.0)
@@ -382,7 +382,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.5)
+    unf_ext (0.0.7.6)
     unicode-display_width (1.5.0)
     unicorn (5.5.0)
       kgio (~> 2.6)
