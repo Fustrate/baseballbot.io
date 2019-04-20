@@ -53,15 +53,18 @@ module Slack
 
         return 'Cannot add finished game' if POSTGAME_STATUSES.match?(status)
 
-        home_team = live_feed.dig('gameData', 'teams', 'home', 'teamName')
-        away_team = live_feed.dig('gameData', 'teams', 'away', 'teamName')
-
-        date = Time.zone
-          .parse(live_feed.dig('gameData', 'datetime', 'dateTime'))
-          .in_time_zone(ActiveSupport::TimeZone.new('America/New_York'))
-          .strftime('%-m/%-d at %-I:%m %p')
+        home_team = live_feed.game_data.dig('teams', 'home', 'teamName')
+        away_team = live_feed.game_data.dig('teams', 'away', 'teamName')
+        date = game_date(live_feed).strftime('%-m/%-d at %-I:%m %p')
 
         "Adding #{away_team} @ #{home_team} on #{date} to the list"
+      end
+
+      def game_date(live_feed, time_zone: 'America/New_York')
+        Time.zone
+          .parse(live_feed.game_data.dig('datetime', 'dateTime'))
+          .in_time_zone(ActiveSupport::TimeZone.new(time_zone))
+          .strftime('%-m/%-d at %-I:%m %p')
       end
 
       def find_games(text)
