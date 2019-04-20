@@ -51,7 +51,7 @@ module Slack
 
         status = live_feed.game_data.dig('status', 'abstractGameState')
 
-        return 'Cannot add finished game' if POSTGAME_STATUSES.include?(status)
+        return 'Cannot add finished game' if POSTGAME_STATUSES.match?(status)
 
         home_team = live_feed.dig('gameData', 'teams', 'home', 'teamName')
         away_team = live_feed.dig('gameData', 'teams', 'away', 'teamName')
