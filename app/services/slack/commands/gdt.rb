@@ -47,14 +47,16 @@ module Slack
           "#{game.dig('teams', 'home', 'team', 'teamName')} to the list"
       end
 
-      def add_game_by_pk(game_pk)
+      def add_game_by_pk(game_pk, title = nil)
         live_feed = api.live_feed(game_pk)
 
         return 'Invalid game PK' unless game
 
         status = live_feed.game_data.dig('status', 'abstractGameState')
 
-        if ['Live', 'Final']
+        return 'Cannot add finished game' if POSTGAME_STATUSES.include?(status)
+
+
       end
 
       def find_games(text)

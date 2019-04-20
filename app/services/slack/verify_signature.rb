@@ -38,7 +38,10 @@ module Slack
     end
 
     def self.signing_secret
-      Rails.application.credentials.dig(:slack_dodgers, :signing_secret)
+      Rails.application.credentials.dig(
+        :"slack_#{params[:team_id]}",
+        :signing_secret
+      )
     end
   end
 end
