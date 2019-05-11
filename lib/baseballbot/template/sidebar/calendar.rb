@@ -155,8 +155,8 @@ class Baseballbot
         end
 
         def add_game_to_calendar?(game)
-          current_team_game?(game) && game['ifNecessary'] != 'Y'
-            && !game['rescheduleDate']
+          current_team_game?(game) && game['ifNecessary'] != 'Y' &&
+            !game['rescheduleDate']
         end
 
         def current_team_game?(game)
