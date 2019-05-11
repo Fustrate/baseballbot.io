@@ -135,15 +135,14 @@ class Baseballbot
               if days[date.strftime('%F')]
                 days[date.strftime('%F')][:games] << process_game(game, date)
               else
-                Honeybadger.notify(
-                  'Date hash error',
+                Honeybadger.notify('Date hash error', context: {
                   date: date,
                   date_formatted: date.strftime('%F'),
                   start_date: start_date,
                   end_date: end_date,
                   game_date: game['gameDate'],
                   keys: days.keys,
-                )
+                })
               end
             end
           end
