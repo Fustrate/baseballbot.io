@@ -127,10 +127,14 @@ class Baseballbot
 
           calendar_dates(start_date, end_date).each do |calendar_date|
             calendar_date['games'].each do |game|
-              next unless current_team_game?(game) && game['ifNecessary'] != 'Y'
+              next unless add_game_to_calendar?(game)
 
-              date = Baseballbot::Utility
-                .parse_time(game['gameDate'], in_time_zone: @subreddit.timezone)
+              # Rescheduled games, when converted to the local time zone,
+              # end up in the previous day.
+              date = Baseballbot::Utility.parse_time(
+                game['gameDate'].sub('03:33', '12:00'),
+                in_time_zone: @subreddit.timezone
+              )
 
               if days[date.strftime('%F')]
                 days[date.strftime('%F')][:games] << process_game(game, date)
@@ -148,6 +152,11 @@ class Baseballbot
           end
 
           days
+        end
+
+        def add_game_to_calendar?(game)
+          current_team_game?(game) && game['ifNecessary'] != 'Y'
+            && !game['rescheduleDate']
         end
 
         def current_team_game?(game)
