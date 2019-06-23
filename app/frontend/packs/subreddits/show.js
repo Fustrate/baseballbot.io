@@ -11,7 +11,7 @@ class ShowSubreddit extends GenericPage {
 
     this.subreddit = new Subreddit(this.root.dataset.subreddit);
 
-    this.subreddit.reload().done(() => {
+    this.subreddit.reload().then(() => {
       this.refresh();
     });
   }

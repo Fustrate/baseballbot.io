@@ -15,7 +15,7 @@ class ShowTemplate extends GenericPage {
 
     this.template = new Template(this.root.dataset.template);
 
-    this.template.reload().done(() => {
+    this.template.reload().then(() => {
       this.refresh();
     });
   }

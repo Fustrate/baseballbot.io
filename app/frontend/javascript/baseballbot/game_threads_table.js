@@ -8,11 +8,11 @@ import { subredditPath } from '../routes';
 
 const blankRow = `
   <tr>
-    <td class="game_pk"></td>
+    <td class="game-pk"></td>
     <td class="title"></td>
     <td class="subreddit"></td>
-    <td class="post_at no-wrap"></td>
-    <td class="starts_at no-wrap"></td>
+    <td class="post-at no-wrap"></td>
+    <td class="starts-at no-wrap"></td>
     <td class="status"></td>
   </tr>`;
 
@@ -26,13 +26,13 @@ class GameThreadsTable extends GenericTable {
   }
 
   reloadTable() {
-    fetch(this.reloadUrl)
-      .then(response => response.json())
-      .then((response) => {
-        this.reloadRows(response.data.map(row => this.createRow(new GameThread(row))));
+    fetch(this.reloadUrl).then((response) => {
+      const { data } = response.json();
 
-        this.updatePagination(response);
-      });
+      this.reloadRows(data.map(row => this.createRow(new GameThread(row))));
+
+      this.updatePagination(response);
+    });
   }
 
   updateRow(row, gameThread) {
@@ -45,13 +45,13 @@ class GameThreadsTable extends GenericTable {
       this.constructor.populateGameThreadTitle(row.querySelector('.title'), gameThread);
     }
 
-    row.querySelector('.game_pk').innerHTML = linkTo(
+    row.querySelector('.game-pk').innerHTML = linkTo(
       gameThread.gamePk,
       `https://www.mlb.com/gameday/${gameThread.gamePk}`,
     );
 
-    row.querySelector('.post_at').textContent = gameThread.postAt.toHumanDate(true);
-    row.querySelector('.starts_at').textContent = gameThread.startsAt.toHumanDate(true);
+    row.querySelector('.post-at').textContent = gameThread.postAt.toHumanDate(true);
+    row.querySelector('.starts-at').textContent = gameThread.startsAt.toHumanDate(true);
 
     row.querySelector('.status').innerHTML = this.constructor.statusLabel(gameThread);
 

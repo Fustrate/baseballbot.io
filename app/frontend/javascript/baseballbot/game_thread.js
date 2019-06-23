@@ -4,10 +4,6 @@ import { Record } from '@fustrate/rails';
 import { gameThreadPath, gameThreadsPath } from '../routes';
 
 class GameThread extends Record {
-  static get createPath() { return gameThreadsPath; }
-
-  static get class() { return 'GameThread'; }
-
   path({ format } = {}) {
     return gameThreadPath(this.id, { format });
   }
@@ -19,5 +15,8 @@ class GameThread extends Record {
     this.startsAt = moment(this.startsAt);
   }
 }
+
+GameThread.createPath = gameThreadsPath;
+GameThread.classname = 'GameThread';
 
 export default GameThread;
