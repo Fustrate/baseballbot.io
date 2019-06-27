@@ -1,20 +1,19 @@
 import moment from 'moment';
+import Page from '@fustrate/rails/dist/js/Page';
 
 import GameCard from '../javascript/scoreboard/game_card';
 
 import '../stylesheets/scoreboard.scss';
+import BaseballBot from '../javascript/baseballbot';
 
 const secondsBetweenReloads = 30;
 const apiEndpoint = 'https://statsapi.mlb.com/api/v1/schedule/?sportId=1&hydrate=game(content(summary)),linescore(runners),flags,team';
 
-class Scoreboard {
-  static start() {
-    Scoreboard.instance = new this();
-
-    document.addEventListener('DOMContentLoaded', () => {
-      Scoreboard.instance.initialize();
-    });
-  }
+class Scoreboard extends Page {
+  public date: moment.Moment;
+  public loading: HTMLDivElement;
+  public container: HTMLDivElement;
+  public gameCards: GameCard[];
 
   initialize() {
     this.date = moment();
@@ -46,7 +45,7 @@ class Scoreboard {
     }
   }
 
-  updateGameCards(games) {
+  updateGameCards(games: any[]) {
     const dataByPk = {};
 
     games.forEach((gameData) => {
@@ -58,7 +57,7 @@ class Scoreboard {
     });
   }
 
-  reloadGameInfo(onLoad = () => {}) {
+  reloadGameInfo(onLoad = (games: any[]) => {}) {
     this.loading.style.display = '';
 
     window.fetch(`${apiEndpoint}&date=${this.date.format('MM/DD/YYYY')}`)
@@ -71,4 +70,4 @@ class Scoreboard {
   }
 }
 
-Scoreboard.start();
+BaseballBot.start(new Scoreboard());

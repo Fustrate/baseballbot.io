@@ -1,4 +1,5 @@
-import { Modal } from '@fustrate/rails';
+import Modal from '@fustrate/rails/dist/js/components/modal';
+import Game from './game';
 
 const template = `
   <section>
@@ -11,22 +12,34 @@ const template = `
     Box Score
   </section>`;
 
-const settings = {
-  size: 'small',
-  content: template,
-};
+function inningCell(inning, side) {
+  if (!inning || inning[side].runs === undefined) {
+    return '<td></td>';
+  }
 
-class GameModal extends Modal {
-  constructor(game) {
-    super({ settings });
+  return `<td>${inning[side].runs !== undefined ? inning[side].runs : ''}</td>`;
+}
+
+function linescoreTotals(team) {
+  return [team.runs, team.hits, team.errors, team.leftOnBase];
+}
+
+export default class GameModal extends Modal {
+  public game: Game;
+
+  constructor(game: Game) {
+    super({
+      size: 'small',
+      content: template,
+      title: `⚾ ${game.teams.away.team.name} @ ${game.teams.home.team.name}`,
+      buttons: [],
+    });
 
     this.game = game;
-
-    this.setTitle(`⚾ ${this.game.teams.away.team.name} @ ${this.game.teams.home.team.name}`);
   }
 
   open() {
-    this.modal.find('.linescore').html(this.linescore());
+    this.modal.querySelector('.linescore').innerHTML = this.linescore();
 
     super.open();
   }
@@ -50,8 +63,8 @@ class GameModal extends Modal {
 
       const inning = this.game.linescore.innings[i - 1];
 
-      away.push(this.constructor.inningCell(inning, 'away'));
-      home.push(this.constructor.inningCell(inning, 'home'));
+      away.push(inningCell(inning, 'away'));
+      home.push(inningCell(inning, 'home'));
     }
 
     if (this.game.status.abstractGameState === 'Final' && home[home.length - 1] === '<td></td>') {
@@ -60,10 +73,10 @@ class GameModal extends Modal {
 
     headers = headers.concat('<th>R</th>', '<th>H</th>', '<th>E</th>', '<th>LOB</th>');
     away = away.concat(
-      this.constructor.linescoreTotals(this.game.linescore.teams.away).map(text => `<th>${text}</th>`),
+      linescoreTotals(this.game.linescore.teams.away).map(text => `<th>${text}</th>`),
     );
     home = home.concat(
-      this.constructor.linescoreTotals(this.game.linescore.teams.home).map(text => `<th>${text}</th>`),
+      linescoreTotals(this.game.linescore.teams.home).map(text => `<th>${text}</th>`),
     );
 
     return `
@@ -75,18 +88,4 @@ class GameModal extends Modal {
         </tbody>
       </table>`;
   }
-
-  static inningCell(inning, side) {
-    if (!inning || inning[side].runs === undefined) {
-      return '<td></td>';
-    }
-
-    return `<td>${inning[side].runs !== undefined ? inning[side].runs : ''}</td>`;
-  }
-
-  static linescoreTotals(team) {
-    return [team.runs, team.hits, team.errors, team.leftOnBase];
-  }
 }
-
-export default GameModal;

@@ -1,5 +1,6 @@
 import Game from './game';
 import GameModal from './game_modal';
+import { elementFromString } from '@fustrate/rails/dist/js/utilities';
 
 const template = `
   <div class="game-card">
@@ -22,11 +23,24 @@ const template = `
     </div>
   </div>`;
 
-class GameCard {
-  constructor(game) {
-    this.game = new Game(game);
+function setBaseRunner(element: HTMLDivElement, runner: any) {
+  if (runner) {
+    element.classList.add('runner');
+    element.title = runner.fullName;
+  } else {
+    element.classList.remove('runner');
+    element.title = '';
+  }
+}
 
-    this.card = this.constructor.elementFromString(template);
+class GameCard {
+  public game: Game;
+  public card: HTMLDivElement;
+
+  public modal?: GameModal;
+
+  constructor(game: Game) {
+    this.card = elementFromString(template);
 
     this.card.querySelector('.home-team').classList.add(this.game.teams.home.team.fileCode);
     this.card.querySelector('.away-team').classList.add(this.game.teams.away.team.fileCode);
@@ -49,33 +63,23 @@ class GameCard {
 
   refreshRunners() {
     if (this.game.isInProgress) {
-      this.card.querySelector('.runners').style.display = '';
+      this.card.querySelector<HTMLDivElement>('.runners').style.display = '';
     } else {
-      this.card.querySelector('.runners').style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.runners').style.display = 'none';
 
       return;
     }
 
-    this.constructor.setBaseRunner(this.card.querySelector('.first'), this.game.linescore.offense.first);
-    this.constructor.setBaseRunner(this.card.querySelector('.second'), this.game.linescore.offense.second);
-    this.constructor.setBaseRunner(this.card.querySelector('.third'), this.game.linescore.offense.third);
-  }
-
-  static setBaseRunner(element, runner) {
-    if (runner) {
-      element.classList.add('runner');
-      element.title = runner.fullName;
-    } else {
-      element.classList.remove('runner');
-      element.title = '';
-    }
+    setBaseRunner(this.card.querySelector<HTMLDivElement>('.first'), this.game.linescore.offense.first);
+    setBaseRunner(this.card.querySelector<HTMLDivElement>('.second'), this.game.linescore.offense.second);
+    setBaseRunner(this.card.querySelector<HTMLDivElement>('.third'), this.game.linescore.offense.third);
   }
 
   refreshOuts() {
     if (this.game.isInProgress) {
-      this.card.querySelector('.outs').style.display = '';
+      this.card.querySelector<HTMLDivElement>('.outs').style.display = '';
     } else {
-      this.card.querySelector('.outs').style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.outs').style.display = 'none';
     }
 
     if (!this.game.isInProgress) {
@@ -127,14 +131,6 @@ class GameCard {
     this.game.updateData(data);
 
     this.refresh();
-  }
-
-  static elementFromString(string) {
-    const templateElement = document.createElement('template');
-
-    templateElement.innerHTML = string.trim();
-
-    return templateElement.content.firstChild;
   }
 }
 

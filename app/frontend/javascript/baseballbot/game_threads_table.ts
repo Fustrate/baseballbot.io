@@ -1,33 +1,36 @@
 import moment from 'moment';
-import { GenericTable } from '@fustrate/rails';
-import { icon, label, linkTo } from '@fustrate/rails/utilities';
+import GenericTable from '@fustrate/rails/dist/js/GenericTable';
+import { icon, label, linkTo } from '@fustrate/rails/dist/js/utilities';
+import { get } from '@fustrate/rails/dist/js/ajax';
 
 import GameThread from './game_thread';
 
 import { subredditPath } from '../routes';
 
-const blankRow = `
-  <tr>
-    <td class="game-pk"></td>
-    <td class="title"></td>
-    <td class="subreddit"></td>
-    <td class="post-at no-wrap"></td>
-    <td class="starts-at no-wrap"></td>
-    <td class="status"></td>
-  </tr>`;
-
 const redditIcon = icon('reddit', 'brands');
 
 class GameThreadsTable extends GenericTable {
-  constructor(root, reloadUrl) {
-    super(root, root.querySelector('table.game-threads'));
+  protected reloadUrl: string;
+
+  protected static blankRow = `
+    <tr>
+      <td class="game-pk"></td>
+      <td class="title"></td>
+      <td class="subreddit"></td>
+      <td class="post-at no-wrap"></td>
+      <td class="starts-at no-wrap"></td>
+      <td class="status"></td>
+    </tr>`;
+
+  constructor(reloadUrl) {
+    super(document.body.querySelector('table.game-threads'));
 
     this.reloadUrl = reloadUrl;
   }
 
   reloadTable() {
-    fetch(this.reloadUrl).then((response) => {
-      const { data } = response.json();
+    get(this.reloadUrl).then((response) => {
+      const { data } = response.data;
 
       this.reloadRows(data.map(row => this.createRow(new GameThread(row))));
 
@@ -42,7 +45,7 @@ class GameThreadsTable extends GenericTable {
     );
 
     if (gameThread.title) {
-      this.constructor.populateGameThreadTitle(row.querySelector('.title'), gameThread);
+      (this.constructor as typeof GameThreadsTable).populateGameThreadTitle(row.querySelector('.title'), gameThread);
     }
 
     row.querySelector('.game-pk').innerHTML = linkTo(
@@ -53,7 +56,7 @@ class GameThreadsTable extends GenericTable {
     row.querySelector('.post-at').textContent = gameThread.postAt.toHumanDate(true);
     row.querySelector('.starts-at').textContent = gameThread.startsAt.toHumanDate(true);
 
-    row.querySelector('.status').innerHTML = this.constructor.statusLabel(gameThread);
+    row.querySelector('.status').innerHTML = (this.constructor as typeof GameThreadsTable).statusLabel(gameThread);
 
     return row;
   }
@@ -69,10 +72,6 @@ class GameThreadsTable extends GenericTable {
       `${redditIcon} ${gameThread.title}`,
       `http://redd.it/${gameThread.postId}`,
     );
-  }
-
-  static get blankRow() {
-    return blankRow;
   }
 
   static statusLabel(gameThread) {

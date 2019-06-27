@@ -1,10 +1,19 @@
 import moment from 'moment';
 
+import { JsonData } from '@fustrate/rails';
+
 const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
 
 class Game {
-  constructor(data) {
+  public data: JsonData;
+  public teams: JsonData;
+  public linescore: JsonData;
+  public status: JsonData;
+  public gamePk: number;
+  public gameDate: moment.Moment;
+
+  constructor(data: JsonData) {
     this.data = data;
 
     this.teams = data.teams;

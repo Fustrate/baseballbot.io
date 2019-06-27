@@ -1,5 +1,6 @@
-import { GenericTable } from '@fustrate/rails';
-import { getCurrentPageJson, icon, linkTo } from '@fustrate/rails/utilities';
+import GenericTable from '@fustrate/rails/dist/js/GenericTable';
+import { getCurrentPageJson } from '@fustrate/rails/dist/js/ajax';
+import { icon, linkTo } from '@fustrate/rails/dist/js/utilities';
 
 import BaseballBot from '../../javascript/baseballbot';
 import Subreddit from '../../javascript/baseballbot/subreddit';
@@ -19,7 +20,7 @@ const checkMark = icon('check');
 
 class SubredditsTable extends GenericTable {
   constructor() {
-    super(document.body, document.body.querySelector('table.subreddits'));
+    super(document.body.querySelector('table.subreddits'));
   }
 
   reloadTable() {
