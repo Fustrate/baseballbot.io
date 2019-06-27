@@ -3,13 +3,19 @@ import { Record, PathParameters } from '@fustrate/rails/dist/js/Record';
 import { JsonData } from '@fustrate/rails/dist/js/BasicObject';
 
 import { gameThreadPath, gameThreadsPath } from '../routes';
+import Subreddit from './subreddit';
 
 export default class GameThread extends Record {
   public static classname = 'GameThread';
 
   public id: number;
+  public gamePk: number;
   public postAt: moment.Moment;
+  public postId: string;
   public startsAt: moment.Moment;
+  public status: string;
+  public subreddit: Subreddit;
+  public title: string;
 
   public static createPath(parameters: PathParameters = {}) {
     return gameThreadsPath(parameters);
@@ -24,10 +30,14 @@ export default class GameThread extends Record {
       return {};
     }
 
-    super.extractFromData(data);
-
-    this.postAt = moment(this.postAt);
-    this.startsAt = moment(this.startsAt);
+    this.id = data.id;
+    this.gamePk = data.gamePk;
+    this.postAt = moment(data.postAt);
+    this.postId = data.postId;
+    this.startsAt = moment(data.startsAt);
+    this.status = data.status;
+    this.subreddit = new Subreddit(data.subreddit);
+    this.title = data.title;
 
     return data;
   }

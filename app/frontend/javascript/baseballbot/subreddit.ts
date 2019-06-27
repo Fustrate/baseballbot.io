@@ -8,11 +8,11 @@ export default class Subreddit extends Record {
   public static classname = 'Subreddit';
 
   public id: number;
-  public name: string;
   public abbreviation: string;
+  public account: { id: number, name: string };
+  public name: string;
   public options: { [s: string]: any };
   public templates: Template[];
-  public account: { id: number, name: string };
 
   public static createPath(parameters: PathParameters = {}) {
     return subredditsPath(parameters);
@@ -28,10 +28,10 @@ export default class Subreddit extends Record {
     }
 
     this.id = data.id;
-    this.name = data.name;
     this.abbreviation = data.abbreviation;
-    this.options = data.options;
     this.account = data.account;
+    this.name = data.name;
+    this.options = data.options;
 
     if (data.templates) {
       this.templates = Template.buildList<Template>(data.templates);

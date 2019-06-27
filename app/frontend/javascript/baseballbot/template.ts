@@ -6,8 +6,8 @@ export default class Template extends Record {
   public static classname: 'Template';
 
   public id: number;
-  public type: string;
   public body: string;
+  public type: string;
 
   public static createPath(parameters: { format?: string } = {}): string {
     return templatesPath(parameters);
@@ -23,6 +23,8 @@ export default class Template extends Record {
     }
 
     this.id = data.id;
+    this.body = data.body;
+    this.type = data.type;
 
     return data;
   }
