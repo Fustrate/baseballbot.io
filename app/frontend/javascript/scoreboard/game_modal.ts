@@ -1,4 +1,4 @@
-import Modal from '@fustrate/rails/dist/js/components/modal';
+import Modal from '@fustrate/rails/dist/js/components/Modal';
 import Game from './game';
 
 const template = `
