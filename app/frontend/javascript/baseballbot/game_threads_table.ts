@@ -1,6 +1,6 @@
 import moment from 'moment';
 import GenericTable from '@fustrate/rails/dist/js/GenericTable';
-import { icon, label, linkTo } from '@fustrate/rails/dist/js/utilities';
+import { icon, label, linkTo, toHumanDate } from '@fustrate/rails/dist/js/utilities';
 import { get } from '@fustrate/rails/dist/js/ajax';
 
 import GameThread from './game_thread';
@@ -53,8 +53,8 @@ class GameThreadsTable extends GenericTable {
       `https://www.mlb.com/gameday/${gameThread.gamePk}`,
     );
 
-    row.querySelector('.post-at').textContent = gameThread.postAt.toHumanDate(true);
-    row.querySelector('.starts-at').textContent = gameThread.startsAt.toHumanDate(true);
+    row.querySelector('.post-at').textContent = toHumanDate(gameThread.postAt, true);
+    row.querySelector('.starts-at').textContent = toHumanDate(gameThread.startsAt, true);
 
     row.querySelector('.status').innerHTML = (this.constructor as typeof GameThreadsTable).statusLabel(gameThread);
 
