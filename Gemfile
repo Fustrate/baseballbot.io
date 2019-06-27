@@ -7,15 +7,21 @@ gem 'rails', '5.2.3'
 
 gem 'pg'
 
-gem 'execjs'
 gem 'haml-rails'
 gem 'jbuilder'
+gem 'webpacker', '~> 4.0'
+
+# Sprockets
+gem 'execjs'
 gem 'jquery-rails'
 gem 'sassc-rails', '~> 2.1'
 gem 'sprockets-rails'
 gem 'uglifier', '~> 4.1'
 
-gem 'webpacker', '~> 4.0'
+
+# Used to generate routes & i18n for the frontend
+gem 'i18n-js'
+gem 'js-routes'
 
 # Faster json generation
 gem 'oj'
@@ -53,6 +59,7 @@ group :development do
   # Linters
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
 end
 

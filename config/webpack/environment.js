@@ -23,4 +23,5 @@ environment.config.merge(smp.wrap({
   },
 }));
 
+environment.loaders.prepend('typescript', typescript)
 module.exports = environment;
