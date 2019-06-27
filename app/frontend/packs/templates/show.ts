@@ -5,7 +5,7 @@ import erb from 'highlight.js/lib/languages/erb';
 import BaseballBot from '../../javascript/baseballbot';
 import Template from '../../javascript/baseballbot/template';
 
-require('../../stylesheets/highlight_erb.css');
+import '../../stylesheets/highlight_erb.css';
 
 hljs.registerLanguage('erb', erb);
 
