@@ -22,7 +22,7 @@ class GameThreadsTable extends GenericTable {
       <td class="status"></td>
     </tr>`;
 
-  constructor(reloadUrl) {
+  constructor(reloadUrl: string) {
     super(document.body.querySelector('table.game-threads'));
 
     this.reloadUrl = reloadUrl;
