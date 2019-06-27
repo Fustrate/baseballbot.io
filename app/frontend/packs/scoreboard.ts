@@ -2,6 +2,7 @@ import moment from 'moment';
 import Page from '@fustrate/rails/dist/js/Page';
 
 import GameCard from '../javascript/scoreboard/game_card';
+import Game from '../javascript/scoreboard/game';
 
 import '../stylesheets/scoreboard.scss';
 import BaseballBot from '../javascript/baseballbot';
@@ -21,14 +22,18 @@ class Scoreboard extends Page {
     this.loading = document.querySelector('.loading');
     this.container = document.querySelector('.game-cards');
 
-    this.reloadGameInfo(this.createGameCards.bind(this));
+    this.reloadGameInfo((data: any[]) => {
+      this.createGameCards(data.map((gameData: any) => new Game(gameData)));
+    });
 
     window.setInterval(() => {
-      this.reloadGameInfo(this.updateGameCards.bind(this));
+      this.reloadGameInfo((data: any[]) => {
+        this.updateGameCards(data);
+      });
     }, secondsBetweenReloads * 1000);
   }
 
-  createGameCards(games) {
+  createGameCards(games: Game[]) {
     const spacer = document.createElement('div');
     spacer.className = 'card-spacer';
 

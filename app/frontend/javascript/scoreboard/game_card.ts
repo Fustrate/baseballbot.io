@@ -40,6 +40,7 @@ class GameCard {
   public modal?: GameModal;
 
   constructor(game: Game) {
+    this.game = game;
     this.card = elementFromString(template);
 
     this.card.querySelector('.home-team').classList.add(this.game.teams.home.team.fileCode);

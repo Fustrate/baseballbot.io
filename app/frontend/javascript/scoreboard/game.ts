@@ -5,9 +5,14 @@ import { JsonData } from '@fustrate/rails';
 const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
 
+interface TeamsData {
+  away: { [s: string]: any };
+  home: { [s: string]: any };
+}
+
 class Game {
   public data: JsonData;
-  public teams: JsonData;
+  public teams: TeamsData;
   public linescore: JsonData;
   public status: JsonData;
   public gamePk: number;
