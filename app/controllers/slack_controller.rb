@@ -9,7 +9,7 @@ class SlackController < ApplicationController
   def interactivity
     case params.dig(:actions, 0, :name)
     when 'queue_action'
-      # Slack::ModQueueActionWorker.perform_async(params)
+      # Slack::ModQueueActionWorker.perform_async(params[:payload])
     end
 
     render plain: '', status: 200
@@ -18,6 +18,6 @@ class SlackController < ApplicationController
   protected
 
   def verify_slack_signature
-    raise 'Invalid signature' unless Slack::VerifySignature.valid?
+    Slack::VerifySignature.verify!
   end
 end

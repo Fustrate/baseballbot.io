@@ -14,7 +14,7 @@ module Slack
     protected
 
     def verify_slack_signature
-      raise 'Invalid signature' unless Slack::VerifySignature.valid?
+      Slack::VerifySignature.verify!
     end
   end
 end
