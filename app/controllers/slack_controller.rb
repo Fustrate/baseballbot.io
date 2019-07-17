@@ -12,7 +12,7 @@ class SlackController < ApplicationController
       Slack::ModQueueActionJob.perform_later payload
     end
 
-    render plain: '', status: 200
+    render json: modified_message, status: 200
   end
 
   protected
@@ -23,5 +23,13 @@ class SlackController < ApplicationController
 
   def payload
     @payload ||= JSON.parse(Current.params[:payload])
+  end
+
+  def modified_message
+    message = payload['original_message']
+
+    message['attachments'][-1].delete 'actions'
+
+    message
   end
 end
