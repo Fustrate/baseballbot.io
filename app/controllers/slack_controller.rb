@@ -18,7 +18,7 @@ class SlackController < ApplicationController
   protected
 
   def verify_slack_signature
-    Slack::VerifySignature.verify!(payload.dig('team', 'id'))
+    Slack::VerifySignature.verify!(team_id: payload.dig('team', 'id'))
   end
 
   def payload
