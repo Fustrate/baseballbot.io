@@ -54,6 +54,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
+  gem 'capistrano-sidekiq', require: false
 
   # Linters
   gem 'rubocop', require: false
