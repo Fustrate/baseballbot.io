@@ -347,6 +347,8 @@ GEM
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sidekiq-history (0.0.11)
+      sidekiq (>= 3.0.0)
     simplecov (0.17.0)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -452,6 +454,7 @@ DEPENDENCIES
   ruby_gntp
   sassc-rails (~> 2.1)
   sidekiq
+  sidekiq-history
   simplecov
   skylight
   sorcery

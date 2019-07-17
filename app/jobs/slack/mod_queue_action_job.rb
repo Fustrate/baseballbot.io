@@ -7,6 +7,8 @@ module Slack
     def perform(*args)
       @payload = args
 
+      @payload.dig('actions')
+      @payload.dig('actions', 0)
       @action = @payload.dig('actions', 0, 'value').split(':').first
 
       send_to_reddit

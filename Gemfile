@@ -103,3 +103,4 @@ gem 'em-hiredis'
 gem 'eventmachine'
 
 gem 'sidekiq'
+gem 'sidekiq-history'

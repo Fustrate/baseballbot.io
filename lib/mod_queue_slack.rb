@@ -105,7 +105,7 @@ class ModQueue
   end
 
   def action_buttons(item)
-    ACTIONS.map do |action|
+    ACTIONS.dup.map do |action|
       action[:value] = "#{action[:value]}:#{item.id}"
 
       action
