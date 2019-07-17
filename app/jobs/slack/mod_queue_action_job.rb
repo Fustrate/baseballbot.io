@@ -44,6 +44,7 @@ module Slack
     def modified_message
       message = @payload['original_message']
 
+      message['attachments'][-1].delete 'actions'
       message['attachments'] << { text: text_for_action }
 
       message
