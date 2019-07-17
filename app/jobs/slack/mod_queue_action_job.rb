@@ -9,15 +9,12 @@ module Slack
 
       @action = @payload.dig('actions', 0, 'value')
 
-      send_to_reddit
+      perform_reddit_action
     end
 
     protected
 
-    def send_to_reddit
-      reddit.client.access = Account.find_by(name: 'DodgerBot').access
-
-      subreddit = reddit.subreddit('dodgers')
+    def perform_reddit_action
       submission = subreddit.load_submission(id: @payload['callback_id'])
 
       response = case @action
@@ -27,10 +24,10 @@ module Slack
 
       raise response.raw_body unless response.code == 200
 
-      send_to_slack
+      update_slack_message
     end
 
-    def send_to_slack
+    def update_slack_message
       uri = URI.parse(@payload['response_url'])
 
       https = Net::HTTP.new(uri.host, uri.port)
@@ -64,11 +61,21 @@ module Slack
       end
     end
 
-    def reddit
-      @reddit ||= Redd.it(
-        user_agent: 'DodgerBot Slack Mod Queue by /u/Fustrate',
+    def subreddit
+      client = Redd::APIClient.new redd_auth_strategy, limit_time: 0
+      session = Redd::Models::Session.new client
+
+      client.access = Account.find_by(name: 'DodgerBot').access
+
+      session.subreddit('dodgers')
+    end
+
+    def redd_auth_strategy
+      Redd::AuthStrategies::Web.new(
         client_id: Rails.application.credentials.dig(:reddit, :client_id),
-        secret: Rails.application.credentials.dig(:reddit, :secret)
+        secret: Rails.application.credentials.dig(:reddit, :secret),
+        redirect_uri: Rails.application.credentials.dig(:reddit, :redirect_uri),
+        user_agent: 'DodgerBot Slack Mod Queue by /u/Fustrate'
       )
     end
   end
