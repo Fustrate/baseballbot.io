@@ -23,7 +23,7 @@ class Account < ApplicationRecord
       access_token: access_token,
       refresh_token: refresh_token,
       scope: scope,
-      expires_at: expires_at - 15
+      expires_at: expires_at - 15,
       expires_in: expires_at - Time.zone.now
     )
   end
