@@ -7,7 +7,7 @@ module Slack
     def perform(*args)
       @payload = args
 
-      @action = @payload.dig('actions', 0, 'selected_options', 0, 'value')
+      @action = @payload.dig('actions', 0, 'value').split(':').first
 
       send_to_reddit
     end
@@ -18,7 +18,7 @@ module Slack
       reddit.client.access = Account.find_by(name: 'DodgerBot').access
 
       subreddit = reddit.subreddit('dodgers')
-      submission = subreddit.load_submission(id: POST_ID)
+      submission = subreddit.load_submission(id: @payload['callback_id'])
 
       response = case @action
                  when 'spam' then submission.remove(spam: true)
