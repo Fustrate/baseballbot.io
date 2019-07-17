@@ -12,7 +12,7 @@ class SlackController < ApplicationController
       # Slack::ModQueueActionWorker.perform_async(params)
     end
 
-    render plain: 'OK', status: 200
+    render plain: '', status: 200
   end
 
   protected
