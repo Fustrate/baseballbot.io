@@ -9,7 +9,7 @@ class SlackController < ApplicationController
   def interactivity
     case payload.dig('actions', 0, 'name')
     when 'queue_action'
-      Slack::ModQueueActionWorker.perform_async(payload)
+      Slack::ModQueueActionJob.perform_later payload
     end
 
     render plain: '', status: 200
