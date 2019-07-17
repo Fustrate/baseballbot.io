@@ -9,7 +9,7 @@ module Slack
 
       @payload.dig('actions')
       @payload.dig('actions', 0)
-      @action = @payload.dig('actions', 0, 'value').split(':').first
+      @action = @payload.dig('actions', 0, 'value')
 
       send_to_reddit
     end

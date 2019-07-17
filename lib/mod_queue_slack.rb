@@ -87,7 +87,7 @@ class ModQueue
 
     {
       text: reports.any? ? "Reports: #{reasons.join(', ')}" : 'Spam?',
-      actions: action_buttons(item),
+      actions: ACTIONS,
       callback_id: item.name,
       fallback: 'Uh oh! Something went wrong.'
     }
@@ -102,14 +102,6 @@ class ModQueue
     return if res.code.to_i == 200
 
     raise 'Uh oh!'
-  end
-
-  def action_buttons(item)
-    ACTIONS.dup.map do |action|
-      action[:value] = "#{action[:value]}:#{item.id}"
-
-      action
-    end
   end
 
   def item_body(item)
