@@ -10,3 +10,5 @@ end
 Sidekiq.configure_client do |config|
   config.redis = { url: 'redis://localhost:6379/2' }
 end
+
+Sidekiq.history_exclude_jobs = []
