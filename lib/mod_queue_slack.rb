@@ -87,7 +87,9 @@ class ModQueue
 
     {
       text: reports.any? ? "Reports: #{reasons.join(', ')}" : 'Spam?',
-      actions: action_buttons(item)
+      actions: action_buttons(item),
+      callback_id: item.name,
+      fallback: 'Uh oh! Something went wrong.'
     }
   end
 
