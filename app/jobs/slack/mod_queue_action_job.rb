@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 module Slack
-  class ModQueueActionWorker
-    include Sidekiq::Worker
-
-    sidekiq_options queue: :slack, retry: 5
+  class ModQueueActionJob < ApplicationJob
+    queue_as :slack
 
     def perform(*args)
-      @params = args
+      @payload = args
 
-      @action = @params.dig('actions', 0, 'selected_options', 0, 'value')
+      @action = @payload.dig('actions', 0, 'selected_options', 0, 'value')
 
       send_to_reddit
     end
@@ -33,7 +31,7 @@ module Slack
     end
 
     def send_to_slack
-      uri = URI.parse(@params[:response_url])
+      uri = URI.parse(@payload['response_url'])
 
       https = Net::HTTP.new(uri.host, uri.port)
       https.use_ssl = true
@@ -49,10 +47,10 @@ module Slack
     end
 
     def modified_message
-      message = @params[:original_message]
+      message = @payload['original_message']
 
-      message[:attachments][-1].delete :actions
-      message[:attachments] << { text: text_for_action }
+      message['attachments'][-1].delete 'actions'
+      message['attachments'] << { text: text_for_action }
 
       message
     end
@@ -60,9 +58,9 @@ module Slack
     def text_for_action
       case @action
       when 'spam'
-        ":hocho: Marked as spam by *@#{@params.dig(:user, :name)}*"
+        ":hocho: Marked as spam by *@#{@payload.dig('user', 'name')}*"
       when 'approve'
-        ":white_check_mark: Approved by *@#{@params.dig(:user, :name)}*"
+        ":white_check_mark: Approved by *@#{@payload.dig('user', 'name')}*"
       end
     end
 
@@ -70,7 +68,7 @@ module Slack
       @reddit ||= Redd.it(
         user_agent: 'DodgerBot Slack Mod Queue by /u/Fustrate',
         client_id: Rails.application.credentials.dig(:reddit, :client_id),
-        secret: Rails.application.credentials.dig(:reddit, :secret),
+        secret: Rails.application.credentials.dig(:reddit, :secret)
       )
     end
   end
