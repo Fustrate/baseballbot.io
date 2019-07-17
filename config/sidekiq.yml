@@ -1,0 +1,12 @@
+---
+:queues:
+  - slack
+  - default
+
+:pidfile: tmp/pids/sidekiq.pid
+:logfile: log/sidekiq.log
+:timeout: 15
+:concurrency: 5
+
+production:
+  :concurrency: 10

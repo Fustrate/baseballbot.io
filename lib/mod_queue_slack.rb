@@ -12,13 +12,13 @@ SLACK_HOOK_ID = ENV['DODGERS_SLACK_HOOK_ID']
 class ModQueue
   ACTIONS = [
     {
-      name: 'action',
+      name: 'queue_action',
       text: 'Approve',
       type: 'button',
       value: 'approve'
     },
     {
-      name: 'action',
+      name: 'queue_action',
       text: 'Mark as Spam',
       style: 'danger',
       type: 'button',

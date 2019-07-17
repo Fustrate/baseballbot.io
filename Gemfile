@@ -18,7 +18,6 @@ gem 'sassc-rails', '~> 2.1'
 gem 'sprockets-rails'
 gem 'uglifier', '~> 4.1'
 
-
 # Used to generate routes & i18n for the frontend
 gem 'i18n-js'
 gem 'js-routes'
@@ -101,3 +100,5 @@ gem 'redis'
 # Communication with the Discord bot
 gem 'em-hiredis'
 gem 'eventmachine'
+
+gem 'sidekiq'

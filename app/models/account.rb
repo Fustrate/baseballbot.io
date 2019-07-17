@@ -17,13 +17,13 @@ class Account < ApplicationRecord
   #     yield client
   #   end
   # end
-  #
-  # def access
-  #   @access ||= Redd::Access.new(
-  #     access_token: access_token,
-  #     refresh_token: refresh_token,
-  #     scope: scope.join(','),
-  #     expires_at: expires_at
-  #   )
-  # end
+
+  def access
+    @access ||= Redd::Models::Access.new(
+      access_token: access_token,
+      refresh_token: refresh_token,
+      scope: scope.join(','),
+      expires_at: expires_at
+    )
+  end
 end
