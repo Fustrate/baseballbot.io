@@ -20,8 +20,8 @@ class DiscordController < ApplicationController
   def save_account
     session = Redd.it(
       code: params[:code],
-      client_id: reddit_config['discord_client_id'],
-      secret: reddit_config['discord_secret'],
+      client_id: Rails.application.credentials.dig(:discord, :client_id),
+      secret: Rails.application.credentials.dig(:discord, :secret),
       redirect_uri: 'https://baseballbot.io/discord/reddit-callback'
     )
 
@@ -36,9 +36,5 @@ class DiscordController < ApplicationController
 
     Rails.application.redis.rpush 'discord.verification_queue', data
     Rails.application.redis.publish 'discord.verified', data
-  end
-
-  def reddit_config
-    @reddit_config ||= Rails.application.config_for(:reddit)
   end
 end

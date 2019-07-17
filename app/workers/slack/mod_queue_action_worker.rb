@@ -69,13 +69,9 @@ module Slack
     def reddit
       @reddit ||= Redd.it(
         user_agent: 'DodgerBot Slack Mod Queue by /u/Fustrate',
-        client_id: reddit_config['client_id'],
-        secret: reddit_config['secret'],
+        client_id: Rails.application.credentials.dig(:reddit, :client_id),
+        secret: Rails.application.credentials.dig(:reddit, :secret),
       )
-    end
-
-    def reddit_config
-      @reddit_config ||= Rails.application.config_for(:reddit)
     end
   end
 end

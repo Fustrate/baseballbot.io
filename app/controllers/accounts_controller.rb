@@ -62,8 +62,8 @@ class AccountsController < ApplicationController
     session[:state] = SecureRandom.urlsafe_base64
 
     auth_url = Redd.url(
-      client_id: reddit_config['client_id'],
-      redirect_uri: reddit_config['redirect_uri'],
+      client_id: Rails.application.credentials.dig(:reddit, :client_id),
+      redirect_uri: Rails.application.credentials.dig(:reddit, :redirect_uri),
       response_type: 'code',
       state: session[:state],
       scope: AUTH_SCOPE,
@@ -76,9 +76,9 @@ class AccountsController < ApplicationController
   def save_account
     session = Redd.it(
       code: params[:code],
-      client_id: reddit_config['client_id'],
-      secret: reddit_config['secret'],
-      redirect_uri: reddit_config['redirect_uri']
+      client_id: Rails.application.credentials.dig(:reddit, :client_id),
+      secret: Rails.application.credentials.dig(:reddit, :secret),
+      redirect_uri: Rails.application.credentials.dig(:reddit, :redirect_uri)
     )
 
     # session.client.refresh if session.client.access.expired?
@@ -119,9 +119,5 @@ class AccountsController < ApplicationController
       refresh_token: session.client.access.refresh_token,
       expires_at: Time.zone.now + expires_in - 10.seconds
     )
-  end
-
-  def reddit_config
-    @reddit_config ||= Rails.application.config_for(:reddit)
   end
 end
