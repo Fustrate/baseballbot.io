@@ -5,7 +5,9 @@ module Slack
     VERSION = 'v0'
 
     # Returns true if the signature coming from Slack is valid.
-    def self.verify!
+    def self.verify!(team_id: nil)
+      @team_id = team_id || Current.params[:team_id]
+
       ensure_valid_parameters!
 
       digest = OpenSSL::Digest::SHA256.new
@@ -19,6 +21,8 @@ module Slack
     end
 
     def self.ensure_valid_parameters!
+      raise 'No team ID' unless @team_id
+
       raise 'No slack signing secret' unless signing_secret
 
       raise 'No slack request timestamp' unless timestamp
@@ -48,11 +52,8 @@ module Slack
     end
 
     def self.signing_secret
-      team_id = Current.params[:team_id] ||
-                Current.params.dig(:payload, :team, :id)
-
       Rails.application.credentials.dig(
-        :"slack_#{team_id}",
+        :"slack_#{@team_id}",
         :signing_secret
       )
     end

@@ -7,9 +7,9 @@ class SlackController < ApplicationController
   protect_from_forgery with: :null_session
 
   def interactivity
-    case params.dig(:actions, 0, :name)
+    case payload.dig('actions', 0, 'name')
     when 'queue_action'
-      # Slack::ModQueueActionWorker.perform_async(params[:payload])
+      # Slack::ModQueueActionWorker.perform_async(payload)
     end
 
     render plain: '', status: 200
@@ -18,6 +18,10 @@ class SlackController < ApplicationController
   protected
 
   def verify_slack_signature
-    Slack::VerifySignature.verify!
+    Slack::VerifySignature.verify!(payload.dig('team', 'id'))
+  end
+
+  def payload
+    @payload ||= JSON.parse(Current.params[:payload])
   end
 end
