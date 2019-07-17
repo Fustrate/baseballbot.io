@@ -10,6 +10,22 @@ require 'json'
 SLACK_HOOK_ID = ENV['DODGERS_SLACK_HOOK_ID']
 
 class ModQueue
+  ACTIONS = [
+    {
+      name: 'action',
+      text: 'Approve',
+      type: 'button',
+      value: 'approve'
+    },
+    {
+      name: 'action',
+      text: 'Mark as Spam',
+      style: 'danger',
+      type: 'button',
+      value: 'spam'
+    }
+  ].freeze
+
   def initialize
     @bot = DefaultBot.create(purpose: 'Mod Queue', account: 'DodgerBot')
     @subreddit = @bot.session.subreddit('Dodgers')
@@ -70,7 +86,8 @@ class ModQueue
     reasons = reports.map { |reason, number| "#{reason} (#{number})" }
 
     {
-      text: reports.any? ? "Reports: #{reasons.join(', ')}" : 'Spam?'
+      text: reports.any? ? "Reports: #{reasons.join(', ')}" : 'Spam?',
+      actions: action_buttons(item)
     }
   end
 
@@ -83,6 +100,14 @@ class ModQueue
     return if res.code.to_i == 200
 
     raise 'Uh oh!'
+  end
+
+  def action_buttons(item)
+    ACTIONS.map do |action|
+      action[:value] = "#{action[:value]}:#{item.id}"
+
+      action
+    end
   end
 end
 

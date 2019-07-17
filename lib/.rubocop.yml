@@ -1,9 +1,6 @@
 AllCops:
   TargetRubyVersion: 2.5
 
-Rails:
-  Enabled: false
-
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
