@@ -15,8 +15,6 @@ module Slack
     protected
 
     def perform_reddit_action
-      submission = subreddit.load_submission(id: @payload['callback_id'])
-
       response = case @action
                  when 'spam' then submission.remove(spam: true)
                  when 'approve' then submission.approve
@@ -61,13 +59,13 @@ module Slack
       end
     end
 
-    def subreddit
-      client = Redd::APIClient.new redd_auth_strategy, limit_time: 0
-      session = Redd::Models::Session.new client
+    def submission
+      @client = Redd::APIClient.new redd_auth_strategy, limit_time: 0
+      @session = Redd::Models::Session.new @client
 
-      client.access = Account.find_by(name: 'DodgerBot').access
+      @client.access = Account.find_by(name: 'DodgerBot').access
 
-      session.subreddit('dodgers')
+      @session.from_ids(@payload['callback_id']).first
     end
 
     def redd_auth_strategy
