@@ -75,7 +75,7 @@ class ModQueue
 
   def body_attachment(item)
     {
-      text: item.body,
+      text: item_body(item),
       title: item.link_title,
       title_link: "https://www.reddit.com#{item.permalink}"
     }
@@ -110,6 +110,12 @@ class ModQueue
 
       action
     end
+  end
+
+  def item_body(item)
+    return item.selftext[0..255] if item.is_a? Redd::Models::Submission
+
+    item.body
   end
 end
 
