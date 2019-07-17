@@ -4,11 +4,9 @@ module Slack
   class ModQueueActionJob < ApplicationJob
     queue_as :slack
 
-    def perform(*args)
-      @payload = args
+    def perform(payload)
+      @payload = payload
 
-      @payload.dig('actions')
-      @payload.dig('actions', 0)
       @action = @payload.dig('actions', 0, 'value')
 
       send_to_reddit

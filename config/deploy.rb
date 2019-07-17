@@ -32,5 +32,5 @@ namespace :deploy do
   after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
 
-  after :finishing, 'sidekiq:start'
+  # after :finishing, 'sidekiq:start'
 end
