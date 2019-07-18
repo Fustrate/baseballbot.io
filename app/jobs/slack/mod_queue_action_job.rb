@@ -16,8 +16,10 @@ module Slack
 
     def perform_reddit_action
       response = case @action
-                 when 'spam' then submission.remove(spam: true)
                  when 'approve' then submission.approve
+                 when 'ignore' then submission.ignore_reports
+                 when 'remove' then submission.remove(spam: false)
+                 when 'spam' then submission.remove(spam: true)
                  end
 
       raise response.raw_body unless response.code == 200
@@ -53,9 +55,13 @@ module Slack
     def text_for_action
       case @action
       when 'spam'
-        ":hocho: Marked as spam by *@#{@payload.dig('user', 'name')}*"
+        ":canned_food: *Marked as spam by @#{@payload.dig('user', 'name')}*"
       when 'approve'
-        ":white_check_mark: Approved by *@#{@payload.dig('user', 'name')}*"
+        ":white_check_mark: *Approved by @#{@payload.dig('user', 'name')}*"
+      when 'remove'
+        ":hocho: *Removed by @#{@payload.dig('user', 'name')}*"
+      when 'ignore'
+        ":shrug: *Reports ignored by @#{@payload.dig('user', 'name')}*"
       end
     end
 

@@ -19,10 +19,27 @@ class ModQueue
     },
     {
       name: 'queue_action',
+      text: 'Remove',
+      style: 'danger',
+      type: 'button',
+      value: 'remove',
+      confirm: {
+        title: 'Are you sure?',
+        ok_text: 'Yes',
+        dismiss_text: 'No'
+      }
+    },
+    {
+      name: 'queue_action',
       text: 'Mark as Spam',
       style: 'danger',
       type: 'button',
-      value: 'spam'
+      value: 'spam',
+      confirm: {
+        title: 'Are you sure?',
+        ok_text: 'Yes',
+        dismiss_text: 'No'
+      }
     }
   ].freeze
 
