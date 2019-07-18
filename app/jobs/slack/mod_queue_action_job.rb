@@ -84,7 +84,8 @@ module Slack
     def display_name(user)
       {
         'UGE8VHTCY' => 'abunchofsquirrels',
-        'UGFNXQPV5' => 'Toast'
+        'UGFNXQPV5' => 'Toast',
+        'UGFS6EQHM' => 'tommyburger'
       }[user['id']] || user['name']
     end
   end
