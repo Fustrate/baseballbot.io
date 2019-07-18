@@ -14,6 +14,7 @@ class ModQueue
     {
       name: 'queue_action',
       text: 'Approve',
+      style: 'primary',
       type: 'button',
       value: 'approve'
     },
@@ -24,7 +25,8 @@ class ModQueue
       type: 'button',
       value: 'remove',
       confirm: {
-        title: 'Are you sure?',
+        title: 'Confirm Removal',
+        text: 'Are you sure you want to remove this item?',
         ok_text: 'Yes',
         dismiss_text: 'No'
       }
@@ -36,7 +38,8 @@ class ModQueue
       type: 'button',
       value: 'spam',
       confirm: {
-        title: 'Are you sure?',
+        title: 'Confirm Spam',
+        text: 'Are you sure you want to mark this item as spam?',
         ok_text: 'Yes',
         dismiss_text: 'No'
       }
