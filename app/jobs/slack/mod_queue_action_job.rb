@@ -53,15 +53,13 @@ module Slack
     end
 
     def text_for_action
+      name = display_name @payload['user']
+
       case @action
-      when 'spam'
-        ":canned_food: *Marked as spam by @#{@payload.dig('user', 'name')}*"
-      when 'approve'
-        ":white_check_mark: *Approved by @#{@payload.dig('user', 'name')}*"
-      when 'remove'
-        ":hocho: *Removed by @#{@payload.dig('user', 'name')}*"
-      when 'ignore'
-        ":shrug: *Reports ignored by @#{@payload.dig('user', 'name')}*"
+      when 'spam' then ":canned_food: *Marked as spam by @#{name}*"
+      when 'approve' then ":white_check_mark: *Approved by @#{name}*"
+      when 'remove' then ":hocho: *Removed by @#{name}*"
+      when 'ignore' then ":shrug: *Reports ignored by @#{name}*"
       end
     end
 
@@ -81,6 +79,13 @@ module Slack
         redirect_uri: Rails.application.credentials.dig(:reddit, :redirect_uri),
         user_agent: 'DodgerBot Slack Mod Queue by /u/Fustrate'
       )
+    end
+
+    def display_name(user)
+      {
+        'UGE8VHTCY' => 'abunchofsquirrels',
+        'UGFNXQPV5' => 'Toast'
+      }[user['id']] || user['name']
     end
   end
 end
