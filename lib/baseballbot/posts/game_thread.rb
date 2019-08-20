@@ -73,7 +73,7 @@ class Baseballbot
       def change_status(status)
         attrs = status == 'Posted' ? posted_attributes : attributes(status)
 
-        fields = attrs.keys.map.with_index { |col, i| "#{col} = #{i + 2}" }
+        fields = attrs.keys.map.with_index { |col, i| "#{col} = $#{i + 2}" }
 
         @bot.db.exec_params(
           "UPDATE game_threads SET #{fields.join(', ')} WHERE id = $1",
