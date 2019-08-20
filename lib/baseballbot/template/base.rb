@@ -45,9 +45,7 @@ class Baseballbot
           text = CGI.unescapeHTML(text.selftext)
         end
 
-        text
-          .gsub('[](/updates)', DELIMITER)
-          .sub(replace_regexp, "#{DELIMITER}\n#{body}\n#{DELIMITER}")
+        text.sub(replace_regexp, "#{DELIMITER}\n#{body}\n#{DELIMITER}")
       end
 
       def timestamp(action = nil)
