@@ -66,28 +66,28 @@ class Baseballbot
 
         return postpone_game_thread! if @template.postponed?
 
-        return end_game_thread! if @template.final?
-
-        change_status 'Posted'
+        @template.final? ? end_game_thread! : change_status('Posted')
       end
 
       # @param status [String] status of the game thread
       def change_status(status)
-        game_thread_posted = status == 'Posted'
+        attrs = status == 'Posted' ? posted_attributes : attributes(status)
 
-        fields = ['status = $2', 'updated_at = $3']
-        fields.concat ['post_id = $4', 'title = $5'] if game_thread_posted
+        fields = attrs.keys.each_with_index { |col, i| "#{col} = #{i + 2}" }
 
         @bot.db.exec_params(
           "UPDATE game_threads SET #{fields.join(', ')} WHERE id = $1",
-          [
-            @id,
-            status,
-            Time.now,
-            (@submission.id if game_thread_posted),
-            (@submission.title if game_thread_posted)
-          ].compact
+          [@id] + attrs.values
         )
+      end
+
+      def attributes(status)
+        { status: status, updated_at: Time.zone.now }
+          .merge(status == 'Posted' ? posted_attributes : {})
+      end
+
+      def posted_attributes
+        { post_id: @submission.id, title: @submission.title }
       end
 
       # Mark the game thread as complete, and make any last updates

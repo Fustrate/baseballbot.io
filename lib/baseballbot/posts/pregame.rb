@@ -15,10 +15,7 @@ class Baseballbot
 
       def post_pregame_thread!
         @bot.with_reddit_account(@subreddit.account.name) do
-          @template = pregame_template
-
-          # The title uses @template
-          @template.title = pregame_title
+          load_pregame_template
 
           @submission = @subreddit.submit(
             title: @template.title,
@@ -42,12 +39,17 @@ class Baseballbot
         titles[playoffs ? 'postseason' : 'default'] || titles.values.first
       end
 
-      def pregame_template
-        Template::GameThread.new(
+      def load_pregame_template
+        @template = Template::GameThread.new(
           subreddit: @subreddit,
           game_pk: @game_pk,
           type: 'pregame'
         )
+
+        # The title uses @template
+        @template.title = pregame_title
+
+        @template
       end
     end
   end

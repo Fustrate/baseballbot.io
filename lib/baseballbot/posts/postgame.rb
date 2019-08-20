@@ -48,15 +48,24 @@ class Baseballbot
 
         return titles if titles.is_a?(String)
 
-        return titles['won'] if @template.won? && titles['won']
-        return titles['lost'] if @template.lost? && titles['lost']
-
-        playoffs = %w[F D L W].include? @template.game_data.dig('game', 'type')
-
-        titles[playoffs ? 'postseason' : 'default'] || titles.values.first
+        titles[title_key] || titles['default'] || titles.values.first
 
         # # Spring training games can end in a tie.
         # titles['tie'] || titles
+      end
+
+      def playoffs?
+        %w[F D L W].include? @template.game_data.dig('game', 'type')
+      end
+
+      def title_key
+        return 'won' if @template.won?
+
+        return 'lost' if @template.lost?
+
+        return 'playoffs' if playoffs?
+
+        'default'
       end
     end
   end
