@@ -48,7 +48,7 @@ class Baseballbot
 
       def create_game_thread_post!
         @submission = @subreddit
-          .submit(title: @template.title, text: @template.body)
+          .submit(title: @template.title, text: @template.evaluated_body)
 
         # Mark as posted right away so that it won't post again
         change_status 'Posted'

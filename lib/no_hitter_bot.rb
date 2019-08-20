@@ -115,7 +115,8 @@ class NoHitterBot
   def post_thread!(game, flag)
     template = no_hitter_template(game, flag)
 
-    submission = subreddit.submit title: template.title, text: template.body
+    submission = subreddit
+      .submit title: template.title, text: template.evaluated_body
 
     insert_game_thread!(submission, game)
 

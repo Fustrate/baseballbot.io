@@ -18,17 +18,17 @@ class Baseballbot
 
       def initialize(body:, subreddit:)
         @subreddit = subreddit
-        @raw_body = body
+        @template_body = body
 
         @template = ERB.new body, safe_level: nil, trim_mode: '<>'
         @bot = subreddit.bot
       end
 
-      def body
+      def evaluated_body
         @template.result(binding)
       rescue SyntaxError => e
-        Honeybadger.notify(e, context: { body: @raw_body })
-        raise StandardError, 'ERB template error'
+        Honeybadger.notify(e, context: { template: @template_body })
+        raise StandardError, 'ERB syntax error'
       end
 
       # Get the default subreddit for this team

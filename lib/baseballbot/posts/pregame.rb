@@ -19,7 +19,7 @@ class Baseballbot
 
           @submission = @subreddit.submit(
             title: @template.title,
-            text: @template.body
+            text: @template.evaluated_body
           )
 
           change_status 'Pregame'

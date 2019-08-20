@@ -11,7 +11,7 @@ class Baseballbot
 
         @submission = @subreddit.submit(
           title: @template.title,
-          text: @template.body
+          text: @template.evaluated_body
         )
 
         update_sticky @subreddit.sticky_game_threads?
