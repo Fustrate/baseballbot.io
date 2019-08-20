@@ -18,13 +18,17 @@ class Baseballbot
 
       def initialize(body:, subreddit:)
         @subreddit = subreddit
+        @raw_body = body
 
         @template = ERB.new body, safe_level: nil, trim_mode: '<>'
         @bot = subreddit.bot
       end
 
       def body
-        @template.result binding
+        @template.result(binding)
+      rescue SyntaxError => e
+        Honeybadger.notify(e, context: { body: @raw_body })
+        raise StandardError, 'ERB template error'
       end
 
       # Get the default subreddit for this team
@@ -39,7 +43,6 @@ class Baseballbot
         Regexp.new "#{delimiter}(.*)#{delimiter}", Regexp::MULTILINE
       end
 
-      # Temporary extra replacement to move to the new delimiter
       def replace_in(text)
         if text.is_a?(Redd::Models::Submission)
           text = CGI.unescapeHTML(text.selftext)
