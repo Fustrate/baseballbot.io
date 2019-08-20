@@ -82,7 +82,7 @@ class Baseballbot
       end
 
       def attributes(status)
-        { status: status, updated_at: Time.zone.now }
+        { status: status, updated_at: Time.now }
           .merge(status == 'Posted' ? posted_attributes : {})
       end
 
