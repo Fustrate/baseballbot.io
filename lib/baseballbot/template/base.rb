@@ -18,7 +18,7 @@ class Baseballbot
       def initialize(body:, subreddit:)
         @subreddit = subreddit
 
-        @template = ERB.new body, nil, '<>'
+        @template = ERB.new body, safe_level: nil, trim_mode: '<>'
         @bot = subreddit.bot
       end
 

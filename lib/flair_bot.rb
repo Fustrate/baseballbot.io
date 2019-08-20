@@ -35,5 +35,6 @@ class FlairBot
     load_flair_page after: res[:next]
   end
 
-  def process_flair(_flair); end
+  def process_flair(_flair)
+  end
 end

@@ -19,7 +19,7 @@ class Baseballbot
       def create!
         @template = template_for(@type)
 
-        return change_status(id, nil, 'Postponed') if @template.postponed?
+        return change_status('Postponed') if @template.postponed?
 
         # default_title uses @template
         @template.title = (@title && !@title.empty? ? @title : default_title)

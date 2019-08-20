@@ -1,5 +1,7 @@
-AllCops:
-  TargetRubyVersion: 2.5
+inherit_from: ../.rubocop.yml
+
+Rails:
+  Enabled: false
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented

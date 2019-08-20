@@ -44,7 +44,7 @@ module Slack
         add_game_by_pk free_games.dig(0, 'gamePk')
       end
 
-      def add_game_by_pk(game_pk, title = nil)
+      def add_game_by_pk(game_pk)
         live_feed = api.live_feed(game_pk)
 
         return 'Invalid game PK' unless live_feed
