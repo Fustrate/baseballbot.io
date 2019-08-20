@@ -20,7 +20,7 @@ class Baseballbot
         @subreddit = subreddit
         @template_body = body
 
-        @template = ERB.new body, safe_level: nil, trim_mode: '<>'
+        @template = ERB.new body, trim_mode: '<>'
         @bot = subreddit.bot
       end
 
