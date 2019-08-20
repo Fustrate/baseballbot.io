@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../markdown_calendar'
-require_relative '../team_calendar'
+require_relative 'markdown_calendar'
+require_relative 'team_calendar'
 
 class Baseballbot
   module Template
