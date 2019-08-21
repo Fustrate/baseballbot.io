@@ -71,7 +71,12 @@ class Baseballbot
 
       # @param status [String] status of the game thread
       def change_status(status)
-        attrs = status == 'Posted' ? posted_attributes : attributes(status)
+        attrs = { status: status, updated_at: Time.now }
+
+        if status == 'Posted'
+          attrs[:post_id] = @submission.id
+          attrs[:title] = @submission.title
+        end
 
         fields = attrs.keys.map.with_index { |col, i| "#{col} = $#{i + 2}" }
 
@@ -79,15 +84,6 @@ class Baseballbot
           "UPDATE game_threads SET #{fields.join(', ')} WHERE id = $1",
           [@id] + attrs.values
         )
-      end
-
-      def attributes(status)
-        { status: status, updated_at: Time.now }
-          .merge(status == 'Posted' ? posted_attributes : {})
-      end
-
-      def posted_attributes
-        { post_id: @submission.id, title: @submission.title }
       end
 
       # Mark the game thread as complete, and make any last updates
