@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Fustrate/fustrate-rails.git
-  revision: c57cd4f67c4e766806f14f84530e44137644a8ec
+  revision: 778737148c2cc9172b398862e782a935a290f83f
   specs:
     fustrate-rails (0.5.0)
       jbuilder (>= 2.7)

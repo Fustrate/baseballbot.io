@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-json.partial! 'templates/template', template: @template
+json.call @template, :id, :type, :body
+
+json.subreddit @template.subreddit, :id, :name

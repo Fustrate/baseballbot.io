@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-json.collection!(
-  @game_threads,
-  partial: 'game_threads/game_thread',
-  as: :game_thread
-)
+json.data(@game_threads) do |game_thread|
+  json.call(
+    game_thread, :id, :post_at, :starts_at, :status, :title, :post_id, :game_pk,
+    :created_at, :updated_at
+  )
+
+  json.subreddit game_thread.subreddit, :id, :name, :team_id
+end
