@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # config valid only for current version of Capistrano
-lock '3.11.0'
+lock '3.11.1'
 
 set :application, 'baseballbot.io'
 set :user, 'baseballbot'
