@@ -1,13 +1,13 @@
 GIT
-  remote: https://github.com/Fustrate/fustrate-rails.git
-  revision: b13ce00be0a7b0ae57892b6ab4307c8c1248d17d
+  remote: git://github.com/Fustrate/fustrate-rails.git
+  revision: 3dc23a568485beea52f9de81be805bc5729d151b
   specs:
     fustrate-rails (0.6.0)
       jbuilder (>= 2.7)
       railties (>= 5.2.0.rc1, < 6.1)
 
 GIT
-  remote: https://github.com/Fustrate/mlb_stats_api.git
+  remote: git://github.com/Fustrate/mlb_stats_api.git
   revision: 6bbb430dbea4557b5d99c00cdd048b27aeeca231
   specs:
     mlb_stats_api (0.2.3)
@@ -177,7 +177,7 @@ GEM
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
-    httparty (0.17.1)
+    httparty (0.17.3)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     i18n (1.7.0)
@@ -217,7 +217,7 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.12.2)
     mock_redis (0.22.0)
-    moneta (1.2.0)
+    moneta (1.2.1)
     multi_json (1.14.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -247,7 +247,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (4.0.1)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-protection (2.0.7)
       rack
     rack-proxy (0.6.5)
