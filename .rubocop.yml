@@ -19,10 +19,10 @@ Rails:
 # Coding Style
 #
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
@@ -39,7 +39,7 @@ Style/EmptyMethod:
 #
 
 # False positive
-Lint/UnneededSplatExpansion:
+Lint/RedundantSplatExpansion:
   Exclude:
     - 'app/views/**/*.jbuilder'
 
@@ -50,7 +50,7 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
     - 'lib/capistrano/**/*.rake'
 
-Metrics/LineLength:
+Layout/LineLength:
   Exclude:
     - 'config/**/*.rb'
 

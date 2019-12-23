@@ -6,7 +6,7 @@ class Baseballbot
       # This is kept here because of inheritance
       Dir.glob(
         File.join(File.dirname(__FILE__), 'game_thread', '*.rb')
-      ).each { |file| require file }
+      ).sort.each { |file| require file }
 
       using TemplateRefinements
 

@@ -2,13 +2,13 @@
 
 source 'https://rubygems.org'
 
-ruby '2.6.3'
-gem 'rails', '5.2.3'
+ruby '2.6.5'
+gem 'rails', '6.0.2.1'
 
 gem 'pg'
 
 gem 'haml-rails'
-gem 'jbuilder'
+gem 'jbuilder', '~> 2.7'
 gem 'webpacker', '~> 4.0'
 
 # Sprockets

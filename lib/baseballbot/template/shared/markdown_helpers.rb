@@ -20,7 +20,7 @@ module MarkdownHelpers
   end
 
   def pct(percent)
-    format('%0.3f', percent).sub(/\A0+/, '')
+    format('%0.3<percent>f', percent: percent).sub(/\A0+/, '')
   end
 
   def gb(games_back)
