@@ -98,5 +98,5 @@ gem 'redis'
 gem 'em-hiredis'
 gem 'eventmachine'
 
-gem 'sidekiq'
+gem 'sidekiq', '< 6'
 gem 'sidekiq-history'
