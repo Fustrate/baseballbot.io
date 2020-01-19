@@ -12,15 +12,15 @@ gem 'jbuilder', '~> 2.7'
 gem 'webpacker', '~> 4.0'
 
 # Sprockets
-gem 'execjs'
-gem 'jquery-rails'
-gem 'sassc-rails', '~> 2.1'
-gem 'sprockets-rails'
-gem 'uglifier', '~> 4.1'
+# gem 'execjs'
+# gem 'jquery-rails'
+# gem 'sassc-rails', '~> 2.1'
+# gem 'sprockets-rails'
+# gem 'uglifier', '~> 4.1'
 
 # Used to generate routes & i18n for the frontend
 gem 'i18n-js'
-gem 'js-routes'
+gem 'js-routes', require: false
 
 # Faster json generation
 gem 'oj'
@@ -34,10 +34,14 @@ gem 'unicorn'
 gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api' # '~> 0.1'
 gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
-group :production do
-  gem 'honeybadger'
-  gem 'skylight'
-end
+# App Monitoring
+gem 'honeybadger', '~> 4.0'
+gem 'skylight'
+
+# Use ActiveStorage validations & variants
+gem 'active_storage_validations'
+gem 'image_processing'
+# gem 'ratonvirus'
 
 group :development do
   gem 'better_errors'
@@ -63,25 +67,24 @@ group :development do
   gem 'rubocop-rspec', require: false
 end
 
-group :test do
-  gem 'capybara'
-  gem 'mock_redis'
-  gem 'simplecov', require: false
-end
-
 group :development, :test do
-  # gem 'database_cleaner', '~> 1.6'
-  # gem 'factory_bot_rails'
-  # gem 'launchy'
-  gem 'rspec', '~> 3.7'
-  gem 'rspec-collection_matchers'
-  gem 'rspec-rails'
-
-  gem 'byebug'
+  gem 'rspec-rails', '4.0.0.beta3'
 
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :test do
+  gem 'rspec-collection_matchers'
+
+  gem 'capybara'
+  gem 'mock_redis'
+
+  gem 'database_cleaner', '~> 1.5'
+  gem 'factory_bot_rails'
+  gem 'launchy'
+  gem 'rails-controller-testing', require: false
 end
 
 # "is_active" links in views, and pagination
@@ -93,7 +96,7 @@ gem 'authority'
 gem 'sorcery'
 
 # Cron jobs
-gem 'whenever', require: false
+gem 'whenever'
 
 gem 'chronic'
 gem 'redis'

@@ -68,7 +68,7 @@ class Scoreboard extends Page {
     window.fetch(`${apiEndpoint}&date=${this.date.format('MM/DD/YYYY')}`)
       .then(response => response.json())
       .then((json) => {
-        onLoad(json.dates[0].games);
+        onLoad(json.dates[0]?.games ?? []);
 
         this.loading.style.display = 'none';
       });
