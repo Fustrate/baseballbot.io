@@ -9,7 +9,7 @@ require 'capistrano/deploy'
 # Include tasks from other gems
 require 'capistrano/rbenv'
 require 'capistrano/bundler'
-require 'capistrano/rails/migrations'
+require 'capistrano/rails'
 require 'capistrano/scm/git'
 require 'capistrano/sidekiq'
 require 'capistrano/honeybadger'
