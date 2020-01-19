@@ -20,19 +20,28 @@ default: &default
   extract_css: true
 
   extensions:
-    - .ts
     - .css
     - .gif
     - .jpeg
     - .jpg
     - .js
-    - .module.css
-    - .module.sass
-    - .module.scss
     - .png
-    - .sass
-    - .scss
     - .svg
+    - .ts
+
+  static_assets_extensions:
+    - .eot
+    - .gif
+    - .ico
+    - .jpeg
+    - .jpg
+    - .otf
+    - .png
+    - .svg
+    - .tiff
+    - .ttf
+    - .woff
+    - .woff2
 
 development:
   <<: *default

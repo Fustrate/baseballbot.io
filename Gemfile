@@ -18,6 +18,7 @@ gem 'js-routes', require: false
 # Faster json generation
 gem 'oj'
 
+# A few custom services and initializers
 gem 'fustrate-rails', github: 'Fustrate/fustrate-rails'
 
 # Use Unicorn as the app server
@@ -47,7 +48,7 @@ group :development do
   gem 'web-console', '~> 3.6'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano', '~> 3.11', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
@@ -58,6 +59,9 @@ group :development do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
+
+  gem 'pry'
+  gem 'pry-rails'
 end
 
 group :development, :test do
