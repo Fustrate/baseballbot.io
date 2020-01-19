@@ -11,13 +11,6 @@ gem 'haml-rails'
 gem 'jbuilder', '~> 2.7'
 gem 'webpacker', '~> 4.0'
 
-# Sprockets
-# gem 'execjs'
-# gem 'jquery-rails'
-# gem 'sassc-rails', '~> 2.1'
-# gem 'sprockets-rails'
-# gem 'uglifier', '~> 4.1'
-
 # Used to generate routes & i18n for the frontend
 gem 'i18n-js'
 gem 'js-routes', require: false
