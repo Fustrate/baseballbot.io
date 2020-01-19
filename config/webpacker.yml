@@ -21,6 +21,7 @@ default: &default
 
   extensions:
     - .css
+    - .scss
     - .gif
     - .jpeg
     - .jpg
