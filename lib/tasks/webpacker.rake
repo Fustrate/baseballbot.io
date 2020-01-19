@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2020 Valencia Management Group
-# All rights reserved.
-
 require 'js-routes'
 
 namespace :webpacker do
