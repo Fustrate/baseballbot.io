@@ -5,18 +5,16 @@ lock '3.11.2'
 
 set :application, 'baseballbot.io'
 set :user, 'baseballbot'
+set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
 set :branch, ENV['REVISION'] || :master
 
-set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
+set :linked_dirs, 'log', 'node_modules', 'public/system', 'tmp/cache',
+    'tmp/pids', 'tmp/sockets'
 
-set :linked_files, %w[
-  config/database.yml config/honeybadger.yml config/master.key config/reddit.yml
-  config/skylight.yml
-]
-
-set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets public/system]
+set :linked_files, 'config/database.yml', 'config/honeybadger.yml',
+    'config/master.key', 'config/reddit.yml', 'config/skylight.yml'
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
 
