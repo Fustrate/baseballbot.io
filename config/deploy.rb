@@ -10,11 +10,11 @@ set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
 set :branch, ENV['REVISION'] || :master
 
-set :linked_dirs, 'log', 'node_modules', 'public/system', 'tmp/cache',
-    'tmp/pids', 'tmp/sockets'
+append :linked_dirs, 'log', 'node_modules', 'public/system', 'tmp/cache',
+       'tmp/pids', 'tmp/sockets'
 
-set :linked_files, 'config/database.yml', 'config/honeybadger.yml',
-    'config/master.key', 'config/reddit.yml', 'config/skylight.yml'
+append :linked_files, 'config/database.yml', 'config/honeybadger.yml',
+       'config/master.key', 'config/reddit.yml', 'config/skylight.yml'
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
 
