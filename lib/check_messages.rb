@@ -99,7 +99,7 @@ class CheckMessages
       sportId: 1,
       date: Time.now.strftime('%m/%d/%Y'),
       hydrate: 'game(content(summary)),linescore,flags,team'
-    ).dig('dates', 0, 'games')
+    ).dig('dates', 0, 'games') || []
   end
 
   # This is no longer included in the data - we might have to switch to
