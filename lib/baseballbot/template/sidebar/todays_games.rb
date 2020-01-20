@@ -14,14 +14,18 @@ class Baseballbot
 
           load_game_threads
 
+          scheduled_games.map { |game| process_todays_game game }
+        end
+
+        protected
+
+        def scheduled_games
           @bot.api.schedule(
             sportId: 1,
             date: @date.strftime('%m/%d/%Y'),
             hydrate: 'game(content(summary)),linescore,flags,team'
-          ).dig('dates', 0, 'games').map { |game| process_todays_game game }
+          ).dig('dates', 0, 'games') || []
         end
-
-        protected
 
         def process_todays_game(game)
           game_hash(game).tap { |data| mark_winner_and_loser(data) }
