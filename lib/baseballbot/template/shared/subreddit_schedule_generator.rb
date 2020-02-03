@@ -38,7 +38,7 @@ class SubredditSchedule
       calendar_date['games'].each do |data|
         date = adjust_game_time(data['gameDate'])
 
-        game = TeamCalendarGame.new(data: data, date: date)
+        game = team_calendar_game(data: data, date: date)
 
         days[date.strftime('%F')][:games] << game if game.visible?
       end
