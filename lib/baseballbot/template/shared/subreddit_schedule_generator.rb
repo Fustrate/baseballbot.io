@@ -38,7 +38,7 @@ class SubredditSchedule
       calendar_date['games'].each do |data|
         date = adjust_game_time(data['gameDate'])
 
-        game = TeamCalendarGame.new(data: data, team_id: @team_id, date: date)
+        game = TeamCalendarGame.new(data: data, date: date)
 
         days[date.strftime('%F')][:games] << game if game.visible?
       end
@@ -79,15 +79,25 @@ class SubredditSchedule
       hydrate: SCHEDULE_HYDRATION
     ).dig('dates')
   end
+
+  def team_calendar_game(data:, date:)
+    TeamCalendarGame.new(
+      api: @api,
+      data: data,
+      team_id: @team_id,
+      date: date
+    )
+  end
 end
 
 class TeamCalendarGame
   attr_reader :flag, :opponent_flag, :team_id, :game_pk
 
-  def initialize(api:, data:, team_id:)
+  def initialize(api:, data:, team_id:, date:)
     @api = api
     @data = data
     @team_id = team_id
+    @date = date
 
     @flag, @opponent_flag = home_team? ? %w[home away] : %w[away home]
     @game_pk = data['gamePk']
