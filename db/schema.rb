@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_04_004826) do
+ActiveRecord::Schema.define(version: 2020_02_04_010243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,19 +68,19 @@ ActiveRecord::Schema.define(version: 2020_02_04_004826) do
     t.json "options"
   end
 
-  create_table "subreddit_users", id: false, force: :cascade do |t|
-    t.bigint "subreddit_id", null: false
-    t.bigint "user_id", null: false
-    t.index ["subreddit_id"], name: "index_subreddit_users_on_subreddit_id"
-    t.index ["user_id"], name: "index_subreddit_users_on_user_id"
-  end
-
   create_table "subreddits", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "team_code"
     t.integer "account_id"
     t.json "options"
     t.integer "team_id"
+  end
+
+  create_table "subreddits_users", id: false, force: :cascade do |t|
+    t.bigint "subreddit_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["subreddit_id"], name: "index_subreddits_users_on_subreddit_id"
+    t.index ["user_id"], name: "index_subreddits_users_on_user_id"
   end
 
   create_table "templates", id: :serial, force: :cascade do |t|
@@ -120,5 +120,10 @@ ActiveRecord::Schema.define(version: 2020_02_04_004826) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "game_threads", "subreddits"
+  add_foreign_key "scheduled_posts", "subreddits"
+  add_foreign_key "subreddits", "accounts"
+  add_foreign_key "subreddits_users", "subreddits"
+  add_foreign_key "subreddits_users", "users"
   add_foreign_key "templates", "subreddits"
 end
