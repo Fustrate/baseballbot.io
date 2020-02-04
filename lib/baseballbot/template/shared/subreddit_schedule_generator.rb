@@ -91,7 +91,7 @@ class SubredditSchedule
 end
 
 class TeamCalendarGame
-  attr_reader :flag, :opponent_flag, :team_id, :game_pk
+  attr_reader :flag, :opponent_flag, :team_id, :game_pk, :date
 
   def initialize(api:, data:, team_id:, date:)
     @api = api
