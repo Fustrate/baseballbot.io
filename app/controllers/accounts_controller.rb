@@ -56,6 +56,10 @@ class AccountsController < ApplicationController
     flash[:success] = 'Your account is now active for use with BaseballBot.'
 
     redirect_to :root
+  rescue Redd::AuthenticationError
+    flash[:error] = 'Reddit sent an invalid token - did you take too long?'
+
+    redirect_to :root
   end
 
   def redirect_to_reddit
