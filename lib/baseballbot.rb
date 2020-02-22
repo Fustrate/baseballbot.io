@@ -53,7 +53,7 @@ class Baseballbot
       config.api_key = ENV['HONEYBADGER_API_KEY']
 
       config.breadcrumbs.enabled = true
-      config.environment = 'bot'
+      config.env = 'bot'
 
       config.before_notify do |notice|
         if IGNORED_EXCEPTIONS.any? { |klass| notice.exception.is_a?(klass) }

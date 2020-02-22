@@ -49,7 +49,7 @@ class AccountsController < ApplicationController
   protected
 
   def finish_authentication
-    raise 'Invalid state!' unless params[:state] == session[:state]
+    raise UserError, 'Invalid state!' unless params[:state] == session[:state]
 
     save_account
 

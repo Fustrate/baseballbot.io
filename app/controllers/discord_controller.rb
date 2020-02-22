@@ -2,9 +2,9 @@
 
 class DiscordController < ApplicationController
   def reddit_callback
-    raise 'Invalid auth code' unless params[:code]
+    raise UserError, 'Invalid auth code' unless params[:code]
 
-    raise 'Invalid state' unless params[:state]
+    raise UserError, 'Invalid state' unless params[:state]
 
     save_account
   end

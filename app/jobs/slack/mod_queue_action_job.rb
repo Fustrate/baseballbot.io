@@ -40,7 +40,7 @@ module Slack
 
       return if res.code.to_i == 200
 
-      raise 'Uh oh!'
+      raise "Invalid response code: #{res.code}"
     end
 
     def modified_message
