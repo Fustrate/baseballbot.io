@@ -4,18 +4,7 @@ class Baseballbot
   module Posts
     class Postgame < GameThread
       def create!
-        @template = postgame_template
-
-        # The title uses the template to see who won
-        @template.title = postgame_title
-
-        @submission = @subreddit.submit(
-          title: @template.title,
-          text: @template.evaluated_body
-        )
-
-        update_sticky @subreddit.sticky_game_threads?
-        update_flair postgame_flair
+        post_thread!
 
         info "[PST] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
 
@@ -24,11 +13,37 @@ class Baseballbot
 
       protected
 
-      def postgame_template
-        Template::GameThread.new(
+      def post_thread!
+        @bot.with_reddit_account(@subreddit.account.name) do
+          load_template
+
+          @submission = @subreddit.submit(
+            title: @template.title,
+            text: @template.evaluated_body
+          )
+
+          post_process
+        end
+      end
+
+      def load_template
+        @template = Template::GameThread.new(
           subreddit: @subreddit,
           game_pk: @game_pk,
           type: 'postgame'
+        )
+
+        # The title uses the template to see who won
+        @template.title = postgame_title
+      end
+
+      def post_process
+        update_sticky @subreddit.sticky_game_threads?
+        update_flair postgame_flair
+
+        @bot.db.exec_params(
+          'UPDATE game_threads SET post_game_thread_id = $1 WHERE id = $2',
+          [@submission.id, @id]
         )
       end
 
@@ -66,6 +81,18 @@ class Baseballbot
         return 'playoffs' if playoffs?
 
         'default'
+      end
+
+      def post_process
+        change_status 'Pregame'
+
+        update_sticky @subreddit.sticky_game_threads?
+        update_flair @subreddit.options.dig('pregame', 'flair')
+
+        @bot.db.exec_params(
+          "UPDATE game_threads SET pre_game_thread_id = $1 WHERE id = $2",
+          [@submission.id, @id]
+        )
       end
     end
   end

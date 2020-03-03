@@ -4,7 +4,7 @@ class Baseballbot
   module Posts
     class Pregame < GameThread
       def create!
-        post_pregame_thread!
+        post_thread!
 
         info "[PRE] #{@submission.id} in /r/#{@subreddit.name} for #{@game_pk}"
 
@@ -13,20 +13,28 @@ class Baseballbot
 
       protected
 
-      def post_pregame_thread!
+      def post_thread!
         @bot.with_reddit_account(@subreddit.account.name) do
-          load_pregame_template
+          load_template
 
           @submission = @subreddit.submit(
             title: @template.title,
             text: @template.evaluated_body
           )
 
-          change_status 'Pregame'
-
-          update_sticky @subreddit.sticky_game_threads?
-          update_flair @subreddit.options.dig('pregame', 'flair')
+          post_process
         end
+      end
+
+      def load_template
+        @template = Template::GameThread.new(
+          subreddit: @subreddit,
+          game_pk: @game_pk,
+          type: 'pregame'
+        )
+
+        # The title uses @template
+        @template.title = pregame_title
       end
 
       def pregame_title
@@ -39,17 +47,16 @@ class Baseballbot
         titles[playoffs ? 'postseason' : 'default'] || titles.values.first
       end
 
-      def load_pregame_template
-        @template = Template::GameThread.new(
-          subreddit: @subreddit,
-          game_pk: @game_pk,
-          type: 'pregame'
+      def post_process
+        change_status 'Pregame'
+
+        update_sticky @subreddit.sticky_game_threads?
+        update_flair @subreddit.options.dig('pregame', 'flair')
+
+        @bot.db.exec_params(
+          'UPDATE game_threads SET pre_game_thread_id = $1 WHERE id = $2',
+          [@submission.id, @id]
         )
-
-        # The title uses @template
-        @template.title = pregame_title
-
-        @template
       end
     end
   end
