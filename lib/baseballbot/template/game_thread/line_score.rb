@@ -5,6 +5,7 @@ class Baseballbot
     class GameThread
       module LineScore
         BLANK_RHE = { 'runs' => 0, 'hits' => 0, 'errors' => 0 }.freeze
+        BLANK_LINES = [[nil] * 9, [nil] * 9].freeze
 
         def line_score
           [
@@ -57,21 +58,14 @@ class Baseballbot
 
         def lines
           @lines ||= begin
-            lines = [[nil] * 9, [nil] * 9]
+            return BLANK_LINES unless started? && linescore&.dig('innings')
 
-            return lines unless started? && linescore&.dig('innings')
+            innings = [9, linescore['innings'].count].max
+            lines = [[nil] * innings, [nil] * innings]
 
             linescore['innings'].each do |inning|
-              if inning['away'] && !inning['away'].empty?
-                lines[0][inning['num'] - 1] = inning.dig('away', 'runs')
-
-                # In case of extra innings
-                lines[1][inning['num'] - 1] = nil
-              end
-
-              next unless inning.dig('home', 'runs')
-
-              lines[1][inning['num'] - 1] = inning.dig('home', 'runs')
+              lines[0][inning['num'] - 1] = inning['away']&.dig('runs')
+              lines[1][inning['num'] - 1] = inning['home']&.dig('runs')
             end
 
             lines

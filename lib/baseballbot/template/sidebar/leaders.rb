@@ -66,57 +66,49 @@ class Baseballbot
           qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
 
           %w[h xbh hr rbi bb sb r].each do |key|
-            stats[key] = high_stat(key, all_hitters).first(count)
-              .map { |s| { name: s[0], value: s[1].to_i } }
+            stats[key] = list_of(key, all_hitters, 'high', count, 'integer')
           end
 
           %w[avg obp slg ops].each do |key|
-            stats[key] = high_stat(key, qualifying).first(count)
-              .map { |s| { name: s[0], value: pct(s[1]) } }
+            stats[key] = list_of(key, qualifying, 'high', count, 'float')
           end
 
           stats
         end
 
         def load_pitcher_stats(year, type, count)
-          stats = {}
           all_pitchers = pitchers(year: year, type: type)
           qualifying = pitchers(year: year, type: type, pool: 'QUALIFIER')
 
+          stats = { 'ip' => list_of('ip', all_pitchers, 'high', count) }
+
           %w[w sv hld so].each do |key|
-            stats[key] = high_stat(key, all_pitchers).first(count)
-              .map { |s| { name: s[0], value: s[1].to_i } }
+            stats[key] = list_of(key, all_pitchers, 'high', count, 'integer')
           end
 
-          stats['ip'] = high_stat('ip', all_pitchers).first(count)
-            .map { |s| { name: s[0], value: s[1] } }
-
-          stats['avg'] = low_stat('avg', qualifying).first(count)
-            .map { |s| { name: s[0], value: pct(s[1]) } }
-
-          %w[whip era].each do |key|
-            stats[key] = low_stat(key, qualifying).first(3)
-              .map { |s| { name: s[0], value: s[1].to_s.sub(/\A0+/, '') } }
+          %w[whip era avg].each do |key|
+            stats[key] = list_of(key, qualifying, 'low', count, 'float')
           end
 
           stats
         end
 
-        def high_stat(key, players)
+        def list_of(key, players, direction, count, type)
           return [['', 0]] unless players
 
           players
             .map { |player| player.values_at 'name_display_last_init', key }
             .sort_by { |player| player[1].to_f }
-            .reverse
+            .send(direction == 'high' ? :reverse : :itself)
+            .first(count)
+            .map { |s| { name: s[0], value: cast_value(s[1], type) } }
         end
 
-        def low_stat(key, players)
-          return [['', 0]] unless players
+        def cast_value(value, type)
+          return value.to_i if type == 'integer'
+          return pct(value) if type == 'float'
 
-          players
-            .map { |player| player.values_at 'name_display_last_init', key }
-            .sort_by { |player| player[1].to_f }
+          value
         end
 
         def hitters(year:, type:, pool: 'ALL')

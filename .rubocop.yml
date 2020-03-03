@@ -57,6 +57,10 @@ Layout/LineLength:
 Metrics/AbcSize:
   Enabled: false
 
+Rails/HelperInstanceVariable:
+  Exclude:
+    - 'app/helpers/*.rb'
+
 Style/Documentation:
   Enabled: false
 

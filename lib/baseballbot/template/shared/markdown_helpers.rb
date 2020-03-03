@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MarkdownHelpers
-  TABLE_ALIGNMENT = {
+  ALIGNMENT = {
     center: ':-:',
     left: '-',
     right: '-:'
@@ -32,13 +32,8 @@ module MarkdownHelpers
     alignment = []
 
     columns.map do |column|
-      if column.is_a?(Array)
-        headers << column[0]
-        alignment << TABLE_ALIGNMENT[column[1] || :left]
-      else
-        headers << column.to_s
-        alignment << TABLE_ALIGNMENT[:left]
-      end
+      headers << column.is_a?(Array) ? column[0] : column.to_s
+      alignment << ALIGNMENT[Array(column)[1] || :left] || ALIGNMENT[:left]
     end
 
     <<~TABLE
