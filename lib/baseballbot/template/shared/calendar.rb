@@ -31,7 +31,7 @@ class Baseballbot
         def previous_games(limit, team: nil)
           team_id = team || @subreddit.team.id
 
-          previous = []
+          games = []
           start_date = Date.today - limit - 7
 
           # Go backwards an extra week to account for off days
@@ -40,36 +40,31 @@ class Baseballbot
             .reverse_each do |day|
               next if day[:date] > Date.today
 
-              day[:games].each do |game|
-                previous << game if game.over?
-              end
+              games.concat day[:games].keep_if(&:over?)
 
-              break if previous.count >= limit
+              break if games.count >= limit
             end
 
-          previous.first(limit)
+          games.first(limit)
         end
 
         def upcoming_games(limit, team: nil)
           team_id = team || @subreddit.team.id
 
-          upcoming = []
+          games = []
           end_date = Date.today + limit + 7
 
           # Go forward an extra week to account for off days
-          team_schedule
-            .games_between(Date.today, end_date, team: team_id)
+          team_schedule.games_between(Date.today, end_date, team: team_id)
             .each_value do |day|
               next if day[:date] < Date.today
 
-              day[:games].each do |game|
-                upcoming << game unless game.over?
-              end
+              games.concat day[:games].reject(&:over?)
 
-              break if upcoming.count >= limit
+              break if games.count >= limit
             end
 
-          upcoming.first(limit)
+          games.first(limit)
         end
 
         def next_game_str(date_format: '%-m/%-d', team: nil)
