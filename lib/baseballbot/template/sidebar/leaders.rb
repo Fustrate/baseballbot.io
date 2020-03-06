@@ -66,11 +66,11 @@ class Baseballbot
           qualifying = hitters(year: year, type: type, pool: 'QUALIFIER')
 
           %w[h xbh hr rbi bb sb r].each do |key|
-            stats[key] = list_of(key, all_hitters, 'high', count, 'integer')
+            stats[key] = list_of(key, all_hitters, 'high', count, :integer)
           end
 
           %w[avg obp slg ops].each do |key|
-            stats[key] = list_of(key, qualifying, 'high', count, 'float')
+            stats[key] = list_of(key, qualifying, 'high', count, :float)
           end
 
           stats
@@ -83,17 +83,17 @@ class Baseballbot
           stats = { 'ip' => list_of('ip', all_pitchers, 'high', count) }
 
           %w[w sv hld so].each do |key|
-            stats[key] = list_of(key, all_pitchers, 'high', count, 'integer')
+            stats[key] = list_of(key, all_pitchers, 'high', count, :integer)
           end
 
           %w[whip era avg].each do |key|
-            stats[key] = list_of(key, qualifying, 'low', count, 'float')
+            stats[key] = list_of(key, qualifying, 'low', count, :float)
           end
 
           stats
         end
 
-        def list_of(key, players, direction, count, type)
+        def list_of(key, players, direction, count, type = :noop)
           return [{ name: '', value: 0 }] unless players
 
           players
@@ -105,8 +105,8 @@ class Baseballbot
         end
 
         def cast_value(value, type)
-          return value.to_i if type == 'integer'
-          return pct(value) if type == 'float'
+          return value.to_i if type == :integer
+          return pct(value) if type == :float
 
           value
         end
