@@ -94,7 +94,7 @@ class Baseballbot
         end
 
         def list_of(key, players, direction, count, type)
-          return [['', 0]] unless players
+          return [{ name: '', value: 0 }] unless players
 
           players
             .map { |player| player.values_at 'name_display_last_init', key }
