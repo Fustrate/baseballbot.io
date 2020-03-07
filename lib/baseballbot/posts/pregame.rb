@@ -54,7 +54,7 @@ class Baseballbot
         update_flair @subreddit.options.dig('pregame', 'flair')
 
         @bot.db.exec_params(
-          'UPDATE game_threads SET pre_game_thread_id = $1 WHERE id = $2',
+          'UPDATE game_threads SET pre_game_post_id = $1 WHERE id = $2',
           [@submission.id, @id]
         )
       end
