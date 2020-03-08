@@ -39,8 +39,8 @@ module Slack
         TEAM_TO_ID[params[:team_id].to_sym]
       end
 
-      def add_gdt(_text)
-        games = find_games(args[:date]).reject do |game|
+      def add_gdt(args)
+        games = find_games(args).reject do |game|
           POSTGAME_STATUSES.match?(game['status']['abstractGameState'])
         end
 
