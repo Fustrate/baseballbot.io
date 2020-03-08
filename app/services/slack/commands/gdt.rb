@@ -50,11 +50,11 @@ module Slack
       def game_option(game)
         {
           text: {
-            type: 'mrkdwn',
+            type: 'plain_text',
             text: game_title(game),
             emoji: true
           },
-          value: game['gamePk']
+          value: game['gamePk'].to_s
         }
       end
 
@@ -66,7 +66,7 @@ module Slack
           .in_time_zone(ActiveSupport::TimeZone.new('America/New_York'))
           .strftime('%-I:%m %p')
 
-        "#{away} @ #{home} - #{time}#{free ? ' :free:' : ''}"
+        "#{away} @ #{home} - #{time}#{free ? ' 🆓' : ''}"
       end
 
       def modal_response(options)
