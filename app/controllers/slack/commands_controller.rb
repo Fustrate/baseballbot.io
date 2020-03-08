@@ -8,7 +8,13 @@ module Slack
     protect_from_forgery with: :null_session
 
     def gdt
-      render json: Slack::Commands::GDT.call, status: 200
+      json = Slack::Commands::GDT.call
+
+      Rails.logger.info '-----------------------'
+      Rails.logger.info JSON.dump(json)
+      Rails.logger.info '-----------------------'
+
+      render json: json, status: 200
     end
 
     protected

@@ -140,9 +140,9 @@ module Slack
       end
 
       def parse_date(text)
-        return Time.zone.today if text == 'today'
+        return Time.zone.today if text.blank? || text == 'today'
 
-        Chronic.parse(text)
+        Chronic.parse(text) || Time.zone.today
       end
 
       def api
