@@ -7,12 +7,45 @@ module Slack
     def perform(payload)
       @payload = payload
 
-      @game_pk = @payload.dig 'actions', 0, 'selected_option', 'value'
+      @game_pk = @payload.dig('actions', 0, 'selected_option', 'value').to_i
 
       add_game_thread!
+      notify_slack!
     end
 
     protected
+
+    def notify_slack!
+      uri = URI.parse(@payload['response_url'])
+
+      https = Net::HTTP.new(uri.host, uri.port)
+      https.use_ssl = true
+
+      req = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+      req.body = modified_message.to_json
+
+      res = https.request(req)
+
+      return if res.code.to_i == 200
+
+      raise "Invalid response code: #{res.code}"
+    end
+
+    def modified_message
+      {
+        replace_original: true,
+        text: success_message
+      }
+    end
+
+    def success_message
+      format(
+        'Added GDT for %<away>s @ %<home>s on %<date>s',
+        away: game_feed.game_data.dig('teams', 'away', 'teamName'),
+        home: game_feed.game_data.dig('teams', 'home', 'teamName'),
+        date: starts_at.strftime('%A, %B %-d %Y')
+      )
+    end
 
     def subreddit
       @subreddit ||= Subreddit.find_by slack_id: @payload.dig('team', 'id')

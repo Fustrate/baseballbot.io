@@ -29,10 +29,16 @@ class SlackController < ApplicationController
   end
 
   def modified_message
-    message = payload['original_message']
+    if action['name'] == 'queue_action'
+      message = payload['original_message']
 
-    message['attachments'][-1].delete 'actions'
+      message['attachments'][-1].delete 'actions'
 
-    message
+      message
+    elsif action['action_id'] == 'add_game'
+      { response_type: 'ephemeral', text: 'Processing...' }
+    else
+      { text: 'Processing error. Please try again or let Fustrate know.' }
+    end
   end
 end
