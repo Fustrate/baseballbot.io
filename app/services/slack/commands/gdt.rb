@@ -101,7 +101,7 @@ module Slack
                     type: 'plain_text',
                     text: 'Nevermind'
                   }
-                }
+                },
                 options: options
               }
             }
