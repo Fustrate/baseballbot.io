@@ -46,7 +46,7 @@ module Slack
           POSTGAME_STATUSES.match?(game['status']['abstractGameState'])
         end
 
-        modal_response(games.map { |game| game_option(game) })
+        modal_response(date, games.map { |game| game_option(game) })
       end
 
       def game_option(game)
