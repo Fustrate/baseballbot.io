@@ -7,9 +7,12 @@ class SlackController < ApplicationController
   protect_from_forgery with: :null_session
 
   def interactivity
-    case payload.dig('actions', 0, 'name')
-    when 'queue_action'
+    action = payload.dig('actions', 0)
+
+    if action['name'] == 'queue_action'
       Slack::ModQueueActionJob.perform_later payload
+    elsif action['action_id'] == 'add_game'
+      Slack::AddGameJob.perform_later payload
     end
 
     render json: modified_message, status: 200

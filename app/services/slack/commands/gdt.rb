@@ -71,7 +71,7 @@ module Slack
         "#{away} @ #{home} - #{time}#{free ? ' 🆓' : ''}"
       end
 
-      def modal_response(date, options)
+      def modal_response(_date, options)
         {
           blocks: [
             {

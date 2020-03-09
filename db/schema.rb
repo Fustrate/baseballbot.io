@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_04_010243) do
+ActiveRecord::Schema.define(version: 2020_03_09_053109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 2020_02_04_010243) do
     t.string "status"
     t.string "title"
     t.string "post_id"
-    t.datetime "created_at", default: -> { "now()" }
-    t.datetime "updated_at", default: -> { "now()" }
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }
     t.integer "subreddit_id", null: false
     t.integer "game_pk"
     t.string "type"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 2020_02_04_010243) do
     t.integer "account_id"
     t.json "options"
     t.integer "team_id"
+    t.string "slack_id"
   end
 
   create_table "subreddits_users", id: false, force: :cascade do |t|
