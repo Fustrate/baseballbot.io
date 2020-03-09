@@ -89,9 +89,19 @@ module Slack
                   emoji: true
                 },
                 confirm: {
-                  type: 'plain_text',
-                  text: 'Are you sure you want to add this game?'
-                },
+                  title: {
+                    type: 'plain_text',
+                    text: 'Are you sure you want to add this game?'
+                  },
+                  confirm: {
+                    'type': 'plain_text',
+                    'text': 'Yes, add it'
+                  },
+                  deny: {
+                    type: 'plain_text',
+                    text: 'Nevermind'
+                  }
+                }
                 options: options
               }
             }
