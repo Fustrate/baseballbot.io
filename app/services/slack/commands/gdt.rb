@@ -96,10 +96,15 @@ module Slack
               },
               accessory: {
                 type: 'static_select',
+                action_id: 'add_game',
                 placeholder: {
                   type: 'plain_text',
                   text: 'Select an item',
                   emoji: true
+                },
+                confirm: {
+                  type: 'plain_text',
+                  text: 'Are you sure you want to add this game?'
                 },
                 options: options
               }
