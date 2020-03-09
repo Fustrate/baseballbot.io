@@ -40,7 +40,9 @@ module Slack
       end
 
       def add_gdt(args)
-        games = find_games(args).reject do |game|
+        date = parse_date(args)
+
+        games = find_games(date).reject do |game|
           POSTGAME_STATUSES.match?(game['status']['abstractGameState'])
         end
 
@@ -64,17 +66,17 @@ module Slack
         free = game.dig('content', 'media', 'freeGame')
         time = Time.zone.parse(game['gameDate'])
           .in_time_zone(ActiveSupport::TimeZone.new('America/New_York'))
-          .strftime('%-I:%m %p')
+          .strftime('%-I:%M %p')
 
         "#{away} @ #{home} - #{time}#{free ? ' 🆓' : ''}"
       end
 
-      def modal_response(options)
+      def modal_response(date, options)
         {
           type: 'modal',
           title: {
             type: 'plain_text',
-            text: 'Add a GDT :baseball:',
+            text: "Add a GDT :baseball: #{date.strftime('%B %-d %Y')}",
             emoji: true
           },
           submit: {
@@ -129,10 +131,10 @@ module Slack
       #     .strftime('%-m/%-d at %-I:%m %p')
       # end
 
-      def find_games(text)
+      def find_games(date)
         api.schedule(
           sportId: 1,
-          date: parse_date(text).strftime('%m/%d/%Y'),
+          date: date.strftime('%m/%d/%Y'),
           eventTypes: 'primary',
           scheduleTypes: 'games',
           hydrate: 'game(content(summary)),team'
