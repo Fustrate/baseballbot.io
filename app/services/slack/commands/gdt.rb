@@ -32,7 +32,7 @@ module Slack
       protected
 
       def text_response(text)
-        { response_type: 'in_channel', text: text }
+        { response_type: 'ephemeral', text: text }
       end
 
       def subreddit_id
