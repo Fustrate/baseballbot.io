@@ -1,5 +1,5 @@
 import GenericPage from '@fustrate/rails/dist/js/GenericPage';
-import { titleize } from '@fustrate/rails/dist/js/string';
+import { startCase } from 'lodash/string';
 import { linkTo } from '@fustrate/rails/dist/js/utilities';
 
 import BaseballBot from '../../javascript/baseballbot';
@@ -48,10 +48,10 @@ class ShowSubreddit extends GenericPage {
   refreshTemplates() {
     const listItems = this.subreddit.templates
       .map(template => new Template(template))
-      .map(template => `<li>${linkTo(titleize(template.type), template.path())}</li>`);
+      .map(template => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
 
     this.fields.templates.innerHTML = listItems.join('');
   }
 }
 
-BaseballBot.start(new ShowSubreddit(document.body));
+BaseballBot.start(new ShowSubreddit());

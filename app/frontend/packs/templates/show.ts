@@ -29,4 +29,4 @@ class ShowTemplate extends GenericPage {
   }
 }
 
-BaseballBot.start(new ShowTemplate(document.body));
+BaseballBot.start(new ShowTemplate());

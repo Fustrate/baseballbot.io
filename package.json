@@ -23,11 +23,16 @@
     "typescript": "^3.8.3"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.149",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.20.1",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
+  },
+  "scripts": {
+    "eslint": "eslint . --ext js,ts",
+    "precommit": "eslint . --ext js,ts"
   }
 }
