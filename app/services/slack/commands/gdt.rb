@@ -73,20 +73,6 @@ module Slack
 
       def modal_response(date, options)
         {
-          type: 'modal',
-          title: {
-            type: 'plain_text',
-            text: "Add a GDT :baseball: #{date.strftime('%B %-d %Y')}",
-            emoji: true
-          },
-          submit: {
-            type: 'plain_text',
-            text: 'Submit'
-          },
-          close: {
-            type: 'plain_text',
-            text: 'Cancel'
-          },
           blocks: [
             {
               type: 'section',
