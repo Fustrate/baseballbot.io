@@ -1,7 +1,7 @@
 import moment from 'moment';
 import GenericTable from '@fustrate/rails/dist/js/GenericTable';
 import { icon, label, linkTo, toHumanDate } from '@fustrate/rails/dist/js/utilities';
-import { get } from '@fustrate/rails/dist/js/ajax';
+import { getCurrentPageJson } from '@fustrate/rails/dist/js/ajax';
 
 import GameThread from './game_thread';
 
@@ -10,8 +10,6 @@ import { subredditPath } from '../routes';
 const redditIcon = icon('reddit', 'brands');
 
 class GameThreadsTable extends GenericTable {
-  protected reloadUrl: string;
-
   protected static blankRow = `
     <tr>
       <td class="game-pk"></td>
@@ -22,14 +20,12 @@ class GameThreadsTable extends GenericTable {
       <td class="status"></td>
     </tr>`;
 
-  constructor(reloadUrl: string) {
+  constructor() {
     super(document.body.querySelector('table.game-threads'));
-
-    this.reloadUrl = reloadUrl;
   }
 
   reloadTable() {
-    get(this.reloadUrl).then((response) => {
+    getCurrentPageJson().then((response) => {
       const { data } = response.data;
 
       this.reloadRows(data.map(row => this.createRow(new GameThread(row))));
