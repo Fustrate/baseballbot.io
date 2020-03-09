@@ -5,20 +5,7 @@ module Slack
     class GDT < ApplicationService
       POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
-      TEAM_TO_ID = {
-        T0KEXQR25: 15
-      }.freeze
-
       def call
-        # params[:command] => '/gdt
-        # params[:text] => 'add angels 4/19'
-        # params[:team_id] => 'T0KEXQR25',
-        # params[:team_domain] => 'r-baseball-mods',
-        # params[:channel_id] => 'C6H05DDS9',
-        # params[:channel_name] => 'bot',
-        # params[:user_id] => 'U0KF8ULV7',
-        # params[:user_name] => 'fustrate'
-
         command, args = params[:text].split(' ', 2)
 
         case command
@@ -35,22 +22,19 @@ module Slack
         { response_type: 'ephemeral', text: text }
       end
 
-      def subreddit_id
-        TEAM_TO_ID[params[:team_id].to_sym]
+      def subreddit
+        @subreddit ||= Subreddit.find_by slack_id: params[:team_id]
       end
 
       def add_gdt(args)
         date = parse_date(args)
+        options = game_options(date)
 
-        games = find_games(date).reject do |game|
-          POSTGAME_STATUSES.match?(game['status']['abstractGameState'])
-        end
-
-        if games.none?
+        if options.none?
           day = date.strftime('%-m/%-d/%y')
           text_response "There were no games found on #{day}"
         else
-          modal_response(date, games.map { |game| game_option(game) })
+          modal_response(date, options)
         end
       end
 
@@ -137,7 +121,19 @@ module Slack
       #     .strftime('%-m/%-d at %-I:%m %p')
       # end
 
-      def find_games(date)
+      def game_options(date)
+        added = existing_game_pks(date)
+
+        scheduled_games(date)
+          .reject { |game| added.include?(game['gamePk']) || game_over?(game) }
+          .map { |game| game_option(game) }
+      end
+
+      def game_over?(game)
+        POSTGAME_STATUSES.match?(game['status']['abstractGameState'])
+      end
+
+      def scheduled_games(date)
         api.schedule(
           sportId: 1,
           date: date.strftime('%m/%d/%Y'),
@@ -145,6 +141,12 @@ module Slack
           scheduleTypes: 'games',
           hydrate: 'game(content(summary)),team'
         ).dig('dates', 0, 'games') || []
+      end
+
+      def existing_game_pks(date)
+        subreddit.game_threads
+          .where('DATE(starts_at) = ?', date.to_date)
+          .pluck(:game_pk)
       end
 
       def parse_date(text)

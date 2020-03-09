@@ -10,25 +10,34 @@ module Slack
       @game_pk = @payload.dig('actions', 0, 'selected_option', 'value').to_i
 
       add_game_thread!
-      notify_slack!
+      notify_slack!(modified_message)
+    rescue ActiveRecord::RecordNotUnique
+      notify_slack!(already_added_message)
     end
 
     protected
 
-    def notify_slack!
+    def notify_slack!(message)
       uri = URI.parse(@payload['response_url'])
 
       https = Net::HTTP.new(uri.host, uri.port)
       https.use_ssl = true
 
       req = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
-      req.body = modified_message.to_json
+      req.body = message.to_json
 
       res = https.request(req)
 
       return if res.code.to_i == 200
 
       raise "Invalid response code: #{res.code}"
+    end
+
+    def already_added_message
+      {
+        replace_original: true,
+        text: 'This game has already been added.'
+      }
     end
 
     def modified_message
