@@ -7,8 +7,6 @@ class SlackController < ApplicationController
   protect_from_forgery with: :null_session
 
   def interactivity
-    action = payload.dig('actions', 0)
-
     if action['name'] == 'queue_action'
       Slack::ModQueueActionJob.perform_later payload
     elsif action['action_id'] == 'add_game'
@@ -26,6 +24,10 @@ class SlackController < ApplicationController
 
   def payload
     @payload ||= JSON.parse(Current.params[:payload])
+  end
+
+  def action
+    @action ||= payload.dig('actions', 0)
   end
 
   def modified_message

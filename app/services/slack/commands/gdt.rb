@@ -46,7 +46,12 @@ module Slack
           POSTGAME_STATUSES.match?(game['status']['abstractGameState'])
         end
 
-        modal_response(date, games.map { |game| game_option(game) })
+        if games.none?
+          day = date.strftime('%-m/%-d/%y')
+          text_response "There were no games found on #{day}"
+        else
+          modal_response(date, games.map { |game| game_option(game) })
+        end
       end
 
       def game_option(game)
