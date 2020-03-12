@@ -18,7 +18,7 @@ def bundle_exec_ruby(name, *arguments)
 end
 
 every :minute do
-  bundle_exec_ruby :no_hitter_bot
+  # bundle_exec_ruby :no_hitter_bot
   bundle_exec_ruby :mod_queue_slack
 end
 
@@ -29,11 +29,11 @@ end
 
 every 15.minutes do
   bundle_exec_ruby :check_messages
-  bundle_exec_ruby :game_threads, :pregame
+  # bundle_exec_ruby :game_threads, :pregame
 end
 
 every 5.minutes do
-  bundle_exec_ruby :game_threads, :post
+  # bundle_exec_ruby :game_threads, :post
 end
 
 # So we don't run twice on the hour
@@ -42,16 +42,16 @@ step_minutes_by(5, except: 0) do
 end
 
 step_minutes_by(2, except: [0, 30]) do
-  bundle_exec_ruby :game_threads, :update
+  # bundle_exec_ruby :game_threads, :update
 end
 
 step_minutes_by(30) do
-  bundle_exec_ruby :game_threads, :update, :posted
+  # bundle_exec_ruby :game_threads, :update, :posted
 end
 
 every :saturday do
-  bundle_exec_ruby :load_game_threads
-  bundle_exec_ruby :load_sunday_game_threads
+  # bundle_exec_ruby :load_game_threads
+  # bundle_exec_ruby :load_sunday_game_threads
 end
 
 # This is off by an hour. Investigate 5 years from now.
