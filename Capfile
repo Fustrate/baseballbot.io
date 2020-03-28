@@ -11,7 +11,6 @@ require 'capistrano/rbenv'
 require 'capistrano/bundler'
 require 'capistrano/rails'
 require 'capistrano/scm/git'
-require 'capistrano/sidekiq'
 require 'capistrano/honeybadger'
 require 'whenever/capistrano'
 
