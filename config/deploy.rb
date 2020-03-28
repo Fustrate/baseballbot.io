@@ -27,6 +27,7 @@ set :rbenv_map_bins,
 set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
+  before :compile_assets, 'webpacker:backup_manifest'
   after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
 
