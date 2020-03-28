@@ -52,7 +52,6 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
-  gem 'capistrano-sidekiq', require: false
 
   # Linters
   gem 'rubocop', require: false
@@ -102,5 +101,5 @@ gem 'redis'
 gem 'em-hiredis'
 gem 'eventmachine'
 
-gem 'sidekiq', '< 6'
+gem 'sidekiq', '~> 6.0'
 gem 'sidekiq-history'
