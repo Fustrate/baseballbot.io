@@ -13,7 +13,6 @@ require 'capistrano/rails'
 require 'capistrano/scm/git'
 require 'capistrano/sidekiq'
 require 'capistrano/honeybadger'
-
 require 'whenever/capistrano'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined

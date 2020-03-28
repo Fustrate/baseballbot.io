@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 ruby '2.6.5'
-gem 'rails', '6.0.2.1'
+gem 'rails', '6.0.2.2'
 
 gem 'pg'
 
@@ -65,7 +65,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails', '4.0.0.beta3'
+  gem 'rspec-rails', '~> 4.0'
 
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring

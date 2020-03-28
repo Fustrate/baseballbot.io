@@ -48,7 +48,6 @@ Metrics/BlockLength:
   Exclude:
     - 'config/**/*.rb'
     - 'spec/**/*.rb'
-    - 'lib/capistrano/**/*.rake'
 
 Layout/LineLength:
   Exclude:
