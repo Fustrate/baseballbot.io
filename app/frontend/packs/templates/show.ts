@@ -5,8 +5,6 @@ import erb from 'highlight.js/lib/languages/erb';
 import BaseballBot from '../../javascript/baseballbot';
 import Template from '../../javascript/baseballbot/template';
 
-import '../../stylesheets/highlight_erb.css';
-
 hljs.registerLanguage('erb', erb);
 
 class ShowTemplate extends GenericPage {

@@ -4,7 +4,6 @@ import Page from '@fustrate/rails/dist/js/Page';
 import GameCard from '../javascript/scoreboard/game_card';
 import Game from '../javascript/scoreboard/game';
 
-import '../stylesheets/scoreboard.scss';
 import BaseballBot from '../javascript/baseballbot';
 
 const secondsBetweenReloads = 30;
