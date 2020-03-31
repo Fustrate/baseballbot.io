@@ -30,6 +30,8 @@ namespace :deploy do
   before :compile_assets, 'webpacker:backup_manifest'
   after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
+end
 
-  after :restart, 'sidekiq:restart'
+namespace :unicorn do
+  after :reload, 'sidekiq:restart'
 end
