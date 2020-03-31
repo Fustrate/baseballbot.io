@@ -1,10 +1,10 @@
 const { environment } = require('@rails/webpacker');
-const webpack = require('webpack'); // eslint-disable-line import/no-extraneous-dependencies
+const { IgnorePlugin } = require('webpack'); // eslint-disable-line import/no-extraneous-dependencies
 const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
 const typescript = require('./loaders/typescript');
 
 environment.plugins.insert(
-  'IgnorePlugin', new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  'IgnorePlugin', new IgnorePlugin(/^\.\/locale$/, /moment$/),
 );
 
 const smp = new SpeedMeasurePlugin();

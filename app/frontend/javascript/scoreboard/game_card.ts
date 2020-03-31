@@ -128,7 +128,7 @@ class GameCard {
     this.card.querySelector('.status').textContent = this.gameStatus();
   }
 
-  update(data) {
+  update(data: object) {
     this.game.updateData(data);
 
     this.refresh();

@@ -34,7 +34,7 @@ class GameThreadsTable extends GenericTable {
     });
   }
 
-  updateRow(row, gameThread) {
+  updateRow(row: HTMLTableRowElement, gameThread: GameThread) {
     row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
       subredditPath(gameThread.subreddit),
@@ -45,7 +45,7 @@ class GameThreadsTable extends GenericTable {
     }
 
     row.querySelector('.game-pk').innerHTML = linkTo(
-      gameThread.gamePk,
+      `${gameThread.gamePk}`,
       `https://www.mlb.com/gameday/${gameThread.gamePk}`,
     );
 
@@ -57,7 +57,7 @@ class GameThreadsTable extends GenericTable {
     return row;
   }
 
-  static populateGameThreadTitle(cell, gameThread) {
+  static populateGameThreadTitle(cell: HTMLTableCellElement, gameThread: GameThread) {
     if (!gameThread.postId) {
       cell.textContent = gameThread.title;
 
@@ -70,7 +70,7 @@ class GameThreadsTable extends GenericTable {
     );
   }
 
-  static statusLabel(gameThread) {
+  static statusLabel(gameThread: GameThread) {
     if (moment().isAfter(gameThread.postAt) && gameThread.status === 'Future') {
       return label('Error', 'fw game-thread');
     }

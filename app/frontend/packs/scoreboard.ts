@@ -51,7 +51,7 @@ class Scoreboard extends Page {
   }
 
   updateGameCards(games: any[]) {
-    const dataByPk = {};
+    const dataByPk: { [key: number]: object } = {};
 
     games.forEach((gameData) => {
       dataByPk[gameData.gamePk] = gameData;

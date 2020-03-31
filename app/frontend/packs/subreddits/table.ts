@@ -29,7 +29,7 @@ class SubredditsTable extends GenericTable {
     });
   }
 
-  updateRow(row, subreddit) {
+  updateRow(row: HTMLTableRowElement, subreddit: Subreddit) {
     row.querySelector('.name').innerHTML = linkTo(subreddit.name, subreddit);
     row.querySelector('.team').textContent = subreddit.abbreviation;
     row.querySelector('.account').textContent = subreddit.account.name;
