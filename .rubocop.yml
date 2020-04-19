@@ -10,7 +10,8 @@ AllCops:
     - db/schema.rb
     - node_modules/**/*
   TargetRubyVersion: 2.6
-  TargetRailsVersion: 5.2
+  TargetRailsVersion: 6.0
+  NewCops: enable
 
 Rails:
   Enabled: true
