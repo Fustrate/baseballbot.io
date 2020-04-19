@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '2.6.5'
+ruby '2.6.6'
 gem 'rails', '6.0.2.2'
 
 gem 'pg'
@@ -45,7 +45,7 @@ group :development do
   gem 'guard-rails'
   gem 'guard-rspec', require: false
   gem 'ruby_gntp'
-  gem 'web-console', '~> 3.6'
+  gem 'web-console', '~> 4.0'
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.11', require: false
