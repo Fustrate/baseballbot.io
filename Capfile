@@ -9,6 +9,9 @@ require 'capistrano/deploy'
 # Include tasks from other gems
 require 'capistrano/rbenv'
 require 'capistrano/bundler'
+# This needs to be required because... the gem is dumb?
+require 'capistrano3-puma'
+require 'capistrano/puma'
 require 'capistrano/rails'
 require 'capistrano/scm/git'
 require 'capistrano/honeybadger'
@@ -18,3 +21,4 @@ require 'whenever/capistrano'
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 
 install_plugin Capistrano::SCM::Git
+install_plugin Capistrano::Puma

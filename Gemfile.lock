@@ -15,6 +15,15 @@ GIT
       httparty (~> 0.16)
       moneta (~> 1.0)
 
+GIT
+  remote: https://github.com/seuros/capistrano-puma.git
+  revision: 87bfd747bd43a19b5d214e0272b76fb723cf1f5f
+  specs:
+    capistrano3-puma (4.0.0)
+      capistrano (~> 3.7)
+      capistrano-bundler
+      puma (~> 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -209,7 +218,6 @@ GEM
       railties (>= 4)
       sprockets-rails
     jwt (2.2.1)
-    kgio (2.11.3)
     launchy (2.5.0)
       addressable (~> 2.7)
     listen (3.2.1)
@@ -265,6 +273,8 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.4)
+    puma (4.3.3)
+      nio4r (~> 2.0)
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
@@ -303,7 +313,6 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
-    raindrops (0.19.1)
     rake (13.0.1)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
@@ -395,9 +404,6 @@ GEM
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
-    unicorn (5.5.4)
-      kgio (~> 2.6)
-      raindrops (~> 0.7)
     unf_ext (0.0.7.7)
     unicode-display_width (1.7.0)
     uniform_notifier (1.13.0)
@@ -435,6 +441,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rails
   capistrano-rbenv (~> 2.1)
+  capistrano3-puma!
   capybara
   chronic
   database_cleaner (~> 1.5)
@@ -458,6 +465,7 @@ DEPENDENCIES
   pg
   pry
   pry-rails
+  puma
   rails (= 6.0.2.2)
   rails-controller-testing
   redd
@@ -474,7 +482,6 @@ DEPENDENCIES
   skylight
   sorcery
   spring
-  unicorn
   web-console (~> 4.0)
   webpacker (~> 5.0)
   whenever
