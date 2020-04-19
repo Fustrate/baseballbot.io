@@ -32,10 +32,11 @@ set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
   before :compile_assets, 'webpacker:backup_manifest'
-  after :publishing, 'unicorn:reload'
   after :finishing,  :cleanup
 end
 
-namespace :unicorn do
-  after :reload, 'sidekiq:restart'
+namespace :puma do
+  after :'phased-restart', 'sidekiq:restart'
+  after :restart, 'sidekiq:restart'
+  after :start, 'sidekiq:restart'
 end
