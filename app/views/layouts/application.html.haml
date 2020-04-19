@@ -1,26 +1,26 @@
 !!!
 %html{ lang: :en }
-%head
-  %title= content_for?(:title) ? yield(:title) : 'baseballbot.io'
-  %meta{ charset: 'utf-8' }
-  %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
-  = stylesheet_pack_tag 'application', media: :all
-  = csrf_meta_tags
-%body{ data: html_data }
-  %nav.toolbar{ role: 'navigation' }
-    = link_to 'Baseballbot', root_path, class: 'branding'
+  %head
+    %title= content_for?(:title) ? yield(:title) : 'baseballbot.io'
+    %meta{ charset: 'utf-8' }
+    %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
+    = stylesheet_pack_tag 'application', media: :all
+    = csrf_meta_tags
+  %body{ data: html_data }
+    %nav.toolbar{ role: 'navigation' }
+      = link_to 'Baseballbot', root_path, class: 'branding'
 
-    %section.main-menu
-      = link_to 'Game Threads', game_threads_path
-      = link_to 'Subreddits', subreddits_path
-      = link_to 'Gameday', gameday_path
+      %section.main-menu
+        = link_to 'Game Threads', game_threads_path
+        = link_to 'Subreddits', subreddits_path
+        = link_to 'Gameday', gameday_path
 
-  %section.page-content
-    - unless flash.empty?
-      - flash.each do |type, message|
-        .alert-box{ class: type }
-          %a.close{ href: '#' } &times;
-          = message
-      - flash.clear
+    %section.page-content
+      - unless flash.empty?
+        - flash.each do |type, message|
+          .alert-box{ class: type }
+            %a.close{ href: '#' } &times;
+            = message
+        - flash.clear
 
-    = yield
+      = yield
