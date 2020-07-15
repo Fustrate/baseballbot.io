@@ -3,12 +3,12 @@
 source 'https://rubygems.org'
 
 ruby '2.6.6'
-gem 'rails', '6.0.2.2'
+gem 'rails', '~> 6.0.3'
 
 gem 'pg'
 
 gem 'haml-rails'
-gem 'jbuilder', '~> 2.7'
+gem 'jbuilder', '~> 2.10'
 gem 'webpacker', '~> 5.0'
 
 # Used to generate routes & i18n for the frontend
@@ -25,7 +25,7 @@ gem 'fustrate-rails', github: 'Fustrate/fustrate-rails'
 gem 'puma'
 
 # Reddit interaction
-gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api' # '~> 0.1'
+gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api'
 gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
 # App Monitoring
