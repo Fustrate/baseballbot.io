@@ -40,9 +40,7 @@ class ApplicationService
     end
 
     def default_order
-      if self.class::DEFAULT_ORDER.is_a? Proc
-        return self.class::DEFAULT_ORDER.call
-      end
+      return self.class::DEFAULT_ORDER.call if self.class::DEFAULT_ORDER.is_a? Proc
 
       self.class::DEFAULT_ORDER
     end

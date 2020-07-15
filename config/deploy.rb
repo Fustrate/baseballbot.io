@@ -13,26 +13,23 @@ set :branch, ENV['REVISION'] || :master
 # Puma configuration
 set :puma_threads [1, 3]
 
-append :linked_dirs, 'log', 'node_modules', 'public/packs', 'public/system',
-       'tmp/cache', 'tmp/pids', 'tmp/sockets'
+append :linked_dirs, 'log', 'node_modules', 'public/packs', 'public/system', 'tmp/cache',
+       'tmp/pids', 'tmp/sockets'
 
-append :linked_files, 'config/database.yml', 'config/honeybadger.yml',
-       'config/master.key', 'config/reddit.yml', 'config/skylight.yml'
+append :linked_files, 'config/database.yml', 'config/honeybadger.yml', 'config/master.key',
+       'config/reddit.yml', 'config/skylight.yml'
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
 
 set :rbenv_ruby, File.read(File.expand_path('../.ruby-version', __dir__)).strip
-set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} " \
-                   "#{fetch :rbenv_path}/bin/rbenv exec"
-set :rbenv_map_bins, %w[
-  bundle gem honeybadger puma pumactl rails rake ruby sidekiq sidekiqctl yarn
-]
+set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} #{fetch :rbenv_path}/bin/rbenv exec"
+set :rbenv_map_bins, %w[bundle gem honeybadger puma pumactl rails rake ruby sidekiq sidekiqctl yarn]
 
 set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
   before :compile_assets, 'webpacker:backup_manifest'
-  after :finishing,  :cleanup
+  after :finishing, :cleanup
 end
 
 namespace :puma do

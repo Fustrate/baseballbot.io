@@ -26,6 +26,11 @@ Layout/FirstArrayElementIndentation:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
+Layout/LineLength:
+  Max: 100
+  Exclude:
+    - 'config/**/*.rb'
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
@@ -49,10 +54,6 @@ Metrics/BlockLength:
   Exclude:
     - 'config/**/*.rb'
     - 'spec/**/*.rb'
-
-Layout/LineLength:
-  Exclude:
-    - 'config/**/*.rb'
 
 Metrics/AbcSize:
   Enabled: false

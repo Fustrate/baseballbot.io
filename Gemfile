@@ -49,10 +49,10 @@ group :development do
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.11', require: false
+  gem 'capistrano3-puma', github: 'seuros/capistrano-puma'
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
-  gem 'capistrano3-puma', github: 'seuros/capistrano-puma'
 
   # Linters
   gem 'rubocop', require: false

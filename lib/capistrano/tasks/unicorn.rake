@@ -8,8 +8,7 @@ namespace :load do
     set :unicorn_restart_sleep_time, 3
     set :unicorn_rack_env, 'deployment'
     set :unicorn_pid, -> { "#{current_path}/tmp/pids/unicorn.pid" }
-    set :unicorn_config_path,
-        -> { "#{current_path}/config/unicorn/#{fetch(:stage)}.rb" }
+    set :unicorn_config_path, -> { "#{current_path}/config/unicorn/#{fetch(:stage)}.rb" }
   end
 end
 
@@ -29,9 +28,7 @@ namespace :unicorn do
               fetch(:unicorn_options)
             ]
 
-            execute :bundle, :exec, :unicorn,
-                    options.compact.join(' '),
-                    fetch(:unicorn_rackup)
+            execute :bundle, :exec, :unicorn, options.compact.join(' '), fetch(:unicorn_rackup)
           end
         end
       end

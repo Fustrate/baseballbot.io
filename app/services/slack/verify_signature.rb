@@ -10,7 +10,7 @@ module Slack
 
       ensure_valid_parameters!
 
-      digest = OpenSSL::Digest::SHA256.new
+      digest = OpenSSL::Digest.new('SHA256')
       signature_base = [VERSION, timestamp, body].join(':')
       hex_hash = OpenSSL::HMAC.hexdigest(digest, signing_secret, signature_base)
       computed_signature = [VERSION, hex_hash].join('=')
@@ -52,10 +52,7 @@ module Slack
     end
 
     def self.signing_secret
-      Rails.application.credentials.dig(
-        :"slack_#{@team_id}",
-        :signing_secret
-      )
+      Rails.application.credentials.dig(:"slack_#{@team_id}", :signing_secret)
     end
   end
 end

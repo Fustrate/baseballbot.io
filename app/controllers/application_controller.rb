@@ -8,9 +8,7 @@ class ApplicationController < ActionController::Base
   class << self
     def restrict_formats(format, options = {})
       before_action(options) do
-        unless request.format.symbol == format
-          raise ActionController::UnknownFormat
-        end
+        raise ActionController::UnknownFormat unless request.format.symbol == format
       end
     end
   end

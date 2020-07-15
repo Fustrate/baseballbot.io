@@ -14,7 +14,7 @@ class WebpackerAssetCleanupTasks
 
   def clean_old_assets!
     files_to_remove.each do |file_to_remove|
-      relative_path = file_to_remove[7..-1]
+      relative_path = file_to_remove[7..]
 
       execute :rm, relative_path
       # puts relative_path
@@ -38,7 +38,7 @@ class WebpackerAssetCleanupTasks
 
     capture(:find, '.', '-type f', '-mindepth 2', '-print')
       .split("\n")
-      .map { |file| "/packs/#{file[2..-1]}" }
+      .map { |file| "/packs/#{file[2..]}" }
       .reject { |file| current_files.include?(file.gsub(/\.(?:gz|br)$/, '')) }
       .sort
   end

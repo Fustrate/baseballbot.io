@@ -2,6 +2,4 @@
 
 json.call template, :id, :type, :body
 
-unless local_assigns[:subreddit] == false
-  json.subreddit template.subreddit, :id, :name
-end
+json.subreddit template.subreddit, :id, :name unless local_assigns[:subreddit] == false
