@@ -23,4 +23,13 @@ environment.config.merge(smp.wrap({
   },
 }));
 
+// Make sure Rails UJS doesn't get double-compiled.
+const nodeModulesLoader = environment.loaders.get('nodeModules');
+
+if (!Array.isArray(nodeModulesLoader.exclude)) {
+  nodeModulesLoader.exclude = [nodeModulesLoader.exclude || []].flat();
+}
+
+nodeModulesLoader.exclude.push(/@fustrate\/rails/);
+
 module.exports = environment;

@@ -1,11 +1,11 @@
-import { Record, PathParameters } from '@fustrate/rails/dist/js/Record';
-import { JsonData } from '@fustrate/rails/dist/js/BasicObject';
-import { subredditPath, subredditsPath } from '../routes';
+import { Record } from '@fustrate/rails/dist/js/Record';
 
+import { subredditPath, subredditsPath } from 'js/routes';
 import Template from './template';
 
 export default class Subreddit extends Record {
   public static classname = 'Subreddit';
+  public static createPath = subredditsPath;
 
   public id: number;
   public abbreviation: string;
@@ -14,18 +14,12 @@ export default class Subreddit extends Record {
   public options: { [s: string]: any };
   public templates: Template[];
 
-  public static createPath(parameters: PathParameters = {}) {
-    return subredditsPath(parameters);
+  path(options?: { [s: string]: any }): string {
+    return subredditPath(this.id, options);
   }
 
-  path(parameters: PathParameters = {}) {
-    return subredditPath(this.id, parameters);
-  }
-
-  public extractFromData(data?: JsonData): JsonData {
-    if (!data) {
-      return {};
-    }
+  extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+    super.extractFromData(data);
 
     this.id = data.id;
     this.abbreviation = data.abbreviation;

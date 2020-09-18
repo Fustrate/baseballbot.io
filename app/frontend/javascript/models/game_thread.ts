@@ -1,12 +1,12 @@
 import moment from 'moment';
-import { Record, PathParameters } from '@fustrate/rails/dist/js/Record';
-import { JsonData } from '@fustrate/rails/dist/js/BasicObject';
+import { Record } from '@fustrate/rails/dist/js/Record';
 
-import { gameThreadPath, gameThreadsPath } from '../routes';
+import { gameThreadPath, gameThreadsPath } from 'js/routes';
 import Subreddit from './subreddit';
 
 export default class GameThread extends Record {
   public static classname = 'GameThread';
+  public static createPath = gameThreadsPath;
 
   public id: number;
   public gamePk: number;
@@ -17,18 +17,12 @@ export default class GameThread extends Record {
   public subreddit: Subreddit;
   public title: string;
 
-  public static createPath(parameters: PathParameters = {}) {
-    return gameThreadsPath(parameters);
+  path(options?: { [s: string]: any }): string {
+    return gameThreadPath(this.id, options);
   }
 
-  path(parameters: PathParameters = {}) {
-    return gameThreadPath(this.id, parameters);
-  }
-
-  extractFromData(data?: JsonData): JsonData {
-    if (!data) {
-      return {};
-    }
+  extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+    super.extractFromData(data);
 
     this.id = data.id;
     this.gamePk = data.gamePk;

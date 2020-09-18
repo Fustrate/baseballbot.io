@@ -44,6 +44,7 @@ module.exports = (api) => {
       '@babel/plugin-proposal-export-default-from',
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',
+      '@babel/plugin-proposal-logical-assignment-operators',
       [
         '@babel/plugin-proposal-class-properties',
         {
@@ -68,6 +69,16 @@ module.exports = (api) => {
         '@babel/plugin-transform-regenerator',
         {
           async: false,
+        },
+      ],
+      [
+        'babel-plugin-module-resolver',
+        {
+          root: ['./app/frontend/'],
+          alias: {
+            js: './app/frontend/javascript/',
+            models: './app/frontend/javascript/models/',
+          },
         },
       ],
     ].filter(Boolean),

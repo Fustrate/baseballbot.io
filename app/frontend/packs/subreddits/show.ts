@@ -2,9 +2,9 @@ import GenericPage from '@fustrate/rails/dist/js/GenericPage';
 import { startCase } from 'lodash/string';
 import { linkTo } from '@fustrate/rails/dist/js/utilities';
 
-import BaseballBot from '../../javascript/baseballbot';
-import Subreddit from '../../javascript/baseballbot/subreddit';
-import Template from '../../javascript/baseballbot/template';
+import BaseballBot from 'js/baseballbot';
+import Subreddit from 'models/subreddit';
+import Template from 'models/template';
 
 class ShowSubreddit extends GenericPage {
   public subreddit: Subreddit;

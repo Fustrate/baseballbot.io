@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "dom", "es2016.array.include"],
+    "lib": ["ES6", "DOM", "ES2019.Array", "ES2015.Promise"],
     "module": "es6",
     "moduleResolution": "node",
-    "baseUrl": ".",
     "paths": {
-        "*": ["node_modules/*", "app/javascript/*"]
+      "*": ["../../node_modules/*", "app/frontend/*"],
+      "models/*": ["javascript/models/*"],
+      "js/*": ["javascript/*"],
     },
     "sourceMap": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
     "target": "es5"
   },
   "exclude": [

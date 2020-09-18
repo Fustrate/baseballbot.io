@@ -2,8 +2,8 @@ import GenericPage from '@fustrate/rails/dist/js/GenericPage';
 import hljs from 'highlight.js';
 import erb from 'highlight.js/lib/languages/erb';
 
-import BaseballBot from '../../javascript/baseballbot';
-import Template from '../../javascript/baseballbot/template';
+import BaseballBot from 'js/baseballbot';
+import Template from 'models/template';
 
 hljs.registerLanguage('erb', erb);
 

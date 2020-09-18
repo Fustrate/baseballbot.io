@@ -16,5 +16,7 @@ namespace :webpacker do
     output = Rails.root.join('docs/routes.txt')
 
     system "rails routes > #{output}"
+
+    Rake::Task['typescript:routes'].invoke
   end
 end

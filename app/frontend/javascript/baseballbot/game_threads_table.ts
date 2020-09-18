@@ -3,9 +3,9 @@ import GenericTable from '@fustrate/rails/dist/js/GenericTable';
 import { icon, label, linkTo, toHumanDate } from '@fustrate/rails/dist/js/utilities';
 import { getCurrentPageJson } from '@fustrate/rails/dist/js/ajax';
 
-import GameThread from './game_thread';
+import GameThread from 'models/game_thread';
 
-import { subredditPath } from '../routes';
+import { subredditPath } from 'js/routes';
 
 const redditIcon = icon('reddit', 'brands');
 

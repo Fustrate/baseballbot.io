@@ -1,25 +1,30 @@
-                 Prefix Verb   URI Pattern                            Controller#Action
-                   root GET    /                                      home#home
-  accounts_authenticate GET    /accounts/authenticate(.:format)       accounts#authenticate
-discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#reddit_callback
-          discord_debug GET    /discord/debug(.:format)               discord#debug
-           game_threads GET    /game_threads(.:format)                game_threads#index
-                        POST   /game_threads(.:format)                game_threads#create
-        new_game_thread GET    /game_threads/new(.:format)            game_threads#new
-       edit_game_thread GET    /game_threads/:id/edit(.:format)       game_threads#edit
-            game_thread GET    /game_threads/:id(.:format)            game_threads#show
-                        PATCH  /game_threads/:id(.:format)            game_threads#update
-                        PUT    /game_threads/:id(.:format)            game_threads#update
-                        DELETE /game_threads/:id(.:format)            game_threads#destroy
-              gamechats GET    /gamechats(.:format)                   game_threads#index
-                gameday GET    /gameday(.:format)                     home#gameday
-                 log_in GET    /log_in(.:format)                      sessions#log_in
-                        POST   /log_in(.:format)                      sessions#process_log_in
-               sign_out DELETE /sign_out(.:format)                    sessions#sign_out
-            sidekiq_web        /sidekiq                               Sidekiq::Web
-     slack_commands_gdt POST   /slack/commands/gdt(.:format)          slack/commands#gdt
-    slack_interactivity POST   /slack/interactivity(.:format)         slack#interactivity
- game_threads_subreddit GET    /subreddits/:id/game_threads(.:format) subreddits#game_threads
-             subreddits GET    /subreddits(.:format)                  subreddits#index
-              subreddit GET    /subreddits/:id(.:format)              subreddits#show
-               template GET    /templates/:id(.:format)               templates#show
+                   Prefix Verb   URI Pattern                                                                              Controller#Action
+                     root GET    /                                                                                        home#home
+    accounts_authenticate GET    /accounts/authenticate(.:format)                                                         accounts#authenticate
+  discord_reddit_callback GET    /discord/reddit-callback(.:format)                                                       discord#reddit_callback
+            discord_debug GET    /discord/debug(.:format)                                                                 discord#debug
+             game_threads GET    /game_threads(.:format)                                                                  game_threads#index
+                          POST   /game_threads(.:format)                                                                  game_threads#create
+          new_game_thread GET    /game_threads/new(.:format)                                                              game_threads#new
+         edit_game_thread GET    /game_threads/:id/edit(.:format)                                                         game_threads#edit
+              game_thread GET    /game_threads/:id(.:format)                                                              game_threads#show
+                          PATCH  /game_threads/:id(.:format)                                                              game_threads#update
+                          PUT    /game_threads/:id(.:format)                                                              game_threads#update
+                          DELETE /game_threads/:id(.:format)                                                              game_threads#destroy
+                gamechats GET    /gamechats(.:format)                                                                     game_threads#index
+                  gameday GET    /gameday(.:format)                                                                       home#gameday
+                   log_in GET    /log_in(.:format)                                                                        sessions#log_in
+                          POST   /log_in(.:format)                                                                        sessions#process_log_in
+                 sign_out DELETE /sign_out(.:format)                                                                      sessions#sign_out
+              sidekiq_web        /sidekiq                                                                                 Sidekiq::Web
+       slack_commands_gdt POST   /slack/commands/gdt(.:format)                                                            slack/commands#gdt
+      slack_interactivity POST   /slack/interactivity(.:format)                                                           slack#interactivity
+   game_threads_subreddit GET    /subreddits/:id/game_threads(.:format)                                                   subreddits#game_threads
+               subreddits GET    /subreddits(.:format)                                                                    subreddits#index
+                subreddit GET    /subreddits/:id(.:format)                                                                subreddits#show
+                 template GET    /templates/:id(.:format)                                                                 templates#show
+       rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
+rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
+       rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
+update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                      active_storage/disk#update
+     rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                           active_storage/direct_uploads#create

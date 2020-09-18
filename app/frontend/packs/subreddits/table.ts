@@ -2,8 +2,8 @@ import GenericTable from '@fustrate/rails/dist/js/GenericTable';
 import { getCurrentPageJson } from '@fustrate/rails/dist/js/ajax';
 import { icon, linkTo } from '@fustrate/rails/dist/js/utilities';
 
-import BaseballBot from '../../javascript/baseballbot';
-import Subreddit from '../../javascript/baseballbot/subreddit';
+import BaseballBot from 'js/baseballbot';
+import Subreddit from 'models/subreddit';
 
 const blankRow = `
   <tr>
