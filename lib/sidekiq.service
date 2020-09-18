@@ -25,7 +25,7 @@ After=syslog.target network.target
 [Service]
 Type=simple
 WorkingDirectory=/home/baseballbot/apps/baseballbot.io/current
-ExecStart=/bin/bash -lc '/home/baseballbot/.rbenv/shims/bundle exec sidekiq -e production'
+ExecStart=/home/baseballbot/.rbenv/shims/bundle exec sidekiq -e production
 User=baseballbot
 Group=baseballbot
 UMask=0002
@@ -41,6 +41,9 @@ Restart=on-failure
 # output goes to /var/log/syslog
 StandardOutput=syslog
 StandardError=syslog
+
+StandardOutput=file:/home/baseballbot/apps/baseballbot.io/shared/log/sidekiq.log
+StandardError=file:/home/baseballbot/apps/baseballbot.io/shared/log/sidekiq_error.log
 
 # This will default to "bundler" if we don't specify it
 SyslogIdentifier=sidekiq-baseballbot

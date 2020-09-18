@@ -17,10 +17,7 @@
 Description=puma-baseballbot
 # start us only once the network and logging subsystems are available,
 # consider adding redis-server.service if Redis is local and systemd-managed.
-After=syslog.target network.target
-
-# Uncomment for socket activation (see below)
-# Requires=puma.socket
+After=network.target
 
 # See these pages for lots of options:
 # http://0pointer.de/public/systemd-man/systemd.service.html
@@ -29,21 +26,20 @@ After=syslog.target network.target
 # Foreground process (do not use --daemon in ExecStart or config.rb)
 Type=simple
 WorkingDirectory=/home/baseballbot/apps/baseballbot.io/current
-ExecStart=/home/baseballbot/apps/baseballbot.io/current/bin/puma -C /home/baseballbot/apps/baseballbot.io/current/config/puma.rb
+ExecStart=/home/baseballbot/.rbenv/shims/bundle exec puma -C ./config/puma.rb
+PIDFile=/home/baseballbot/apps/baseballbot.io/shared/tmp/pids/puma.pid
 User=baseballbot
-Group=baseballbot
-UMask=0002
+# Group=baseballbot
+# UMask=0002
 
 # Helpful for debugging socket activation, etc.
 # Environment=PUMA_DEBUG=1
 
-# output goes to /var/log/syslog
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=file:/home/baseballbot/apps/baseballbot.io/shared/log/puma.log
+StandardError=file:/home/baseballbot/apps/baseballbot.io/shared/log/puma_error.log
 
-# if we crash, restart
-RestartSec=1
-Restart=always
+RestartSec=5
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
