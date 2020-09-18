@@ -10,9 +10,6 @@ set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
 set :branch, ENV['REVISION'] || :master
 
-# Puma configuration
-set :puma_threads [1, 3]
-
 append :linked_dirs, 'log', 'node_modules', 'public/packs', 'public/system', 'tmp/cache',
        'tmp/pids', 'tmp/sockets'
 
@@ -29,11 +26,11 @@ set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
   before :compile_assets, 'webpacker:backup_manifest'
+  after :finished, 'puma:restart'
   after :finishing, :cleanup
 end
 
 namespace :puma do
-  after :'phased-restart', 'sidekiq:restart'
   after :restart, 'sidekiq:restart'
   after :start, 'sidekiq:restart'
 end
