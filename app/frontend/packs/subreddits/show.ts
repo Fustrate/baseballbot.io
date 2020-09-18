@@ -12,7 +12,7 @@ class ShowSubreddit extends GenericPage {
   initialize() {
     super.initialize();
 
-    this.subreddit = new Subreddit(document.body.dataset.subreddit);
+    this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit });
 
     this.subreddit.reload().then(() => {
       this.refresh();
@@ -46,12 +46,11 @@ class ShowSubreddit extends GenericPage {
   }
 
   refreshTemplates() {
-    const listItems = this.subreddit.templates
-      .map(template => new Template(template))
+    const listItems = Template.buildList(this.subreddit.templates)
       .map(template => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
 
     this.fields.templates.innerHTML = listItems.join('');
   }
 }
 
-BaseballBot.start(new ShowSubreddit());
+BaseballBot.start(ShowSubreddit);

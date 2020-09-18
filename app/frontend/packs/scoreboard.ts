@@ -74,4 +74,4 @@ class Scoreboard extends Page {
   }
 }
 
-BaseballBot.start(new Scoreboard());
+BaseballBot.start(Scoreboard);

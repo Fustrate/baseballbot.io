@@ -28,7 +28,7 @@ export default class Subreddit extends Record {
     this.options = data.options;
 
     if (data.templates) {
-      this.templates = Template.buildList<Template>(data.templates);
+      this.templates = Template.buildList(data.templates);
     }
 
     return data;

@@ -27,4 +27,4 @@ class ShowTemplate extends GenericPage {
   }
 }
 
-BaseballBot.start(new ShowTemplate());
+BaseballBot.start(ShowTemplate);

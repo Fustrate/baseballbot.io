@@ -28,7 +28,7 @@ class GameThreadsTable extends GenericTable {
     getCurrentPageJson().then((response) => {
       const { data } = response.data;
 
-      this.reloadRows(data.map(row => this.createRow(new GameThread(row))));
+      this.reloadRows(data.map(row => this.createRow(GameThread.build(row))));
 
       this.updatePagination(response);
     });

@@ -31,5 +31,6 @@ if (!Array.isArray(nodeModulesLoader.exclude)) {
 }
 
 nodeModulesLoader.exclude.push(/@fustrate\/rails/);
+nodeModulesLoader.exclude.push(/@rails\/ujs/);
 
 module.exports = environment;

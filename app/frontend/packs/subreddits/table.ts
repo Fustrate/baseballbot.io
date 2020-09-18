@@ -25,7 +25,7 @@ class SubredditsTable extends GenericTable {
 
   reloadTable() {
     getCurrentPageJson().then((response) => {
-      this.reloadRows(response.data.data.map(row => this.createRow(new Subreddit(row))));
+      this.reloadRows(response.data.data.map(row => this.createRow(Subreddit.build(row))));
     });
   }
 
@@ -60,4 +60,4 @@ class SubredditsTable extends GenericTable {
   }
 }
 
-BaseballBot.start(new SubredditsTable());
+BaseballBot.start(SubredditsTable);

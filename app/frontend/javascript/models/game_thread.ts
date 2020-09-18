@@ -30,7 +30,7 @@ export default class GameThread extends Record {
     this.postId = data.postId;
     this.startsAt = moment(data.startsAt);
     this.status = data.status;
-    this.subreddit = new Subreddit(data.subreddit);
+    this.subreddit = Subreddit.build(data.subreddit);
     this.title = data.title;
 
     return data;
