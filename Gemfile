@@ -22,7 +22,7 @@ gem 'oj'
 gem 'fustrate-rails', github: 'Fustrate/fustrate-rails'
 
 # Use Puma as the app server
-gem 'puma'
+gem 'puma', '~> 5.0'
 
 # Reddit interaction
 gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api'
@@ -49,7 +49,6 @@ group :development do
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.11', require: false
-  gem 'capistrano3-puma', github: 'seuros/capistrano-puma'
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
