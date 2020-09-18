@@ -1,0 +1,49 @@
+#
+# systemd unit file for CentOS 7, Ubuntu 15.04
+#
+# Customize this file based on your bundler location, app directory, etc.
+# Put this in /usr/lib/systemd/system (CentOS) or /lib/systemd/system (Ubuntu).
+# Run:
+#   - systemctl enable puma-baseballbot
+#   - systemctl {start,stop,restart} puma-baseballbot
+#
+# This file corresponds to a single Sidekiq process.  Add multiple copies
+# to run multiple processes (sidekiq-1, sidekiq-2, etc).
+#
+# See Inspeqtor's Systemd wiki page for more detail about Systemd:
+# https://github.com/mperham/inspeqtor/wiki/Systemd
+#
+[Unit]
+Description=puma-baseballbot
+# start us only once the network and logging subsystems are available,
+# consider adding redis-server.service if Redis is local and systemd-managed.
+After=syslog.target network.target
+
+# Uncomment for socket activation (see below)
+# Requires=puma.socket
+
+# See these pages for lots of options:
+# http://0pointer.de/public/systemd-man/systemd.service.html
+# http://0pointer.de/public/systemd-man/systemd.exec.html
+[Service]
+# Foreground process (do not use --daemon in ExecStart or config.rb)
+Type=simple
+WorkingDirectory=/home/baseballbot/apps/baseballbot.io/current
+ExecStart=/home/baseballbot/apps/baseballbot.io/current/bin/puma -C /home/baseballbot/apps/baseballbot.io/current/config/puma.rb
+User=baseballbot
+Group=baseballbot
+UMask=0002
+
+# Helpful for debugging socket activation, etc.
+# Environment=PUMA_DEBUG=1
+
+# output goes to /var/log/syslog
+StandardOutput=syslog
+StandardError=syslog
+
+# if we crash, restart
+RestartSec=1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
