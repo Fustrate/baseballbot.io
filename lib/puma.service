@@ -29,8 +29,6 @@ WorkingDirectory=/home/baseballbot/apps/baseballbot.io/current
 ExecStart=/home/baseballbot/.rbenv/shims/bundle exec puma -C ./config/puma.rb
 PIDFile=/home/baseballbot/apps/baseballbot.io/shared/tmp/pids/puma.pid
 User=baseballbot
-# Group=baseballbot
-# UMask=0002
 
 # Helpful for debugging socket activation, etc.
 # Environment=PUMA_DEBUG=1
