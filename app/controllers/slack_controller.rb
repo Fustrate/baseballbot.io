@@ -13,7 +13,7 @@ class SlackController < ApplicationController
       Slack::AddGameJob.perform_later payload
     end
 
-    render json: modified_message, status: 200
+    render json: modified_message, status: :ok
   end
 
   protected

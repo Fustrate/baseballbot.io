@@ -10,11 +10,11 @@ module Slack
     def gdt
       json = Slack::Commands::GDT.call
 
-      Rails.logger.info '-----------------------'
-      Rails.logger.info JSON.dump(json)
-      Rails.logger.info '-----------------------'
+      # Rails.logger.info '-----------------------'
+      # Rails.logger.info JSON.dump(json)
+      # Rails.logger.info '-----------------------'
 
-      render json: json, status: 200
+      render json: json, status: :ok
     end
 
     protected
