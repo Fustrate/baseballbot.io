@@ -61,16 +61,15 @@ class Scoreboard extends Page {
     });
   }
 
-  reloadGameInfo(onLoad = (games: any[]) => {}) {
+  protected async reloadGameInfo(onLoad = (games: any[]) => {}): Promise<void> {
     this.loading.style.display = '';
 
-    window.fetch(`${apiEndpoint}&date=${this.date.format('MM/DD/YYYY')}`)
-      .then(response => response.json())
-      .then((json) => {
-        onLoad(json.dates[0]?.games ?? []);
+    const response = await window.fetch(`${apiEndpoint}&date=${this.date.format('MM/DD/YYYY')}`);
+    const json = await response.json();
 
-        this.loading.style.display = 'none';
-      });
+    onLoad(json.dates[0]?.games ?? []);
+
+    this.loading.style.display = 'none';
   }
 }
 

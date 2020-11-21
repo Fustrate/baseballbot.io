@@ -9,6 +9,31 @@ import { subredditPath } from 'js/routes';
 
 const redditIcon = icon('reddit', 'brands');
 
+function statusLabel(gameThread: GameThread) {
+  if (moment().isAfter(gameThread.postAt) && gameThread.status === 'Future') {
+    return label('Error', 'fw game-thread');
+  }
+
+  if (moment().isAfter(gameThread.startsAt) && gameThread.status === 'Posted') {
+    return label('Live', 'fw game-thread');
+  }
+
+  return label(gameThread.status, 'fw game-thread');
+}
+
+function populateGameThreadTitle(cell: HTMLTableCellElement, gameThread: GameThread) {
+  if (!gameThread.postId) {
+    cell.textContent = gameThread.title;
+
+    return;
+  }
+
+  cell.innerHTML = linkTo(
+    `${redditIcon} ${gameThread.title}`,
+    `http://redd.it/${gameThread.postId}`,
+  );
+}
+
 class GameThreadsTable extends GenericTable {
   protected static blankRow = `
     <tr>
@@ -24,24 +49,24 @@ class GameThreadsTable extends GenericTable {
     super(document.body.querySelector('table.game-threads'));
   }
 
-  reloadTable() {
-    getCurrentPageJson().then((response) => {
-      const { data } = response.data;
+  public async reloadTable(): Promise<void> {
+    const response = await getCurrentPageJson();
 
-      this.reloadRows(data.map(row => this.createRow(GameThread.build(row))));
+    const { data } = response.data;
 
-      this.updatePagination(response);
-    });
+    this.reloadRows(data.map(row => this.createRow(GameThread.build(row))));
+
+    this.updatePagination(response);
   }
 
-  updateRow(row: HTMLTableRowElement, gameThread: GameThread) {
+  public updateRow(row: HTMLTableRowElement, gameThread: GameThread) {
     row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
       subredditPath(gameThread.subreddit),
     );
 
     if (gameThread.title) {
-      (this.constructor as typeof GameThreadsTable).populateGameThreadTitle(row.querySelector('.title'), gameThread);
+      populateGameThreadTitle(row.querySelector('.title'), gameThread);
     }
 
     row.querySelector('.game-pk').innerHTML = linkTo(
@@ -52,34 +77,9 @@ class GameThreadsTable extends GenericTable {
     row.querySelector('.post-at').textContent = toHumanDate(gameThread.postAt, true);
     row.querySelector('.starts-at').textContent = toHumanDate(gameThread.startsAt, true);
 
-    row.querySelector('.status').innerHTML = (this.constructor as typeof GameThreadsTable).statusLabel(gameThread);
+    row.querySelector('.status').innerHTML = statusLabel(gameThread);
 
     return row;
-  }
-
-  static populateGameThreadTitle(cell: HTMLTableCellElement, gameThread: GameThread) {
-    if (!gameThread.postId) {
-      cell.textContent = gameThread.title;
-
-      return;
-    }
-
-    cell.innerHTML = linkTo(
-      `${redditIcon} ${gameThread.title}`,
-      `http://redd.it/${gameThread.postId}`,
-    );
-  }
-
-  static statusLabel(gameThread: GameThread) {
-    if (moment().isAfter(gameThread.postAt) && gameThread.status === 'Future') {
-      return label('Error', 'fw game-thread');
-    }
-
-    if (moment().isAfter(gameThread.startsAt) && gameThread.status === 'Posted') {
-      return label('Live', 'fw game-thread');
-    }
-
-    return label(gameThread.status, 'fw game-thread');
   }
 }
 

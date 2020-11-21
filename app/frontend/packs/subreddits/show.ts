@@ -9,17 +9,22 @@ import Template from 'models/template';
 class ShowSubreddit extends GenericPage {
   public subreddit: Subreddit;
 
-  initialize() {
+  public async initialize(): Promise<void> {
     super.initialize();
 
     this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit });
 
-    this.subreddit.reload().then(() => {
-      this.refresh();
-    });
+    await this.subreddit.reload();
+
+    this.refresh();
   }
 
-  refreshSettings() {
+  public refresh(): void {
+    this.refreshSettings();
+    this.refreshTemplates();
+  }
+
+  protected refreshSettings(): void {
     const listItems = [];
 
     if (this.subreddit.options.sidebar && this.subreddit.options.sidebar.enabled) {
@@ -45,7 +50,7 @@ class ShowSubreddit extends GenericPage {
     this.fields.options.innerHTML = listItems.join('');
   }
 
-  refreshTemplates() {
+  protected refreshTemplates(): void {
     const listItems = Template.buildList(this.subreddit.templates)
       .map(template => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
 

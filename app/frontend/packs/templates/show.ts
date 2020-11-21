@@ -10,17 +10,21 @@ hljs.registerLanguage('erb', erb);
 class ShowTemplate extends GenericPage {
   public template: Template;
 
-  initialize() {
+  public async initialize(): Promise<void> {
     super.initialize();
 
     this.template = new Template(document.body.dataset.template);
 
-    this.template.reload().then(() => {
-      this.refresh();
-    });
+    await this.template.reload();
+
+    this.refresh();
   }
 
-  refreshBody() {
+  public refresh(): void {
+    this.refreshBody();
+  }
+
+  protected refreshBody(): void {
     this.fields.body.textContent = this.template.body;
 
     hljs.highlightBlock(this.fields.body);

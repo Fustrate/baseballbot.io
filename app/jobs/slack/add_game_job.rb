@@ -63,9 +63,10 @@ module Slack
     def post_at
       setting = subreddit.options.dig('game_threads', 'post_at')
 
-      if setting =~ /\A-?\d{1,2}\z/
+      case setting
+      when /\A-?\d{1,2}\z/
         starts_at - Regexp.last_match[0].to_i.abs * 3600
-      elsif setting =~ /(1[012]|\d)(:\d\d|) ?(am|pm)/i
+      when /(1[012]|\d)(:\d\d|) ?(am|pm)/i
         constant_time(Regexp.last_match)
       else
         # Default to 3 hours before game time

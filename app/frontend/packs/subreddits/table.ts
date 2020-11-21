@@ -23,13 +23,13 @@ class SubredditsTable extends GenericTable {
     super(document.body.querySelector('table.subreddits'));
   }
 
-  reloadTable() {
-    getCurrentPageJson().then((response) => {
-      this.reloadRows(response.data.data.map(row => this.createRow(Subreddit.build(row))));
-    });
+  public async reloadTable(): Promise<void> {
+    const response = await getCurrentPageJson();
+
+    this.reloadRows(response.data.data.map(row => this.createRow(Subreddit.build(row))));
   }
 
-  updateRow(row: HTMLTableRowElement, subreddit: Subreddit) {
+  public updateRow(row: HTMLTableRowElement, subreddit: Subreddit): void {
     row.querySelector('.name').innerHTML = linkTo(subreddit.name, subreddit);
     row.querySelector('.team').textContent = subreddit.abbreviation;
     row.querySelector('.account').textContent = subreddit.account.name;
@@ -55,7 +55,7 @@ class SubredditsTable extends GenericTable {
     }
   }
 
-  static get blankRow() {
+  protected static get blankRow(): string {
     return blankRow;
   }
 }
