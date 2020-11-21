@@ -15,7 +15,7 @@ class Scoreboard extends Page {
   public container: HTMLDivElement;
   public gameCards: GameCard[];
 
-  initialize() {
+  public initialize(): void {
     this.date = moment();
 
     this.loading = document.querySelector('.loading');
@@ -32,7 +32,7 @@ class Scoreboard extends Page {
     }, secondsBetweenReloads * 1000);
   }
 
-  createGameCards(games: Game[]) {
+  protected createGameCards(games: Game[]): void {
     const spacer = document.createElement('div');
     spacer.className = 'card-spacer';
 
@@ -49,8 +49,8 @@ class Scoreboard extends Page {
     }
   }
 
-  updateGameCards(games: any[]) {
-    const dataByPk: { [key: number]: object } = {};
+  protected updateGameCards(games: any[]): void {
+    const dataByPk: { [key: number]: any } = {};
 
     games.forEach((gameData) => {
       dataByPk[gameData.gamePk] = gameData;
@@ -61,13 +61,15 @@ class Scoreboard extends Page {
     });
   }
 
-  protected async reloadGameInfo(onLoad = (games: any[]) => {}): Promise<void> {
+  protected async reloadGameInfo(onLoad?: (games: any[]) => void): Promise<void> {
     this.loading.style.display = '';
 
     const response = await window.fetch(`${apiEndpoint}&date=${this.date.format('MM/DD/YYYY')}`);
     const json = await response.json();
 
-    onLoad(json.dates[0]?.games ?? []);
+    if (onLoad) {
+      onLoad(json.dates[0]?.games ?? []);
+    }
 
     this.loading.style.display = 'none';
   }

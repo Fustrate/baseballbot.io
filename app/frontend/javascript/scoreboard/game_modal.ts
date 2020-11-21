@@ -27,7 +27,7 @@ function linescoreTotals(team) {
 export default class GameModal extends Modal {
   public game: Game;
 
-  constructor(game: Game) {
+  public constructor(game: Game) {
     super({
       size: 'small',
       content: template,
@@ -38,13 +38,13 @@ export default class GameModal extends Modal {
     this.game = game;
   }
 
-  open() {
+  public async open(): Promise<void> {
     this.modal.querySelector('.linescore').innerHTML = this.linescore();
 
     super.open();
   }
 
-  linescore() {
+  public linescore(): string {
     if (this.game.isPregame) {
       return 'Line score begins at game time.';
     }
@@ -73,10 +73,10 @@ export default class GameModal extends Modal {
 
     headers = headers.concat('<th>R</th>', '<th>H</th>', '<th>E</th>', '<th>LOB</th>');
     away = away.concat(
-      linescoreTotals(this.game.linescore.teams.away).map(text => `<th>${text}</th>`),
+      linescoreTotals(this.game.linescore.teams.away).map((text) => `<th>${text}</th>`),
     );
     home = home.concat(
-      linescoreTotals(this.game.linescore.teams.home).map(text => `<th>${text}</th>`),
+      linescoreTotals(this.game.linescore.teams.home).map((text) => `<th>${text}</th>`),
     );
 
     return `

@@ -3,10 +3,10 @@ declare module 'js/routes' {
 
   export type RouteOptionsComponent = string | number | string[] | number[] | boolean;
 
-  export type RouteOptions = {
+  export interface RouteOptions {
     format?: string;
     [s: string]: RouteOptionsComponent;
-  };
+  }
 
   export function accountsAuthenticatePath(options?: RouteOptions): string;
   export function discordDebugPath(options?: RouteOptions): string;

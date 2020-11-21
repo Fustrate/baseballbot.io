@@ -1,6 +1,7 @@
+import { elementFromString } from '@fustrate/rails/dist/js/utilities';
+
 import Game from './game';
 import GameModal from './game_modal';
-import { elementFromString } from '@fustrate/rails/dist/js/utilities';
 
 const template = `
   <div class="game-card">
@@ -23,7 +24,7 @@ const template = `
     </div>
   </div>`;
 
-function setBaseRunner(element: HTMLDivElement, runner: any) {
+function setBaseRunner(element: HTMLDivElement, runner: any): void {
   if (runner) {
     element.classList.add('runner');
     element.title = runner.fullName;
@@ -39,7 +40,7 @@ class GameCard {
 
   public modal?: GameModal;
 
-  constructor(game: Game) {
+  public constructor(game: Game) {
     this.game = game;
     this.card = elementFromString(template);
 
@@ -54,7 +55,13 @@ class GameCard {
     this.refresh();
   }
 
-  openGameModal() {
+  public update(data: any): void {
+    this.game.updateData(data);
+
+    this.refresh();
+  }
+
+  protected openGameModal(): void {
     if (!this.modal) {
       this.modal = new GameModal(this.game);
     }
@@ -62,7 +69,7 @@ class GameCard {
     this.modal.open();
   }
 
-  refreshRunners() {
+  protected refreshRunners(): void {
     if (this.game.isInProgress) {
       this.card.querySelector<HTMLDivElement>('.runners').style.display = '';
     } else {
@@ -76,7 +83,7 @@ class GameCard {
     setBaseRunner(this.card.querySelector<HTMLDivElement>('.third'), this.game.linescore.offense.third);
   }
 
-  refreshOuts() {
+  protected refreshOuts(): void {
     if (this.game.isInProgress) {
       this.card.querySelector<HTMLDivElement>('.outs').style.display = '';
     } else {
@@ -98,7 +105,7 @@ class GameCard {
     this.card.querySelector('.outs').innerHTML = elements.join('');
   }
 
-  gameStatus() {
+  protected gameStatus(): string {
     const gameTime = this.game.gameDate.format('h:mm');
 
     if (['Preview', 'Scheduled', 'Pre-Game'].includes(this.game.status.detailedState)) {
@@ -116,7 +123,7 @@ class GameCard {
     return `${this.game.linescore.inningState} ${this.game.linescore.currentInning}`;
   }
 
-  refresh() {
+  protected refresh(): void {
     this.refreshOuts();
     this.refreshRunners();
 
@@ -126,12 +133,6 @@ class GameCard {
     }
 
     this.card.querySelector('.status').textContent = this.gameStatus();
-  }
-
-  update(data: object) {
-    this.game.updateData(data);
-
-    this.refresh();
   }
 }
 

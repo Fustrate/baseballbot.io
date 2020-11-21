@@ -1,7 +1,12 @@
 import moment from 'moment';
 import GenericTable from '@fustrate/rails/dist/js/GenericTable';
-import { icon, label, linkTo, toHumanDate } from '@fustrate/rails/dist/js/utilities';
 import { getCurrentPageJson } from '@fustrate/rails/dist/js/ajax';
+import {
+  icon,
+  label,
+  linkTo,
+  toHumanDate,
+} from '@fustrate/rails/dist/js/utilities';
 
 import GameThread from 'models/game_thread';
 
@@ -45,7 +50,7 @@ class GameThreadsTable extends GenericTable {
       <td class="status"></td>
     </tr>`;
 
-  constructor() {
+  public constructor() {
     super(document.body.querySelector('table.game-threads'));
   }
 
@@ -54,12 +59,12 @@ class GameThreadsTable extends GenericTable {
 
     const { data } = response.data;
 
-    this.reloadRows(data.map(row => this.createRow(GameThread.build(row))));
+    this.reloadRows(data.map((row) => this.createRow(GameThread.build(row))));
 
     this.updatePagination(response);
   }
 
-  public updateRow(row: HTMLTableRowElement, gameThread: GameThread) {
+  public updateRow(row: HTMLTableRowElement, gameThread: GameThread): void {
     row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
       subredditPath(gameThread.subreddit),
@@ -78,8 +83,6 @@ class GameThreadsTable extends GenericTable {
     row.querySelector('.starts-at').textContent = toHumanDate(gameThread.startsAt, true);
 
     row.querySelector('.status').innerHTML = statusLabel(gameThread);
-
-    return row;
   }
 }
 

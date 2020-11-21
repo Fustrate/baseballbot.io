@@ -19,14 +19,14 @@ const blankRow = `
 const checkMark = icon('check');
 
 class SubredditsTable extends GenericTable {
-  constructor() {
+  public constructor() {
     super(document.body.querySelector('table.subreddits'));
   }
 
   public async reloadTable(): Promise<void> {
     const response = await getCurrentPageJson();
 
-    this.reloadRows(response.data.data.map(row => this.createRow(Subreddit.build(row))));
+    this.reloadRows(response.data.data.map((row) => this.createRow(Subreddit.build(row))));
   }
 
   public updateRow(row: HTMLTableRowElement, subreddit: Subreddit): void {
@@ -34,23 +34,23 @@ class SubredditsTable extends GenericTable {
     row.querySelector('.team').textContent = subreddit.abbreviation;
     row.querySelector('.account').textContent = subreddit.account.name;
 
-    if (subreddit.options.sidebar && subreddit.options.sidebar.enabled) {
+    if (subreddit.options.sidebar?.enabled) {
       row.querySelector('.sidebar').innerHTML = checkMark;
     }
 
-    if (subreddit.options.gameThreads && subreddit.options.gameThreads.enabled) {
+    if (subreddit.options.gameThreads?.enabled) {
       const { postAt } = subreddit.options.gameThreads;
 
       row.querySelector('.game-threads').textContent = Subreddit.postAtFormat(postAt);
     }
 
-    if (subreddit.options.pregame && subreddit.options.pregame.enabled) {
+    if (subreddit.options.pregame?.enabled) {
       const { postAt } = subreddit.options.pregame;
 
       row.querySelector('.pregames').textContent = Subreddit.postAtFormat(postAt);
     }
 
-    if (subreddit.options.postgame && subreddit.options.postgame.enabled) {
+    if (subreddit.options.postgame?.enabled) {
       row.querySelector('.postgames').innerHTML = checkMark;
     }
   }

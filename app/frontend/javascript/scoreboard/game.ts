@@ -18,7 +18,7 @@ class Game {
   public gamePk: number;
   public gameDate: moment.Moment;
 
-  constructor(data: JsonData) {
+  public constructor(data: JsonData) {
     this.data = data;
 
     this.teams = data.teams;
@@ -28,15 +28,15 @@ class Game {
     this.updateData(data);
   }
 
-  get isPregame() {
+  public get isPregame(): boolean {
     return pregameStatuses.includes(this.data.status.detailedState);
   }
 
-  get isInProgress() {
+  public get isInProgress(): boolean {
     return inProgressStatuses.includes(this.data.status.detailedState);
   }
 
-  updateData(data) {
+  public updateData(data: any): void {
     this.data = data;
 
     this.linescore = data.linescore;

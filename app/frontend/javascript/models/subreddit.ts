@@ -9,32 +9,12 @@ export default class Subreddit extends Record {
 
   public id: number;
   public abbreviation: string;
-  public account: { id: number, name: string };
+  public account: { id: number; name: string };
   public name: string;
   public options: { [s: string]: any };
   public templates: Template[];
 
-  path(options?: { [s: string]: any }): string {
-    return subredditPath(this.id, options);
-  }
-
-  extractFromData(data: { [s: string]: any }): { [s: string]: any } {
-    super.extractFromData(data);
-
-    this.id = data.id;
-    this.abbreviation = data.abbreviation;
-    this.account = data.account;
-    this.name = data.name;
-    this.options = data.options;
-
-    if (data.templates) {
-      this.templates = Template.buildList(data.templates);
-    }
-
-    return data;
-  }
-
-  public static postAtFormat(postAt?: string) {
+  public static postAtFormat(postAt?: string): string {
     if (!postAt) {
       return '3 Hours Pregame';
     }
@@ -49,5 +29,25 @@ export default class Subreddit extends Record {
 
     // Bad format, default back to 3 hours pregame
     return '3 Hours Pregame';
+  }
+
+  public path(options?: { [s: string]: any }): string {
+    return subredditPath(this.id, options);
+  }
+
+  public extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+    super.extractFromData(data);
+
+    this.id = data.id;
+    this.abbreviation = data.abbreviation;
+    this.account = data.account;
+    this.name = data.name;
+    this.options = data.options;
+
+    if (data.templates) {
+      this.templates = Template.buildList(data.templates);
+    }
+
+    return data;
   }
 }

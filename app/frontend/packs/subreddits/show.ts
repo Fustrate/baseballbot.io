@@ -1,5 +1,5 @@
 import GenericPage from '@fustrate/rails/dist/js/GenericPage';
-import { startCase } from 'lodash/string';
+import startCase from 'lodash/startCase';
 import { linkTo } from '@fustrate/rails/dist/js/utilities';
 
 import BaseballBot from 'js/baseballbot';
@@ -27,23 +27,23 @@ class ShowSubreddit extends GenericPage {
   protected refreshSettings(): void {
     const listItems = [];
 
-    if (this.subreddit.options.sidebar && this.subreddit.options.sidebar.enabled) {
+    if (this.subreddit.options.sidebar?.enabled) {
       listItems.push('<li>Hourly Sidebar Updates</li>');
     }
 
-    if (this.subreddit.options.gameThreads && this.subreddit.options.gameThreads.enabled) {
+    if (this.subreddit.options.gameThreads?.enabled) {
       const { postAt } = this.subreddit.options.gameThreads;
 
       listItems.push(`<li>Game Threads ${Subreddit.postAtFormat(postAt)}</li>`);
     }
 
-    if (this.subreddit.options.pregame && this.subreddit.options.pregame.enabled) {
+    if (this.subreddit.options.pregame?.enabled) {
       const { postAt } = this.subreddit.options.pregame;
 
       listItems.push(`<li>Pregame Threads ${Subreddit.postAtFormat(postAt)}</li>`);
     }
 
-    if (this.subreddit.options.postgame && this.subreddit.options.postgame.enabled) {
+    if (this.subreddit.options.postgame?.enabled) {
       listItems.push('<li>Postgame Threads</li>');
     }
 
@@ -52,7 +52,7 @@ class ShowSubreddit extends GenericPage {
 
   protected refreshTemplates(): void {
     const listItems = Template.buildList(this.subreddit.templates)
-      .map(template => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
+      .map((template) => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
 
     this.fields.templates.innerHTML = listItems.join('');
   }

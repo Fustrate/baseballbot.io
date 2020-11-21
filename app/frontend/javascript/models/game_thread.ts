@@ -17,11 +17,11 @@ export default class GameThread extends Record {
   public subreddit: Subreddit;
   public title: string;
 
-  path(options?: { [s: string]: any }): string {
+  public path(options?: { [s: string]: any }): string {
     return gameThreadPath(this.id, options);
   }
 
-  extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+  public extractFromData(data: { [s: string]: any }): { [s: string]: any } {
     super.extractFromData(data);
 
     this.id = data.id;

@@ -9,11 +9,11 @@ export default class Template extends Record {
   public body: string;
   public type: string;
 
-  path(options?: { [s: string]: any }): string {
+  public path(options?: { [s: string]: any }): string {
     return templatePath(this.id, options);
   }
 
-  extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+  public extractFromData(data: { [s: string]: any }): { [s: string]: any } {
     super.extractFromData(data);
 
     this.id = data.id;
