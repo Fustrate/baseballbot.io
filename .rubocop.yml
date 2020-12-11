@@ -20,23 +20,11 @@ Rails:
 # Coding Style
 #
 
-Layout/FirstArrayElementIndentation:
-  EnforcedStyle: consistent
-
-Layout/FirstHashElementIndentation:
-  EnforcedStyle: consistent
-
-Layout/LineLength:
-  Max: 100
-  Exclude:
-    - 'config/**/*.rb'
-
+# 2 space indentation is preferred over aligning the dots.
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-Layout/MultilineMethodCallBraceLayout:
-  EnforcedStyle: new_line
-
+# Prefer `def method_name\nend` over `def method_name; end`
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
@@ -44,6 +32,7 @@ Style/EmptyMethod:
 # Disabled Cops
 #
 
+# The puma.rb file doesn't need to have the executable bit set.
 Lint/ScriptPermission:
   Exclude:
     - 'config/puma.rb'
