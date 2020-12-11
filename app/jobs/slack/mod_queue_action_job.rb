@@ -34,22 +34,20 @@ module Slack
       https.use_ssl = true
 
       req = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
-      req.body = modified_message.to_json
+      req.body = modified_message_json
 
       res = https.request(req)
 
-      return if res.code.to_i == 200
-
-      raise "Invalid response code: #{res.code}"
+      raise "Invalid response code: #{res.code}" unless res.code.to_i == 200
     end
 
-    def modified_message
+    def modified_message_json
       message = @payload['original_message']
 
       message['attachments'][-1].delete 'actions'
       message['attachments'] << { text: text_for_action }
 
-      message
+      message.to_json
     end
 
     def text_for_action

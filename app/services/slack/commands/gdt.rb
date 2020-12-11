@@ -5,6 +5,17 @@ module Slack
     class GDT < ApplicationService
       POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
+      MODAL_RESPONSE_ACCESSORY = {
+        type: 'static_select',
+        action_id: 'add_game',
+        placeholder: { type: 'plain_text', text: 'Select an item', emoji: true },
+        confirm: {
+          title: { type: 'plain_text', text: 'Are you sure you want to add this game?' },
+          confirm: { type: 'plain_text', text: 'Yes, add it' },
+          deny: { type: 'plain_text', text: 'Nevermind' }
+        }
+      }.freeze
+
       def call
         command, args = params[:text].split(' ', 2)
 
@@ -30,12 +41,9 @@ module Slack
         date = parse_date(args)
         options = game_options(date)
 
-        if options.none?
-          day = date.strftime('%-m/%-d/%y')
-          text_response "There were no games found on #{day}"
-        else
-          modal_response(date, options)
-        end
+        return modal_response(date, options) if options.any?
+
+        text_response "There were no games found on #{date.strftime('%-m/%-d/%y')}"
       end
 
       def game_option(game)
@@ -65,34 +73,8 @@ module Slack
           blocks: [
             {
               type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: 'Select a game to add:'
-              },
-              accessory: {
-                type: 'static_select',
-                action_id: 'add_game',
-                placeholder: {
-                  type: 'plain_text',
-                  text: 'Select an item',
-                  emoji: true
-                },
-                confirm: {
-                  title: {
-                    type: 'plain_text',
-                    text: 'Are you sure you want to add this game?'
-                  },
-                  confirm: {
-                    'type': 'plain_text',
-                    'text': 'Yes, add it'
-                  },
-                  deny: {
-                    type: 'plain_text',
-                    text: 'Nevermind'
-                  }
-                },
-                options: options
-              }
+              text: { type: 'mrkdwn', text: 'Select a game to add:' },
+              accessory: MODAL_RESPONSE_ACCESSORY.dup.merge(options: options)
             }
           ]
         }
@@ -124,9 +106,9 @@ module Slack
       def game_options(date)
         added = existing_game_pks(date)
 
-        scheduled_games(date)
-          .reject { |game| added.include?(game['gamePk']) || game_over?(game) }
-          .map { |game| game_option(game) }
+        scheduled_games(date).filter_map do |game|
+          game_option(game) unless added.include?(game['gamePk']) || game_over?(game)
+        end
       end
 
       def game_over?(game)
@@ -144,9 +126,7 @@ module Slack
       end
 
       def existing_game_pks(date)
-        subreddit.game_threads
-          .where('DATE(starts_at) = ?', date.to_date)
-          .pluck(:game_pk)
+        subreddit.game_threads.where('DATE(starts_at) = ?', date.to_date).pluck(:game_pk)
       end
 
       def parse_date(text)
@@ -156,10 +136,7 @@ module Slack
       end
 
       def api
-        @api ||= MLBStatsAPI::Client.new(
-          logger: Rails.logger,
-          cache: Rails.application.redis
-        )
+        @api ||= MLBStatsAPI::Client.new(logger: Rails.logger, cache: Rails.application.redis)
       end
     end
   end

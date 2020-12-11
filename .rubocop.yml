@@ -10,7 +10,7 @@ AllCops:
     - db/schema.rb
     - node_modules/**/*
   TargetRubyVersion: 2.7
-  TargetRailsVersion: 6.0
+  TargetRailsVersion: 6.1
   NewCops: enable
 
 Rails:
@@ -44,34 +44,22 @@ Style/EmptyMethod:
 # Disabled Cops
 #
 
-# False positive
-Lint/RedundantSplatExpansion:
+Lint/ScriptPermission:
   Exclude:
-    - 'app/views/**/*.jbuilder'
+    - 'config/puma.rb'
 
 # Rails by default ships with lines (and blocks) that are "too long".
 Metrics/BlockLength:
   Exclude:
     - 'config/**/*.rb'
-    - 'spec/**/*.rb'
-
-Metrics/AbcSize:
-  Enabled: false
 
 Rails/HelperInstanceVariable:
   Exclude:
     - 'app/helpers/*.rb'
 
+Rails/Output:
+  Exclude:
+    - 'config/puma.rb'
+
 Style/Documentation:
   Enabled: false
-
-# New Cops
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
