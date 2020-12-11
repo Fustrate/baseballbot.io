@@ -20,5 +20,6 @@
         "editor.rulers": [100]
     },
     "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+
+# The version of this file from Rails 6.1 causes an infinite loop with rbenv
 APP_ROOT = File.expand_path('..', __dir__)
 Dir.chdir(APP_ROOT) do
   begin

@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 ruby '2.7.2'
-gem 'rails', '~> 6.0.3'
+gem 'rails', '~> 6.1.0'
 
 gem 'pg'
 
@@ -30,7 +30,7 @@ gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
 # App Monitoring
 gem 'honeybadger', '~> 4.0'
-gem 'skylight'
+gem 'skylight', '>= 5.0.0.beta4'
 
 # Use ActiveStorage validations & variants
 gem 'active_storage_validations'
@@ -40,7 +40,7 @@ gem 'image_processing'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'bullet'
+  gem 'bullet', github: 'flyerhzm/bullet'
   gem 'guard-bundler', require: false
   gem 'guard-rails'
   gem 'guard-rspec', require: false
