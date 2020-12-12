@@ -16,14 +16,6 @@ GIT
       httparty (~> 0.18)
       moneta (~> 1.3)
 
-GIT
-  remote: https://github.com/flyerhzm/bullet.git
-  revision: dfd77088eb8c06f8876ced1dee8a0111d08c1378
-  specs:
-    bullet (6.1.0)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.11)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -107,6 +99,9 @@ GEM
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     builder (3.2.4)
+    bullet (6.1.2)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     capistrano (3.14.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -442,7 +437,7 @@ DEPENDENCIES
   authority
   better_errors
   binding_of_caller
-  bullet!
+  bullet
   capistrano (~> 3.11)
   capistrano-bundler
   capistrano-rails

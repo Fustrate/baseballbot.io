@@ -40,7 +40,7 @@ gem 'image_processing'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'bullet', github: 'flyerhzm/bullet'
+  gem 'bullet'
   gem 'guard-bundler', require: false
   gem 'guard-rails'
   gem 'guard-rspec', require: false

@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
+# Copyright (c) 2020 Valencia Management Group
+# All rights reserved.
+
 FILE_TEMPLATE = <<~TYPESCRIPT
   declare module 'js/routes' {
     export type RouteComponent = string | number | { id?: number};
 
     export type RouteOptionsComponent = string | number | string[] | number[] | boolean;
 
-    export type RouteOptions = {
-      format?: string;
+    export interface RouteOptions {
       [s: string]: RouteOptionsComponent;
-    };
+      format?: string;
+    }
 
     %<routes>s
   }
@@ -26,7 +29,7 @@ class RouteDefinitionBuilder
     @typescript_definitions = {}
 
     # Ensure routes are loaded. If they're not, load them.
-    application.reload_routes!
+    Rails.application.reload_routes!
 
     generate_information
 
@@ -34,23 +37,20 @@ class RouteDefinitionBuilder
       format(ROUTE_TEMPLATE, name: name, parameters: parameters)
     end
 
-    format(
-      FILE_TEMPLATE,
-      routes: definitions.join("\n  ")
-    )
+    format FILE_TEMPLATE, routes: definitions.join("\n  ")
   end
 
   def generate!
-    # Some libraries like Devise do not yet loaded their routes so we will wait
-    # until initialization process finish
+    # Some libraries like Devise do not yet loaded their routes so we will wait until initialization
+    # process finish
     # https://github.com/railsware/js-routes/issues/7
     Rails.configuration.after_initialize do
       file_path = Rails.root.join('app/frontend/routes.d.ts')
 
       content = generate
 
-      # We don't need to rewrite file if it already exist and have same content.
-      # It helps asset pipeline or webpack understand that file wasn't changed.
+      # We don't need to rewrite file if it already exist and have same content. It helps asset
+      # pipeline or webpack understand that file wasn't changed.
       next if File.exist?(file_path) && File.read(file_path) == content
 
       File.write(file_path, content)
@@ -59,16 +59,8 @@ class RouteDefinitionBuilder
 
   protected
 
-  def application
-    Rails.application
-  end
-
-  def named_routes
-    application.routes.named_routes.to_a
-  end
-
   def generate_information
-    named_routes.sort_by(&:first).flat_map do |_, route|
+    Rails.application.routes.named_routes.to_a.sort_by(&:first).flat_map do |_, route|
       build_js(route)
 
       mounted_app_routes(route)
@@ -90,8 +82,8 @@ class RouteDefinitionBuilder
   end
 
   def get_app_from_route(route)
-    # rails engine in Rails 4.2 use additional
-    # ActionDispatch::Routing::Mapper::Constraints, which contain app
+    # Rails engines in Rails 4.2 use additional ActionDispatch::Routing::Mapper::Constraints, which
+    # contain the engine's app.
     if route.app.respond_to?(:app) && route.app.respond_to?(:constraints)
       route.app.app
     else

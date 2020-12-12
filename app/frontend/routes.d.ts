@@ -4,8 +4,8 @@ declare module 'js/routes' {
   export type RouteOptionsComponent = string | number | string[] | number[] | boolean;
 
   export interface RouteOptions {
-    format?: string;
     [s: string]: RouteOptionsComponent;
+    format?: string;
   }
 
   export function accountsAuthenticatePath(options?: RouteOptions): string;
@@ -20,6 +20,7 @@ declare module 'js/routes' {
   export function logInPath(options?: RouteOptions): string;
   export function newGameThreadPath(options?: RouteOptions): string;
   export function railsBlobRepresentationPath(signedBlobId: RouteComponent, variationKey: RouteComponent, filename: RouteComponent, options?: RouteOptions): string;
+  export function railsBlobRepresentationProxyPath(signedBlobId: RouteComponent, variationKey: RouteComponent, filename: RouteComponent, options?: RouteOptions): string;
   export function railsDirectUploadsPath(options?: RouteOptions): string;
   export function railsDiskServicePath(encodedKey: RouteComponent, filename: RouteComponent, options?: RouteOptions): string;
   export function railsInfoPath(options?: RouteOptions): string;
@@ -27,6 +28,7 @@ declare module 'js/routes' {
   export function railsInfoRoutesPath(options?: RouteOptions): string;
   export function railsMailersPath(options?: RouteOptions): string;
   export function railsServiceBlobPath(signedId: RouteComponent, filename: RouteComponent, options?: RouteOptions): string;
+  export function railsServiceBlobProxyPath(signedId: RouteComponent, filename: RouteComponent, options?: RouteOptions): string;
   export function rootPath(options?: { [s: string]: RouteOptionsComponent }): string;
   export function sidekiqWebPath(options?: { [s: string]: RouteOptionsComponent }): string;
   export function signOutPath(options?: RouteOptions): string;
