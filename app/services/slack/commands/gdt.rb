@@ -3,7 +3,7 @@
 module Slack
   module Commands
     class GDT < ApplicationService
-      POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
+      POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
 
       MODAL_RESPONSE_ACCESSORY = {
         type: 'static_select',

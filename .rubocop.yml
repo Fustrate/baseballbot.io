@@ -9,8 +9,8 @@ AllCops:
     - db/**/*
     - db/schema.rb
     - node_modules/**/*
-  TargetRubyVersion: 2.7
-  TargetRailsVersion: 6.1
+  # Always enable new cops, disabling manually when they don't fit.
+  # EnabledByDefault: true
   NewCops: enable
 
 Rails:
