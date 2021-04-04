@@ -64,10 +64,8 @@ module Slack
       setting = subreddit.options.dig('game_threads', 'post_at')
 
       case setting
-      when /\A-?\d{1,2}\z/
-        starts_at - Regexp.last_match[0].to_i.abs * 3600
-      when /(1[012]|\d)(:\d\d|) ?(am|pm)/i
-        constant_time(Regexp.last_match)
+      when /\A-?\d{1,2}\z/                 then starts_at - Regexp.last_match[0].to_i.abs * 3600
+      when /(1[012]|\d)(:\d\d|) ?(am|pm)/i then constant_time(Regexp.last_match)
       else
         # Default to 3 hours before game time
         starts_at - 3 * 3600
@@ -96,10 +94,8 @@ module Slack
     end
 
     def starts_at
-      @starts_at ||= begin
-        Time.zone.parse(game_feed.dig('gameData', 'datetime', 'dateTime'))
-          .in_time_zone(ActiveSupport::TimeZone.new('America/Los_Angeles'))
-      end
+      @starts_at ||= Time.zone.parse(game_feed.dig('gameData', 'datetime', 'dateTime'))
+        .in_time_zone(ActiveSupport::TimeZone.new('America/Los_Angeles'))
     end
 
     def api
