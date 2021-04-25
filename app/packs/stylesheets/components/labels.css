@@ -1,0 +1,72 @@
+.label {
+	background-color: #0b2d4d;
+	color: #fff;
+	text-shadow: 0 1px 1px #030e17;
+	border-radius: 3px;
+	display: inline-block;
+	font-size: .75rem;
+	line-height: 1;
+	margin-bottom: inherit;
+	padding: .375rem .5rem;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+
+	&.fw,
+	td.status:last-child &:only-child {
+		display: block;
+	}
+
+	&.round {
+		border-radius: 1000px;
+	}
+
+	&.sharp {
+		border-radius: 0;
+	}
+
+	&.bad,
+	&.danger,
+	&.inactive,
+	&.no {
+		background-color: #914141;
+		color: #fff;
+		text-shadow: 0 1px 1px #2c1414;
+	}
+
+	&.good,
+	&.success,
+	&.yes {
+		background-color: #70a854;
+		color: #fff;
+		text-shadow: 0 1px 1px #223219;
+	}
+
+	&.warning {
+		background-color: #b26620;
+		color: #fff;
+		text-shadow: 0 1px 1px #351f0a;
+	}
+
+	&.plain {
+		background-color: #eee;
+		color: #333;
+		text-shadow: 0 1px 1px #fafafa;
+		border: 1px solid #ddd;
+	}
+
+	&.no:before,
+	&.yes:before {
+		@mixin font-awesome regular;
+		padding-right: 3px;
+	}
+
+	&.no:before {
+		content: fa-var(times);
+	}
+
+	&.yes:before {
+		content: fa-var(check);
+	}
+}

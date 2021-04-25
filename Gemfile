@@ -9,7 +9,7 @@ gem 'pg'
 
 gem 'haml-rails'
 gem 'jbuilder', '~> 2.10'
-gem 'webpacker', '~> 5.0'
+gem 'webpacker', '6.0.0.beta.7'
 
 # Used to generate routes & i18n for the frontend
 gem 'i18n-js'

@@ -21,6 +21,13 @@ yarn-debug.log*
 .yarn-integrity
 .DS_Store
 /yarn-error.log
-/app/frontend/tsconfig.tsbuildinfo
+/app/packs/tsconfig.tsbuildinfo
 
 /config/credentials/*
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

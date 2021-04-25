@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-const environment = require('./environment');
+const { merge } = require('@rails/webpacker');
+const webpackConfig = require('./base');
 
-module.exports = environment.toWebpackConfig();
+module.exports = merge(webpackConfig, { target: 'web' });

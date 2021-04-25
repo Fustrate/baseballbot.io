@@ -1,0 +1,39 @@
+.has-dropdown {
+	&:after {
+		content: "\25BE";
+		padding-left: .5em;
+	}
+
+	+ .dropdown {
+		background: #fff;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		display: inline-block;
+		left: -9999px;
+		margin-bottom: 0;
+		position: absolute;
+		width: auto;
+		z-index: 1;
+	}
+
+	+ .dropdown a,
+	+ .dropdown span {
+		color: #000;
+		cursor: pointer;
+		display: block;
+		font-size: .9rem;
+		padding: 3px 10px;
+	}
+
+	+ .dropdown a:hover,
+	+ .dropdown span:hover {
+		background: #f2f2f2;
+	}
+
+	+ .dropdown a.divider,
+	+ .dropdown span.divider {
+		border-top: 1px solid #ccc;
+		margin: 3px 0;
+		padding: 0;
+	}
+}

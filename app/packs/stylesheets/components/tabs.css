@@ -1,0 +1,67 @@
+ul.tabs {
+	margin-bottom: 0;
+
+	> li {
+		display: inline;
+
+		a {
+			-webkit-appearance: none;
+			border: 0;
+			border-radius: 0;
+			cursor: pointer;
+			display: inline-block;
+			font-size: .75rem;
+			font-weight: 400;
+			line-height: normal;
+			margin: 0 0 .3125rem;
+			position: relative;
+			text-align: center;
+			transition: background .2s linear;
+			padding: .625rem 1.125rem .6875rem;
+			background: #fff;
+			text-shadow: 0 1px 1px #fff;
+
+			&:active,
+			&:hover {
+				background: #d4d4d4;
+				color: #333;
+			}
+
+			&.active {
+				background: #0b2d4d;
+				color: #fff;
+				text-shadow: 0 1px 1px #02070c;
+			}
+		}
+	}
+}
+
+.tabs-content {
+	.content {
+		display: none;
+		overflow: hidden;
+		padding: 0 .625rem;
+
+		&.active {
+			display: block;
+		}
+
+		&.panel {
+			padding: 1rem 1.25rem;
+		}
+	}
+
+	&.panel {
+		padding: 0 .625rem;
+
+		.content {
+			padding: 0;
+		}
+	}
+}
+
+@media only screen and (max-width: 48em) {
+	ul.tabs > li a {
+		padding: .375rem 1.125rem .4375rem;
+	}
+}

@@ -1,23 +1,35 @@
 {
     "[haml]": {
         "editor.tabSize": 2,
-        "editor.rulers": [100]
+        "editor.rulers": [120]
     },
     "[javascript]": {
         "editor.tabSize": 2,
-        "editor.rulers": [100]
+        "editor.rulers": [120]
+    },
+    "[postcss]": {
+        "editor.autoIndent": "full",
+        "editor.colorDecorators": true,
+        "editor.detectIndentation": true,
+        "editor.renderWhitespace": "boundary",
+        "editor.rulers": [120],
+        "editor.tabSize": 4,
     },
     "[ruby]": {
         "editor.tabSize": 2,
-        "editor.rulers": [100]
+        "editor.rulers": [120]
     },
-    "[scss]": {
+    "[typescript]": {
+        "editor.rulers": [120],
         "editor.tabSize": 2,
-        "editor.rulers": [100]
     },
     "[yaml]": {
         "editor.tabSize": 2,
-        "editor.rulers": [100]
+        "editor.rulers": [120]
+    },
+    "files.associations": {
+        "*.css": "postcss",
+        "tslint.json": "jsonc",
     },
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,

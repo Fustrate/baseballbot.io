@@ -1,6 +1,0 @@
-scss_files: 'app/frontend/stylesheets/**/*.scss'
-
-linters:
-  Indentation:
-    severity: warning
-    width: 2

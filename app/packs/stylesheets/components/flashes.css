@@ -1,0 +1,36 @@
+#flashes {
+	bottom: 0;
+	left: 0;
+	padding: .15rem .15rem 0;
+	position: fixed;
+	width: 100%;
+	z-index: 9900;
+
+	.flash {
+		background: #0b2d4d;
+		border: 1px solid #165897;
+		text-shadow: 0 1px 3px #061727;
+		box-shadow: 0 0 8px hsla(0, 0%, 100%, .4);
+		color: #fff;
+		font-size: 1.25em;
+		line-height: 40px;
+		margin: 0 0 .15rem;
+		min-height: 40px;
+		opacity: .98;
+		padding: .2em 0;
+		position: relative;
+		text-align: center;
+
+		&.error {
+			background: #914141;
+			border: 1px solid #b55959;
+			text-shadow: 0 1px 3px #492121;
+		}
+
+		&.success {
+			background: #70a854;
+			border: 1px solid #8cba75;
+			text-shadow: 0 1px 3px #38542a;
+		}
+	}
+}

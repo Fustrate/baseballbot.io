@@ -7,13 +7,12 @@ module.exports = {
     'airbnb-base',
     'plugin:lodash/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:sonarjs/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     allowImportExportEverywhere: true,
   },
-  plugins: ['import', 'lodash', '@typescript-eslint', 'sonarjs'],
+  plugins: ['import', 'lodash', '@typescript-eslint'],
   rules: {
     /*
     * Disabled Rules
@@ -43,8 +42,6 @@ module.exports = {
     // This is just ridiculous - can't even assign to a property of a parameter
     'no-param-reassign': 'off',
 
-    'sonarjs/no-duplicate-string': 'off',
-
     // A few third party packages use snake case
     '@typescript-eslint/camelcase': 'off',
 
@@ -58,7 +55,7 @@ module.exports = {
     'import/extensions': ['error', 'ignorePackages', { js: 'never', ts: 'never' }],
 
     // Ignore class definition lines that are too long
-    'max-len': ['error', 100, 2, {
+    'max-len': ['error', 120, 2, {
       ignorePattern: '^export default class.*implements',
       ignoreUrls: true,
       ignoreComments: false,
@@ -104,13 +101,16 @@ module.exports = {
       'babel-module': {},
       typescript: {
         alwaysTryTypes: true,
-        project: './app/frontend',
+        project: './app/packs',
       },
     },
   },
   overrides: [
     {
-      files: ['app/frontend/stylesheets/variables.js'],
+      files: [
+        'app/packs/stylesheets/variables.js',
+        'lib/postcss/**/*.js',
+      ],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,

@@ -45,7 +45,7 @@ class RouteDefinitionBuilder
     # process finish
     # https://github.com/railsware/js-routes/issues/7
     Rails.configuration.after_initialize do
-      file_path = Rails.root.join('app/frontend/routes.d.ts')
+      file_path = Rails.root.join('app/packs/routes.d.ts')
 
       content = generate
 

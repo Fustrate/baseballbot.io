@@ -4,7 +4,7 @@
   %title Baseballbot Gameday
   %meta{ charset: 'utf-8' }
   %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
-  = stylesheet_pack_tag 'scoreboard', media: :all
+  = stylesheet_pack_tag 'application', 'scoreboard', media: :all
 %body
   %nav.toolbar{ role: 'navigation' }
     = link_to 'Baseballbot', root_path, class: 'branding'
@@ -14,8 +14,8 @@
       = link_to 'Subreddits', subreddits_path
       = link_to 'Gameday', gameday_path
 
-  %section.game-cards
+  %section.game-cards{ 'data-field': 'cardsContainer' }
 
-  .loading
+  %div{ 'data-field': 'loadingIndicator' }
 
-= javascript_packs_with_chunks_tag 'scoreboard'
+= javascript_pack_tag 'scoreboard'

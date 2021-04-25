@@ -1,0 +1,35 @@
+$toolbar-bg: #0b2d4d;
+$toolbar-color: #fff;
+
+.toolbar {
+	background-color: $toolbar-bg;
+	background-image: linear-gradient(to right, color-mod($toolbar-bg lightness(25%)), color-mod($toolbar-bg lightness(15%)));
+	border-bottom: 2px solid color-mod($toolbar-bg lightness(50%));
+	height: 60px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+
+	a {
+		color: $toolbar-color;
+		height: 40px;
+		line-height: 40px;
+		margin: 10px 0;
+	}
+
+	.branding {
+		font-size: 1.4rem;
+		padding: 0 20px;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, .8);
+	}
+
+	.branding,
+	.main-menu {
+		display: inline-block;
+	}
+
+	.main-menu a {
+		color: color-mod($toolbar-bg saturation(-10%) lightness(85%));
+		display: inline-block;
+		font-size: 1rem;
+		padding: 0 10px;
+	}
+}

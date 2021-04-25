@@ -1,0 +1,152 @@
+.alert-box {
+	background-color: #eaeaea;
+	color: #333;
+	text-shadow: 0 1px 1px #f9f9f9;
+	border: 1px solid #c9c9c9;
+	display: block;
+	font-size: .875rem;
+	font-weight: 400;
+	margin-bottom: 1.25rem;
+	padding: .5rem 1.5rem .5rem .875rem;
+	position: relative;
+	transition: opacity .3s ease-out;
+
+	a,
+	a:hover {
+		color: #333;
+		text-decoration: underline;
+	}
+
+	.panel &:last-child {
+		margin-bottom: 0;
+	}
+
+	li,
+	p {
+		font-size: .875rem;
+	}
+
+	> :last-child {
+		margin-bottom: 0;
+	}
+
+	a.close {
+		color: #333;
+		font-size: 1.375rem;
+		line-height: 0;
+		margin-top: -.6875rem;
+		opacity: .6;
+		padding: 9px 6px 4px;
+		position: absolute;
+		right: .25rem;
+		text-decoration: none !important;
+		top: 50%;
+
+		&:focus,
+		&:hover {
+			opacity: .8;
+		}
+	}
+
+	&.radius {
+		border-radius: 3px;
+	}
+
+	&.round {
+		border-radius: 8px;
+	}
+
+	&.plain {
+		background-color: #f1f1f1;
+		border-color: #d0d0d0;
+		color: #333;
+		text-shadow: 0 1px 1px #fbfbfb;
+
+		a,
+		a:hover {
+			color: #333;
+			text-decoration: underline;
+		}
+	}
+
+	&.birthday,
+	&.good,
+	&.success {
+		background-color: #70a854;
+		border-color: #609048;
+		color: #fff;
+		text-shadow: 0 1px 1px #223219;
+
+		a,
+		a:hover {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+
+	&.alert {
+		background-color: #b04f4f;
+		border-color: #974444;
+		color: #fff;
+		text-shadow: 0 1px 1px #351818;
+
+		a,
+		a:hover {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+
+	&.secondary {
+		background-color: #e7e7e7;
+		border-color: #c7c7c7;
+		color: #333;
+		text-shadow: 0 1px 1px #f8f8f8;
+
+		a,
+		a:hover {
+			color: #333;
+			text-decoration: underline;
+		}
+	}
+
+	&.warning {
+		background-color: #b26620;
+		border-color: #99581c;
+		color: #fff;
+		text-shadow: 0 1px 1px #351f0a;
+
+		a,
+		a:hover {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+
+	&.danger,
+	&.error {
+		background-color: #914141;
+		border-color: #7d3838;
+		color: #fff;
+		text-shadow: 0 1px 1px #2c1414;
+
+		a,
+		a:hover {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+
+	&.info {
+		background-color: #d9edf7;
+		border-color: #a3d4ec;
+		color: #333;
+		text-shadow: 0 1px 1px #f4fafd;
+
+		a,
+		a:hover {
+			color: #333;
+			text-decoration: underline;
+		}
+	}
+}

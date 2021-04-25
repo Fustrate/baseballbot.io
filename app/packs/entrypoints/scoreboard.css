@@ -1,0 +1,361 @@
+.loading {
+	bottom: 1vw;
+	color: #91abc4;
+	position: fixed;
+	right: 1vw;
+	text-align: center;
+
+	&:before {
+		@mixin font-awesome regular spin;
+		content: fa-var(spinner);
+		margin-right: 3px;
+		font-size: 3vw;
+	}
+}
+
+.game-cards {
+	align-items: flex-start;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+
+	> div {
+		flex-grow: 1;
+		flex-basis: 0;
+		margin: .8rem;
+		max-width: 24rem;
+		min-width: 16rem;
+	}
+
+	.card-spacer {
+		margin: 0 .8rem;
+	}
+
+	.game-card {
+		background: #fff;
+		border-radius: 6px;
+		box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2);
+		cursor: pointer;
+		transform-origin: center;
+		transition: .18s ease-in-out;
+
+		&:hover {
+			transform: scale(1.05);
+		}
+
+		.away-team,
+		.home-team {
+			float: left;
+			font-size: 1.6rem;
+			padding: .75rem;
+			position: relative;
+			width: 50%;
+
+			&:after {
+				border-style: solid;
+				border-width: 24px 4px;
+				content: " ";
+				position: absolute;
+				top: 0;
+				width: 0;
+			}
+		}
+
+		.away-team {
+			border-top-left-radius: 6px;
+
+			&:after {
+				border-color: transparent #fff #fff transparent;
+				right: 0;
+			}
+
+			.runs {
+				float: right;
+				padding-right: .25rem;
+			}
+		}
+
+		.home-team {
+			border-top-right-radius: 6px;
+			text-align: right;
+
+			&:after {
+				border-color: #fff transparent transparent #fff;
+				left: 0;
+			}
+
+			.name {
+				float: right;
+			}
+
+			.runs {
+				float: left;
+				padding-left: .25rem;
+			}
+		}
+
+		.game-info {
+			align-items: center;
+			border-radius: 0 0 6px 6px;
+			clear: both;
+			display: flex;
+			justify-content: space-between;
+			padding: .25rem .75rem;
+		}
+
+		.outs {
+			color: #9d1014;
+			display: inline-block;
+			font-size: 1.5rem;
+
+			.out {
+				display: inline-block;
+
+				&:before {
+					content: "●";
+				}
+			}
+		}
+
+		.runners {
+			display: inline-block;
+			height: 1.5rem;
+			margin-top: .375rem;
+			position: relative;
+			transform: rotate(45deg);
+			transform-origin: center;
+			width: 1.5rem;
+
+			.first,
+			.second,
+			.third {
+				background: #ddd;
+				height: .7rem;
+				position: absolute;
+				width: .7rem;
+			}
+
+			.first {
+				right: 0;
+				top: 0;
+			}
+
+			.second {
+				left: 0;
+				top: 0;
+			}
+
+			.third {
+				bottom: 0;
+				left: 0;
+			}
+
+			.runner {
+				background: #f0c11c;
+			}
+		}
+
+		.la {
+			background: #002f6c;
+			color: #fff;
+		}
+
+		.col {
+			background: #24135e;
+			color: #cacdcd;
+		}
+
+		.ari {
+			background: #a71930;
+			color: #dbceac;
+		}
+
+		.sf {
+			background: #000;
+			color: #fb5b1f;
+		}
+
+		.sd {
+			background: #483727;
+			color: #fec325;
+		}
+
+		.atl {
+			background: #002855;
+			color: #ba0c2f;
+		}
+
+		.was {
+			background: #ba122b;
+			color: #fff;
+		}
+
+		.nym {
+			background: #002d70;
+			color: #fc4c00;
+		}
+
+		.phi {
+			background: #ba0c2e;
+			color: #fff;
+		}
+
+		.mia {
+			background: #000;
+			color: #00a3e0;
+		}
+
+		.bal {
+			background: #fc4c00;
+			color: #000;
+		}
+
+		.bos {
+			background: #c60c30;
+			color: #024;
+		}
+
+		.nyy {
+			background: #1c2841;
+			color: #fff;
+		}
+
+		.tor {
+			background: #003da5;
+			color: #fff;
+		}
+
+		.tb {
+			background: #79bdee;
+			color: gold;
+		}
+
+		.ana {
+			background: #ba032e;
+			color: #fff;
+		}
+
+		.hou {
+			background: #072854;
+			color: #ff7f00;
+		}
+
+		.tex {
+			background: #bd1021;
+			color: #003279;
+		}
+
+		.sea {
+			background: #1c8b85;
+			color: silver;
+		}
+
+		.oak {
+			background: #00483a;
+			color: #ffbe00;
+		}
+
+		.chc {
+			background: #002f6c;
+			color: #c8102e;
+		}
+
+		.cin {
+			background: #ba0c2f;
+			color: #fff;
+		}
+
+		.stl {
+			background: #c41e3a;
+			color: #0a2252;
+		}
+
+		.mil {
+			background: #012143;
+			color: #c4953b;
+		}
+
+		.pit {
+			background: #000;
+			color: #ffc72b;
+		}
+
+		.kc {
+			background: #74b4fa;
+			color: #fff;
+		}
+
+		.det {
+			background: #0c2340;
+			color: #fa4614;
+		}
+
+		.min {
+			background: #0c2341;
+			color: #ba0c2e;
+		}
+
+		.cle {
+			background: #d50032;
+			color: #0c2340;
+		}
+
+		.cws {
+			background: #000;
+			color: #fff;
+		}
+	}
+}
+
+.modal {
+	background: rgba(0, 0, 0, .225);
+
+	.modal-content {
+		border: 0;
+		padding: 0;
+
+		section {
+			background: #fff;
+			border: 1px solid #666;
+			margin-bottom: .5rem;
+			padding: .75rem;
+
+			&:first-child {
+				border-top-width: 0;
+			}
+
+			&:last-child {
+				border-bottom-width: 0;
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+table.linescore {
+	margin: 0;
+
+	thead th {
+		text-align: center;
+		border-bottom: none;
+	}
+
+	tbody {
+		td,
+		th {
+			border: 1px solid #ddd;
+
+			&:not(:first-child) {
+				text-align: center;
+			}
+
+			&.did-not-play {
+				color: #ccc;
+
+				&:after {
+					content: "X";
+				}
+			}
+		}
+	}
+}
