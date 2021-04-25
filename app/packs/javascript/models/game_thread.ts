@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { Record } from '@fustrate/rails';
 
 import { gameThreadPath, gameThreadsPath } from 'js/routes';
@@ -29,9 +29,9 @@ export default class GameThread extends Record {
 
   public id: number;
   public gamePk: number;
-  public postAt: moment.Moment;
+  public postAt: Moment;
   public postId: string;
-  public startsAt: moment.Moment;
+  public startsAt: Moment;
   public status: string;
   public subreddit: Subreddit;
   public title: string;

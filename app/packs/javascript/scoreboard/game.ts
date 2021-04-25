@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
@@ -14,7 +14,7 @@ class Game {
   public linescore: { [s: string]: any };
   public status: { [s: string]: any };
   public gamePk: number;
-  public gameDate: moment.Moment;
+  public gameDate: Moment;
 
   public constructor(data: { [s: string]: any }) {
     this.data = data;

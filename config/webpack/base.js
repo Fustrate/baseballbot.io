@@ -39,7 +39,7 @@ module.exports = merge(webpackConfig, {
   },
   plugins: [
     new ForkTSCheckerWebpackPlugin({ typescript: { configFile: 'app/packs/tsconfig.json' } }),
-    new IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
   ],
   resolve: {
     extensions: ['.css'],
