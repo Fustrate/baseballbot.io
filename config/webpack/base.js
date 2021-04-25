@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { webpackConfig, merge } = require('@rails/webpacker');
-// const ForkTSCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTSCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { IgnorePlugin } = require('webpack'); // eslint-disable-line import/no-extraneous-dependencies
 
 webpackConfig.module.rules.map((module) => {
@@ -31,8 +31,14 @@ webpackConfig.module.rules.push({
 });
 
 module.exports = merge(webpackConfig, {
+  performance: {
+    hints: false,
+    maxEntrypointSize: 400000,
+    // Don't warn about maps and fonts
+    assetFilter: (assetFilename) => !(/\.(?:map|ttf|eot|svg|gz)$/.test(assetFilename)),
+  },
   plugins: [
-    // new ForkTSCheckerWebpackPlugin({ typescript: { configFile: 'app/packs/tsconfig.json' } }),
+    new ForkTSCheckerWebpackPlugin({ typescript: { configFile: 'app/packs/tsconfig.json' } }),
     new IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
   resolve: {

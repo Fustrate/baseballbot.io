@@ -40,19 +40,22 @@ function populateGameThreadTitle(cell: HTMLTableCellElement, gameThread: GameThr
   cell.innerHTML = linkTo(`${redditIcon} ${gameThread.title}`, `http://redd.it/${gameThread.postId}`);
 }
 
-class GameThreadsTable extends GenericTable<GameThread> {
-  protected static blankRow = `
-    <tr>
-      <td class="game-pk"></td>
-      <td class="title"></td>
-      <td class="subreddit"></td>
-      <td class="post-at no-wrap"></td>
-      <td class="starts-at no-wrap"></td>
-      <td class="status"></td>
-    </tr>`;
+const blankRow = `
+  <tr>
+    <td class="game-pk"></td>
+    <td class="title"></td>
+    <td class="subreddit"></td>
+    <td class="post-at no-wrap"></td>
+    <td class="starts-at no-wrap"></td>
+    <td class="status"></td>
+  </tr>`;
 
+class GameThreadsTable extends GenericTable<GameThread> {
   public constructor() {
-    super('table.game-threads', {});
+    super('table.game-threads', {
+      blankRow,
+      noRecordsMessage: 'No game threads found.',
+    });
   }
 
   public async reloadTable(): Promise<void> {
