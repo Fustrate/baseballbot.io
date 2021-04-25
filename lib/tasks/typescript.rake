@@ -41,16 +41,15 @@ class RouteDefinitionBuilder
   end
 
   def generate!
-    # Some libraries like Devise do not yet loaded their routes so we will wait until initialization
-    # process finish
+    # Some libraries like Devise do not yet loaded their routes so we will wait until initialization process finish
     # https://github.com/railsware/js-routes/issues/7
     Rails.configuration.after_initialize do
       file_path = Rails.root.join('app/packs/routes.d.ts')
 
       content = generate
 
-      # We don't need to rewrite file if it already exist and have same content. It helps asset
-      # pipeline or webpack understand that file wasn't changed.
+      # We don't need to rewrite file if it already exist and have same content. It helps asset pipeline or webpack
+      # understand that file wasn't changed.
       next if File.exist?(file_path) && File.read(file_path) == content
 
       File.write(file_path, content)
@@ -68,26 +67,14 @@ class RouteDefinitionBuilder
   end
 
   def mounted_app_routes(route)
-    rails_engine_app = get_app_from_route(route)
-
-    some_conditional = rails_engine_app.respond_to?(:superclass) &&
-                       rails_engine_app.superclass == Rails::Engine &&
+    some_conditional = route.app.respond_to?(:superclass) &&
+                       route.app.superclass == Rails::Engine &&
                        !route.path.anchored
 
     return [] unless some_conditional
 
-    rails_engine_app.routes.named_routes.map do |_, engine_route|
+    route.app.routes.named_routes.map do |_, engine_route|
       build_js(engine_route, route)
-    end
-  end
-
-  def get_app_from_route(route)
-    # Rails engines in Rails 4.2 use additional ActionDispatch::Routing::Mapper::Constraints, which
-    # contain the engine's app.
-    if route.app.respond_to?(:app) && route.app.respond_to?(:constraints)
-      route.app.app
-    else
-      route.app
     end
   end
 
