@@ -107,13 +107,19 @@ module.exports = {
   },
   overrides: [
     {
-      files: [
-        'app/packs/stylesheets/variables.js',
-        'lib/postcss/**/*.js',
-      ],
+      files: ['app/packs/stylesheets/variables.js'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,
+        '@typescript-eslint/no-var-requires': 0,
+      },
+    },
+    {
+      files: [
+        'config/webpack/**/*.js',
+        'lib/postcss/**/*.js',
+      ],
+      rules: {
         '@typescript-eslint/no-var-requires': 0,
       },
     },
