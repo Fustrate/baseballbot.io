@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment';
+import { DateTime } from 'luxon';
 import { Record } from '@fustrate/rails';
 
 import { gameThreadPath, gameThreadsPath } from 'js/routes';
@@ -29,9 +29,9 @@ export default class GameThread extends Record {
 
   public id: number;
   public gamePk: number;
-  public postAt: Moment;
+  public postAt: DateTime;
   public postId: string;
-  public startsAt: Moment;
+  public startsAt: DateTime;
   public status: string;
   public subreddit: Subreddit;
   public title: string;
@@ -45,9 +45,9 @@ export default class GameThread extends Record {
 
     this.id = data.id;
     this.gamePk = data.gamePk;
-    this.postAt = moment(data.postAt);
+    this.postAt = DateTime.fromISO(data.postAt);
     this.postId = data.postId;
-    this.startsAt = moment(data.startsAt);
+    this.startsAt = DateTime.fromISO(data.startsAt);
     this.status = data.status;
     this.subreddit = Subreddit.build(data.subreddit);
     this.title = data.title;

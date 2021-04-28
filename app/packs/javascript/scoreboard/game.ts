@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment';
+import { DateTime } from 'luxon';
 
 const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
@@ -14,14 +14,14 @@ class Game {
   public linescore: { [s: string]: any };
   public status: { [s: string]: any };
   public gamePk: number;
-  public gameDate: Moment;
+  public gameDate: DateTime;
 
   public constructor(data: { [s: string]: any }) {
     this.data = data;
 
     this.teams = data.teams;
     this.gamePk = data.gamePk;
-    this.gameDate = moment(data.gameDate);
+    this.gameDate = DateTime.fromISO(data.gameDate);
 
     this.updateData(data);
   }

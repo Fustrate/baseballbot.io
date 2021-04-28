@@ -106,7 +106,7 @@ class GameCard {
   }
 
   protected gameStatus(): string {
-    const gameTime = this.game.gameDate.format('h:mm');
+    const gameTime = this.game.gameDate.toFormat('h:mm');
 
     if (['Preview', 'Scheduled', 'Pre-Game'].includes(this.game.status.detailedState)) {
       return gameTime;

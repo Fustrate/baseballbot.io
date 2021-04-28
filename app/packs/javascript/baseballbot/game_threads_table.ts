@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { GenericTable, PaginationData } from '@fustrate/rails';
 import { getCurrentPageJson } from '@fustrate/rails/ajax';
 import {
@@ -19,11 +19,11 @@ interface PaginatedResponse<T> extends PaginationData {
 const redditIcon = icon('reddit', 'brands');
 
 function statusLabel(gameThread: GameThread) {
-  if (moment().isAfter(gameThread.postAt) && gameThread.status === 'Future') {
+  if (gameThread.postAt < DateTime.now() && gameThread.status === 'Future') {
     return label('Error', 'fw game-thread');
   }
 
-  if (moment().isAfter(gameThread.startsAt) && gameThread.status === 'Posted') {
+  if (gameThread.startsAt < DateTime.now() && gameThread.status === 'Posted') {
     return label('Live', 'fw game-thread');
   }
 
