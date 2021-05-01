@@ -4,8 +4,8 @@ class ApplicationService
   # Lets us use `t` and `l` helpers.
   include ActionView::Helpers::TranslationHelper
 
-  def self.call(*parameters)
-    new.call(*parameters)
+  def self.call(...)
+    new.call(...)
   end
 
   protected
@@ -19,24 +19,23 @@ class ApplicationService
   end
 
   class LoadPage < self
-    DEFAULT_ORDER = nil
     DEFAULT_INCLUDES = nil
+    DEFAULT_JOINS = nil
+    DEFAULT_ORDER = nil
     RESULTS_PER_PAGE = 25
 
-    def call(page: nil, includes: nil, scope: nil, order: nil)
+    def call(page: nil, includes: nil, scope: nil, order: nil, joins: nil)
       (scope || default_scope)
-        .reorder(order || default_order)
-        .paginate(
-          page: (page || params[:page]),
-          per_page: self.class::RESULTS_PER_PAGE
-        )
         .includes(includes || self.class::DEFAULT_INCLUDES)
+        .joins(joins || self.class::DEFAULT_JOINS)
+        .reorder(order || default_order)
+        .paginate(page: (page || params[:page]), per_page: self.class::RESULTS_PER_PAGE)
     end
 
     protected
 
     def default_scope
-      raise '#default_scope not defined'
+      raise NotImplementedError, '#default_scope not defined'
     end
 
     def default_order
