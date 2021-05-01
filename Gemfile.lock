@@ -238,7 +238,7 @@ GEM
     mime-types-data (3.2021.0225)
     mini_magick (4.11.0)
     mini_mime (1.0.3)
-    mini_portile2 (2.5.0)
+    mini_portile2 (2.5.1)
     minitest (5.14.4)
     mock_redis (0.27.3)
       ruby2_keywords
@@ -359,14 +359,14 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.4.1)
       parser (>= 2.7.1.5)
-    rubocop-performance (1.11.0)
+    rubocop-performance (1.11.1)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.9.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 0.90.0, < 2.0)
-    rubocop-rspec (2.2.0)
+    rubocop-rspec (2.3.0)
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
@@ -391,9 +391,9 @@ GEM
       sidekiq (>= 3.0.0)
     skylight (5.1.0.beta)
       activesupport (>= 5.2.0)
-    sorcery (0.16.0)
+    sorcery (0.16.1)
       bcrypt (~> 3.1)
-      oauth (~> 0.4, >= 0.4.4)
+      oauth (~> 0.5, >= 0.5.5)
       oauth2 (~> 1.0, >= 0.8.0)
     spring (2.1.1)
     sprockets (4.0.2)
@@ -499,4 +499,4 @@ RUBY VERSION
    ruby 3.0.1p64
 
 BUNDLED WITH
-   2.2.15
+   2.2.16
