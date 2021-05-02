@@ -30,7 +30,7 @@ gem 'redd' # , git: 'https://github.com/avinashbot/redd.git'
 
 # App Monitoring
 gem 'honeybadger', '~> 4.0'
-gem 'skylight', '>= 5.0.0.beta4'
+gem 'skylight', '~> 5.0'
 
 # Use ActiveStorage validations & variants
 gem 'active_storage_validations'
