@@ -91,9 +91,6 @@ gem 'will_paginate', '~> 3.1'
 gem 'authority'
 gem 'sorcery'
 
-# Cron jobs
-gem 'whenever'
-
 gem 'chronic'
 gem 'redis'
 
