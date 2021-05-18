@@ -22,7 +22,7 @@ gem 'oj'
 gem 'fustrate-rails', github: 'Fustrate/fustrate-rails'
 
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.3'
 
 # Reddit interaction
 gem 'mlb_stats_api', github: 'Fustrate/mlb_stats_api'
