@@ -3,20 +3,20 @@
 source 'https://rubygems.org'
 
 ruby '3.0.1'
-gem 'rails', '~> 6.1.0'
+gem 'rails', '~> 6.1.3'
 
-gem 'pg'
+gem 'pg', '~> 1.2'
 
 gem 'haml-rails'
 gem 'jbuilder', '~> 2.10'
 gem 'webpacker', '6.0.0.beta.7'
 
 # Used to generate routes & i18n for the frontend
-gem 'i18n-js'
-gem 'js-routes', require: false
+gem 'i18n-js', '~> 3.8'
+gem 'js-routes', '~> 2.0', require: false
 
 # Faster json generation
-gem 'oj'
+gem 'oj', '~> 3.11'
 
 # A few custom services and initializers
 gem 'fustrate-rails', github: 'Fustrate/fustrate-rails'
@@ -33,7 +33,7 @@ gem 'honeybadger', '~> 4.0'
 gem 'skylight', '~> 5.0'
 
 # Use ActiveStorage validations & variants
-gem 'active_storage_validations'
+gem 'active_storage_validations', '~> 0.9'
 gem 'image_processing'
 # gem 'ratonvirus'
 
@@ -59,12 +59,11 @@ group :development do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
 
-  gem 'pry'
-  gem 'pry-rails'
+  gem 'pry-rails', '~> 0.3'
 end
 
 group :development, :test do
-  gem 'rspec-rails', '~> 4.0'
+  gem 'rspec-rails', '~> 5.0'
 
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
@@ -77,21 +76,21 @@ group :test do
   gem 'capybara'
   gem 'mock_redis'
 
-  gem 'database_cleaner', '~> 1.5'
-  gem 'factory_bot_rails'
+  gem 'database_cleaner', '~> 2.0'
+  gem 'factory_bot_rails', '~> 6.2'
   gem 'launchy'
   gem 'rails-controller-testing', require: false
 end
 
 # "is_active" links in views, and pagination
-gem 'active_link_to'
+gem 'active_link_to', '~> 1.0'
 gem 'will_paginate', '~> 3.1'
 
 # Authentication and permissions
 gem 'authority'
 gem 'sorcery'
 
-gem 'chronic'
+gem 'chronic', '~> 0.10'
 gem 'redis'
 
 # Communication with the Discord bot
