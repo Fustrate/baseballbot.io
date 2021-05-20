@@ -7,7 +7,7 @@ namespace :webpacker do
   task(regenerate_assets: :environment) do
     I18n::JS.export
 
-    JsRoutes.generate! 'app/packs/javascript/routes.js', namespace: 'Routes', camel_case: true
+    JsRoutes.generate! 'app/packs/javascript/routes.js', camel_case: true, documentation: false
 
     output = Rails.root.join('docs/routes.txt')
 
