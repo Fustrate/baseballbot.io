@@ -9,9 +9,7 @@ namespace :webpacker do
 
     JsRoutes.generate! 'app/packs/javascript/routes.js', camel_case: true, documentation: false
 
-    output = Rails.root.join('docs/routes.txt')
-
-    system "rails routes > #{output}"
+    system "rails routes > #{Rails.root.join('docs/routes.txt')}"
 
     Rake::Task['typescript:routes'].invoke
   end
