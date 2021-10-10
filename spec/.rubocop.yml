@@ -1,0 +1,29 @@
+inherit_from: ../.rubocop.yml
+
+require:
+  - rubocop-rspec
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'system/**/*'
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MessageExpectation:
+  Enabled: false
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/Pending:
+  Enabled: false

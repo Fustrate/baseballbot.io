@@ -38,7 +38,7 @@ module Slack
 
       res = https.request(req)
 
-      raise "Invalid response code: #{res.code}" unless res.code.to_i == 200
+      raise UserError, "Invalid response code: #{res.code}" unless res.code.to_i == 200
     end
 
     def modified_message_json

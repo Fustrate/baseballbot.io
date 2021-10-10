@@ -1,24 +1,32 @@
 require:
   - rubocop-performance
   - rubocop-rails
-  - rubocop-rspec
 
 AllCops:
+  Include:
+    - '**/*.jbuilder'
+    - '**/*.rake'
+    - '**/*.rb'
+    - '**/*.ru'
+    - '**/Capfile'
+    - '**/Gemfile'
+    - '**/Rakefile'
+  # Exclude auto-generated files and migrations
   Exclude:
-    - bin/**/*
-    - db/**/*
-    - db/schema.rb
-    - node_modules/**/*
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
   # Always enable new cops, disabling manually when they don't fit.
-  # EnabledByDefault: true
+  EnabledByDefault: true
   NewCops: enable
 
 Rails:
   Enabled: true
 
-#
+# ------------------------------------------------------------------------------
 # Coding Style
-#
+# ------------------------------------------------------------------------------
 
 # 2 space indentation is preferred over aligning the dots.
 Layout/MultilineMethodCallIndentation:
@@ -28,9 +36,9 @@ Layout/MultilineMethodCallIndentation:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-#
-# Disabled Cops
-#
+# ------------------------------------------------------------------------------
+# Cops excluded for specific files/directories
+# ------------------------------------------------------------------------------
 
 # The puma.rb file doesn't need to have the executable bit set.
 Lint/ScriptPermission:
@@ -42,6 +50,17 @@ Metrics/BlockLength:
   Exclude:
     - 'config/**/*.rb'
 
+# A couple of gems use the `tag` method name in a manner unrelated to Rails' content tags.
+Rails/ContentTag:
+  Exclude:
+    - config/puma.rb
+    - config/initializers/will_paginate.rb
+
+# This is just the same name as the one in ActiveRecord, not actually the same thing
+Rails/DefaultScope:
+  Exclude:
+    - 'app/services/**/*'
+
 Rails/HelperInstanceVariable:
   Exclude:
     - 'app/helpers/*.rb'
@@ -50,5 +69,77 @@ Rails/Output:
   Exclude:
     - 'config/puma.rb'
 
+Style/IpAddresses:
+  AllowedAddresses:
+    - '::'
+    - '::1'
+  Exclude:
+    - 'config/deploy/*'
+    - 'Gemfile'
+
+# ------------------------------------------------------------------------------
+# Cops that should not be run
+# ------------------------------------------------------------------------------
+
+# Recommends a comment for each gem in Gemfile
+Bundler/GemComment:
+  Enabled: false
+
+# Recommends each array item be on its own line.
+Layout/MultilineArrayLineBreaks:
+  Enabled: false
+
+# Recommends right hand side of multi-line assignment be on a new line
+Layout/MultilineAssignmentLayout:
+  Enabled: false
+
+# Wants every argument in a multi-line method call to be on its own line
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: false
+
+# Recommends squishing a multi-line hash into one line. I don't like that. It's not readable.
+Layout/RedundantLineBreak:
+  Enabled: false
+
+# Recommends `::File` instead of `File`
+Lint/ConstantResolution:
+  Enabled: false
+
+# Recommends Integer(xxx, 10) instead of xxx.to_i
+Lint/NumberConversion:
+  Enabled: false
+
+# String#drop is not a function, and besides, arr.drop(n) doesn't read better than arr[n..]
+Performance/ArraySemiInfiniteRangeSlice:
+  Enabled: false
+
+# Wants every constant to be listed in #public_constant or #private_constant
+Style/ConstantVisibility:
+  Enabled: false
+
+Style/Copyright:
+  Enabled: false
+
+# Every class and module should be documented
 Style/Documentation:
+  Enabled: false
+
+# Every method should be documented
+Style/DocumentationMethod:
+  Enabled: false
+
+# Converts [1, 2, three: 3] to [1, 2, { three: 3 }]
+Style/HashAsLastArrayItem:
+  Enabled: false
+
+# Converts `a_method 1` to `a_method(1)`
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
+
+# Hashes that come from a database JSON column use strings for keys
+Style/StringHashKeys:
+  Enabled: false
+
+# Not every `if` needs an `else`
+Style/MissingElse:
   Enabled: false

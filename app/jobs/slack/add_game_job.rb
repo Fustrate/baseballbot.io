@@ -30,7 +30,7 @@ module Slack
 
       return if res.code.to_i == 200
 
-      raise "Invalid response code: #{res.code}"
+      raise UserError, "Invalid response code: #{res.code}"
     end
 
     def already_added_message
@@ -64,11 +64,11 @@ module Slack
       setting = subreddit.options.dig('game_threads', 'post_at')
 
       case setting
-      when /\A-?\d{1,2}\z/                 then starts_at - Regexp.last_match[0].to_i.abs * 3600
+      when /\A-?\d{1,2}\z/                 then starts_at - (Regexp.last_match[0].to_i.abs * 3600)
       when /(1[012]|\d)(:\d\d|) ?(am|pm)/i then constant_time(Regexp.last_match)
       else
         # Default to 3 hours before game time
-        starts_at - 3 * 3600
+        starts_at - (3 * 3600)
       end
     end
 

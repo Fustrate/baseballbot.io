@@ -20,7 +20,7 @@ module Slack
     protected
 
     def verify_slack_signature
-      Slack::VerifySignature.verify!
+      Slack::VerifySignature.call
     end
   end
 end

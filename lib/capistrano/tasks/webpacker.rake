@@ -13,31 +13,39 @@ class WebpackerAssetCleanupTasks
     files_to_remove.each do |file_to_remove|
       relative_path = file_to_remove[7..]
 
-      execute :rm, relative_path
-      # puts relative_path
+      # execute :rm, relative_path
+      puts relative_path
     end
   end
 
   protected
 
   def current_files_from_manifest
-    first = JSON.parse capture(:cat, 'manifest.json')
-    second = JSON.parse capture(:cat, 'manifest.1.json')
+    filenames = Set.new
 
-    first.delete 'entrypoints'
-    second.delete 'entrypoints'
+    ['manifest', 'manifest.1', 'manifest.2'].each do |file|
+      json = JSON.parse capture(:cat, "#{file}.json")
 
-    (first.values + second.values).uniq
+      json.delete 'entrypoints'
+
+      filenames.merge json.values
+    end
+
+    filenames
   end
 
   def files_to_remove
     current_files = current_files_from_manifest
 
-    capture(:find, '.', '-type f', '-mindepth 2', '-print')
-      .split("\n")
-      .map { |file| "/packs/#{file[2..]}" }
-      .reject { |file| current_files.include?(file.gsub(/\.(?:gz|br)$/, '')) }
-      .sort
+    all_asset_files.tap do |list|
+      list.reject! { |file| current_files.include?(file.gsub(/\.(?:gz|br)$/, '')) }
+
+      list.sort!
+    end
+  end
+
+  def all_asset_files
+    capture(:find, '.', '-type f', '-mindepth 2', '-print').split("\n").map { |file| "/packs/#{file[2..]}" }
   end
 end
 
@@ -46,6 +54,7 @@ namespace :webpacker do
   task :backup_manifest do
     on roles(:app) do
       within current_path.join('public', 'packs') do
+        execute :cp, 'manifest.1.json', 'manifest.2.json'
         execute :cp, 'manifest.json', 'manifest.1.json'
       end
     end
