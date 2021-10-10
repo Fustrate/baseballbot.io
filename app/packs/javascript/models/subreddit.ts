@@ -4,10 +4,9 @@ import { subredditPath, subredditsPath } from 'js/routes';
 import Template from './template';
 
 export default class Subreddit extends Record {
-  public static classname = 'Subreddit';
+  public static override classname = 'Subreddit';
   public static createPath = subredditsPath;
 
-  public id: number;
   public abbreviation: string;
   public account: { id: number; name: string };
   public name: string;
@@ -31,11 +30,11 @@ export default class Subreddit extends Record {
     return '3 Hours Pregame';
   }
 
-  public path(options?: { [s: string]: any }): string {
+  public override path(options?: { [s: string]: any }): string {
     return subredditPath(this.id, options);
   }
 
-  public extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+  public override extractFromData(data: { [s: string]: any }): { [s: string]: any } {
     super.extractFromData(data);
 
     this.id = data.id;

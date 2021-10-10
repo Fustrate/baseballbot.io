@@ -63,7 +63,7 @@
 	}
 
 	&.no:before {
-		content: fa-var(times);
+		content: fa-var(xmark);
 	}
 
 	&.yes:before {

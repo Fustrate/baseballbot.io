@@ -6,8 +6,8 @@ module.exports = (api) => {
     const validEnvStrings = validEnv.map((str) => `"${str}"`).join(', ');
 
     throw new Error(`
-      Please specify a valid NODE_ENV or BABEL_ENV environment variable. Valid values are ${validEnvStrings}.
-      Instead, received: ${JSON.stringify(currentEnv)}.`);
+      Please specify a valid NODE_ENV or BABEL_ENV environment variable. Valid values are ${validEnvStrings}. Instead,
+      received: ${JSON.stringify(currentEnv)}.`);
   }
 
   const isTestEnv = api.env('test');
@@ -37,12 +37,15 @@ module.exports = (api) => {
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-transform-destructuring',
       '@babel/plugin-transform-modules-commonjs',
+      ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
       '@babel/plugin-proposal-export-default-from',
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-logical-assignment-operators',
       ['@babel/plugin-proposal-class-properties', { loose: true }],
       ['@babel/plugin-proposal-object-rest-spread', { useBuiltIns: true }],
+      ['@babel/plugin-proposal-private-methods', { loose: true }],
+      ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
       ['@babel/plugin-transform-runtime', { helpers: false }],
       ['@babel/plugin-transform-regenerator', { async: false }],
       ['babel-plugin-module-resolver', {

@@ -27,9 +27,9 @@ module.exports = {
   plugins: [
     postcssImport,
     postcssFlexbugsFixes,
-    // postcssAdvancedVars(variablesConfig),
+    postcssAdvancedVars(variablesConfig),
     remCalc,
-    // postcss-mixins must come before postcss-simple-vars and postcss-nested
+    // postcss-mixins must come before postcss-nested
     postcssMixins({ mixinsDir: path.join(__dirname, 'lib', 'postcss', 'mixins') }),
     postcssAdvancedVars(variablesConfig),
     postcssNested,

@@ -10,4 +10,15 @@ namespace :webpacker do
 
     system "rails routes > #{Rails.root.join('docs/routes.txt')}"
   end
+
+  desc 'Update package versions'
+  task(update_packages: :environment) do
+    data = JSON.parse(File.read(Rails.root.join('package.json')))
+
+    %w[dependencies devDependencies].each do |key|
+      package_names = data[key].filter_map { |name, version| name unless version[/http|rc|beta|pre/] }
+
+      system "yarn add#{key == 'devDependencies' ? ' -D' : ''} #{package_names.join(' ')}"
+    end
+  end
 end

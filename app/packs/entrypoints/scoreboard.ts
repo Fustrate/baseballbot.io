@@ -12,12 +12,12 @@ class Scoreboard extends GenericPage {
   public date: Date;
   public gameCards: GameCard[];
 
-  public fields: {
+  public override fields: {
     loadingIndicator: HTMLDivElement;
     cardsContainer: HTMLDivElement;
   }
 
-  public async initialize(): Promise<void> {
+  public override async initialize(): Promise<void> {
     super.initialize();
 
     this.date = new Date();

@@ -24,10 +24,9 @@ export interface JSONData {
 }
 
 export default class GameThread extends Record {
-  public static classname = 'GameThread';
+  public static override classname = 'GameThread';
   public static createPath = gameThreadsPath;
 
-  public id: number;
   public gamePk: number;
   public postAt: DateTime;
   public postId: string;
@@ -36,11 +35,11 @@ export default class GameThread extends Record {
   public subreddit: Subreddit;
   public title: string;
 
-  public path(options?: { [s: string]: any }): string {
+  public override path(options?: { [s: string]: any }): string {
     return gameThreadPath(this.id, options);
   }
 
-  public extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+  public override extractFromData(data: { [s: string]: any }): { [s: string]: any } {
     super.extractFromData(data);
 
     this.id = data.id;

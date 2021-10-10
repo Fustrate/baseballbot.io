@@ -9,12 +9,12 @@ import Template from 'models/template';
 class ShowSubreddit extends GenericPage {
   public subreddit: Subreddit;
 
-  public fields: {
+  public override fields: {
     options: HTMLElement;
     templates: HTMLElement;
   }
 
-  public async initialize(): Promise<void> {
+  public override async initialize(): Promise<void> {
     super.initialize();
 
     this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit });
@@ -24,7 +24,7 @@ class ShowSubreddit extends GenericPage {
     this.refresh();
   }
 
-  public refresh(): void {
+  public override refresh(): void {
     this.refreshSettings();
     this.refreshTemplates();
   }

@@ -10,11 +10,11 @@ hljs.registerLanguage('erb', erb);
 class ShowTemplate extends GenericPage {
   public template: Template;
 
-  public fields: {
+  public override fields: {
     body: HTMLElement;
   }
 
-  public async initialize(): Promise<void> {
+  public override async initialize(): Promise<void> {
     super.initialize();
 
     this.template = new Template(document.body.dataset.template);
@@ -24,7 +24,7 @@ class ShowTemplate extends GenericPage {
     this.refresh();
   }
 
-  public refresh(): void {
+  public override refresh(): void {
     this.refreshBody();
   }
 

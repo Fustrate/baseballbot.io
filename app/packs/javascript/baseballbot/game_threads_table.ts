@@ -58,7 +58,7 @@ class GameThreadsTable extends GenericTable<GameThread> {
     });
   }
 
-  public async reloadTable(): Promise<void> {
+  public override async reloadTable(): Promise<void> {
     const response = await getCurrentPageJson<PaginatedResponse<JSONData>>();
 
     const { data } = response.data;
@@ -68,7 +68,7 @@ class GameThreadsTable extends GenericTable<GameThread> {
     this.updatePagination(response.data);
   }
 
-  public updateRow(row: HTMLTableRowElement, gameThread: GameThread): void {
+  public override updateRow(row: HTMLTableRowElement, gameThread: GameThread): void {
     row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
       subredditPath(gameThread.subreddit),

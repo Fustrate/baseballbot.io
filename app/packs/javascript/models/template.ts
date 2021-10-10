@@ -3,17 +3,16 @@ import { Record } from '@fustrate/rails';
 import { templatePath } from 'js/routes';
 
 export default class Template extends Record {
-  public static classname: 'Template';
+  public static override classname: 'Template';
 
-  public id: number;
   public body: string;
   public type: string;
 
-  public path(options?: { [s: string]: any }): string {
+  public override path(options?: { [s: string]: any }): string {
     return templatePath(this.id, options);
   }
 
-  public extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+  public override extractFromData(data: { [s: string]: any }): { [s: string]: any } {
     super.extractFromData(data);
 
     this.id = data.id;
