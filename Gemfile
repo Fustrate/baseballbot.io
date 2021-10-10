@@ -11,8 +11,7 @@ gem 'haml-rails', '~> 2.0'
 gem 'jbuilder', '~> 2.10'
 gem 'webpacker', '>= 6.0.0.rc.5'
 
-# Used to generate routes & i18n for the frontend
-gem 'i18n-js', '~> 3.8'
+# Used to generate routes for the frontend
 gem 'js-routes', '~> 2.0', require: false
 
 # Faster json generation
@@ -31,6 +30,7 @@ gem 'redd', '~> 0.8'
 
 # App Monitoring
 gem 'honeybadger', '~> 4.0'
+gem 'listen', '~> 3.3'
 gem 'skylight', '~> 5.0'
 
 # Use ActiveStorage validations & variants
