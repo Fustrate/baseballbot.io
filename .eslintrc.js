@@ -7,13 +7,12 @@ module.exports = {
     'airbnb-base',
     'plugin:lodash/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:radar/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     allowImportExportEverywhere: true,
   },
-  plugins: ['import', 'lodash', '@typescript-eslint', 'radar'],
+  plugins: ['import', 'lodash', '@typescript-eslint'],
   rules: {
     /*
     * Disabled Rules
@@ -42,8 +41,6 @@ module.exports = {
 
     // This is just ridiculous - can't even assign to a property of a parameter
     'no-param-reassign': 'off',
-
-    'radar/no-duplicate-string': 'off',
 
     // A few third party packages use snake case
     '@typescript-eslint/camelcase': 'off',
