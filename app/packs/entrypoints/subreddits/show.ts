@@ -12,7 +12,7 @@ class ShowSubreddit extends GenericPage {
   public override fields: {
     options: HTMLElement;
     templates: HTMLElement;
-  }
+  };
 
   public override async initialize(): Promise<void> {
     super.initialize();

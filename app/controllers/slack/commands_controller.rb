@@ -8,19 +8,11 @@ module Slack
     protect_from_forgery with: :null_session
 
     def gdt
-      json = Slack::Commands::GDT.call
-
-      # Rails.logger.info '-----------------------'
-      # Rails.logger.info JSON.dump(json)
-      # Rails.logger.info '-----------------------'
-
-      render json: json, status: :ok
+      render json: Slack::Commands::GDT.call, status: :ok
     end
 
     protected
 
-    def verify_slack_signature
-      Slack::VerifySignature.call
-    end
+    def verify_slack_signature() = Slack::VerifySignature.call
   end
 end

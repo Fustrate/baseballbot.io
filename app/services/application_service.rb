@@ -4,19 +4,13 @@ class ApplicationService
   # Lets us use `t` and `l` helpers.
   include ActionView::Helpers::TranslationHelper
 
-  def self.call(...)
-    new.call(...)
-  end
+  def self.call(...) = new.call(...)
 
   protected
 
-  def transaction(&block)
-    ActiveRecord::Base.transaction(&block)
-  end
+  def transaction(&) = ActiveRecord::Base.transaction(&)
 
-  def params
-    Current.params
-  end
+  def params() = Current.params
 
   class LoadPage < self
     DEFAULT_INCLUDES = nil

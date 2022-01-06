@@ -81,12 +81,7 @@ module Slack
     end
 
     def add_game_thread!
-      subreddit.game_threads.create!(
-        starts_at: starts_at,
-        post_at: post_at,
-        status: 'Future',
-        game_pk: @game_pk
-      )
+      subreddit.game_threads.create! starts_at:, post_at:, status: 'Future', game_pk: @game_pk
     end
 
     def game_feed

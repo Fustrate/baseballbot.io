@@ -74,7 +74,7 @@ module Slack
             {
               type: 'section',
               text: { type: 'mrkdwn', text: 'Select a game to add:' },
-              accessory: MODAL_RESPONSE_ACCESSORY.dup.merge(options: options)
+              accessory: MODAL_RESPONSE_ACCESSORY.dup.merge(options:)
             }
           ]
         }

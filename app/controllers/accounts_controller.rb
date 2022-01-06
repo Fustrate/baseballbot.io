@@ -117,7 +117,7 @@ class AccountsController < ApplicationController
   def create_new_account(name, session, expires_in)
     Account.create(
       id: Account.order('id DESC').limit(1).ids[0] + 1,
-      name: name,
+      name:,
       scope: AUTH_SCOPE,
       access_token: session.client.access.access_token,
       refresh_token: session.client.access.refresh_token,

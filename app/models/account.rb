@@ -20,9 +20,9 @@ class Account < ApplicationRecord
 
   def access
     @access ||= Redd::Models::Access.new(
-      access_token: access_token,
-      refresh_token: refresh_token,
-      scope: scope,
+      access_token:,
+      refresh_token:,
+      scope:,
       expires_at: expires_at - 15,
       expires_in: expires_at - Time.zone.now
     )

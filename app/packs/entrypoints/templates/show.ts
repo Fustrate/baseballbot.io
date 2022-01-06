@@ -12,7 +12,7 @@ class ShowTemplate extends GenericPage {
 
   public override fields: {
     body: HTMLElement;
-  }
+  };
 
   public override async initialize(): Promise<void> {
     super.initialize();

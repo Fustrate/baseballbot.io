@@ -4,7 +4,7 @@ import BaseballBot from 'js/baseballbot';
 import GameCard from 'js/scoreboard/game_card';
 import Game from 'js/scoreboard/game';
 
-import loadSchedule, { ScheduleGame } from 'js/statsapi/schedule';
+import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
 
 const secondsBetweenReloads = 30;
 
@@ -15,7 +15,7 @@ class Scoreboard extends GenericPage {
   public override fields: {
     loadingIndicator: HTMLDivElement;
     cardsContainer: HTMLDivElement;
-  }
+  };
 
   public override async initialize(): Promise<void> {
     super.initialize();

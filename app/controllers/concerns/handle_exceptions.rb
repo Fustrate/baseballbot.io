@@ -5,9 +5,7 @@ module HandleExceptions
   extend ActiveSupport::Concern
 
   # These are exceptions that we really don't need to log to Honeybadger
-  IGNORED_EXCEPTIONS = [
-    UserError, ActiveRecord::RecordInvalid, ActiveRecord::NotNullViolation
-  ].freeze
+  IGNORED_EXCEPTIONS = [UserError, ActiveRecord::RecordInvalid, ActiveRecord::NotNullViolation].freeze
 
   included do
     rescue_from Exception, with: :handle_exceptions
@@ -22,7 +20,7 @@ module HandleExceptions
 
     respond_to do |format|
       format.json do
-        render json: { error: @error_message }, status: status
+        render json: { error: @error_message }, status:
       end
 
       format.any { handle_non_json_error(exception) }

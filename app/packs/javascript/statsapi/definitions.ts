@@ -1,26 +1,25 @@
 // These definitions were hand-written on 2020-11-21 and are not guaranteed to be up to date.
-import type { Venue } from './venue';
+import { type Venue } from './venue';
 
 // Still need catchers interference
-type RunnerEventTypes = 'field_out' | 'single' | 'double' | 'triple' | 'home_run' | 'walk' |
-  'passed_ball' | 'wild_pitch' | 'intent_walk' | `stolen_base_${'2b' | '3b' | 'home'}` |
-  `grounded_into_${'double' | 'triple'}_play` | 'hit_by_pitch' | 'field_error';
+type RunnerEventTypes = 'field_out' | 'single' | 'double' | 'triple' | 'home_run' | 'walk' | 'passed_ball' |
+'wild_pitch' | 'intent_walk' | `stolen_base_${'2b' | '3b' | 'home'}` | 'hit_by_pitch' | 'field_error' |
+`grounded_into_${'double' | 'triple'}_play`;
 
 type RunnerMovementReasons = 'r_adv_force' | 'r_adv_play' | 'r_force_out' | 'r_doubled_off' |
-  `r_${'stolen_base' | 'caught_stealing'}_${'2b' | '3b' | 'home'}`;
+`r_${'stolen_base' | 'caught_stealing'}_${'2b' | '3b' | 'home'}`;
 
-type FielderCredits = 'f_putout' | 'f_fielded_ball' | 'f_assist' | 'f_deflection' | 'f_assist_of' |
-  'f_fielding_error';
+type FielderCredits = `f_${'putout' | 'fielded_ball' | 'assist' | 'deflection' | 'assist_of' | 'fielding_error'}`;
 
 // Still need catchers interference
 type PlayEventTypes = 'field_out' | 'walk' | 'single' | 'double' | 'triple' | 'sac_fly' |
-  'strikeout' | 'grounded_into_double_play' | 'hit_by_pitch' | 'force_out' | 'triple_play' |
-  'intent_walk' | 'field_error';
+'strikeout' | 'grounded_into_double_play' | 'hit_by_pitch' | 'force_out' | 'triple_play' |
+'intent_walk' | 'field_error';
 
 // I assume these types are going to grow rather large.
 type GameEvent = 'field_out' | 'game_finished' | 'strikeout';
 type LogicalEvent = 'midInning' | 'countChange' | 'newLeftHandedHit' | 'gameStateChangeToGameOver' |
-  `count${0 | 1 | 2 | 3}${0 | 1 | 2 | 3}` | `count4${0 | 1 | 2}`;
+`count${0 | 1 | 2 | 3}${0 | 1 | 2 | 3}` | `count4${0 | 1 | 2}`;
 
 export interface GameStatus {
   abstractGameState: 'Final';
