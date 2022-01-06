@@ -70,7 +70,8 @@
   },
   "scripts": {
     "eslint": "eslint ./app/packs/ --ext=js,ts",
-    "tsc": "tsc --noEmit --incremental --project ./app/packs"
+    "tsc": "tsc --noEmit --incremental --project ./app/packs",
+    "versions": "node ./lib/yarn/update-package-versions.js"
   },
   "babel": {
     "presets": [
