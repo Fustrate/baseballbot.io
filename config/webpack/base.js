@@ -1,6 +1,16 @@
-const { webpackConfig, merge } = require('@rails/webpacker');
+const { webpackConfig, merge, config } = require('@rails/webpacker');
 const ForkTSCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { ProvidePlugin } = require('webpack');
+
+const {
+  basename,
+  dirname,
+  join,
+  relative,
+  resolve,
+} = require('path');
+const extname = require('path-complete-extname');
+const { sync: globSync } = require('glob');
 
 webpackConfig.module.rules.map((module) => {
   if (module.test?.toString()?.includes('css')) {
@@ -10,7 +20,33 @@ webpackConfig.module.rules.map((module) => {
   return module;
 });
 
-module.exports = merge(webpackConfig, {
+// Webpacker 6.0.0.rc6 changed the glob from **/*.* to *.*, so we need to change it back
+function getEntryObject() {
+  const entries = {};
+  const rootPath = join(config.source_path, config.source_entry_path);
+
+  globSync(`${rootPath}/**/*.*`).forEach((path) => {
+    const namespace = relative(join(rootPath), dirname(path));
+    const name = join(namespace, basename(path, extname(path)));
+    let assetPaths = resolve(path);
+
+    // Allows for multiple filetypes per entry (https://webpack.js.org/guides/entry-advanced/)
+    // Transforms the config object value to an array with all values under the same name
+    let previousPaths = entries[name];
+
+    if (previousPaths) {
+      previousPaths = Array.isArray(previousPaths) ? previousPaths : [previousPaths];
+      previousPaths.push(assetPaths);
+      assetPaths = previousPaths;
+    }
+
+    entries[name] = assetPaths;
+  });
+
+  return entries;
+}
+
+const newConfig = merge(webpackConfig, {
   module: {
     rules: [
       {
@@ -63,3 +99,8 @@ module.exports = merge(webpackConfig, {
   //   },
   // },
 });
+
+// Don't allow this to be merged; merging creates duplicates.
+newConfig.entry = getEntryObject();
+
+module.exports = newConfig;

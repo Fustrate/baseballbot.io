@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# config valid only for current version of Capistrano
-lock '~> 3.13'
+lock '~> 3.15'
 
 set :application, 'baseballbot.io'
 set :user, 'baseballbot'
@@ -10,7 +9,7 @@ set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
 set :branch, ENV['REVISION'] || :master
 
-append :linked_dirs, 'log', 'public/packs', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/sockets'
+append :linked_dirs, 'log', 'public/packs', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/sockets', 'tmp/webpacker'
 
 append :linked_files, 'config/database.yml', 'config/honeybadger.yml', 'config/master.key', 'config/reddit.yml',
        'config/skylight.yml'
