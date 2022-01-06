@@ -13,12 +13,11 @@ module.exports = {
     allowImportExportEverywhere: true,
   },
   plugins: ['import', 'lodash', '@typescript-eslint'],
+  root: true,
   rules: {
     /*
     * Disabled Rules
     */
-    'class-methods-use-this': 'off',
-
     // I want to allow 0 spaces between property definitions.
     'lines-between-class-members': 'off',
 
@@ -52,6 +51,10 @@ module.exports = {
     * Tweak the defaults
     */
 
+    'class-methods-use-this': ['error', {
+      exceptMethods: ['updateRow'],
+    }],
+
     'import/extensions': ['error', 'ignorePackages', { js: 'never', ts: 'never' }],
 
     // Ignore class definition lines that are too long
@@ -69,28 +72,28 @@ module.exports = {
     '@typescript-eslint/consistent-type-definitions': 'warn',
     '@typescript-eslint/explicit-member-accessibility': 'warn',
     '@typescript-eslint/member-delimiter-style': 'warn',
-    '@typescript-eslint/member-ordering': [
-      'warn',
-      {
-        default: [
-          'static-field',
-          'public-field',
-          'protected-field',
-          'private-field',
+    '@typescript-eslint/member-ordering': ['warn', {
+      default: [
+        'static-field',
+        'public-field',
+        'protected-field',
+        'private-field',
 
-          'constructor',
+        'constructor',
 
-          'static-method',
-          'public-method',
-          'protected-method',
-          'private-method',
+        'static-method',
+        'public-method',
+        'protected-method',
+        'private-method',
 
-          'abstract-method',
-        ],
-      },
-    ],
+        'abstract-method',
+      ],
+    }],
     '@typescript-eslint/prefer-optional-chain': 'warn',
-    // '@typescript-eslint/restrict-template-expressions': 'warn',
+
+    // https://github.com/eslint/eslint/issues/13957
+    indent: 'off',
+    '@typescript-eslint/indent': ['error', 2],
   },
   settings: {
     'import/extensions': ['.js', '.ts'],
