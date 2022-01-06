@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
     t.string "access_token"
     t.string "refresh_token"
     t.string "scope", default: [], array: true
-    t.datetime "expires_at"
+    t.datetime "expires_at", precision: 6
   end
 
   create_table "bot_actions", force: :cascade do |t|
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
     t.string "action", null: false
     t.string "note"
     t.jsonb "data"
-    t.datetime "date", default: -> { "now()" }
+    t.datetime "date", precision: 6, default: -> { "now()" }
     t.index ["subject_type", "subject_id"], name: "index_bot_actions_on_subject_type_and_subject_id"
   end
 
@@ -38,19 +38,19 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
     t.integer "eventable_id"
     t.string "type"
     t.string "note"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id"
   end
 
   create_table "game_threads", id: :serial, force: :cascade do |t|
-    t.datetime "post_at"
-    t.datetime "starts_at"
+    t.datetime "post_at", precision: 6
+    t.datetime "starts_at", precision: 6
     t.string "status"
     t.string "title"
     t.string "post_id"
-    t.datetime "created_at", default: -> { "now()" }
-    t.datetime "updated_at", default: -> { "now()" }
+    t.datetime "created_at", precision: 6, default: -> { "now()" }
+    t.datetime "updated_at", precision: 6, default: -> { "now()" }
     t.integer "subreddit_id", null: false
     t.integer "game_pk"
     t.string "type"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
   end
 
   create_table "scheduled_posts", id: :serial, force: :cascade do |t|
-    t.datetime "next_post_at"
+    t.datetime "next_post_at", precision: 6
     t.string "title"
     t.text "body"
     t.integer "subreddit_id", null: false
@@ -88,8 +88,8 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
     t.text "body"
     t.string "type"
     t.integer "subreddit_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.string "title"
   end
 
@@ -98,21 +98,21 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
     t.string "email", null: false
     t.string "crypted_password"
     t.string "salt"
-    t.datetime "lock_expires_at"
+    t.datetime "lock_expires_at", precision: 6
     t.integer "failed_logins_count", default: 0
     t.string "unlock_token"
-    t.datetime "last_activity_at"
-    t.datetime "last_login_at"
-    t.datetime "last_logout_at"
+    t.datetime "last_activity_at", precision: 6
+    t.datetime "last_login_at", precision: 6
+    t.datetime "last_logout_at", precision: 6
     t.string "last_login_from_ip_address"
-    t.datetime "remember_me_token_expires_at"
+    t.datetime "remember_me_token_expires_at", precision: 6
     t.string "remember_me_token"
-    t.datetime "reset_password_email_sent_at"
-    t.datetime "reset_password_token_expires_at"
+    t.datetime "reset_password_email_sent_at", precision: 6
+    t.datetime "reset_password_token_expires_at", precision: 6
     t.integer "access_count_to_reset_password_page", default: 0
     t.string "reset_password_token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at"
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token"
