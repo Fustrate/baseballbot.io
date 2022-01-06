@@ -107,7 +107,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['app/packs/stylesheets/variables.js'],
+      files: ['app/packs/stylesheets/variables.js', 'lib/yarn/**/*.js'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,
