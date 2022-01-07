@@ -3,7 +3,7 @@
 require 'js-routes'
 
 namespace :assets do
-  desc 'Regenerate assets for front end'
+  desc 'Regenerate assets for the front end'
   task(regenerate: :environment) do
     js_folder = Rails.root.join('app/frontend/javascript')
 

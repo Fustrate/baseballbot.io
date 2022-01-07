@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# In order to make this work without needing a password, the following entry
-# must be added using `visudo`:
+# In order to make this work without needing a password, the following must be added using `visudo`:
 #
 #  baseballbot ALL=NOPASSWD: /bin/systemctl restart sidekiq-baseballbot
 
