@@ -36,10 +36,6 @@ gem 'honeybadger', '~> 4.9'
 gem 'listen', '~> 3.7'
 gem 'skylight', '~> 5.1'
 
-# Use ActiveStorage validations & variants
-gem 'active_storage_validations', '~> 0.9'
-gem 'image_processing', '~> 1.12'
-
 group :development do
   gem 'bullet', '~> 7.0'
 

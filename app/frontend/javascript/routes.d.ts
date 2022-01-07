@@ -201,62 +201,6 @@ export const newGameThreadPath: ((
 
 /**
  * Generates rails route to
- * /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format)
- * @param {any} signedBlobId
- * @param {any} variationKey
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const railsBlobRepresentationPath: ((
-  signedBlobId: RequiredRouteParameter,
-  variationKey: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)
- * @param {any} signedBlobId
- * @param {any} variationKey
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const railsBlobRepresentationProxyPath: ((
-  signedBlobId: RequiredRouteParameter,
-  variationKey: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/direct_uploads(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const railsDirectUploadsPath: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/disk/:encoded_key/*filename(.:format)
- * @param {any} encodedKey
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const railsDiskServicePath: ((
-  encodedKey: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
  * /rails/info(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
@@ -292,34 +236,6 @@ export const railsInfoRoutesPath: ((
  * @returns {string} route path
  */
 export const railsMailersPath: ((
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)
- * @param {any} signedId
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const railsServiceBlobPath: ((
-  signedId: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/blobs/proxy/:signed_id/*filename(.:format)
- * @param {any} signedId
- * @param {any} filename
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const railsServiceBlobProxyPath: ((
-  signedId: RequiredRouteParameter,
-  filename: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -404,18 +320,6 @@ export const subredditsPath: ((
  */
 export const templatePath: ((
   id: RequiredRouteParameter,
-  options?: {format?: OptionalRouteParameter} & RouteOptions
-) => string) & RouteHelperExtras;
-
-/**
- * Generates rails route to
- * /rails/active_storage/disk/:encoded_token(.:format)
- * @param {any} encodedToken
- * @param {object | undefined} options
- * @returns {string} route path
- */
-export const updateRailsDiskServicePath: ((
-  encodedToken: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

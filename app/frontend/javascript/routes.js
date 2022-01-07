@@ -521,14 +521,6 @@
 
   newGameThreadPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"game_threads"],[2,[7,"/"],[2,[6,"new"],[1,[2,[8,"."],[3,"format"]]]]]]]),
 
-  railsBlobRepresentationPath: __jsr.r({"signed_blob_id":{"r":true},"variation_key":{"r":true},"filename":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"representations"],[2,[7,"/"],[2,[6,"redirect"],[2,[7,"/"],[2,[3,"signed_blob_id"],[2,[7,"/"],[2,[3,"variation_key"],[2,[7,"/"],[2,[5,[3,"filename"]],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]]]),
-
-  railsBlobRepresentationProxyPath: __jsr.r({"signed_blob_id":{"r":true},"variation_key":{"r":true},"filename":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"representations"],[2,[7,"/"],[2,[6,"proxy"],[2,[7,"/"],[2,[3,"signed_blob_id"],[2,[7,"/"],[2,[3,"variation_key"],[2,[7,"/"],[2,[5,[3,"filename"]],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]]]),
-
-  railsDirectUploadsPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"direct_uploads"],[1,[2,[8,"."],[3,"format"]]]]]]]]]),
-
-  railsDiskServicePath: __jsr.r({"encoded_key":{"r":true},"filename":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"disk"],[2,[7,"/"],[2,[3,"encoded_key"],[2,[7,"/"],[2,[5,[3,"filename"]],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]),
-
   railsInfoPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"info"],[1,[2,[8,"."],[3,"format"]]]]]]]),
 
   railsInfoPropertiesPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"info"],[2,[7,"/"],[2,[6,"properties"],[1,[2,[8,"."],[3,"format"]]]]]]]]]),
@@ -536,10 +528,6 @@
   railsInfoRoutesPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"info"],[2,[7,"/"],[2,[6,"routes"],[1,[2,[8,"."],[3,"format"]]]]]]]]]),
 
   railsMailersPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"mailers"],[1,[2,[8,"."],[3,"format"]]]]]]]),
-
-  railsServiceBlobPath: __jsr.r({"signed_id":{"r":true},"filename":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"blobs"],[2,[7,"/"],[2,[6,"redirect"],[2,[7,"/"],[2,[3,"signed_id"],[2,[7,"/"],[2,[5,[3,"filename"]],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]),
-
-  railsServiceBlobProxyPath: __jsr.r({"signed_id":{"r":true},"filename":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"blobs"],[2,[7,"/"],[2,[6,"proxy"],[2,[7,"/"],[2,[3,"signed_id"],[2,[7,"/"],[2,[5,[3,"filename"]],[1,[2,[8,"."],[3,"format"]]]]]]]]]]]]]]]),
 
   rootPath: __jsr.r({}, [7,"/"]),
 
@@ -555,9 +543,7 @@
 
   subredditsPath: __jsr.r({"format":{}}, [2,[7,"/"],[2,[6,"subreddits"],[1,[2,[8,"."],[3,"format"]]]]]),
 
-  templatePath: __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"templates"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]]),
-
-  updateRailsDiskServicePath: __jsr.r({"encoded_token":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"rails"],[2,[7,"/"],[2,[6,"active_storage"],[2,[7,"/"],[2,[6,"disk"],[2,[7,"/"],[2,[3,"encoded_token"],[1,[2,[8,"."],[3,"format"]]]]]]]]]]])}
+  templatePath: __jsr.r({"id":{"r":true},"format":{}}, [2,[7,"/"],[2,[6,"templates"],[2,[7,"/"],[2,[3,"id"],[1,[2,[8,"."],[3,"format"]]]]]]])}
 ,
     };
     Utils.define_module("CJS", result);
