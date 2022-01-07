@@ -6,3 +6,6 @@ exceptions:
     - 'UserError'
     - 'ActiveRecord::RecordInvalid'
     - 'ActiveRecord::NotNullViolation'
+
+development:
+  disabled: true
