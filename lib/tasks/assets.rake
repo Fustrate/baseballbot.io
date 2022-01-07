@@ -2,9 +2,9 @@
 
 require 'js-routes'
 
-namespace :js do
+namespace :assets do
   desc 'Regenerate assets for front end'
-  task(regenerate_assets: :environment) do
+  task(regenerate: :environment) do
     JsRoutes.generate! Rails.root.join('app/frontend/javascript/routes.js'), camel_case: true, documentation: false, module_type: 'CJS'
     JsRoutes.definitions! Rails.root.join('app/frontend/javascript/routes.d.ts'), camel_case: true
 
