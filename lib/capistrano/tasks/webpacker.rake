@@ -48,24 +48,3 @@ class WebpackerAssetCleanupTasks
     capture(:find, '.', '-type f', '-mindepth 2', '-print').split("\n").map { |file| "/packs/#{file[2..]}" }
   end
 end
-
-namespace :webpacker do
-  desc 'Back up the last deploy\'s manifest.json'
-  task :backup_manifest do
-    on roles(:app) do
-      within current_path.join('public', 'packs') do
-        execute :cp, 'manifest.1.json', 'manifest.2.json'
-        execute :cp, 'manifest.json', 'manifest.1.json'
-      end
-    end
-  end
-
-  desc 'Clean old assets'
-  task :clean_old_assets do
-    on roles(:app) do
-      within current_path.join('public', 'packs') do
-        WebpackerAssetCleanupTasks.new(self).clean_old_assets!
-      end
-    end
-  end
-end

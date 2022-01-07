@@ -9,7 +9,7 @@ set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
 set :branch, ENV['REVISION'] || :master
 
-append :linked_dirs, 'log', 'public/packs', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/sockets'
+append :linked_dirs, 'log', 'public/assets', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/sockets'
 
 append :linked_files, 'config/database.yml', 'config/honeybadger.yml', 'config/master.key', 'config/reddit.yml',
        'config/skylight.yml'
@@ -23,7 +23,6 @@ set :rbenv_map_bins, %w[bundle gem honeybadger puma rails rake ruby sidekiq side
 set :sidekiq_config, 'config/sidekiq.yml'
 
 namespace :deploy do
-  # before :compile_assets, 'webpacker:backup_manifest'
   after :finished, 'puma:phased-restart'
   after :finishing, :cleanup
 end
