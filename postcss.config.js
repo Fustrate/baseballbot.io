@@ -15,6 +15,7 @@ const postcssMinify = require('postcss-minify');
 const remCalc = require('./lib/postcss/rem-calc');
 const media = require('./lib/postcss/media');
 const faVar = require('./lib/postcss/fa-var');
+const faFontUrls = require('./lib/postcss/fa-font-urls');
 
 const variables = require('./app/frontend/stylesheets/variables');
 
@@ -40,6 +41,7 @@ module.exports = {
     postcssColorMod,
     faVar,
     media,
+    faFontUrls,
     postcssPresetEnv({ autoprefixer: { flexbox: 'no-2009' }, stage: 3 }),
     autoprefixer,
     (isProduction && postcssMinify),
