@@ -1,4 +1,7 @@
-- title 'Baseballbot'
+:ruby
+  title 'Baseballbot'
+
+  javascript 'home'
 
 %h4 Today's Game Threads (#{@game_threads.count})
 
@@ -16,5 +19,3 @@
       %td{ colspan: 7 } Loading game threads...
 
 %p.text-center All times are Pacific.
-
-= javascript_include_tag 'home', defer: true

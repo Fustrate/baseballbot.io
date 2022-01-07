@@ -1,20 +1,8 @@
-!!!
-%html{ lang: :en }
-%head
-  %title Baseballbot Gameday
-  %meta{ charset: 'utf-8' }
-  %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
-  = javascript_include_tag 'scoreboard', defer: true
-  = stylesheet_link_tag 'application', 'scoreboard', media: :all
-%body
-  %nav.toolbar{ role: 'navigation' }
-    = link_to 'Baseballbot', root_path, class: 'branding'
+:ruby
+  title 'Baseballbot Gameday'
+  javascript 'scoreboard'
+  stylesheet 'scoreboard'
 
-    %section.main-menu
-      = link_to 'Game Threads', game_threads_path
-      = link_to 'Subreddits', subreddits_path
-      = link_to 'Gameday', gameday_path
+%section.game-cards{ 'data-field': 'cardsContainer' }
 
-  %section.game-cards{ 'data-field': 'cardsContainer' }
-
-  %div{ 'data-field': 'loadingIndicator' }
+%div{ 'data-field': 'loadingIndicator' }

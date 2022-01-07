@@ -1,4 +1,7 @@
-- title 'Subreddits'
+:ruby
+  title 'Subreddits'
+
+  javascript 'subreddits/table'
 
 %h4 Subreddits
 
@@ -15,5 +18,3 @@
   %tbody
     %tr.loading
       %td{ colspan: 7 } Loading subreddits...
-
-= javascript_include_tag 'subreddits/table', defer: true

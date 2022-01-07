@@ -1,10 +1,10 @@
-- title 'Template'
-- html_data template: @template.id
+:ruby
+  title 'Template'
+
+  javascript 'templates/show', template: @template.id
+  stylesheet 'templates/show'
 
 %h4 /r/#{@template.subreddit.name} #{@template.type.titleize} Template
 
 %pre
   %code.erb{ 'data-field' => 'body' }
-
-= javascript_include_tag 'templates/show', defer: true
-= stylesheet_link_tag 'templates/show'

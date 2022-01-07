@@ -9,6 +9,6 @@ class HomeController < ApplicationController
   end
 
   def gameday
-    render :gameday, layout: nil
+    render :gameday, layout: 'no_container'
   end
 end

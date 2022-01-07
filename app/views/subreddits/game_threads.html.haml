@@ -1,5 +1,7 @@
-- title "/r/#{@subreddit.name} Game Threads"
-- html_data subreddit: @subreddit.id
+:ruby
+  title "/r/#{@subreddit.name} Game Threads"
+
+  javascript 'game_threads/table', subreddit: @subreddit.id
 
 %h1.text-center
   = link_to "https://reddit.com/r/#{@subreddit.name}" do
@@ -25,5 +27,3 @@
 %p All times are Pacific.
 
 %div(data-pagination)
-
-= javascript_include_tag 'game_threads/table', defer: true
