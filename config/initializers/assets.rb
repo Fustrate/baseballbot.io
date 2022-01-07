@@ -21,4 +21,15 @@ module Sprockets
       end
     end
   end
+
+  class DirectiveProcessor
+    private
+
+    def link_paths(paths, deps, accept)
+      resolve_paths(paths, deps, accept: accept) do |uri|
+        ::Rails.logger.info "LINKING #{uri}"
+        @to_link << to_load(uri)
+      end
+    end
+  end
 end
