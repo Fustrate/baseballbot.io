@@ -24,6 +24,8 @@ const variablesConfig = {
   disable: ['@content', '@each', '@else', '@if', '@include', '@import', '@for', '@mixin'],
 };
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // Run variables multiple times
 module.exports = {
   plugins: [
@@ -40,6 +42,6 @@ module.exports = {
     media,
     postcssPresetEnv({ autoprefixer: { flexbox: 'no-2009' }, stage: 3 }),
     autoprefixer,
-    postcssMinify,
+    (isProduction && postcssMinify),
   ],
 };
