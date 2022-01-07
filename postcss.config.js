@@ -1,4 +1,5 @@
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 
 const postcssImport = require('postcss-import');
 const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
@@ -38,6 +39,7 @@ module.exports = {
     faVar,
     media,
     postcssPresetEnv({ autoprefixer: { flexbox: 'no-2009' }, stage: 3 }),
+    autoprefixer,
     postcssMinify,
   ],
 };

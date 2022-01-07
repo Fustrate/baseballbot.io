@@ -2,3 +2,4 @@
 app/frontend/javascript/routes.js
 app/frontend/javascript/routes.d.ts
 app/frontend/*.d.ts
+app/assets/config/manifest.js
