@@ -31,7 +31,7 @@ class ShowTemplate extends GenericPage {
   protected refreshBody(): void {
     this.fields.body.textContent = this.template.body;
 
-    hljs.highlightBlock(this.fields.body);
+    hljs.highlightElement(this.fields.body);
   }
 }
 
