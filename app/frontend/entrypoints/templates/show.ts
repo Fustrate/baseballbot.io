@@ -1,5 +1,5 @@
 import { GenericPage } from '@fustrate/rails';
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/core';
 import erb from 'highlight.js/lib/languages/erb';
 
 import BaseballBot from 'js/baseballbot';
