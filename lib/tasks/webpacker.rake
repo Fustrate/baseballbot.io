@@ -2,11 +2,11 @@
 
 require 'js-routes'
 
-namespace :webpacker do
-  desc 'Regenerate assets for Webpacker'
+namespace :js do
+  desc 'Regenerate assets for front end'
   task(regenerate_assets: :environment) do
-    JsRoutes.generate! Rails.root.join('app/packs/javascript/routes.js'), camel_case: true, documentation: false
-    JsRoutes.definitions! Rails.root.join('app/packs/javascript/routes.d.ts'), camel_case: true
+    JsRoutes.generate! Rails.root.join('app/frontend/javascript/routes.js'), camel_case: true, documentation: false, module_type: 'CJS'
+    JsRoutes.definitions! Rails.root.join('app/frontend/javascript/routes.d.ts'), camel_case: true
 
     system "rails routes > #{Rails.root.join('docs/routes.txt')}"
   end

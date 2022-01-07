@@ -4,7 +4,8 @@
   %title Baseballbot Gameday
   %meta{ charset: 'utf-8' }
   %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
-  = stylesheet_pack_tag 'application', 'scoreboard', media: :all
+  = javascript_include_tag 'scoreboard', defer: true
+  = stylesheet_link_tag 'application', 'scoreboard', media: :all
 %body
   %nav.toolbar{ role: 'navigation' }
     = link_to 'Baseballbot', root_path, class: 'branding'
@@ -17,5 +18,3 @@
   %section.game-cards{ 'data-field': 'cardsContainer' }
 
   %div{ 'data-field': 'loadingIndicator' }
-
-= javascript_pack_tag 'scoreboard'

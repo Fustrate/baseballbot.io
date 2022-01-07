@@ -8,13 +8,14 @@ const postcssColorMod = require('postcss-color-mod-function');
 
 const postcssAdvancedVars = require('postcss-advanced-variables');
 const postcssNested = require('postcss-nested');
+const postcssMinify = require('postcss-minify');
 
 // Custom postcss plugins
 const remCalc = require('./lib/postcss/rem-calc');
 const media = require('./lib/postcss/media');
 const faVar = require('./lib/postcss/fa-var');
 
-const variables = require('./app/packs/stylesheets/variables');
+const variables = require('./app/frontend/stylesheets/variables');
 
 // We're literally only using variables here
 const variablesConfig = {
@@ -37,5 +38,6 @@ module.exports = {
     faVar,
     media,
     postcssPresetEnv({ autoprefixer: { flexbox: 'no-2009' }, stage: 3 }),
+    postcssMinify,
   ],
 };

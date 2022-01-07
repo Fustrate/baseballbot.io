@@ -104,13 +104,13 @@ module.exports = {
       'babel-module': {},
       typescript: {
         alwaysTryTypes: true,
-        project: './app/packs',
+        project: './app/frontend',
       },
     },
   },
   overrides: [
     {
-      files: ['app/packs/stylesheets/variables.js', 'lib/yarn/**/*.js'],
+      files: ['app/frontend/stylesheets/variables.js', 'lib/yarn/**/*.js'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 0,
         '@typescript-eslint/explicit-module-boundary-types': 0,
@@ -119,7 +119,6 @@ module.exports = {
     },
     {
       files: [
-        'config/webpack/**/*.js',
         'lib/postcss/**/*.js',
         'postcss.config.js',
       ],

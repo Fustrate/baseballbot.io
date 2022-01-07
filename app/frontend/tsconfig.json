@@ -14,7 +14,7 @@
     "noImplicitThis": true,
     "noImplicitUseStrict": true,
     "paths": {
-      "*": ["node_modules/*", "app/packs/*"],
+      "*": ["node_modules/*", "app/frontend/*"],
       "models/*": ["javascript/models/*"],
       "js/*": ["javascript/*"],
     },

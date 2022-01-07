@@ -49,10 +49,10 @@ module.exports = (api) => {
       ['@babel/plugin-transform-runtime', { helpers: false }],
       ['@babel/plugin-transform-regenerator', { async: false }],
       ['babel-plugin-module-resolver', {
-        root: ['./app/packs/'],
+        root: ['./app/frontend/'],
         alias: {
-          js: './app/packs/javascript/',
-          models: './app/packs/javascript/models/',
+          js: './app/frontend/javascript/',
+          models: './app/frontend/javascript/models/',
         },
       }],
     ].filter(Boolean),
