@@ -10,9 +10,9 @@ gem 'pg', '~> 1.2'
 gem 'haml-rails', '~> 2.0'
 gem 'jbuilder', '~> 2.11'
 
-gem 'sprockets-rails', '~> 3.4'
-gem 'jsbundling-rails', '~> 1.0'
 gem 'cssbundling-rails', '~> 1.0'
+gem 'jsbundling-rails', '~> 1.0'
+gem 'sprockets-rails', '~> 3.4'
 
 # Used to generate routes for the frontend
 gem 'js-routes', '~> 2.1', require: false
