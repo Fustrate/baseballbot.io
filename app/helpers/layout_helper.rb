@@ -33,7 +33,7 @@ module LayoutHelper
     @stylesheets.concat(packs)
   end
 
-  def javascripts!() = javascript_include_tag(*(@javascripts&.any? ? @javascripts : ['default']), defer: true)
+  def javascripts!() = (javascript_include_tag(*@javascripts, defer: true) if @javascripts&.any?)
 
   def stylesheets!() = stylesheet_link_tag(*(['application'] + (@stylesheets || [])), media: :all)
 end
