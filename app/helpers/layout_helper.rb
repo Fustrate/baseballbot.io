@@ -4,9 +4,7 @@
 # All rights reserved.
 
 module LayoutHelper
-  def title(title)
-    content_for :title, title
-  end
+  def title(title) = content_for(:title, title)
 
   def body_dataset(**body_dataset)
     @data ||= {
