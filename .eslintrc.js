@@ -36,13 +36,8 @@ module.exports = {
     // Recommends `_.map(col, 'owner.name')` instead of `col.map((prop) => prop.owner.name)`
     'lodash/prop-shorthand': 'off',
 
-    'no-alert': 'off',
-
     // This is just ridiculous - can't even assign to a property of a parameter
     'no-param-reassign': 'off',
-
-    // A few third party packages use snake case
-    '@typescript-eslint/camelcase': 'off',
 
     // I'm just not there yet on types
     '@typescript-eslint/no-explicit-any': 'off',
@@ -57,21 +52,15 @@ module.exports = {
 
     'import/extensions': ['error', 'ignorePackages', { js: 'never', ts: 'never' }],
 
-    // Ignore class definition lines that are too long
-    'max-len': ['error', 120, 2, {
-      ignorePattern: '^export default class.*implements',
-      ignoreUrls: true,
-      ignoreComments: false,
-      ignoreRegExpLiterals: true,
-      ignoreStrings: true,
-      ignoreTemplateLiterals: true,
-    }],
-
+    // Require all comments that aren't region markers to start with "// "
     'spaced-comment': ['error', 'always', { markers: ['#region', '#endregion'] }],
 
     '@typescript-eslint/consistent-type-definitions': 'warn',
+
     '@typescript-eslint/explicit-member-accessibility': 'warn',
+
     '@typescript-eslint/member-delimiter-style': 'warn',
+
     '@typescript-eslint/member-ordering': ['warn', {
       default: [
         'static-field',
@@ -89,6 +78,7 @@ module.exports = {
         'abstract-method',
       ],
     }],
+
     '@typescript-eslint/prefer-optional-chain': 'warn',
 
     // https://github.com/eslint/eslint/issues/13957
@@ -96,10 +86,6 @@ module.exports = {
     '@typescript-eslint/indent': ['error', 2],
   },
   settings: {
-    'import/extensions': ['.js', '.ts'],
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts'],
-    },
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
@@ -111,18 +97,15 @@ module.exports = {
     {
       files: ['app/frontend/stylesheets/variables.js', 'lib/yarn/**/*.js'],
       rules: {
-        '@typescript-eslint/explicit-function-return-type': 0,
-        '@typescript-eslint/explicit-module-boundary-types': 0,
-        '@typescript-eslint/no-var-requires': 0,
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
     {
-      files: [
-        'lib/postcss/**/*.js',
-        'postcss.config.js',
-      ],
+      files: ['lib/postcss/**/*.js', 'postcss.config.js'],
       rules: {
-        '@typescript-eslint/no-var-requires': 0,
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
   ],
