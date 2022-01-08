@@ -101,7 +101,6 @@ module.exports = {
       '@typescript-eslint/parser': ['.ts'],
     },
     'import/resolver': {
-      'babel-module': {},
       typescript: {
         alwaysTryTypes: true,
         project: './app/frontend',
