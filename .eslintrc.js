@@ -52,6 +52,8 @@ module.exports = {
 
     'import/extensions': ['error', 'ignorePackages', { js: 'never', ts: 'never' }],
 
+    'max-len': ['error', 120],
+
     // Require all comments that aren't region markers to start with "// "
     'spaced-comment': ['error', 'always', { markers: ['#region', '#endregion'] }],
 
