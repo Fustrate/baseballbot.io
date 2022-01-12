@@ -15,8 +15,9 @@
     "noImplicitUseStrict": true,
     "paths": {
       "*": ["node_modules/*", "app/frontend/*"],
-      "models/*": ["javascript/models/*"],
+      "components/*": ["components/*"],
       "js/*": ["javascript/*"],
+      "models/*": ["models/*"],
     },
     "sourceMap": true,
     "strictBindCallApply": true,

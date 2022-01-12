@@ -1,4 +1,4 @@
-import { GenericPage } from '@fustrate/rails';
+import GenericShow, { autorefresh } from 'components/generic_show';
 import startCase from 'lodash/startCase';
 import { linkTo } from '@fustrate/rails/utilities';
 
@@ -6,25 +6,7 @@ import BaseballBot from 'js/baseballbot';
 import Subreddit from 'models/subreddit';
 import Template from 'models/template';
 
-interface MethodDecoratorTarget {
-  kind: 'method';
-  key: string | symbol;
-  placement: 'prototype';
-}
-
-type DecoratorFunction = (target: MethodDecoratorTarget, key: string, descriptor: PropertyDescriptor) => void;
-
-function decorateMethod(tag: string): DecoratorFunction {
-  return (target: MethodDecoratorTarget, key: string, descriptor: PropertyDescriptor) => {
-    descriptor.value[tag] = true;
-  };
-}
-
-function autorefresh(): any {
-  return decorateMethod('$autorefresh');
-}
-
-class ShowSubreddit extends GenericPage {
+class ShowSubreddit extends GenericShow {
   public subreddit: Subreddit;
 
   public override fields: {
@@ -79,16 +61,6 @@ class ShowSubreddit extends GenericPage {
       .map((template) => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
 
     this.fields.templates.innerHTML = listItems.join('');
-  }
-
-  protected callDecoratedMethods(tag: string): void {
-    const descriptors = Object.getOwnPropertyDescriptors(Object.getPrototypeOf(this));
-
-    Object.entries(descriptors).forEach(([name, descriptor]) => {
-      if (descriptor.value?.[tag]) {
-        this[name]();
-      }
-    });
   }
 }
 
