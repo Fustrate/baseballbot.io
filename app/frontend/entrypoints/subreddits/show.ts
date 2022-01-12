@@ -24,10 +24,6 @@ class ShowSubreddit extends GenericShow {
     this.refresh();
   }
 
-  public override refresh(): void {
-    this.callDecoratedMethods('$autorefresh');
-  }
-
   @autorefresh()
   protected refreshSettings(): void {
     const listItems = [];
