@@ -6,6 +6,24 @@ import BaseballBot from 'js/baseballbot';
 import Subreddit from 'models/subreddit';
 import Template from 'models/template';
 
+interface MethodDecoratorTarget {
+  kind: 'method';
+  key: string | symbol;
+  placement: 'prototype';
+}
+
+type DecoratorFunction = (target: MethodDecoratorTarget, key: string, descriptor: PropertyDescriptor) => void;
+
+function decorateMethod(tag: string): DecoratorFunction {
+  return (target: MethodDecoratorTarget, key: string, descriptor: PropertyDescriptor) => {
+    descriptor.value[tag] = true;
+  };
+}
+
+function autorefresh(): any {
+  return decorateMethod('$autorefresh');
+}
+
 class ShowSubreddit extends GenericPage {
   public subreddit: Subreddit;
 
@@ -25,10 +43,10 @@ class ShowSubreddit extends GenericPage {
   }
 
   public override refresh(): void {
-    this.refreshSettings();
-    this.refreshTemplates();
+    this.callDecoratedMethods('$autorefresh');
   }
 
+  @autorefresh()
   protected refreshSettings(): void {
     const listItems = [];
 
@@ -55,11 +73,22 @@ class ShowSubreddit extends GenericPage {
     this.fields.options.innerHTML = listItems.join('');
   }
 
+  @autorefresh()
   protected refreshTemplates(): void {
     const listItems = Template.buildList(this.subreddit.templates)
       .map((template) => `<li>${linkTo(startCase(template.type), template.path())}</li>`);
 
     this.fields.templates.innerHTML = listItems.join('');
+  }
+
+  protected callDecoratedMethods(tag: string): void {
+    const descriptors = Object.getOwnPropertyDescriptors(Object.getPrototypeOf(this));
+
+    Object.entries(descriptors).forEach(([name, descriptor]) => {
+      if (descriptor.value?.[tag]) {
+        this[name]();
+      }
+    });
   }
 }
 
