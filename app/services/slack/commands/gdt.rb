@@ -30,7 +30,7 @@ module Slack
       protected
 
       def text_response(text)
-        { response_type: 'ephemeral', text: text }
+        { response_type: 'ephemeral', text: }
       end
 
       def subreddit
