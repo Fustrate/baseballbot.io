@@ -7,12 +7,14 @@ gem 'rails', '~> 7.0.1'
 
 gem 'pg', '~> 1.2'
 
+# HTML & JSON views
 gem 'haml-rails', '~> 2.0'
 gem 'jbuilder', '~> 2.11'
 
+# Front end compilation
 gem 'cssbundling-rails', '~> 1.0'
 gem 'jsbundling-rails', '~> 1.0'
-gem 'sprockets-rails', '~> 3.4'
+gem 'propshaft', '~> 0.6'
 
 # Used to generate routes for the frontend
 gem 'js-routes', '~> 2.1', require: false
