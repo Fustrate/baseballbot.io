@@ -25,7 +25,7 @@ const variablesConfig = {
   disable: ['@content', '@each', '@else', '@if', '@include', '@import', '@for', '@mixin'],
 };
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = true;
 
 // Run variables multiple times
 module.exports = {
