@@ -23,7 +23,7 @@ class PruneAssetsTask
   def files_to_remove
     all_asset_files
       .values
-      .flat_map { |files| files[KEEP_ASSETS..] }
+      .flat_map { _1[KEEP_ASSETS..] }
       .compact
   end
 
@@ -48,7 +48,7 @@ class PruneAssetsTask
   def all_asset_directories
     capture(:ls, '-cltR', '--time-style=+"%s"')
       .lines
-      .reject { |line| line[/^(?:d|total)/] }
+      .reject { _1[/^(?:d|total)/] }
       .join
       .split("\n\n")
   end

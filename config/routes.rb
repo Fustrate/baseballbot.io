@@ -3,7 +3,5 @@
 Rails.application.routes.draw do
   root to: 'home#home'
 
-  Dir[Rails.root.join('config/routes/*.rb')].each do |file|
-    instance_eval File.read(file)
-  end
+  Dir[Rails.root.join('config/routes/*.rb')].each { instance_eval File.read(_1) }
 end

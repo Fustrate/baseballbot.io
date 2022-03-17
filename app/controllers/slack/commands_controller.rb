@@ -13,6 +13,6 @@ module Slack
 
     protected
 
-    def verify_slack_signature() = Slack::VerifySignature.call
+    def verify_slack_signature = Slack::VerifySignature.call
   end
 end

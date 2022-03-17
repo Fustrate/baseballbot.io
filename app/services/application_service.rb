@@ -10,7 +10,7 @@ class ApplicationService
 
   def transaction(&) = ActiveRecord::Base.transaction(&)
 
-  def params() = Current.params
+  def params = Current.params
 
   class LoadPage < self
     DEFAULT_INCLUDES = nil
@@ -28,9 +28,7 @@ class ApplicationService
 
     protected
 
-    def default_scope
-      raise NotImplementedError, '#default_scope not defined'
-    end
+    def default_scope = (raise NotImplementedError, '#default_scope not defined')
 
     def default_order
       return self.class::DEFAULT_ORDER.call if self.class::DEFAULT_ORDER.is_a? Proc
