@@ -1,21 +1,20 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 
-const postcssImport = require('postcss-import');
-const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
-const postcssPresetEnv = require('postcss-preset-env');
-const postcssMixins = require('postcss-mixins');
-const postcssColorMod = require('postcss-color-mod-function');
-
 const postcssAdvancedVars = require('postcss-advanced-variables');
-const postcssNested = require('postcss-nested');
+const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
+const postcssImport = require('postcss-import');
 const postcssMinify = require('postcss-minify');
+const postcssMixins = require('postcss-mixins');
+const postcssNested = require('postcss-nested');
+const postcssPresetEnv = require('postcss-preset-env');
 
 // Custom postcss plugins
-const remCalc = require('./lib/postcss/rem-calc');
-const media = require('./lib/postcss/media');
-const faVar = require('./lib/postcss/fa-var');
+const colorMod = require('./lib/postcss/color-mod');
 const faFontUrls = require('./lib/postcss/fa-font-urls');
+const faVar = require('./lib/postcss/fa-var');
+const media = require('./lib/postcss/media');
+const remCalc = require('./lib/postcss/rem-calc');
 
 const variables = require('./app/frontend/stylesheets/variables');
 
@@ -38,7 +37,7 @@ module.exports = {
     postcssMixins({ mixinsDir: path.join(__dirname, 'lib', 'postcss', 'mixins') }),
     postcssAdvancedVars(variablesConfig),
     postcssNested,
-    postcssColorMod,
+    colorMod,
     faVar,
     media,
     faFontUrls,
