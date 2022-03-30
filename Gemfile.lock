@@ -268,7 +268,7 @@ GEM
       rack
       railties (>= 7.0.0)
     public_suffix (4.0.6)
-    puma (5.6.2)
+    puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -444,7 +444,7 @@ DEPENDENCIES
   oj (~> 3.13)
   pg (~> 1.2)
   propshaft (~> 0.6)
-  puma (~> 5.5)
+  puma (~> 5.6)
   rails (~> 7.0.2)
   rails-controller-testing (~> 1.0)
   redd (~> 0.8)
