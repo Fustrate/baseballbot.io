@@ -1,4 +1,5 @@
                  Prefix Verb   URI Pattern                            Controller#Action
+                               /assets                                Propshaft::Server
                    root GET    /                                      home#home
   accounts_authenticate GET    /accounts/authenticate(.:format)       accounts#authenticate
 discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#reddit_callback
