@@ -81,10 +81,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fortawesome/fontawesome-pro@^6.1.0":
-  version "6.1.0"
-  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.1.0/fontawesome-pro-6.1.0.tgz#c7ae5be6fa9b492e695a345394e03534a99ed88e"
-  integrity sha512-BsNhQDKcZJ5Rf2Xz75VXF7RmafcQuQGHbrs44IAGZYf8SazMa9w+NHdFRRBVfHBeXUFPAUoO9Jffu/tVuI09EA==
+"@fortawesome/fontawesome-pro@^6.1.1":
+  version "6.1.1"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.1.1/fontawesome-pro-6.1.1.tgz#ff731c472fb4c93947e506806f3e1d7b2cd0a971"
+  integrity sha512-0w6GM8sCXNpcBLUz4bx61JvjjoCvfEIz5wBz2KjLNw9qk1F2XiUWuifXobvLbwaA7kqPGBRPo3U8Zw7zyaJ9sA==
 
 "@fustrate/rails@https://github.com/Fustrate/fustrate-rails.js":
   version "0.1.0"

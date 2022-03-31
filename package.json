@@ -3,7 +3,7 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
-    "@fortawesome/fontawesome-pro": "^6.1.0",
+    "@fortawesome/fontawesome-pro": "^6.1.1",
     "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js",
     "@rails/ujs": "^7.0.2-3",
     "autoprefixer": "^10.4.4",
