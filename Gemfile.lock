@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/Fustrate/fustrate-rails.git
-  revision: 96b180d124bd5525269395ec56afa2a1b4e1b66c
+  revision: bf3c6366ce715fded52c9b28091cd022c2ab263a
   specs:
-    fustrate-rails (0.8.0)
+    fustrate-rails (0.9.0)
       activesupport (>= 6.0.3, < 8)
       jbuilder (~> 2.11)
       railties (>= 6.0.3, < 8)
@@ -10,12 +10,12 @@ GIT
 
 GIT
   remote: https://github.com/Fustrate/mlb_stats_api.git
-  revision: 868902c0b2da538d89de6cabcb6e13c77ec9c742
+  revision: a08dd55da04aaf5f14c147988d669982729af32b
   specs:
     mlb_stats_api (0.3.0)
       hana (~> 1.3)
-      httparty (~> 0.18)
-      moneta (~> 1.3)
+      httparty (~> 0.20)
+      moneta (~> 1.4)
 
 GEM
   remote: https://rubygems.org/
@@ -157,7 +157,7 @@ GEM
     faraday (2.2.0)
       faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
-    faraday-net_http (2.0.1)
+    faraday-net_http (2.0.2)
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -172,7 +172,7 @@ GEM
       railties (>= 5.1)
     hana (1.3.7)
     hiredis (0.6.3)
-    honeybadger (4.12.0)
+    honeybadger (4.12.1)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -193,7 +193,6 @@ GEM
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
-    io-wait (0.2.1)
     irb (1.4.1)
       reline (>= 0.3.0)
     jbuilder (2.11.5)
@@ -209,7 +208,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.15.0)
+    loofah (2.16.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -223,9 +222,9 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.15.0)
-    mock_redis (0.30.0)
+    mock_redis (0.31.0)
       ruby2_keywords
-    moneta (1.4.2)
+    moneta (1.5.1)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.2.3)
@@ -236,8 +235,7 @@ GEM
       digest
       net-protocol
       timeout
-    net-protocol (0.1.2)
-      io-wait
+    net-protocol (0.1.3)
       timeout
     net-scp (3.0.0)
       net-ssh (>= 2.6.5, < 7.0.0)
@@ -247,7 +245,7 @@ GEM
       timeout
     net-ssh (6.1.0)
     nio4r (2.5.8)
-    nokogiri (1.13.3)
+    nokogiri (1.13.4)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     oauth (0.5.8)
@@ -259,7 +257,7 @@ GEM
       rack (>= 1.2, < 3)
     oj (3.13.11)
     parallel (1.22.1)
-    parser (3.1.1.0)
+    parser (3.1.2.0)
       ast (~> 2.4.1)
     pg (1.3.5)
     propshaft (0.6.4)
@@ -267,7 +265,7 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    public_suffix (4.0.6)
+    public_suffix (4.0.7)
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -312,7 +310,7 @@ GEM
     redd (0.8.8)
       http (~> 2.2)
     redis (4.6.0)
-    regexp_parser (2.2.1)
+    regexp_parser (2.3.0)
     reline (0.3.1)
       io-console (~> 0.5)
     rexml (3.2.5)
@@ -323,7 +321,7 @@ GEM
     rspec-expectations (3.11.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
-    rspec-mocks (3.11.0)
+    rspec-mocks (3.11.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-rails (5.1.1)
@@ -335,16 +333,16 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.11.0)
-    rubocop (1.26.1)
+    rubocop (1.28.1)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
-      rubocop-ast (>= 1.16.0, < 2.0)
+      rubocop-ast (>= 1.17.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.16.0)
+    rubocop-ast (1.17.0)
       parser (>= 3.1.1.0)
     rubocop-performance (1.13.3)
       rubocop (>= 1.7.0, < 2.0)
@@ -353,11 +351,11 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    rubocop-rspec (2.9.0)
+    rubocop-rspec (2.10.0)
       rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    ruby_parser (3.19.0)
+    ruby_parser (3.19.1)
       sexp_processor (~> 4.16)
     rubyzip (2.3.2)
     sanitize (6.0.0)
@@ -367,14 +365,14 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
-    sexp_processor (4.16.0)
-    sidekiq (6.4.1)
+    sexp_processor (4.16.1)
+    sidekiq (6.4.2)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
     sidekiq-history (0.0.12)
       sidekiq (>= 3.0.0)
-    skylight (5.3.1)
+    skylight (5.3.2)
       activesupport (>= 5.2.0)
     sorcery (0.16.3)
       bcrypt (~> 3.1)

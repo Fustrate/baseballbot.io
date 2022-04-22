@@ -7,7 +7,7 @@ set :user, 'baseballbot'
 set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
 set :repo_url, 'git@github.com:Fustrate/baseballbot.io.git'
-set :branch, ENV['REVISION'] || :master
+set :branch, ENV.fetch('REVISION', 'master')
 
 append :linked_dirs, 'log', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/sockets'
 
