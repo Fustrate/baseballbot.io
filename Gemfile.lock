@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Fustrate/fustrate-rails.git
-  revision: bf3c6366ce715fded52c9b28091cd022c2ab263a
+  revision: 5a23b1d8bfe8eb165d2a823767787601c52d736f
   specs:
     fustrate-rails (0.9.0)
       activesupport (>= 6.0.3, < 8)
@@ -333,7 +333,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.11.0)
-    rubocop (1.28.1)
+    rubocop (1.28.2)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
       rainbow (>= 2.2.2, < 4.0)
