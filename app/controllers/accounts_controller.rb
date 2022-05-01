@@ -53,11 +53,11 @@ class AccountsController < ApplicationController
 
     save_account
 
-    flash[:success] = 'Your account is now active for use with BaseballBot.'
+    flash[:success] = t('authentication.success')
 
     redirect_to :root
   rescue Redd::AuthenticationError
-    flash[:error] = 'Reddit sent an invalid token - did you take too long?'
+    flash[:error] = t('authentication.invalid_token')
 
     redirect_to :root
   end
