@@ -180,11 +180,21 @@ export const gamedayPath: ((
 
 /**
  * Generates rails route to
- * /log_in(.:format)
+ * /login(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const logInPath: ((
+export const loginPath: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /logout(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const logoutPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
@@ -260,11 +270,31 @@ export const sidekiqWebPath: ((
 
 /**
  * Generates rails route to
- * /sign_out(.:format)
+ * /sign_up/authorized(.:format)
  * @param {object | undefined} options
  * @returns {string} route path
  */
-export const signOutPath: ((
+export const signUpAuthorizedPath: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /sign_up/finish(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const signUpFinishPath: ((
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
+ * /sign_up/start(.:format)
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const signUpStartPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 

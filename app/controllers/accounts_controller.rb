@@ -78,49 +78,49 @@ class AccountsController < ApplicationController
   end
 
   def save_account
-    session = Redd.it(
+    reddit_session = Redd.it(
       code: params[:code],
       client_id: Rails.application.credentials.dig(:reddit, :client_id),
       secret: Rails.application.credentials.dig(:reddit, :secret),
       redirect_uri: Rails.application.credentials.dig(:reddit, :redirect_uri)
     )
 
-    # session.client.refresh if session.client.access.expired?
+    # reddit_session.client.refresh if reddit_session.client.access.expired?
 
-    create_or_update_account(session)
+    create_or_update_account(reddit_session)
   end
 
-  def create_or_update_account(session)
-    name = session.me.name
-    expires_in = session.client.access.expires_in
+  def create_or_update_account(reddit_session)
+    name = reddit_session.me.name
+    expires_in = reddit_session.client.access.expires_in
 
     existing = Account.where('LOWER(name) = ?', name.downcase).first
 
     if existing
-      update_existing_account(existing, session, expires_in)
+      update_existing_account(existing, reddit_session, expires_in)
 
       existing
     else
-      create_new_account(name, session, expires_in)
+      create_new_account(name, reddit_session, expires_in)
     end
   end
 
-  def update_existing_account(account, session, expires_in)
+  def update_existing_account(account, reddit_session, expires_in)
     account.update(
       scope: AUTH_SCOPE,
-      access_token: session.client.access.access_token,
-      refresh_token: session.client.access.refresh_token,
+      access_token: reddit_session.client.access.access_token,
+      refresh_token: reddit_session.client.access.refresh_token,
       expires_at: Time.zone.now + expires_in - 10.seconds
     )
   end
 
-  def create_new_account(name, session, expires_in)
+  def create_new_account(name, reddit_session, expires_in)
     Account.create(
       id: Account.order('id DESC').limit(1).ids[0] + 1,
       name:,
       scope: AUTH_SCOPE,
-      access_token: session.client.access.access_token,
-      refresh_token: session.client.access.refresh_token,
+      access_token: reddit_session.client.access.access_token,
+      refresh_token: reddit_session.client.access.refresh_token,
       expires_at: Time.zone.now + expires_in - 10.seconds
     )
   end

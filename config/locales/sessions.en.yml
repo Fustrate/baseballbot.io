@@ -1,0 +1,13 @@
+en:
+  sessions:
+    log_in:
+      title: Log In
+      email: Email Address
+      password: Password
+      password_confirmation: Confirm Password
+      remember_me: Remember Me
+      welcome_back: 'Welcome back, %{name}!'
+      failed: Username and/or password incorrect.
+      submit: Log In
+
+    logged_out: You have successfully logged out.

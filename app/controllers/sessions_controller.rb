@@ -1,46 +1,31 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  def log_in
+  def new = (redirect_to root_path if logged_in?)
+
+  def create
+    user = login params[:login], params[:password], params[:remember_me]
+
+    user ? successful_login(user) : user_not_found
   end
 
-  def process_log_in
-    email = params[:email].strip
-    password = params[:password]
-    remember_me = params[:remember_me]
+  def destroy
+    logout
 
-    login(email, password, remember_me) do |account, failure_reason|
-      return login_failure(failure_reason) unless account && !failure_reason
-
-      redirect_to root_path
-    end
-  end
-
-  def sign_out
-    if logged_in?
-      logout
-
-      cookies.delete :homeowner_id
-    end
-
-    flash[:info] = t 'sessions.logged_out'
-
-    redirect_to root_path
+    redirect_to login_path, flash: { info: t('sessions.logged_out') }
   end
 
   protected
 
-  def login_failure(failure_reason)
-    if failure_reason == :inactive
-      flash[:error] = t 'sessions.activation.account_not_activated'
+  def user_not_found
+    flash[:error] = t('sessions.log_in.failed')
 
-      redirect_to resend_activation_path(email: params[:email])
+    render :new
+  end
 
-      return
-    end
+  def successful_login(user)
+    flash[:success] = t 'sessions.log_in.welcome_back', name: user.username
 
-    flash[:error] = t 'sessions.log_in.failure'
-
-    render :log_in
+    redirect_back_or_to root_url
   end
 end

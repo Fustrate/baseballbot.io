@@ -14,10 +14,13 @@ discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#re
                         DELETE /game_threads/:id(.:format)            game_threads#destroy
               gamechats GET    /gamechats(.:format)                   game_threads#index
                 gameday GET    /gameday(.:format)                     home#gameday
-                 log_in GET    /log_in(.:format)                      sessions#log_in
-                        POST   /log_in(.:format)                      sessions#process_log_in
-               sign_out DELETE /sign_out(.:format)                    sessions#sign_out
+                  login GET    /login(.:format)                       sessions#new
+                        POST   /login(.:format)                       sessions#create
+                 logout DELETE /logout(.:format)                      sessions#destroy
             sidekiq_web        /sidekiq                               Sidekiq::Web
+          sign_up_start GET    /sign_up/start(.:format)               sign_up#start
+     sign_up_authorized POST   /sign_up/authorized(.:format)          sign_up#authorized
+         sign_up_finish POST   /sign_up/finish(.:format)              sign_up#finish
      slack_commands_gdt POST   /slack/commands/gdt(.:format)          slack/commands#gdt
     slack_interactivity POST   /slack/interactivity(.:format)         slack#interactivity
  game_threads_subreddit GET    /subreddits/:id/game_threads(.:format) subreddits#game_threads
