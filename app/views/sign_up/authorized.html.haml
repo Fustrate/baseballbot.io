@@ -7,7 +7,7 @@
 = form_tag sign_up_finish_path, method: :post do
   %label
     Username
-    = input_field_tag :username, session[:reddit_username], disabled: true, required: true
+    = text_field_tag :username, @username, disabled: true, required: true
 
   %label
     Password
