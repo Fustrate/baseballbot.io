@@ -2,6 +2,6 @@
 
 namespace :sign_up do
   get  :start
-  post :authorized
+  get  :authorized
   post :finish
 end
