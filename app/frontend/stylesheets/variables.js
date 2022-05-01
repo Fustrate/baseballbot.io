@@ -105,16 +105,7 @@ Object.assign(variables, {
 });
 
 Object.assign(variables, {
-  'vacation-icon': 'island-tropical',
-  'sick-icon': 'prescription-bottle-alt',
-
   'table-border-color': '#ddd',
-
-  'permissions-board-icon': 'gavel',
-  'permissions-employee-icon': 'shield-alt',
-  'permissions-guest-icon': 'globe',
-  'permissions-owner-icon': 'home',
-  'permissions-tenant-icon': 'bed',
 });
 
 // Design
