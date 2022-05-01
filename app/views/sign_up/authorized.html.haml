@@ -1,0 +1,18 @@
+:ruby
+  title 'Finish Signup'
+
+%h1.text-center
+  Finish Signup
+
+= form_tag sign_up_finish_path, method: :post do
+  %label
+    Username
+    = input_field_tag :username, session[:reddit_username], disabled: true, required: true
+
+  %label
+    Password
+    = password_field_tag :password, nil, required: true
+
+  %label
+    Confirm Password
+    = password_field_tag :confirm_password, nil, required: true
