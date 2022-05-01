@@ -1,0 +1,5 @@
+- unless flash.empty?
+  - flash.each do |type, message|
+    .alert-box{ class: type }= message
+
+  - flash.clear
