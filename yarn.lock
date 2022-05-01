@@ -513,9 +513,9 @@ css-prefers-color-scheme@^6.0.3:
   integrity sha512-4BqMbZksRkJQx2zAjrokiGMd07RqOa2IxIrrN10lyBe9xhn9DEvjUK79J6jkeiv9D9hQFXKb6g1jwU62jziJZA==
 
 cssdb@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/cssdb/-/cssdb-6.5.0.tgz#61264b71f29c834f09b59cb3e5b43c8226590122"
-  integrity sha512-Rh7AAopF2ckPXe/VBcoUS9JrCZNSyc60+KpgE6X25vpVxA32TmiqvExjkfhwP4wGSb6Xe8Z/JIyGqwgx/zZYFA==
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/cssdb/-/cssdb-6.6.0.tgz#e4562e2aaba5b23e7d9e6555ba64298990e1ba96"
+  integrity sha512-hXoXDYrxmAGNh+vgg39WJArCpFIaU3O2q7ud+bEobQ6Fbl2tjPasl3Wt8MKkxlNQEIZqieh0DBsz92eSKI4ghw==
 
 cssesc@^3.0.0:
   version "3.0.0"
