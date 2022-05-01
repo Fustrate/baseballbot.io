@@ -1,6 +1,6 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-/config/credentials/*
+/config/credentials/*.key
 /config/database.yml
 
 # Front-end builds
