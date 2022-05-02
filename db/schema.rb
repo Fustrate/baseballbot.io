@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_02_062052) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_02_070727) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -97,9 +97,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_02_062052) do
     t.citext "username", null: false
     t.string "crypted_password"
     t.string "salt"
-    t.datetime "lock_expires_at"
-    t.integer "failed_logins_count", default: 0
-    t.string "unlock_token"
     t.datetime "last_activity_at"
     t.datetime "last_login_at"
     t.datetime "last_logout_at"
@@ -110,7 +107,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_02_062052) do
     t.datetime "updated_at", null: false
     t.index ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at"
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token"
-    t.index ["unlock_token"], name: "index_users_on_unlock_token"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
