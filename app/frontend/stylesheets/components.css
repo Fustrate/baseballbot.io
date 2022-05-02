@@ -4,8 +4,9 @@
 @import 'components/buttons';
 /* @import 'components/disclosures'; */
 /* @import 'components/dropdowns'; */
-/* @import 'components/flashes'; */
+@import 'components/flashes';
 @import 'components/forms';
+@import 'components/grid';
 @import 'components/labels';
 @import 'components/modals';
 @import 'components/pagination';

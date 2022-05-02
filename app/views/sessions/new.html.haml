@@ -3,27 +3,26 @@
 
 %h1= t('sessions.log_in.title')
 
-.page-content
-  = render 'flash_messages'
+= render 'flash_messages'
 
-  .grid
-    .medium-6.columns
-      .panel
-        = form_tag login_path do
-          %label
-            = t('sessions.log_in.username')
-            = text_field_tag :username, params[:username]
+.grid
+  .medium-6.columns
+    .panel
+      = form_tag login_path do
+        %label
+          = t('sessions.log_in.username')
+          = text_field_tag :username, params[:username]
 
-          %label
-            = t('sessions.log_in.password')
-            = password_field_tag :password
+        %label
+          = t('sessions.log_in.password')
+          = password_field_tag :password
 
-          %label
-            = check_box_tag :remember_me, params[:remember_me]
-            = t('sessions.log_in.remember_me')
+        %label
+          = check_box_tag :remember_me, params[:remember_me]
+          = t('sessions.log_in.remember_me')
 
-          .text-center= submit_tag 'Log In', class: 'button'
+        .text-center= submit_tag 'Log In', class: 'button'
 
-    .medium-6.columns
-      %h3.text-center Don't have an account?
-      %p.text-center #{link_to 'Click here', :sign_up_start} to sign up.
+  .medium-6.columns
+    %h3.text-center Don't have an account?
+    %p.text-center #{link_to 'Click here', :sign_up_start} to sign up.
