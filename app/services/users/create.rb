@@ -5,12 +5,12 @@
 
 module Users
   class Create < ApplicationService
-    def call
-      raise UserError, 'Invalid username' unless session[:reddit_username] == params[:username]
+    def call(username:)
+      raise UserError, 'Invalid username' unless username == params[:username]
 
       raise UserError, 'Passwords do not match' unless params[:password] == params[:confirm_password]
 
-      User.create! username: session[:reddit_username], password: params[:password]
+      User.create! username:, password: params[:password]
     end
   end
 end

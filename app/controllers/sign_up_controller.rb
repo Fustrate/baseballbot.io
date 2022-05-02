@@ -19,7 +19,7 @@ class SignUpController < ApplicationController
   end
 
   def finish
-    user = Users::Create.call
+    user = Users::Create.call username: session[:reddit_username]
 
     auto_login(user, true)
 
