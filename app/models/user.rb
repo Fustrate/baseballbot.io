@@ -3,7 +3,6 @@
 class User < ApplicationRecord
   authenticates_with_sorcery!
 
-  validates :email, uniqueness: true, presence: true, allow_blank: false
   validates :username, uniqueness: true, presence: true, allow_blank: false
   validates :password, presence: true, on: :create, allow_blank: false
 
