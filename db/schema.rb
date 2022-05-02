@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_02_070727) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_02_152728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -75,6 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_02_070727) do
     t.jsonb "options"
     t.integer "team_id"
     t.string "slack_id"
+    t.string "moderators", default: [], array: true
   end
 
   create_table "subreddits_users", id: false, force: :cascade do |t|
