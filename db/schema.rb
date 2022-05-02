@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_10_070253) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_05_02_062052) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "plpgsql"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
@@ -94,8 +94,7 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "username", null: false
-    t.string "email", null: false
+    t.citext "username", null: false
     t.string "crypted_password"
     t.string "salt"
     t.datetime "lock_expires_at", precision: 6
@@ -107,16 +106,10 @@ ActiveRecord::Schema.define(version: 2021_10_10_070253) do
     t.string "last_login_from_ip_address"
     t.datetime "remember_me_token_expires_at", precision: 6
     t.string "remember_me_token"
-    t.datetime "reset_password_email_sent_at", precision: 6
-    t.datetime "reset_password_token_expires_at", precision: 6
-    t.integer "access_count_to_reset_password_page", default: 0
-    t.string "reset_password_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at"
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token"
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
     t.index ["unlock_token"], name: "index_users_on_unlock_token"
     t.index ["username"], name: "index_users_on_username", unique: true
   end

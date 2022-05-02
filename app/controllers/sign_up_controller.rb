@@ -41,10 +41,10 @@ class SignUpController < ApplicationController
   def authorized_with_reddit
     @username = reddit_session.me.name
 
-    @user = User.where('LOWER(username) = ?', @username.downcase).first
+    user = User.where(username: @username).first
 
     # TODO: Show the reset password form directly
-    raise UserError, 'Please reset your password' if @user
+    raise UserError, 'Please reset your password' if user
 
     session[:reddit_username] = @username
   end
