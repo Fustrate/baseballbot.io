@@ -16,3 +16,6 @@
   %label
     Confirm Password
     = password_field_tag :confirm_password, nil, required: true
+
+  .text-center
+    = submit_tag 'Create Account', class: 'button save', 'data-disable-with': 'Creating Account...'

@@ -16,6 +16,13 @@
         = link_to 'Subreddits', subreddits_path
         = link_to 'Gameday', gameday_path
 
+      %section.main-menu.right
+        - if logged_in?
+          = link_to 'Log Out', :logout, method: :delete
+        - else
+          = link_to 'Log In', :login
+          = link_to 'Sign Up', :sign_up_start
+
     %section.page-content
       - unless flash.empty?
         - flash.each do |type, message|

@@ -19,6 +19,11 @@ class SignUpController < ApplicationController
   end
 
   def finish
+    user = Users::Create.call
+
+    auto_login(user, true)
+
+    redirect_to :root
   end
 
   protected

@@ -1,8 +1,7 @@
 :ruby
   title t('sessions.log_in.title')
 
-.subpage-header
-  %h1= t('sessions.log_in.title')
+%h1= t('sessions.log_in.title')
 
 .page-content
   = render 'flash_messages'
@@ -10,10 +9,10 @@
   .grid
     .medium-6.columns
       .panel
-        = form_tag log_in_path do
+        = form_tag login_path do
           %label
-            = t('sessions.log_in.email')
-            = text_field_tag :email
+            = t('sessions.log_in.username')
+            = text_field_tag :username, params[:username]
 
           %label
             = t('sessions.log_in.password')
@@ -28,10 +27,3 @@
     .medium-6.columns
       %h3.text-center Don't have an account?
       %p.text-center #{link_to 'Click here', :sign_up_start} to sign up.
-
-      %hr
-
-      %h3.text-center= t 'sessions.forgot_password.question'
-
-      %p.text-center
-        #{link_to 'Click here', :forgot_password} to reset your password.

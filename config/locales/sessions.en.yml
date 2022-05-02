@@ -2,7 +2,7 @@ en:
   sessions:
     log_in:
       title: Log In
-      email: Email Address
+      username: Reddit Username
       password: Password
       password_confirmation: Confirm Password
       remember_me: Remember Me
