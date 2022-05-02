@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022 Valencia Management Group
-# All rights reserved.
-
 module Users
   class Create < ApplicationService
-    def call(username:)
-      raise UserError, 'Invalid username' unless username == params[:username]
-
+    def call
       raise UserError, 'Passwords do not match' unless params[:password] == params[:confirm_password]
 
-      User.create! username:, password: params[:password]
+      User.create! username: verified_username, password: params[:password]
     end
+
+    protected
+
+    def verified_username = EncryptedMessages.new.decrypt_and_verify(params[:token], purpose: :username)
   end
 end

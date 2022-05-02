@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2021 Valencia Management Group
-# All rights reserved.
-
 module LayoutHelper
   def title(title) = content_for(:title, title)
 

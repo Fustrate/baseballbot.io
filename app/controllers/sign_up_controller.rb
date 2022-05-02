@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022 Valencia Management Group
-# All rights reserved.
-
 class SignUpController < ApplicationController
   AUTH_SCOPE = %i[identity].freeze
 
@@ -19,7 +16,7 @@ class SignUpController < ApplicationController
   end
 
   def finish
-    user = Users::Create.call username: session[:reddit_username]
+    user = Users::Create.call
 
     auto_login(user, true)
 
@@ -50,8 +47,6 @@ class SignUpController < ApplicationController
 
     # TODO: Show the reset password form directly
     raise UserError, 'Please reset your password' if user
-
-    session[:reddit_username] = @username
   end
 
   def reddit_session

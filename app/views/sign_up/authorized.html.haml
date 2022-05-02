@@ -17,5 +17,7 @@
     Confirm Password
     = password_field_tag :confirm_password, nil, required: true
 
+  = hidden_field_tag :token, EncryptedMessages.new.encrypt_and_sign(@username, expires_in: 7.days, purpose: :username)
+
   .text-center
     = submit_tag 'Create Account', class: 'button save', 'data-disable-with': 'Creating Account...'
