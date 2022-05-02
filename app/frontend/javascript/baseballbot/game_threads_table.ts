@@ -20,14 +20,14 @@ const redditIcon = icon('reddit', 'brands');
 
 function statusLabel(gameThread: GameThread) {
   if (gameThread.postAt < DateTime.now() && gameThread.status === 'Future') {
-    return label('Error', 'fw game-thread');
+    return label('Error', 'fw', 'game-thread', 'error');
   }
 
   if (gameThread.startsAt < DateTime.now() && gameThread.status === 'Posted') {
-    return label('Live', 'fw game-thread');
+    return label('Live', 'fw', 'game-thread', 'live');
   }
 
-  return label(gameThread.status, 'fw game-thread');
+  return label(gameThread.status, 'fw', 'game-thread', gameThread.status.toLowerCase());
 }
 
 function populateGameThreadTitle(cell: HTMLTableCellElement, gameThread: GameThread) {
