@@ -61,9 +61,7 @@ module Slack
         away = game.dig('teams', 'away', 'team', 'abbreviation')
         home = game.dig('teams', 'home', 'team', 'abbreviation')
         free = game.dig('content', 'media', 'freeGame')
-        time = Time.zone.parse(game['gameDate'])
-          .in_time_zone(ActiveSupport::TimeZone.new('America/New_York'))
-          .strftime('%-I:%M %p')
+        time = Time.zone.parse(game['gameDate']).in_time_zone('America/New_York').strftime('%-I:%M %p')
 
         "#{away} @ #{home} - #{time}#{free ? ' 🆓' : ''}"
       end
@@ -99,7 +97,7 @@ module Slack
       # def game_date(live_feed, time_zone: 'America/New_York')
       #   Time.zone
       #     .parse(live_feed.game_data.dig('datetime', 'dateTime'))
-      #     .in_time_zone(ActiveSupport::TimeZone.new(time_zone))
+      #     .in_time_zone(time_zone)
       #     .strftime('%-m/%-d at %-I:%m %p')
       # end
 

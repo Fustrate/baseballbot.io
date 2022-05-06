@@ -90,7 +90,7 @@ module Slack
 
     def starts_at
       @starts_at ||= Time.zone.parse(game_feed.dig('gameData', 'datetime', 'dateTime'))
-        .in_time_zone(ActiveSupport::TimeZone.new('America/Los_Angeles'))
+        .in_time_zone('America/Los_Angeles')
     end
 
     def api

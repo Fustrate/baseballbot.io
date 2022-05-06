@@ -9,9 +9,7 @@ class Subreddit < ApplicationRecord
   has_many :subreddit_users, dependent: :destroy
   has_many :users, through: :subreddit_users
 
-  def url
-    "https://reddit.com/r/#{name}"
-  end
+  def url = "https://reddit.com/r/#{name}"
 
   def update_sidebar?
     @update_sidebar ||= options.dig('sidebar', 'enabled')
