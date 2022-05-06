@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class GameThread < ApplicationRecord
+  include Editable
+  include Eventable
+
   belongs_to :subreddit, optional: false
 
   TYPES = %w[no_hitter game_thread].freeze

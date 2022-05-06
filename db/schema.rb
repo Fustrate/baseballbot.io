@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_02_152728) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_06_171415) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -33,6 +33,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_02_152728) do
     t.index ["subject_type", "subject_id"], name: "index_bot_actions_on_subject_type_and_subject_id"
   end
 
+  create_table "edits", force: :cascade do |t|
+    t.string "editable_type", null: false
+    t.bigint "editable_id", null: false
+    t.string "user_type", null: false
+    t.bigint "user_id", null: false
+    t.text "note"
+    t.string "reason"
+    t.jsonb "pretty_changes", default: {}, null: false
+    t.jsonb "raw_changes", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["editable_type", "editable_id"], name: "index_edits_on_editable"
+    t.index ["user_type", "user_id"], name: "index_edits_on_user"
+  end
+
   create_table "events", id: :serial, force: :cascade do |t|
     t.string "eventable_type"
     t.integer "eventable_id"
@@ -40,7 +55,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_02_152728) do
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "user_type", null: false
+    t.bigint "user_id", null: false
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable_type_and_eventable_id"
+    t.index ["user_type", "user_id"], name: "index_events_on_user_type_and_user_id"
   end
 
   create_table "game_threads", id: :serial, force: :cascade do |t|
@@ -83,6 +101,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_02_152728) do
     t.bigint "user_id", null: false
     t.index ["subreddit_id"], name: "index_subreddits_users_on_subreddit_id"
     t.index ["user_id"], name: "index_subreddits_users_on_user_id"
+  end
+
+  create_table "system_users", force: :cascade do |t|
+    t.string "username", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "templates", id: :serial, force: :cascade do |t|

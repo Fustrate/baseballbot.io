@@ -12,6 +12,8 @@ class ApplicationService
 
   def params = Current.params
 
+  def log_edit(...) = ::LogEdit.call(...)
+
   class LoadPage < self
     DEFAULT_INCLUDES = nil
     DEFAULT_JOINS = nil

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Subreddit < ApplicationRecord
+  include Editable
+  include Eventable
+
   has_many :game_threads, dependent: :destroy
   has_many :templates, dependent: :destroy
 
