@@ -5,9 +5,15 @@ module Users
     def call
       raise UserError, 'Passwords do not match' unless params[:password] == params[:confirm_password]
 
-      @user = User.create! username: verified_username, password: params[:password]
+      @user = User.find_or_initialize_by username: verified_username
 
-      connect_subreddits
+      existing_user = @user.persisted?
+
+      @user.password = params[:password]
+
+      @user.save!
+
+      connect_subreddits unless existing_user
 
       @user
     end

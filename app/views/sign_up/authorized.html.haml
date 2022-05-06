@@ -1,13 +1,14 @@
 :ruby
-  title 'Finish Signup'
+  title_for_action = @user.persisted? ? 'Reset Password' : 'Create Password'
 
-%h1.text-center
-  Finish Signup
+  title title_for_action
+
+%h1.text-center= title_for_action
 
 = form_tag sign_up_finish_path, method: :post do
   %label
     Username
-    = text_field_tag :username, @username, disabled: true, required: true
+    = text_field_tag :username, @user.username, disabled: true, required: true
 
   %label
     Password
@@ -20,4 +21,7 @@
   = hidden_field_tag :token, EncryptedMessages.new.encrypt_and_sign(@username, expires_in: 7.days, purpose: :username)
 
   .text-center
-    = submit_tag 'Create Account', class: 'button save', 'data-disable-with': 'Creating Account...'
+    - if @user.persisted?
+      = submit_tag 'Update Account', class: 'button save', 'data-disable-with': 'Updating Account...'
+    - else
+      = submit_tag 'Create Account', class: 'button save', 'data-disable-with': 'Creating Account...'
