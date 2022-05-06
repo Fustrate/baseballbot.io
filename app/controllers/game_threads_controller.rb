@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GameThreadsController < ApplicationController
+  before_action :require_login, except: %i[index show]
   before_action :load_game_thread, except: %i[index new create]
 
   def index
@@ -16,9 +17,13 @@ class GameThreadsController < ApplicationController
   end
 
   def new
+    @game_thread = GameThread.new
   end
 
   def create
+    @game_thread = GameThread::Create.call
+
+    render :show, status: :created
   end
 
   def edit
