@@ -25,7 +25,7 @@ class GameThreadsController < ApplicationController
 
     flash[:success] = t 'game_threads.created'
 
-    redirect_to @game_thread
+    redirect_to game_threads_subreddit_path(@game_thread.subreddit)
   rescue ActiveRecord::RecordInvalid => e
     @game_thread = e.record
 
