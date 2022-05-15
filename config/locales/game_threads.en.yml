@@ -6,3 +6,4 @@ en:
 
     errors:
       game_pk_exists: has already been added for this subreddit.
+      title_invalid_tokens: includes an invalid formatting token

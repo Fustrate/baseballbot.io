@@ -31,5 +31,9 @@
       Hours before game time to post thread
       = number_field_tag :hours, 1, min: 0, max: 12
 
+    %label
+      Title
+      = f.text_field :title
+
     .text-center
       = f.submit 'Save', class: 'button save', 'data-disable-with': 'Saving...'
