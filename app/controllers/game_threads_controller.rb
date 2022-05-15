@@ -21,9 +21,15 @@ class GameThreadsController < ApplicationController
   end
 
   def create
-    @game_thread = GameThread::Create.call
+    @game_thread = GameThreads::Create.call
 
-    render :show, status: :created
+    flash[:success] = t 'game_threads.created'
+
+    redirect_to @game_thread
+  rescue ActiveRecord::RecordInvalid => e
+    @game_thread = e.record
+
+    render :new
   end
 
   def edit

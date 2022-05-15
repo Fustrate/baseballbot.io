@@ -1,6 +1,4 @@
 # frozen_string_literal: true
 
-# Version of your assets, change this if you want to expire all your assets.
-Rails.application.config.assets.version = '1.0'
-
+# Propshaft doesn't include files in node_module by default
 Rails.application.config.assets.paths << Rails.root.join('node_modules/@fortawesome/fontawesome-pro/webfonts')

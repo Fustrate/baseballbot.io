@@ -1,0 +1,29 @@
+:ruby
+  title 'Add a Game Thread'
+
+  javascript 'game_threads/new'
+
+  my_subreddits_with_game_threads = Current.user.subreddits.where("options['game_threads']['enabled']::boolean IS TRUE")
+
+%h1.text-center Add a Game Thread
+
+.panel
+  = form_with model: @game_thread do |f|
+    %label
+      Subreddit
+      = f.select :subreddit_id, my_subreddits_with_game_threads.pluck(:name, :id), { include_blank: true }, required: true
+
+    %label
+      Date
+      = date_field_tag :date, params[:date] || Time.zone.today, 'data-field': 'date'
+
+    %label
+      Game
+      = f.select :game_pk, [], {}, 'data-field': 'gamePk', disabled: true, required: true
+
+    %label
+      Hours before game time to post thread
+      = number_field_tag :hours, 1, min: 0, max: 12
+
+    .text-center
+      = f.submit 'Save', class: 'button save', 'data-disable-with': 'Saving...'

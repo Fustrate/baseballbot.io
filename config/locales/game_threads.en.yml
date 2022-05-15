@@ -1,0 +1,5 @@
+en:
+  game_threads:
+    created: Game Thread added successfully.
+    updated: Game Thread update successfully.
+    destroyed: Game Thread removed successfully.

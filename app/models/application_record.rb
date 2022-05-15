@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
 class ApplicationRecord < ActiveRecord::Base
-  self.abstract_class = true
-  self.inheritance_column = :_disabled
+  include ::Fustrate::Rails::Concerns::Model
 end

@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Fustrate/fustrate-rails.git
-  revision: cc342f0a26271b63be48f6578f6ef81d62412da4
+  revision: a648d6438806ee5c426b9805eb8e23d904e6ab6b
   specs:
     fustrate-rails (0.9.0)
       activesupport (>= 6.0.3, < 8)

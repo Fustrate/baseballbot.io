@@ -8,6 +8,10 @@ class ApplicationService
 
   protected
 
+  def authorize!(action, resource) = resource.auror.authorize!(action, resource)
+
+  def authorized?(action, resource, **options) = resource.auror.authorized?(action, resource, **options)
+
   def transaction(&) = ActiveRecord::Base.transaction(&)
 
   def params = Current.params
