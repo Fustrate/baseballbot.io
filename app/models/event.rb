@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Event < ApplicationRecord
-  include Authorizable
   include Fustrate::Rails::Concerns::CleanAttributes
 
   belongs_to :eventable, polymorphic: true, touch: true, inverse_of: :events

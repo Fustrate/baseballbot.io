@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Subreddit < ApplicationRecord
+  include Authorizable
   include Editable
   include Eventable
 
@@ -29,4 +30,10 @@ class Subreddit < ApplicationRecord
   def post_postgame?
     @post_postgame ||= options.dig('postgame', 'enabled')
   end
+
+  # TODO: These are required for SubredditAuror to work. Make it work without them.
+
+  def subreddit = self
+
+  def subreddit_id = id
 end

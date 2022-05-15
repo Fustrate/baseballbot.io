@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GameThread < ApplicationRecord
+  include Authorizable
   include Editable
   include Eventable
 
