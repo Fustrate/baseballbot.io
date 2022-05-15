@@ -19,3 +19,6 @@
       %td{ colspan: 7 } Loading game threads...
 
 %p.text-center All times are Pacific.
+
+- if logged_in? && Current.user.subreddits.any?
+  %p.text-center= link_to 'Add a Game Thread', new_game_thread_path, class: 'button plain'
