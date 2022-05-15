@@ -13,4 +13,7 @@ class GameThread < ApplicationRecord
   validates :game_pk, :post_at, :starts_at, :status, presence: true
   validates :type, inclusion: TYPES, allow_nil: true
   validates :status, inclusion: STATUSES
+  validates :game_pk,
+            uniqueness: { scope: %w[subreddit_id type], message: I18n.t('game_threads.errors.game_pk_exists') },
+            on: :create
 end

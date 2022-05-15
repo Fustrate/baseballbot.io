@@ -3,3 +3,6 @@ en:
     created: Game Thread added successfully.
     updated: Game Thread update successfully.
     destroyed: Game Thread removed successfully.
+
+    errors:
+      game_pk_exists: has already been added for this subreddit.

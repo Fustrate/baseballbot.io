@@ -9,6 +9,12 @@
 
 .panel
   = form_with model: @game_thread do |f|
+    - if @game_thread.errors.full_messages.any?
+      .alert-box.error
+        %ul
+          - @game_thread.errors.full_messages.each do |message|
+            %li= message
+
     %label
       Subreddit
       = f.select :subreddit_id, my_subreddits_with_game_threads.pluck(:name, :id), { include_blank: true }, required: true
