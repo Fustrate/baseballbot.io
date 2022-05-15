@@ -9,8 +9,8 @@ class Subreddit < ApplicationRecord
 
   belongs_to :account
 
-  has_many :subreddit_users, dependent: :destroy
-  has_many :users, through: :subreddit_users
+  has_many :subreddits_users, dependent: :destroy
+  has_many :users, through: :subreddits_users
 
   def url = "https://reddit.com/r/#{name}"
 

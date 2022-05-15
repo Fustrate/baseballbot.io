@@ -11,8 +11,8 @@ class User < ApplicationRecord
 
   alias_attribute :to_s, :username
 
-  has_many :subreddit_users, dependent: :destroy
-  has_many :subreddits, through: :subreddit_users
+  has_many :subreddits_users, dependent: :destroy
+  has_many :subreddits, through: :subreddits_users
 
   def subreddit_ids
     @subreddit_ids ||= subreddits.ids
