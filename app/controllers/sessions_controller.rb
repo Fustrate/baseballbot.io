@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   def new = (redirect_to root_path if logged_in?)
 
   def create
-    user = login params[:login], params[:password], params[:remember_me]
+    user = login params[:username], params[:password], params[:remember_me]
 
     user ? successful_login(user) : user_not_found
   end
