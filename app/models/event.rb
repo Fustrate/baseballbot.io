@@ -8,8 +8,8 @@ class Event < ApplicationRecord
 
   validates :type, presence: true
 
-  validates :date, date_sanity: -> { 1.year.ago..Time.zone.tomorrow }
-  validates :note, presence: true, if: -> { type == 'Note' }
+  # validates :date, date_sanity: -> { 1.year.ago..Time.zone.tomorrow }
+  # validates :note, presence: true, if: -> { type == 'Note' }
 
   before_save :clean_data
   before_create :set_date
