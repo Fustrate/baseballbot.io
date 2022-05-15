@@ -32,8 +32,84 @@
       = number_field_tag :hours, 1, min: 0, max: 12
 
     %label
-      Title
+      Post Title
       = f.text_field :title
+      %p.help Leave blank to use the default post title for this subreddit
 
     .text-center
       = f.submit 'Save', class: 'button save', 'data-disable-with': 'Saving...'
+
+  %h4 Title Formatting Tokens
+
+  %table
+    %thead
+      %tr
+        %th Token
+        %th Description
+        %th Example
+    %tbody
+      %tr
+        %td
+          %strong= '%<start_time>s'
+        %td Local start time
+        %td 7:10 PM
+      %tr
+        %td
+          %strong= '%<start_time_et>s'
+        %td Eastern start time
+        %td 10:10 PM ET
+      %tr
+        %td
+          %strong= '%<away_full_name>s'
+        %td Full away team name
+        %td Cleveland Guardians
+      %tr
+        %td
+          %strong= '%<away_name>s'
+        %td Short away team name
+        %td Guardians
+      %tr
+        %td
+          %strong= '%<away_pitcher>s'
+        %td Away starting pitcher last name
+        %td Johnson
+      %tr
+        %td
+          %strong= '%<away_record>s'
+        %td Away team record
+        %td 32-11
+      %tr
+        %td
+          %strong= '%<home_full_name>s'
+        %td Full home team name
+        %td Kansas City Royals
+      %tr
+        %td
+          %strong= '%<home_name>s'
+        %td Short home team name
+        %td Royals
+      %tr
+        %td
+          %strong= '%<home_pitcher>s'
+        %td Home starting pitcher last name
+        %td Smith, W
+      %tr
+        %td
+          %strong= '%<home_record>s'
+        %td Home team record
+        %td 81-80
+      %tr
+        %td
+          %strong= '%<series_game>s'
+        %td Series description (Postseason Only)
+        %td ALDS Game 2
+      %tr
+        %td
+          %strong= '%<home_wins>d'
+        %td Home team wins (Postseason Only)
+        %td 1
+      %tr
+        %td
+          %strong= '%<away_wins>d'
+        %td Away team wins (Postseason Only)
+        %td 0

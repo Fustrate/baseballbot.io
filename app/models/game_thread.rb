@@ -12,10 +12,10 @@ class GameThread < ApplicationRecord
 
   TITLE_INTERPOLATION_STRINGS = %i[
     start_time start_time_et away_full_name away_name away_pitcher away_record home_full_name home_name home_pitcher
-    home_record
+    home_record series_game
   ].freeze
 
-  TITLE_INTERPOLATION_INTEGERS = %i[series_game home_wins away_wins].freeze
+  TITLE_INTERPOLATION_INTEGERS = %i[home_wins away_wins].freeze
 
   validates :game_pk, :post_at, :starts_at, :status, presence: true
   validates :type, inclusion: TYPES, allow_nil: true
