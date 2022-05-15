@@ -21,3 +21,6 @@
 %p All times are Pacific.
 
 %div(data-pagination)
+
+- if logged_in? && Current.user.subreddits.any?
+  %p.text-center= link_to 'Add a Game Thread', new_game_thread_path, class: 'button plain'
