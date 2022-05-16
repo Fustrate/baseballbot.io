@@ -26,7 +26,7 @@ module Authenticate
   def not_authenticated
     respond_to do |format|
       format.html do
-        flash[:error] = t 'sessions.login.please_login'
+        flash[:error] = t 'sessions.log_in.please_log_in'
         redirect_to login_path
       end
 

@@ -19,7 +19,7 @@ discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#re
                  logout DELETE /logout(.:format)                      sessions#destroy
             sidekiq_web        /sidekiq                               Sidekiq::Web
           sign_up_start GET    /sign_up/start(.:format)               sign_up#start
-     sign_up_authorized POST   /sign_up/authorized(.:format)          sign_up#authorized
+     sign_up_authorized GET    /sign_up/authorized(.:format)          sign_up#authorized
          sign_up_finish POST   /sign_up/finish(.:format)              sign_up#finish
      slack_commands_gdt POST   /slack/commands/gdt(.:format)          slack/commands#gdt
     slack_interactivity POST   /slack/interactivity(.:format)         slack#interactivity
