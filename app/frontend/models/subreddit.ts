@@ -3,6 +3,65 @@ import { Record } from '@fustrate/rails';
 import { subredditPath, subredditsPath } from 'js/routes';
 import Template from './template';
 
+export interface SubredditOptions {
+  gameThreads?: {
+    enabled: boolean;
+    flairId?: {
+      default: string;
+    };
+    postAt: string;
+    sticky?: boolean;
+    title: {
+      default: string;
+      postseason?: string;
+      wildcard?: string;
+    };
+  };
+  offDay?: {
+    enabled: boolean;
+    lastRunAt: string;
+    postAt: string;
+    sticky?: boolean;
+    title: string;
+  };
+  postgame?: {
+    enabled: boolean;
+    flairId?: {
+      won?: string;
+      lost?: string;
+    };
+    sticky?: boolean;
+    title: {
+      default: string;
+      postseason?: string;
+    };
+  };
+  pregame?: {
+    title: {
+      default: string;
+      postseason?: string;
+    };
+    enabled: boolean;
+    postAt: string;
+  };
+  sidebar?: {
+    enabled: boolean;
+  };
+  stickySlot?: 1 | 2;
+  timezone: string;
+}
+
+export interface JsonData {
+  id: number;
+  name: string;
+  abbreviation: string;
+  account?: {
+    id: number;
+    name: string;
+  };
+  options: SubredditOptions;
+}
+
 export default class Subreddit extends Record {
   public static override classname = 'Subreddit';
   public static createPath = subredditsPath;
@@ -10,7 +69,7 @@ export default class Subreddit extends Record {
   public abbreviation: string;
   public account: { id: number; name: string };
   public name: string;
-  public options: { [s: string]: any };
+  public options: SubredditOptions;
   public templates: Template[];
 
   public static postAtFormat(postAt?: string): string {

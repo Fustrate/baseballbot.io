@@ -19,7 +19,7 @@
 
     %label
       Subreddit
-      = f.select :subreddit_id, my_subreddits_with_game_threads.pluck(:name, :id), { include_blank: true }, required: true
+      = f.select :subreddit_id, my_subreddits_with_game_threads.pluck(:name, :id), { include_blank: true }, required: true, 'data-field': 'subredditId'
 
     %label
       Date
@@ -35,7 +35,7 @@
 
     %label
       Post Title
-      = f.text_field :title
+      = f.text_field :title, 'data-field': 'title'
       %p.help Leave blank to use the default post title for this subreddit
 
     .text-center

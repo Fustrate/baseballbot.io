@@ -5,6 +5,8 @@ import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
 import { setChildren } from 'js/utilities';
 
 import BaseballBot from 'js/baseballbot';
+import Subreddit from 'models/subreddit';
+import { subredditsPath } from 'js/routes';
 
 function optionForGame(game: ScheduleGame): HTMLOptionElement {
   const away = game.teams.away.team.teamName;
@@ -19,28 +21,40 @@ function optionForGame(game: ScheduleGame): HTMLOptionElement {
   return option;
 }
 
+// TODO: Use the postseason title if the selected game is a postseason game.
+function defaultGameThreadTitle(subreddit: Subreddit): string {
+  return subreddit.options?.gameThreads?.title?.default ?? '';
+}
+
 class NewGameThreadForm extends GenericPage {
   public override fields: {
     date: HTMLInputElement;
     gamePk: HTMLSelectElement;
     postAt: HTMLInputElement;
+    subredditId: HTMLSelectElement;
+    title: HTMLInputElement;
   };
+
+  protected subreddits: { [n: number]: Subreddit } = {};
 
   public override async initialize(): Promise<void> {
     super.initialize();
+
+    await this.loadSubreddits();
 
     this.changedDate();
   }
 
   protected override addEventListeners(): void {
     this.fields.date.addEventListener('change', this.changedDate.bind(this));
+    this.fields.subredditId.addEventListener('change', this.changedSubreddit.bind(this));
   }
 
   protected async changedDate(): Promise<void> {
     const dateValue = this.fields.date.value;
 
     if (!dateValue) {
-      this.availableGames = [];
+      this.updateAvailableGames([]);
 
       return;
     }
@@ -49,10 +63,20 @@ class NewGameThreadForm extends GenericPage {
 
     const schedule = await loadSchedule(luxonDate.toJSDate());
 
-    this.availableGames = schedule.dates[0]?.games ?? [];
+    this.updateAvailableGames(schedule.dates[0]?.games ?? []);
   }
 
-  protected set availableGames(scheduleGames: ScheduleGame[]) {
+  protected async changedSubreddit(): Promise<void> {
+    const subredditId = Number(this.fields.subredditId.value);
+
+    const subreddit = this.subreddits[subredditId];
+
+    if (subreddit) {
+      this.fields.title.value = defaultGameThreadTitle(subreddit);
+    }
+  }
+
+  protected updateAvailableGames(scheduleGames: ScheduleGame[]) {
     const games = scheduleGames.filter((game) => game.status.abstractGameState !== 'Final');
 
     if (games.length === 0) {
@@ -64,6 +88,22 @@ class NewGameThreadForm extends GenericPage {
 
       this.fields.gamePk.removeAttribute('disabled');
     }
+  }
+
+  protected async loadSubreddits(): Promise<void> {
+    if (Object.keys(this.subreddits).length > 0) {
+      return;
+    }
+
+    const response = await window.fetch(subredditsPath({ format: 'json' }));
+
+    const data = await response.json();
+
+    this.subreddits = {};
+
+    data.data.forEach((subredditData) => {
+      this.subreddits[subredditData.id] = Subreddit.build(subredditData);
+    });
   }
 }
 
