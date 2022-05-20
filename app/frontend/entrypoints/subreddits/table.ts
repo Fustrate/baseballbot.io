@@ -3,7 +3,8 @@ import { getCurrentPageJson } from '@fustrate/rails/ajax';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 
 import BaseballBot from 'js/baseballbot';
-import Subreddit from 'models/subreddit';
+import Subreddit, { JsonData as SubredditData } from 'models/subreddit';
+import { postAtFormat } from 'js/utilities';
 
 const blankRow = `
   <tr>
@@ -29,7 +30,7 @@ class SubredditsTable extends GenericTable<Subreddit> {
   public override async reloadTable(): Promise<void> {
     const response = await getCurrentPageJson();
 
-    this.reloadRows(response.data.data.map((row) => this.createRow(Subreddit.build(row))));
+    this.reloadRows(response.data.data.map((row: SubredditData) => this.createRow(Subreddit.build(row))));
   }
 
   public override updateRow(row: HTMLTableRowElement, subreddit: Subreddit): void {
@@ -44,13 +45,13 @@ class SubredditsTable extends GenericTable<Subreddit> {
     if (subreddit.options.gameThreads?.enabled) {
       const { postAt } = subreddit.options.gameThreads;
 
-      row.querySelector('.game-threads').textContent = Subreddit.postAtFormat(postAt);
+      row.querySelector('.game-threads').textContent = postAtFormat(postAt);
     }
 
     if (subreddit.options.pregame?.enabled) {
       const { postAt } = subreddit.options.pregame;
 
-      row.querySelector('.pregames').textContent = Subreddit.postAtFormat(postAt);
+      row.querySelector('.pregames').textContent = postAtFormat(postAt);
     }
 
     if (subreddit.options.postgame?.enabled) {

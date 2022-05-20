@@ -72,23 +72,6 @@ export default class Subreddit extends Record {
   public options: SubredditOptions;
   public templates: Template[];
 
-  public static postAtFormat(postAt?: string): string {
-    if (!postAt) {
-      return '3 Hours Pregame';
-    }
-
-    if (/^-?\d{1,2}$/.test(postAt)) {
-      return `${Math.abs(parseInt(postAt, 10))} Hours Pregame`;
-    }
-
-    if (/(1[012]|\d)(:\d\d|) ?(am|pm)/i.test(postAt)) {
-      return `at ${postAt}`;
-    }
-
-    // Bad format, default back to 3 hours pregame
-    return '3 Hours Pregame';
-  }
-
   public override path(options?: { [s: string]: any }): string {
     return subredditPath(this.id, options);
   }

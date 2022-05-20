@@ -5,7 +5,7 @@ import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
 import { setChildren } from 'js/utilities';
 
 import BaseballBot from 'js/baseballbot';
-import Subreddit from 'models/subreddit';
+import Subreddit, { JsonData as SubredditData } from 'models/subreddit';
 import { subredditsPath } from 'js/routes';
 
 function optionForGame(game: ScheduleGame): HTMLOptionElement {
@@ -101,7 +101,7 @@ class NewGameThreadForm extends GenericPage {
 
     this.subreddits = {};
 
-    data.data.forEach((subredditData) => {
+    data.data.forEach((subredditData: SubredditData) => {
       this.subreddits[subredditData.id] = Subreddit.build(subredditData);
     });
   }

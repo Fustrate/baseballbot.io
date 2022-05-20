@@ -5,6 +5,7 @@ import { linkTo } from '@fustrate/rails/utilities';
 import BaseballBot from 'js/baseballbot';
 import Subreddit from 'models/subreddit';
 import Template from 'models/template';
+import { postAtFormat } from 'js/utilities';
 
 class ShowSubreddit extends GenericShow {
   public subreddit: Subreddit;
@@ -35,13 +36,13 @@ class ShowSubreddit extends GenericShow {
     if (this.subreddit.options.gameThreads?.enabled) {
       const { postAt } = this.subreddit.options.gameThreads;
 
-      listItems.push(`<li>Game Threads ${Subreddit.postAtFormat(postAt)}</li>`);
+      listItems.push(`<li>Game Threads ${postAtFormat(postAt)}</li>`);
     }
 
     if (this.subreddit.options.pregame?.enabled) {
       const { postAt } = this.subreddit.options.pregame;
 
-      listItems.push(`<li>Pregame Threads ${Subreddit.postAtFormat(postAt)}</li>`);
+      listItems.push(`<li>Pregame Threads ${postAtFormat(postAt)}</li>`);
     }
 
     if (this.subreddit.options.postgame?.enabled) {
