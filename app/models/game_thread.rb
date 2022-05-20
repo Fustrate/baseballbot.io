@@ -29,7 +29,7 @@ class GameThread < ApplicationRecord
 
   def valid_title_format
     format(
-      title,
+      Time.zone.now.strftime(title),
       {
         **TITLE_INTERPOLATION_STRINGS.to_h { [_1, ''] },
         **TITLE_INTERPOLATION_INTEGERS.to_h { [_1, 1] }
