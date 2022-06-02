@@ -73,7 +73,7 @@ group :test do
   gem 'database_cleaner', '~> 2.0'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'launchy', '~> 2.5'
-  gem 'rails-controller-testing', '~> 1.0', require: false
+  gem 'rails-controller-testing', '~> 1.0'
 
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'selenium-webdriver', '~> 4.1'
