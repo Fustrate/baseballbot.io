@@ -74,7 +74,7 @@ class AccountsController < ApplicationController
       duration: 'permanent'
     )
 
-    redirect_to auth_url, status: :moved_permanently
+    redirect_to auth_url, status: :moved_permanently, allow_other_host: true
   end
 
   def save_account
