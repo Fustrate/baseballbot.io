@@ -4,6 +4,7 @@ class GameThread < ApplicationRecord
   include Authorizable
   include Editable
   include Eventable
+  include Fustrate::Rails::Concerns::CleanAttributes
 
   belongs_to :subreddit, optional: false
 
