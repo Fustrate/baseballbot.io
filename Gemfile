@@ -100,4 +100,4 @@ gem 'em-hiredis', '~> 0.3'
 gem 'eventmachine', '~> 1.2'
 
 gem 'sidekiq', '< 7'
-gem 'sidekiq-history', '~> 0.0.12'
+gem 'sidekiq-history', '~> 0.0.12', github: 'Fustrate/sidekiq-history'
