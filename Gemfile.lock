@@ -19,7 +19,7 @@ GIT
 
 GIT
   remote: https://github.com/Fustrate/sidekiq-history.git
-  revision: 80dae56db0a939342927121e5f2aaf333cf76f45
+  revision: c81fdfaf5d60af2c98c53f1c3523926beface5b3
   specs:
     sidekiq-history (0.0.12)
       sidekiq (~> 6.5)
@@ -300,7 +300,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (7.0.3)
       actionpack (= 7.0.3)
