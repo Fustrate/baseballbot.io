@@ -24,6 +24,10 @@ AllCops:
 Rails:
   Enabled: true
 
+# Broken in 1.31.2
+Style/TopLevelMethodDefinition:
+  Enabled: false
+
 # ------------------------------------------------------------------------------
 # Coding Style
 # ------------------------------------------------------------------------------
