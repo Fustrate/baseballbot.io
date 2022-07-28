@@ -10,13 +10,39 @@
 
 .grid
   .medium-6.columns
-    %h2.text-center Templates
+    %h2.text-center General Settings
 
     .panel
-      %ul{ 'data-field' => 'templates' }
+      %dl{ 'data-field' => 'generalOptions' }
 
   .medium-6.columns
-    %h2.text-center Settings
+    %h2.text-center Sidebar Settings
 
     .panel
-      %ul.disc{ 'data-field' => 'options' }
+      %dl{ 'data-field' => 'sidebarOptions' }
+
+.grid
+  .medium-6.columns
+    %h2.text-center Game Thread Settings
+
+    .panel
+      %dl{ 'data-field' => 'gameThreadOptions' }
+
+  .medium-6.columns
+    %h2.text-center Pregame Settings
+
+    .panel
+      %dl{ 'data-field' => 'pregameOptions' }
+
+.grid
+  .medium-6.columns
+    %h2.text-center Postgame Settings
+
+    .panel
+      %dl{ 'data-field' => 'postgameOptions' }
+
+  .medium-6.columns
+    %h2.text-center Off Day Settings
+
+    .panel
+      %dl{ 'data-field' => 'offDayOptions' }

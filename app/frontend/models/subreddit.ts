@@ -1,16 +1,19 @@
 import { Record } from '@fustrate/rails';
 
 import { subredditPath, subredditsPath } from 'js/routes';
-import Template from './template';
+import Template, { type JSONData as TemplateData } from './template';
 
 export interface SubredditOptions {
   gameThreads?: {
     enabled: boolean;
     flairId?: {
-      default: string;
+      default?: string;
+      lost?: string;
+      won?: string;
     };
     postAt: string;
     sticky?: boolean;
+    stickyComment?: string;
     title: {
       default: string;
       postseason?: string;
@@ -19,21 +22,27 @@ export interface SubredditOptions {
   };
   offDay?: {
     enabled: boolean;
+    flairId?: string;
     lastRunAt: string;
     postAt: string;
     sticky?: boolean;
+    stickyComment?: string;
     title: string;
   };
   postgame?: {
     enabled: boolean;
     flairId?: {
-      won?: string;
+      default?: string;
       lost?: string;
+      won?: string;
     };
     sticky?: boolean;
+    stickyComment?: string;
     title: {
-      default: string;
+      default?: string;
+      lost?: string;
       postseason?: string;
+      won?: string;
     };
   };
   pregame?: {
@@ -42,7 +51,10 @@ export interface SubredditOptions {
       postseason?: string;
     };
     enabled: boolean;
+    flairId?: string;
     postAt: string;
+    sticky?: boolean;
+    stickyComment?: string;
   };
   sidebar?: {
     enabled: boolean;
@@ -70,25 +82,15 @@ export default class Subreddit extends Record {
   public account: { id: number; name: string };
   public name: string;
   public options: SubredditOptions;
-  public templates: Template[];
+
+  #templates: Template[] = [];
 
   public override path(options?: { [s: string]: any }): string {
     return subredditPath(this.id, options);
   }
 
-  public override extractFromData(data: { [s: string]: any }): { [s: string]: any } {
-    super.extractFromData(data);
-
-    this.id = data.id;
-    this.abbreviation = data.abbreviation;
-    this.account = data.account;
-    this.name = data.name;
-    this.options = data.options;
-
-    if (data.templates) {
-      this.templates = Template.buildList(data.templates);
-    }
-
-    return data;
+  public get templates(): Template[] { return this.#templates; }
+  public set templates(value: Template[] | TemplateData[]) {
+    this.#templates = Template.buildList(value, { eventable: this });
   }
 }
