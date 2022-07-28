@@ -3,7 +3,7 @@ import { getCurrentPageJson } from '@fustrate/rails/ajax';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 
 import BaseballBot from 'js/baseballbot';
-import Subreddit, { JsonData as SubredditData } from 'models/subreddit';
+import Subreddit, { JSONData as SubredditData } from 'models/subreddit';
 import { postAtFormat } from 'js/utilities';
 
 const blankRow = `

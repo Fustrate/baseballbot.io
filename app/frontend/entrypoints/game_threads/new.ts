@@ -5,7 +5,7 @@ import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
 import { setChildren } from 'js/utilities';
 
 import BaseballBot from 'js/baseballbot';
-import Subreddit, { JsonData as SubredditData } from 'models/subreddit';
+import Subreddit, { JSONData as SubredditData } from 'models/subreddit';
 import { subredditsPath } from 'js/routes';
 
 function optionForGame(game: ScheduleGame): HTMLOptionElement {

@@ -51,7 +51,7 @@ export interface SubredditOptions {
   timezone: string;
 }
 
-export interface JsonData {
+export interface JSONData {
   id: number;
   name: string;
   abbreviation: string;
