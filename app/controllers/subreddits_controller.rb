@@ -15,7 +15,7 @@ class SubredditsController < ApplicationController
   end
 
   def edit
-    authorize! :update, @subreddit
+    Auror.authorize :update, @subreddit
   end
 
   def update
