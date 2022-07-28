@@ -14,26 +14,26 @@
 
         %label
           Sticky Comment
-          = text_area_tag 'game_threads[sticky_comment]', @subreddit.options.dig('game_threads', 'sticky_comment'), rows: 5
+          = text_area_tag 'subreddit[options][game_threads][sticky_comment]', @subreddit.options.dig('game_threads', 'sticky_comment'), rows: 5
 
         %h2.text-center Pregame Threads
 
         %label
           Sticky Comment
-          = text_area_tag 'pregame[sticky_comment]', @subreddit.options.dig('pregame', 'sticky_comment'), rows: 5
+          = text_area_tag 'subreddit[options][pregame][sticky_comment]', @subreddit.options.dig('pregame', 'sticky_comment'), rows: 5
 
         %h2.text-center Postgame Threads
 
         %label
           Sticky Comment
-          = text_area_tag 'postgame[sticky_comment]', @subreddit.options.dig('postgame', 'sticky_comment'), rows: 5
+          = text_area_tag 'subreddit[options][postgame][sticky_comment]', @subreddit.options.dig('postgame', 'sticky_comment'), rows: 5
 
       .medium-6.columns
         %h2.text-center Off Day Threads
 
         %label
           Sticky Comment
-          = text_area_tag 'off_day[sticky_comment]', @subreddit.options.dig('off_day', 'sticky_comment'), rows: 5
+          = text_area_tag 'subreddit[options][off_day][sticky_comment]', @subreddit.options.dig('off_day', 'sticky_comment'), rows: 5
 
         %h2.text-center Sidebar
 
