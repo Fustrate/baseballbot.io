@@ -14,6 +14,16 @@ class SubredditsController < ApplicationController
   def show
   end
 
+  def edit
+    authorize! :update, @subreddit
+  end
+
+  def update
+    Subreddits::Update.call @subreddit
+
+    render :show
+  end
+
   def game_threads
     respond_to do |format|
       format.html

@@ -127,6 +127,18 @@ export const editGameThreadPath: ((
 
 /**
  * Generates rails route to
+ * /subreddits/:id/edit(.:format)
+ * @param {any} id
+ * @param {object | undefined} options
+ * @returns {string} route path
+ */
+export const editSubredditPath: ((
+  id: RequiredRouteParameter,
+  options?: {format?: OptionalRouteParameter} & RouteOptions
+) => string) & RouteHelperExtras;
+
+/**
+ * Generates rails route to
  * /game_threads/:id(.:format)
  * @param {any} id
  * @param {object | undefined} options

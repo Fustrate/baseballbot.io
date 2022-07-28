@@ -25,5 +25,8 @@ discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#re
     slack_interactivity POST   /slack/interactivity(.:format)         slack#interactivity
  game_threads_subreddit GET    /subreddits/:id/game_threads(.:format) subreddits#game_threads
              subreddits GET    /subreddits(.:format)                  subreddits#index
+         edit_subreddit GET    /subreddits/:id/edit(.:format)         subreddits#edit
               subreddit GET    /subreddits/:id(.:format)              subreddits#show
+                        PATCH  /subreddits/:id(.:format)              subreddits#update
+                        PUT    /subreddits/:id(.:format)              subreddits#update
                template GET    /templates/:id(.:format)               templates#show
