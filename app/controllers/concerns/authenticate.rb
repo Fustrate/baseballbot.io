@@ -18,9 +18,7 @@ module Authenticate
   end
 
   def setup_current_user
-    return unless logged_in?
-
-    Current.user = current_user
+    Current.user = logged_in? ? current_user : Guest.new
   end
 
   def not_authenticated

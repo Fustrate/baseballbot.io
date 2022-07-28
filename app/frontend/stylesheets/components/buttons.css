@@ -142,6 +142,53 @@ button {
 	}
 }
 
+.buttons {
+	white-space: nowrap;
+
+	button.has-dropdown {
+		&::after {
+			content: '';
+			padding-left: 0;
+		}
+	}
+
+	.dropdown {
+		text-align: left;
+
+		span::before {
+			@mixin font-awesome light full-width;
+			padding-right: 6px;
+		}
+
+		.edit span::before {
+			content: fa-var(pencil);
+		}
+
+		.delete span::before {
+			content: fa-var(trash-can);
+		}
+	}
+
+	.create::before,
+	.delete::before,
+	.edit::before {
+		@mixin font-awesome solid full-width;
+		padding-right: 3px;
+	}
+
+	.create::before {
+		content: fa-var(plus);
+	}
+
+	.delete::before {
+		content: fa-var(trash-can);
+	}
+
+	.edit::before {
+		content: fa-var(pencil);
+	}
+}
+
 h4 .button,
 h4 button {
 	vertical-align: middle;
