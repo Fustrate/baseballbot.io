@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
   protected
 
   def user_not_found
-    flash[:error] = t('sessions.log_in.failed')
+    flash.now[:error] = t('sessions.log_in.failed')
 
     render :new
   end
