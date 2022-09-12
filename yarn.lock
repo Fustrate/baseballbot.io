@@ -133,10 +133,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fortawesome/fontawesome-pro@^6.1.2":
-  version "6.1.2"
-  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.1.2/fontawesome-pro-6.1.2.tgz#4608bdd4bd484ef38e501a24b791bad5f05d4add"
-  integrity sha512-ypL8njTaxiJ+QbHwCCOBrGwj11vnlmyrP4lQ9c3pA2+9R3FtZwTKXpYmfSwdF0cXlwglCkq9plmmK8bgk64QeA==
+"@fortawesome/fontawesome-pro@^6.2.0":
+  version "6.2.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.2.0/fontawesome-pro-6.2.0.tgz#cfb0f1c8f4b33c5bee85fc337c29f77486a82611"
+  integrity sha512-T1JhszQ75ofAaa42XWBte5KsiBb7YM6CKMZTiR3zL0CHZGBabPg8J5FgMoJYlaxgrfLf+jOebDnoB0h43ljAsA==
 
 "@fustrate/rails@https://github.com/Fustrate/fustrate-rails.js":
   version "0.1.0"
