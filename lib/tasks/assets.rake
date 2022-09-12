@@ -10,6 +10,6 @@ namespace :assets do
     JsRoutes.generate! js_folder.join('routes.js'), camel_case: true, documentation: false, module_type: 'CJS'
     JsRoutes.definitions! js_folder.join('routes.d.ts'), camel_case: true
 
-    system "rails routes > #{Rails.root.join('docs/routes.txt')}"
+    system %(rails routes -E | sed -E "s/--.*$//g" > #{Rails.root.join('docs/routes.txt')})
   end
 end

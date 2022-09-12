@@ -1,32 +1,155 @@
-                 Prefix Verb   URI Pattern                            Controller#Action
-                               /assets                                Propshaft::Server
-                   root GET    /                                      home#home
-  accounts_authenticate GET    /accounts/authenticate(.:format)       accounts#authenticate
-discord_reddit_callback GET    /discord/reddit-callback(.:format)     discord#reddit_callback
-          discord_debug GET    /discord/debug(.:format)               discord#debug
-           game_threads GET    /game_threads(.:format)                game_threads#index
-                        POST   /game_threads(.:format)                game_threads#create
-        new_game_thread GET    /game_threads/new(.:format)            game_threads#new
-       edit_game_thread GET    /game_threads/:id/edit(.:format)       game_threads#edit
-            game_thread GET    /game_threads/:id(.:format)            game_threads#show
-                        PATCH  /game_threads/:id(.:format)            game_threads#update
-                        PUT    /game_threads/:id(.:format)            game_threads#update
-                        DELETE /game_threads/:id(.:format)            game_threads#destroy
-              gamechats GET    /gamechats(.:format)                   game_threads#index
-                gameday GET    /gameday(.:format)                     home#gameday
-                  login GET    /login(.:format)                       sessions#new
-                        POST   /login(.:format)                       sessions#create
-                 logout DELETE /logout(.:format)                      sessions#destroy
-            sidekiq_web        /sidekiq                               Sidekiq::Web
-          sign_up_start GET    /sign_up/start(.:format)               sign_up#start
-     sign_up_authorized GET    /sign_up/authorized(.:format)          sign_up#authorized
-         sign_up_finish POST   /sign_up/finish(.:format)              sign_up#finish
-     slack_commands_gdt POST   /slack/commands/gdt(.:format)          slack/commands#gdt
-    slack_interactivity POST   /slack/interactivity(.:format)         slack#interactivity
- game_threads_subreddit GET    /subreddits/:id/game_threads(.:format) subreddits#game_threads
-             subreddits GET    /subreddits(.:format)                  subreddits#index
-         edit_subreddit GET    /subreddits/:id/edit(.:format)         subreddits#edit
-              subreddit GET    /subreddits/:id(.:format)              subreddits#show
-                        PATCH  /subreddits/:id(.:format)              subreddits#update
-                        PUT    /subreddits/:id(.:format)              subreddits#update
-               template GET    /templates/:id(.:format)               templates#show
+
+Prefix            | 
+Verb              | 
+URI               | /assets
+Controller#Action | Propshaft::Server
+
+Prefix            | root
+Verb              | GET
+URI               | /
+Controller#Action | home#home
+
+Prefix            | accounts_authenticate
+Verb              | GET
+URI               | /accounts/authenticate(.:format)
+Controller#Action | accounts#authenticate
+
+Prefix            | discord_reddit_callback
+Verb              | GET
+URI               | /discord/reddit-callback(.:format)
+Controller#Action | discord#reddit_callback
+
+Prefix            | discord_debug
+Verb              | GET
+URI               | /discord/debug(.:format)
+Controller#Action | discord#debug
+
+Prefix            | game_threads
+Verb              | GET
+URI               | /game_threads(.:format)
+Controller#Action | game_threads#index
+
+Prefix            | 
+Verb              | POST
+URI               | /game_threads(.:format)
+Controller#Action | game_threads#create
+
+Prefix            | new_game_thread
+Verb              | GET
+URI               | /game_threads/new(.:format)
+Controller#Action | game_threads#new
+
+Prefix            | edit_game_thread
+Verb              | GET
+URI               | /game_threads/:id/edit(.:format)
+Controller#Action | game_threads#edit
+
+Prefix            | game_thread
+Verb              | GET
+URI               | /game_threads/:id(.:format)
+Controller#Action | game_threads#show
+
+Prefix            | 
+Verb              | PATCH
+URI               | /game_threads/:id(.:format)
+Controller#Action | game_threads#update
+
+Prefix            | 
+Verb              | PUT
+URI               | /game_threads/:id(.:format)
+Controller#Action | game_threads#update
+
+Prefix            | 
+Verb              | DELETE
+URI               | /game_threads/:id(.:format)
+Controller#Action | game_threads#destroy
+
+Prefix            | gamechats
+Verb              | GET
+URI               | /gamechats(.:format)
+Controller#Action | game_threads#index
+
+Prefix            | gameday
+Verb              | GET
+URI               | /gameday(.:format)
+Controller#Action | home#gameday
+
+Prefix            | login
+Verb              | GET
+URI               | /login(.:format)
+Controller#Action | sessions#new
+
+Prefix            | 
+Verb              | POST
+URI               | /login(.:format)
+Controller#Action | sessions#create
+
+Prefix            | logout
+Verb              | DELETE
+URI               | /logout(.:format)
+Controller#Action | sessions#destroy
+
+Prefix            | sidekiq_web
+Verb              | 
+URI               | /sidekiq
+Controller#Action | Sidekiq::Web
+
+Prefix            | sign_up_start
+Verb              | GET
+URI               | /sign_up/start(.:format)
+Controller#Action | sign_up#start
+
+Prefix            | sign_up_authorized
+Verb              | GET
+URI               | /sign_up/authorized(.:format)
+Controller#Action | sign_up#authorized
+
+Prefix            | sign_up_finish
+Verb              | POST
+URI               | /sign_up/finish(.:format)
+Controller#Action | sign_up#finish
+
+Prefix            | slack_commands_gdt
+Verb              | POST
+URI               | /slack/commands/gdt(.:format)
+Controller#Action | slack/commands#gdt
+
+Prefix            | slack_interactivity
+Verb              | POST
+URI               | /slack/interactivity(.:format)
+Controller#Action | slack#interactivity
+
+Prefix            | game_threads_subreddit
+Verb              | GET
+URI               | /subreddits/:id/game_threads(.:format)
+Controller#Action | subreddits#game_threads
+
+Prefix            | subreddits
+Verb              | GET
+URI               | /subreddits(.:format)
+Controller#Action | subreddits#index
+
+Prefix            | edit_subreddit
+Verb              | GET
+URI               | /subreddits/:id/edit(.:format)
+Controller#Action | subreddits#edit
+
+Prefix            | subreddit
+Verb              | GET
+URI               | /subreddits/:id(.:format)
+Controller#Action | subreddits#show
+
+Prefix            | 
+Verb              | PATCH
+URI               | /subreddits/:id(.:format)
+Controller#Action | subreddits#update
+
+Prefix            | 
+Verb              | PUT
+URI               | /subreddits/:id(.:format)
+Controller#Action | subreddits#update
+
+Prefix            | template
+Verb              | GET
+URI               | /templates/:id(.:format)
+Controller#Action | templates#show
