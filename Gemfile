@@ -61,7 +61,7 @@ group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
   gem 'debug', '~> 1.3'
 
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 6.0'
 end
 
 group :test do
@@ -93,7 +93,7 @@ gem 'sorcery', '~> 0.16'
 gem 'authority', '~> 3.3'
 
 gem 'chronic', '~> 0.10'
-gem 'redis', '~> 4.4'
+gem 'redis', '~> 5.0'
 
 # Communication with the Discord bot
 gem 'em-hiredis', '~> 0.3'
