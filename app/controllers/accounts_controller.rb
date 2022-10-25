@@ -23,10 +23,10 @@ class AccountsController < ApplicationController
   def new
   end
 
-  def create
+  def edit
   end
 
-  def edit
+  def create
   end
 
   def update

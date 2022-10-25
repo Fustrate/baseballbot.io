@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
   end
 
   def successful_login(user)
-    flash[:success] = t 'sessions.log_in.welcome_back', name: user.username
+    flash.now[:success] = t 'sessions.log_in.welcome_back', name: user.username
 
     redirect_back_or_to root_url
   end

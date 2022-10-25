@@ -20,6 +20,9 @@ class GameThreadsController < ApplicationController
     @game_thread = GameThread.new
   end
 
+  def edit
+  end
+
   def create
     @game_thread = GameThreads::Create.call
 
@@ -30,9 +33,6 @@ class GameThreadsController < ApplicationController
     @game_thread = e.record
 
     render :new
-  end
-
-  def edit
   end
 
   def update
