@@ -52,101 +52,101 @@
     %tbody
       %tr
         %td
-          %strong= '%<start_time>s'
+          %strong {{start_time}}
         %td Local start time
         %td 7:10 PM
       %tr
         %td
-          %strong= '%<start_time_et>s'
+          %strong {{start_time_et}}
         %td Eastern start time
         %td 10:10 PM ET
       %tr
         %td
-          %strong= '%<away_full_name>s'
+          %strong {{away_full_name}}
         %td Full away team name
         %td Cleveland Guardians
       %tr
         %td
-          %strong= '%<away_name>s'
+          %strong {{away_name}}
         %td Short away team name
         %td Guardians
       %tr
         %td
-          %strong= '%<away_pitcher>s'
+          %strong {{away_pitcher}}
         %td Away starting pitcher last name
         %td Johnson
       %tr
         %td
-          %strong= '%<away_record>s'
+          %strong {{away_record}}
         %td Away team record
         %td 32-11
       %tr
         %td
-          %strong= '%<home_full_name>s'
+          %strong {{home_full_name}}
         %td Full home team name
         %td Kansas City Royals
       %tr
         %td
-          %strong= '%<home_name>s'
+          %strong {{home_name}}
         %td Short home team name
         %td Royals
       %tr
         %td
-          %strong= '%<home_pitcher>s'
+          %strong {{home_pitcher}}
         %td Home starting pitcher last name
         %td Smith, W
       %tr
         %td
-          %strong= '%<home_record>s'
+          %strong {{home_record}}
         %td Home team record
         %td 81-80
       %tr
         %td
-          %strong= '%<series_game>s'
+          %strong {{series_game}}
         %td Postseason series game description
         %td ALDS Game 2
       %tr
         %td
-          %strong= '%<home_wins>d'
+          %strong {{home_wins}}
         %td Postseason home team wins
         %td 1
       %tr
         %td
-          %strong= '%<away_wins>d'
+          %strong {{away_wins}}
         %td Postseason away team wins
         %td 0
       %tr
         %td
-          %strong %-m
+          %strong {{month}}
         %td Month
-        %td= now.strftime('%-m')
+        %td= now.month
       %tr
         %td
-          %strong %-d
+          %strong {{day}}
         %td Day
-        %td= now.strftime('%-d')
+        %td= now.day
       %tr
         %td
-          %strong %Y
+          %strong {{year}}
         %td 4-Digit Year
-        %td= now.strftime('%Y')
+        %td= now.year
       %tr
         %td
-          %strong %y
+          %strong {{short_year}}
         %td 2-Digit Year
         %td= now.strftime('%y')
       %tr
         %td
-          %strong %B
+          %strong {{month_name}}
         %td Month Name
         %td= now.strftime('%B')
       %tr
         %td
-          %strong %A
+          %strong {{day_of_week}}
         %td Weekday name
         %td= now.strftime('%A')
       %tr
         %td
-          %strong %a
+          %strong {{short_day_of_week}}
         %td Abbreviated weekday name
         %td= now.strftime('%a')
