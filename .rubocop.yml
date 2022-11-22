@@ -85,10 +85,6 @@ Style/IpAddresses:
 # Cops that should not be run
 # ------------------------------------------------------------------------------
 
-# Recommends a comment for each gem in Gemfile
-Bundler/GemComment:
-  Enabled: false
-
 # Recommends each array item be on its own line.
 Layout/MultilineArrayLineBreaks:
   Enabled: false
