@@ -3,101 +3,145 @@
 source 'https://rubygems.org'
 
 ruby '3.1.2'
-gem 'rails', '~> 7.0.2'
 
-gem 'pg', '~> 1.2'
+# Rails! [https://github.com/rails/rails]
+gem 'rails', '~> 7.0.4'
 
-# HTML & JSON views
+# Postgres database [https://github.com/ged/ruby-pg]
+gem 'pg', '~> 1.4'
+
+# HAML templates instead of ERB [https://github.com/haml/haml-rails]
 gem 'haml-rails', '~> 2.0'
+
+# JSON generation with a nice DSL [https://github.com/rails/jbuilder]
 gem 'jbuilder', '~> 2.11'
 
-# Front end compilation
-gem 'cssbundling-rails', '~> 1.0'
+# Postcss integration with Rails [https://github.com/rails/cssbundling-rails]
+gem 'cssbundling-rails', '~> 1.1'
+
+# Esbuild integration with Rails [https://github.com/rails/jsbundling-rails]
 gem 'jsbundling-rails', '~> 1.0'
+
+# New Rails asset pipeline [https://github.com/rails/propshaft]
 gem 'propshaft', '~> 0.6'
 
-# Used to generate routes for the frontend
-gem 'js-routes', '~> 2.1', require: false
+# Frontend routes [https://github.com/railsware/js-routes]
+gem 'js-routes', '~> 2.2', require: false
 
-# Faster json generation
+# Faster raw json generation [https://github.com/ohler55/oj]
 gem 'oj', '~> 3.13'
 
-# A few custom services and initializers
+# A few custom services and initializers [https://github.com/Fustrate/fustrate-rails]
 gem 'fustrate-rails', '~> 0.8', github: 'Fustrate/fustrate-rails'
 
-# Use Puma as the app server
-gem 'puma', '~> 5.5'
+# Use Puma as the app server [https://github.com/puma/puma]
+gem 'puma', '~> 6.0'
 
-# Reddit interaction
+# Fetch data from the MLB Stats API [https://github.com/Fustrate/mlb_stats_api]
 gem 'mlb_stats_api', '~> 0.2', github: 'Fustrate/mlb_stats_api'
-gem 'redd', '~> 0.8'
-# gem 'redd', '~> 0.8', git: 'https://github.com/avinashbot/redd.git'
+
+# Reddit interaction [https://github.com/avinashbot/redd]
+gem 'redd', '>= 0.9.0.pre.3', github: 'Fustrate/redd'
+# gem 'redd', '~> 0.8', github: 'avinashbot/redd'
+
+# App Monitoring [https://github.com/honeybadger-io/honeybadger-ruby]
+gem 'honeybadger', '~> 5.0'
+
+# Development evented file watcher [https://github.com/guard/listen]
+gem 'listen', '~> 3.7'
 
 # App Monitoring
-gem 'honeybadger', '~> 4.9'
-gem 'listen', '~> 3.7'
 gem 'skylight', '~> 5.1'
 
-group :development do
-  gem 'bullet', '~> 7.0'
-
-  # Access an IRB console on exception pages or by using `= console` in views
-  gem 'web-console', '~> 4.2'
-
-  # Deploy with Capistrano
-  gem 'capistrano', '~> 3.16', require: false
-  gem 'capistrano-bundler', '~> 2.0', require: false
-  gem 'capistrano-rails', '~> 1.6', require: false
-  gem 'capistrano-rbenv', '~> 2.2', require: false
-
-  # Linters
-  gem 'rubocop', '~> 1.23', require: false
-  gem 'rubocop-performance', '~> 1.12', require: false
-  gem 'rubocop-rails', '~> 2.12', require: false
-  gem 'rubocop-rspec', '~> 2.6', require: false
-end
-
-group :development, :test do
-  # Start debugger with binding.b [https://github.com/ruby/debug]
-  gem 'debug', '~> 1.3'
-
-  gem 'rspec-rails', '~> 6.0'
-end
-
-group :test do
-  gem 'rspec-collection_matchers', '~> 1.2'
-
-  gem 'capybara', '~> 3.36'
-  gem 'mock_redis', '~> 0.29'
-
-  gem 'database_cleaner', '~> 2.0'
-  gem 'factory_bot_rails', '~> 6.2'
-  gem 'launchy', '~> 2.5'
-  gem 'rails-controller-testing', '~> 1.0'
-
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'selenium-webdriver', '~> 4.1'
-  gem 'webdrivers', '~> 5.0'
-end
-
-# "is_active" links in views
+# "is_active" links in views [https://github.com/comfy/active_link_to]
 gem 'active_link_to', '~> 1.0'
 
-# Pagination
+# Pagination [https://github.com/mislav/will_paginate]
 gem 'will_paginate', '~> 3.3'
 
-# Authentication
+# Authentication [https://github.com/Sorcery/sorcery]
 gem 'sorcery', '~> 0.16'
 
 # Permissions
 gem 'authority', '~> 3.3'
 
 gem 'chronic', '~> 0.10'
+
+# A more slim redis client [https://github.com/redis/redis-rb]
 gem 'redis', '~> 5.0'
 
 # Communication with the Discord bot
 gem 'em-hiredis', '~> 0.3'
 gem 'eventmachine', '~> 1.2'
 
-gem 'sidekiq', '< 7'
+# Background Jobs [https://github.com/mperham/sidekiq]
+gem 'sidekiq', '~> 7.0'
+
+# Keep a record of completed jobs in Sidekiq [https://github.com/russ/sidekiq-history]
 gem 'sidekiq-history', '~> 0.0.12', github: 'Fustrate/sidekiq-history'
+
+group :development do
+  # Detect n+1 issues [https://github.com/flyerhzm/bullet]
+  gem 'bullet', '~> 7.0'
+
+  # Access an IRB console on exception pages or by using `= console` in views [https://github.com/rails/web-console]
+  gem 'web-console', '~> 4.2'
+
+  # Deploy with Capistrano [https://github.com/capistrano/capistrano]
+  gem 'capistrano', '~> 3.17', require: false
+
+  # Capistrano Bundler integration [https://github.com/capistrano/bundler]
+  gem 'capistrano-bundler', '~> 2.1', require: false
+
+  # Capistrano Rails integration [https://github.com/capistrano/rails]
+  gem 'capistrano-rails', '~> 1.6', require: false
+
+  # Capistrano rbenv integration [https://github.com/capistrano/rbenv]
+  gem 'capistrano-rbenv', '~> 2.2', require: false
+
+  # Ruby code linting [https://github.com/rubocop/rubocop]
+  gem 'rubocop', '~> 1.31', require: false
+
+  # Rubocop - performance cops [https://github.com/rubocop/rubocop-performance]
+  gem 'rubocop-performance', '~> 1.14', require: false
+
+  # Rubocop - rails cops [https://github.com/rubocop/rubocop-rails]
+  gem 'rubocop-rails', '~> 2.15', require: false
+
+  # Rubocop - rspec cops [https://github.com/rubocop/rubocop-rspec]
+  gem 'rubocop-rspec', '~> 2.12', require: false
+end
+
+group :development, :test do
+  # Start debugger with binding.b [https://github.com/ruby/debug]
+  gem 'debug', '~> 1.5'
+
+  # Make RSpec play nicely with Rails [https://github.com/rspec/rspec-rails]
+  gem 'rspec-rails', '~> 6.0'
+end
+
+group :test do
+  # Adds the `have(n)` matcher [https://github.com/rspec/rspec-collection_matchers]
+  gem 'rspec-collection_matchers', '~> 1.2'
+
+  # Interact with forms in tests [https://github.com/teamcapybara/capybara]
+  gem 'capybara', '~> 3.37'
+
+  # Mock the redis server/client [https://github.com/sds/mock_redis]
+  gem 'mock_redis', '~> 0.32'
+
+  # Reset the database to a clean state after every test [https://github.com/DatabaseCleaner/database_cleaner]
+  gem 'database_cleaner', '~> 2.0'
+
+  # Mock models & relationships [https://github.com/thoughtbot/factory_bot_rails]
+  gem 'factory_bot_rails', '~> 6.2'
+
+  # Launch the code editor from backtraces [https://github.com/copiousfreetime/launchy]
+  gem 'launchy', '~> 2.5'
+
+  # Access assigns in controller & view tests [https://github.com/rails/rails-controller-testing]
+  gem 'rails-controller-testing', '~> 1.0'
+
+  # Easy installation and use of web drivers to run system tests with browsers [https://github.com/titusfortner/webdrivers]
+  gem 'webdrivers', '~> 5.0'
+end

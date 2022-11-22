@@ -4,6 +4,11 @@
 # memory issues, causing jobs to be deleted in favor of the cache
 
 Sidekiq.configure_server do |config|
+  config.queues = %w[default slack].compact
+
+  config[:timeout] = 15
+  config[:concurrency] = 5
+
   config.redis = { url: 'redis://localhost:6379/2' }
 end
 
