@@ -59,9 +59,6 @@ gem 'will_paginate', '~> 3.3'
 # Authentication [https://github.com/Sorcery/sorcery]
 gem 'sorcery', '~> 0.16'
 
-# Permissions
-gem 'authority', '~> 3.3'
-
 # A more slim redis client [https://github.com/redis/redis-rb]
 gem 'redis', '~> 5.0'
 

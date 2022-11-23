@@ -109,8 +109,6 @@ GEM
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
-    authority (3.3.0)
-      activesupport (>= 3.0.0)
     bcrypt (3.1.18)
     bindex (0.8.1)
     builder (3.2.4)
@@ -428,7 +426,6 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to (~> 1.0)
-  authority (~> 3.3)
   bullet (~> 7.0)
   capistrano (~> 3.17)
   capistrano-bundler (~> 2.1)
