@@ -50,9 +50,6 @@ gem 'honeybadger', '~> 5.0'
 # Development evented file watcher [https://github.com/guard/listen]
 gem 'listen', '~> 3.7'
 
-# App Monitoring
-gem 'skylight', '~> 5.1'
-
 # "is_active" links in views [https://github.com/comfy/active_link_to]
 gem 'active_link_to', '~> 1.0'
 

@@ -11,8 +11,7 @@ set :branch, ENV.fetch('REVISION', 'master')
 
 append :linked_dirs, 'log', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/sockets'
 
-append :linked_files, 'config/database.yml', 'config/honeybadger.yml', 'config/credentials/production.key',
-       'config/skylight.yml'
+append :linked_files, 'config/database.yml', 'config/honeybadger.yml', 'config/credentials/production.key'
 
 set :default_env, path: '/opt/ruby/bin:$PATH'
 
