@@ -40,9 +40,8 @@ gem 'puma', '~> 6.0'
 # Fetch data from the MLB Stats API [https://github.com/Fustrate/mlb_stats_api]
 gem 'mlb_stats_api', '~> 0.2', github: 'Fustrate/mlb_stats_api'
 
-# Reddit interaction [https://github.com/avinashbot/redd]
+# Reddit interaction [https://github.com/Fustrate/redd]
 gem 'redd', '>= 0.9.0.pre.3', github: 'Fustrate/redd'
-# gem 'redd', '~> 0.8', github: 'avinashbot/redd'
 
 # App Monitoring [https://github.com/honeybadger-io/honeybadger-ruby]
 gem 'honeybadger', '~> 5.0'
