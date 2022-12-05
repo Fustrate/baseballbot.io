@@ -1,11 +1,11 @@
 import { GenericPage } from '@fustrate/rails';
 import hljs from 'highlight.js/lib/core';
-import erb from 'highlight.js/lib/languages/erb';
+import handlebars from 'highlight.js/lib/languages/handlebars';
 
 import BaseballBot from 'js/baseballbot';
 import Template from 'models/template';
 
-hljs.registerLanguage('erb', erb);
+hljs.registerLanguage('handlebars', handlebars);
 
 class ShowTemplate extends GenericPage {
   public template: Template;
