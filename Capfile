@@ -7,11 +7,11 @@ require 'capistrano/setup'
 require 'capistrano/deploy'
 
 # Include tasks from other gems
-require 'capistrano/rbenv'
 require 'capistrano/bundler'
-require 'capistrano/rails'
-require 'capistrano/scm/git'
 require 'capistrano/honeybadger'
+require 'capistrano/rails'
+require 'capistrano/rbenv'
+require 'capistrano/scm/git'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { import _1 }
