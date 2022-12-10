@@ -51,10 +51,11 @@
     "ruby.intellisense": false,
     "ruby.useLanguageServer": true,
     "search.exclude": {
-        "**/node_modules": true,
-        "yarn.lock": true,
+        ".yarn": true,
         "app/frontend/javascript/i18n-translations.js": true,
         "app/frontend/javascript/routes.js": true,
+        "node_modules": true,
+        "yarn.lock": true,
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.validate.enable": true,
