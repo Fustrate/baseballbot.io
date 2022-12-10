@@ -43,8 +43,7 @@
     "build:css": "postcss \"app/frontend/entrypoints/**/*.css\" --base app/frontend/entrypoints --dir app/assets/builds",
     "eslint": "eslint ./app/frontend/ --ext=js,ts --cache",
     "fontawesome": "node ./lib/yarn/regenerate-fontawesome-metadata.js",
-    "tsc": "tsc --noEmit --incremental --project ./app/frontend",
-    "versions": "node ./lib/yarn/update-package-versions.js"
+    "tsc": "tsc --noEmit --incremental --project ./app/frontend"
   },
   "browserslist": [
     "defaults"
