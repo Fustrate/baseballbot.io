@@ -103,6 +103,9 @@ group :development do
 
   # Rubocop - rspec cops [https://github.com/rubocop/rubocop-rspec]
   gem 'rubocop-rspec', '~> 2.12', require: false
+
+  # Shopify Ruby LSP [https://github.com/Shopify/ruby-lsp]
+  gem 'ruby-lsp', '~> 0.3', github: 'Shopify/ruby-lsp', require: false
 end
 
 group :development, :test do
