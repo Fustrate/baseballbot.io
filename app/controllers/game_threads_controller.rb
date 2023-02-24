@@ -36,9 +36,19 @@ class GameThreadsController < ApplicationController
   end
 
   def update
+    GameThreads::Update.call @game_thread
+
+    flash[:success] = t 'game_threads.updated'
+
+    redirect_to @game_thread
+  rescue ActiveRecord::RecordInvalid
+    render :new
   end
 
   def destroy
+    GameThreads::Destroy.call @game_thread
+
+    head :no_content
   end
 
   protected
