@@ -7,7 +7,6 @@
     "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js.git#commit=12f4ac50d722eb4ae0aeaef98f02d917ebe7af4a",
     "@rails/ujs": "^7.0.4-2",
     "autoprefixer": "^10.4.13",
-    "chokidar": "^3.5.3",
     "color": "^4.2.3",
     "esbuild": "^0.17.11",
     "glob": "^9.2.1",
