@@ -33,15 +33,6 @@ GIT
     sidekiq-history (0.0.12)
       sidekiq (>= 6.5)
 
-GIT
-  remote: https://github.com/Shopify/ruby-lsp.git
-  revision: ac7d7132ee0337d5be9aff2646107d7d172644f3
-  specs:
-    ruby-lsp (0.4.1)
-      language_server-protocol (~> 3.17.0)
-      sorbet-runtime
-      syntax_tree (>= 6.0.2, < 7)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -217,7 +208,6 @@ GEM
       railties (>= 6.0.0)
     json (2.6.3)
     jwt (2.7.0)
-    language_server-protocol (3.17.0.3)
     launchy (2.5.2)
       addressable (~> 2.8)
     lazy_lazer (0.8.1)
@@ -276,7 +266,6 @@ GEM
     parser (3.2.1.1)
       ast (~> 2.4.1)
     pg (1.4.6)
-    prettier_print (1.2.0)
     propshaft (0.7.0)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -391,7 +380,6 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
-    sorbet-runtime (0.5.10705)
     sorcery (0.16.4)
       bcrypt (~> 3.1)
       oauth (~> 0.5, >= 0.5.5)
@@ -399,8 +387,6 @@ GEM
     sshkit (1.21.4)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    syntax_tree (6.0.2)
-      prettier_print (>= 1.2.0)
     temple (0.10.0)
     thor (1.2.1)
     tilt (2.1.0)
@@ -472,7 +458,6 @@ DEPENDENCIES
   rubocop-performance (~> 1.14)
   rubocop-rails (~> 2.15)
   rubocop-rspec (~> 2.12)
-  ruby-lsp (~> 0.3)!
   sidekiq (~> 7.0)
   sidekiq-history (~> 0.0.12)!
   sorcery (~> 0.16)
