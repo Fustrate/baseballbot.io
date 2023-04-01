@@ -5,16 +5,12 @@ module GameThreads
     DEFAULT_INCLUDES = [:subreddit].freeze
 
     # Sort by today's games, posted games, future games,
-    ORDER_SQL = Arel.sql(<<~SQL.squish)
-      DATE(starts_at) = ? DESC,
+    DEFAULT_ORDER = Arel.sql(<<~SQL.squish)
+      DATE(starts_at) = CURRENT_DATE DESC,
       status = 'Posted' DESC,
-      post_at > ? DESC,
-      CASE WHEN post_at > ? THEN -(NOW() - starts_at) ELSE NOW() - starts_at END ASC
+      post_at > NOW() DESC,
+      CASE WHEN post_at > NOW() THEN -(NOW() - starts_at) ELSE NOW() - starts_at END ASC
     SQL
-
-    DEFAULT_ORDER = lambda do
-      [ORDER_SQL, Time.zone.now, Time.zone.now, Time.zone.now]
-    end
 
     protected
 
