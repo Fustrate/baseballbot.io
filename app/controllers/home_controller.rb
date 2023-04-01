@@ -10,7 +10,7 @@ class HomeController < ApplicationController
     status IN ('Over', 'Postponed', 'Removed') ASC,
     status = 'External' ASC,
     post_at > NOW() DESC,
-    CASE WHEN post_at > NOW() THEN -(NOW() - starts_at) ELSE NOW() - starts_at END ASC
+    starts_at ASC
   SQL
 
   def home

@@ -9,7 +9,7 @@ module GameThreads
       DATE(starts_at) = CURRENT_DATE DESC,
       status = 'Posted' DESC,
       post_at > NOW() DESC,
-      CASE WHEN post_at > NOW() THEN -(NOW() - starts_at) ELSE NOW() - starts_at END ASC
+      starts_at ASC
     SQL
 
     protected
