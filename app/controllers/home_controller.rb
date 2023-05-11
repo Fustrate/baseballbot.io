@@ -4,11 +4,11 @@
 class HomeController < ApplicationController
   # Sort by today's games, posted games, future games,
   DEFAULT_ORDER = Arel.sql(<<~SQL.squish)
+    status = 'External' ASC,
     status = 'Posted' DESC,
     status = 'Pregame' DESC,
     status = 'Future' DESC,
     status IN ('Over', 'Postponed', 'Removed') ASC,
-    status = 'External' ASC,
     post_at > NOW() DESC,
     starts_at ASC
   SQL
