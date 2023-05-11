@@ -73,6 +73,12 @@ gem 'sidekiq', '~> 7.0'
 # Keep a record of completed jobs in Sidekiq [https://github.com/russ/sidekiq-history]
 gem 'sidekiq-history', '~> 0.0.12', github: 'Fustrate/sidekiq-history'
 
+# ed25519 keys for deployment [https://github.com/RubyCrypto/ed25519]
+gem 'ed25519', '~> 1.2'
+
+# ed25519 keys for deployment [https://github.com/net-ssh/bcrypt_pbkdf-ruby]
+gem 'bcrypt_pbkdf', '~> 1.1'
+
 group :development do
   # Detect n+1 issues [https://github.com/flyerhzm/bullet]
   gem 'bullet', '~> 7.0'
