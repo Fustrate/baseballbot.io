@@ -52,8 +52,8 @@ gem 'listen', '~> 3.7'
 # "is_active" links in views [https://github.com/comfy/active_link_to]
 gem 'active_link_to', '~> 1.0'
 
-# Pagination [https://github.com/mislav/will_paginate]
-gem 'will_paginate', '~> 3.3'
+# Pagination [https://github.com/ddnexus/pagy]
+gem 'pagy', '~> 6.0'
 
 # Authentication [https://github.com/Sorcery/sorcery]
 gem 'sorcery', '~> 0.16'

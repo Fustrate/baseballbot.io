@@ -4,6 +4,8 @@ class ApplicationService
   # Lets us use `t` and `l` helpers.
   include ActionView::Helpers::TranslationHelper
 
+  include Pagy::Backend
+
   def self.call(...) = new.call(...)
 
   protected
@@ -25,11 +27,14 @@ class ApplicationService
     RESULTS_PER_PAGE = 25
 
     def call(page: nil, includes: nil, scope: nil, order: nil, joins: nil)
-      (scope || default_scope)
-        .includes(includes || self.class::DEFAULT_INCLUDES)
-        .joins(joins || self.class::DEFAULT_JOINS)
-        .reorder(order || default_order)
-        .paginate(page: (page || params[:page]), per_page: self.class::RESULTS_PER_PAGE)
+      pagy(
+        (scope || default_scope)
+          .includes(includes || self.class::DEFAULT_INCLUDES)
+          .joins(joins || self.class::DEFAULT_JOINS)
+          .reorder(order || default_order),
+        count: self.class::RESULTS_PER_PAGE,
+        page: page || params[:page]
+      )
     end
 
     protected
