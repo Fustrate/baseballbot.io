@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 ruby '3.2.2'
 
 # Rails! [https://github.com/rails/rails]
-gem 'rails', '~> 7.0.4'
+gem 'rails', '~> 7.0.7'
 
 # Postgres database [https://github.com/ged/ruby-pg]
 gem 'pg', '~> 1.4'
@@ -141,6 +141,7 @@ group :test do
   # Access assigns in controller & view tests [https://github.com/rails/rails-controller-testing]
   gem 'rails-controller-testing', '~> 1.0'
 
-  # Easy installation and use of web drivers to run system tests with browsers [https://github.com/titusfortner/webdrivers]
-  gem 'webdrivers', '~> 5.0'
+  # Use Cuprite for headless Chrome interaction [https://github.com/rubycdp/cuprite]
+  # https://janko.io/upgrading-from-selenium-to-cuprite/
+  gem 'cuprite', '~> 0.14'
 end
