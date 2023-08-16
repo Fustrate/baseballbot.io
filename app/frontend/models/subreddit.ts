@@ -1,4 +1,4 @@
-import { Record } from '@fustrate/rails';
+import BaseRecord from '@fustrate/rails/record';
 
 import { subredditPath, subredditsPath } from 'js/routes';
 import Template, { type JSONData as TemplateData } from './template';
@@ -74,7 +74,7 @@ export interface JSONData {
   options: SubredditOptions;
 }
 
-export default class Subreddit extends Record {
+export default class Subreddit extends BaseRecord {
   public static override classname = 'Subreddit';
   public static createPath = subredditsPath;
 
@@ -85,7 +85,7 @@ export default class Subreddit extends Record {
 
   #templates: Template[] = [];
 
-  public override path(options?: { [s: string]: any }): string {
+  public override path(options?: Record<string, any>): string {
     return subredditPath(this.id, options);
   }
 

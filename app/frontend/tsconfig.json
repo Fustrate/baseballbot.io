@@ -12,7 +12,6 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitUseStrict": true,
     "paths": {
       "*": ["node_modules/*", "app/frontend/*"],
       "components/*": ["components/*"],

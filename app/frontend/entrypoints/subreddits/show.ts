@@ -1,5 +1,5 @@
-import GenericShow, { autorefresh } from 'components/generic_show';
 import { linkTo, multilineEscapeHTML } from '@fustrate/rails/utilities';
+import GenericShow, { refresh } from 'components/generic_show';
 
 import BaseballBot from 'js/baseballbot';
 import Subreddit from 'models/subreddit';
@@ -28,7 +28,7 @@ class ShowSubreddit extends GenericShow {
     this.refresh();
   }
 
-  @autorefresh()
+  @refresh
   protected refreshGeneralSettings(): void {
     const listItems = [
       `<dt>Time Zone</dt><dd>${this.subreddit.options.timezone}</dd>`,
@@ -41,7 +41,7 @@ class ShowSubreddit extends GenericShow {
     this.fields.generalOptions.innerHTML = listItems.join('');
   }
 
-  @autorefresh()
+  @refresh
   protected refreshGameThreadSettings(): void {
     const options = this.subreddit.options.gameThreads;
 
@@ -75,7 +75,7 @@ class ShowSubreddit extends GenericShow {
     this.fields.gameThreadOptions.innerHTML = listItems.join('');
   }
 
-  @autorefresh()
+  @refresh
   protected refreshPregameSettings(): void {
     const options = this.subreddit.options.pregame;
 
@@ -103,7 +103,7 @@ class ShowSubreddit extends GenericShow {
     this.fields.pregameOptions.innerHTML = listItems.join('');
   }
 
-  @autorefresh()
+  @refresh
   protected refreshPostgameSettings(): void {
     const options = this.subreddit.options.postgame;
 
@@ -127,7 +127,7 @@ class ShowSubreddit extends GenericShow {
     this.fields.postgameOptions.innerHTML = listItems.join('');
   }
 
-  @autorefresh()
+  @refresh
   protected refreshOffDaySettings(): void {
     const options = this.subreddit.options.offDay;
 
@@ -151,7 +151,7 @@ class ShowSubreddit extends GenericShow {
     this.fields.offDayOptions.innerHTML = listItems.join('');
   }
 
-  @autorefresh()
+  @refresh
   protected refreshSidebarSettings(): void {
     const options = this.subreddit.options.sidebar;
 

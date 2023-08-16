@@ -1,4 +1,4 @@
-import { GenericTable } from '@fustrate/rails';
+import GenericTable from '@fustrate/rails/generic_table';
 import { getCurrentPageJson } from '@fustrate/rails/ajax';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 

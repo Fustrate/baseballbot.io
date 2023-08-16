@@ -261,9 +261,7 @@ interface PitchData {
   endSpeed: number;
   strikeZoneTop: number;
   strikeZoneBottom: number;
-  coordinates: {
-    [s: string]: number;
-  };
+  coordinates: Record<string, number>;
   breaks: {
     breakAngle: number;
     breakLength: number;
@@ -411,7 +409,7 @@ interface Play {
 export interface Team {
   team: BasicTeam;
   teamStats: Stats;
-  players: { [s: string]: GamePlayer };
+  players: Record<string, GamePlayer>;
   batters: number[];
   pitchers: number[];
   bench: number[];
@@ -558,7 +556,7 @@ export interface GameData {
   };
   status: GameStatus;
   teams: HomeAndAway<FullTeam>;
-  players: { [s: string]: FullPlayer };
+  players: Record<string, FullPlayer>;
   venue: Venue;
   weather: {
     condition: string;

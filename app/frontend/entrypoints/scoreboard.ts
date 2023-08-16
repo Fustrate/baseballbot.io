@@ -1,4 +1,4 @@
-import { GenericPage } from '@fustrate/rails';
+import GenericPage from '@fustrate/rails/generic_page';
 
 import BaseballBot from 'js/baseballbot';
 import GameCard from 'js/scoreboard/game_card';
@@ -49,7 +49,7 @@ class Scoreboard extends GenericPage {
   protected async updateGameCards(): Promise<void> {
     const games = await this.reloadGameInfo();
 
-    const dataByPk: { [key: number]: ScheduleGame } = {};
+    const dataByPk: Record<number, ScheduleGame> = {};
 
     games.forEach((gameData) => {
       dataByPk[gameData.gamePk] = gameData;

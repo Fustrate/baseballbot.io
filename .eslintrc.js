@@ -7,10 +7,12 @@ module.exports = {
     'airbnb-base',
     'plugin:lodash/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/stylistic',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     allowImportExportEverywhere: true,
+    project: true,
   },
   plugins: ['import', 'lodash', '@typescript-eslint'],
   root: true,
@@ -109,6 +111,10 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-var-requires': 'off',
       },
+    },
+    {
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      files: ['./**/*.js'],
     },
   ],
 };

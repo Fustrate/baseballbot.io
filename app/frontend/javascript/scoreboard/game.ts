@@ -4,19 +4,19 @@ const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Sche
 const inProgressStatuses = ['In Progress', 'Manager Challenge'];
 
 interface TeamsData {
-  away: { [s: string]: any };
-  home: { [s: string]: any };
+  away: Record<string, any>;
+  home: Record<string, any>;
 }
 
 class Game {
-  public data: { [s: string]: any };
+  public data: Record<string, any>;
   public teams: TeamsData;
-  public linescore: { [s: string]: any };
-  public status: { [s: string]: any };
+  public linescore: Record<string, any>;
+  public status: Record<string, any>;
   public gamePk: number;
   public gameDate: DateTime;
 
-  public constructor(data: { [s: string]: any }) {
+  public constructor(data: Record<string, any>) {
     this.data = data;
 
     this.teams = data.teams;

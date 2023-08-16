@@ -1,9 +1,6 @@
-import { GenericPage, autorefresh } from '@fustrate/rails';
+import GenericPage, { refresh } from '@fustrate/rails/generic_page';
 
-export { autorefresh };
+export { refresh };
 
 export default abstract class GenericShow extends GenericPage {
-  public override refresh(): void {
-    this.callDecoratedMethods('$autorefresh');
-  }
 }

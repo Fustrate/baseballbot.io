@@ -54,7 +54,6 @@ Metrics/BlockLength:
 Rails/ContentTag:
   Exclude:
     - config/puma.rb
-    - config/initializers/will_paginate.rb
 
 # This is just the same name as the one in ActiveRecord, not actually the same thing
 Rails/DefaultScope:

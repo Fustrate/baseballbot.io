@@ -1,4 +1,4 @@
-import { GenericPage } from '@fustrate/rails';
+import GenericPage from '@fustrate/rails/generic_page';
 import { DateTime } from 'luxon';
 
 import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
@@ -35,7 +35,7 @@ class NewGameThreadForm extends GenericPage {
     title: HTMLInputElement;
   };
 
-  protected subreddits: { [n: number]: Subreddit } = {};
+  protected subreddits: Record<number, Subreddit> = {};
 
   public override async initialize(): Promise<void> {
     super.initialize();

@@ -1,4 +1,4 @@
-import { Modal } from '@fustrate/rails';
+import Modal from '@fustrate/rails/components/modal';
 import Game from './game';
 
 const template = `
@@ -12,8 +12,8 @@ const template = `
     Box Score
   </section>`;
 
-function inningCell(inning: { [s: string]: { runs: number }}, side: 'home' | 'away') {
-  if (!inning || inning[side].runs === undefined) {
+function inningCell(inning: Record<string, { runs: number }>, side: 'home' | 'away') {
+  if (inning?.[side].runs === undefined) {
     return '<td></td>';
   }
 

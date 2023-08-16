@@ -1,4 +1,4 @@
-import { Record } from '@fustrate/rails';
+import BaseRecord from '@fustrate/rails/record';
 
 import { templatePath } from 'js/routes';
 
@@ -11,13 +11,13 @@ export interface JSONData {
   type: Types;
 }
 
-export default class Template extends Record {
+export default class Template extends BaseRecord {
   public static override classname: 'Template';
 
   public body: string;
   public type: Types;
 
-  public override path(options?: { [s: string]: any }): string {
+  public override path(options?: Record<string, any>): string {
     return templatePath(this.id, options);
   }
 }

@@ -1,4 +1,5 @@
-import { GenericPage } from '@fustrate/rails';
+import GenericPage, { refresh } from '@fustrate/rails/generic_page';
+
 import hljs from 'highlight.js/lib/core';
 import handlebars from 'highlight.js/lib/languages/handlebars';
 
@@ -24,10 +25,7 @@ class ShowTemplate extends GenericPage {
     this.refresh();
   }
 
-  public override refresh(): void {
-    this.refreshBody();
-  }
-
+  @refresh
   protected refreshBody(): void {
     this.fields.body.textContent = this.template.body;
 

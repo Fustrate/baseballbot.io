@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Record } from '@fustrate/rails';
+import BaseRecord from '@fustrate/rails/record';
 
 import { gameThreadPath, gameThreadsPath } from 'js/routes';
 import Subreddit from './subreddit';
@@ -23,7 +23,7 @@ export interface JSONData {
   };
 }
 
-export default class GameThread extends Record {
+export default class GameThread extends BaseRecord {
   public static override classname = 'GameThread';
   public static createPath = gameThreadsPath;
 
@@ -35,11 +35,11 @@ export default class GameThread extends Record {
   public subreddit: Subreddit;
   public title: string;
 
-  public override path(options?: { [s: string]: any }): string {
+  public override path(options?: Record<string, any>): string {
     return gameThreadPath(this.id, options);
   }
 
-  public override extractFromData(data: { [s: string]: any }): { [s: string]: any } {
+  public override extractFromData(data: Record<string, any>): Record<string, any> {
     super.extractFromData(data);
 
     this.id = data.id;

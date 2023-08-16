@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon';
-import { GenericTable, PaginationData } from '@fustrate/rails';
+import GenericTable from '@fustrate/rails/generic_table';
+import { PaginatedData } from '@fustrate/rails/components/pagination';
 import { getCurrentPageJson } from '@fustrate/rails/ajax';
 import {
   icon,
@@ -12,7 +13,7 @@ import GameThread, { JSONData } from 'models/game_thread';
 
 import { subredditPath } from 'js/routes';
 
-interface PaginatedResponse<T> extends PaginationData {
+interface PaginatedResponse<T> extends PaginatedData {
   data: T[];
 }
 
