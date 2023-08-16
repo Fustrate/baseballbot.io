@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def authorized?(action, resource, **options) = resource.auror.authorized?(action, resource, **options)
+  def authorized?(action, resource, **) = resource.auror.authorized?(action, resource, **)
 end

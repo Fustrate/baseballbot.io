@@ -48,8 +48,8 @@ module Auror
 
     def any? = true
 
-    def authorized?(action, resource, **options)
-      authorize!(action, resource, **options)
+    def authorized?(...)
+      authorize!(...)
 
       true
     rescue Auror::PolicyViolation, UserError

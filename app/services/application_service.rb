@@ -12,7 +12,7 @@ class ApplicationService
 
   def authorize!(action, resource) = resource.auror.authorize!(action, resource)
 
-  def authorized?(action, resource, **options) = resource.auror.authorized?(action, resource, **options)
+  def authorized?(action, resource, **) = resource.auror.authorized?(action, resource, **)
 
   def transaction(&) = ActiveRecord::Base.transaction(&)
 
