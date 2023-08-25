@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
-  # identity:  initially find the account name
-  # edit:      update game threads
-  # modconfig: update sidebar
-  # modflair:  manage flair templates
-  # flair:     assign flair to self and own submissions
-  # modposts:  sticky, flair game threads
-  # read:      used for updating game threads
-  # submit:    post game threads
-  # wikiread:  read settings from a sub's /wiki/baseballbot
+  # edit:             update game threads
+  # flair:            assign flair to self and own submissions
+  # history:          user comment/submission history
+  # identity:         initially find the account name
+  # modconfig:        update sidebar
+  # modflair:         manage flair templates
+  # modmail:          read & archive modmail
+  # modnote:          make notes about users
+  # modposts:         sticky, flair game threads
+  # privatemessages:  read and sent PMs
+  # read:             used for updating game threads
+  # structuredstyles: new reddit widgets
+  # submit:           post game threads
+  # wikiread:         read settings from a sub's /wiki/baseballbot
   AUTH_SCOPE = %i[
-    identity edit modconfig modflair modposts read submit wikiread flair
+    edit flair history identity modconfig modflair modmail modnote modposts privatemessages read structuredstyles submit
+    wikiread
   ].freeze
 
   def index
