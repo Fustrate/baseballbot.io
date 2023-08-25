@@ -5,14 +5,14 @@
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^6.4.2",
     "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js.git#commit=f2fddf32000c24dc9c418a445313230726d8b21c",
-    "@rails/ujs": "^7.0.7",
+    "@rails/ujs": "^7.0.7-2",
     "autoprefixer": "^10.4.15",
     "color": "^4.2.3",
     "esbuild": "^0.19.2",
     "highlight.js": "^11.8.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "luxon": "^3.4.0",
+    "luxon": "^3.4.1",
     "postcss": "^8.4.28",
     "postcss-advanced-variables": "^3.0.1",
     "postcss-cli": "^10.1.0",
@@ -27,14 +27,14 @@
   "devDependencies": {
     "@types/lodash": "^4.14.197",
     "@types/luxon": "^3.3.1",
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "@typescript-eslint/parser": "^6.4.0",
-    "eslint": "^8.47.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.48.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-import-resolver-typescript": "^3.6.0",
-    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-lodash": "^7.4.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "scripts": {
     "build": "node ./lib/yarn/esbuild.js",
