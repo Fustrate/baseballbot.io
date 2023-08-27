@@ -14,7 +14,7 @@ class HomeController < ApplicationController
   SQL
 
   def home
-    @pagination, @game_threads = GameThread
+    @game_threads = GameThread
       .where('DATE(post_at) = ?', Time.zone.today)
       .includes(:subreddit)
       .order(DEFAULT_ORDER)
