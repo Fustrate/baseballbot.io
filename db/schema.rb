@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_16_212936) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_25_222139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -78,6 +78,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_16_212936) do
     t.index "game_pk, subreddit_id, date_trunc('day'::text, starts_at), type", name: "index_game_threads_on_game_pk_subreddit_date_type_unique", unique: true
   end
 
+  create_table "modmails", force: :cascade do |t|
+    t.bigint "subreddit_id", null: false
+    t.string "reddit_id"
+    t.string "subject"
+    t.bigint "thread_id"
+    t.string "username"
+    t.boolean "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subreddit_id"], name: "index_modmails_on_subreddit_id"
+  end
+
   create_table "scheduled_posts", id: :serial, force: :cascade do |t|
     t.datetime "next_post_at"
     t.string "title"
@@ -136,6 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_16_212936) do
   end
 
   add_foreign_key "game_threads", "subreddits"
+  add_foreign_key "modmails", "subreddits"
   add_foreign_key "scheduled_posts", "subreddits"
   add_foreign_key "subreddits", "accounts"
   add_foreign_key "subreddits_users", "subreddits"
