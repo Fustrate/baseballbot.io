@@ -61,12 +61,6 @@ gem 'sorcery', '~> 0.16'
 # A more slim redis client [https://github.com/redis/redis-rb]
 gem 'redis', '~> 5.0'
 
-# Communication with the Discord bot
-gem 'em-hiredis', '~> 0.3'
-
-# More communication with the Discord bot
-gem 'eventmachine', '~> 1.2'
-
 # Background Jobs [https://github.com/mperham/sidekiq]
 gem 'sidekiq', '~> 7.0'
 

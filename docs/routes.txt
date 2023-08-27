@@ -14,16 +14,6 @@ Verb              | GET
 URI               | /accounts/authenticate(.:format)
 Controller#Action | accounts#authenticate
 
-Prefix            | discord_reddit_callback
-Verb              | GET
-URI               | /discord/reddit-callback(.:format)
-Controller#Action | discord#reddit_callback
-
-Prefix            | discord_debug
-Verb              | GET
-URI               | /discord/debug(.:format)
-Controller#Action | discord#debug
-
 Prefix            | game_threads
 Verb              | GET
 URI               | /game_threads(.:format)
