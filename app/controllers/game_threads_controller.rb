@@ -8,7 +8,7 @@ class GameThreadsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @game_threads = GameThreads::LoadPage.call
+        @pagination, @game_threads = GameThreads::LoadPage.call
       end
     end
   end

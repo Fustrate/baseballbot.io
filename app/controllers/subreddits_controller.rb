@@ -28,7 +28,7 @@ class SubredditsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @game_threads = GameThreads::LoadPage.call(scope: @subreddit.game_threads)
+        @pagination, @game_threads = GameThreads::LoadPage.call(scope: @subreddit.game_threads)
       end
     end
   end
