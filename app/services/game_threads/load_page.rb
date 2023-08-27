@@ -14,8 +14,6 @@ module GameThreads
 
     protected
 
-    def default_scope
-      GameThread.all
-    end
+    def default_scope = GameThread.all
   end
 end

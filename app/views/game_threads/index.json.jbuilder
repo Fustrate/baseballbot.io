@@ -9,4 +9,4 @@ json.data(@game_threads) do |game_thread|
   json.subreddit game_thread.subreddit, :id, :name, :team_id
 end
 
-json.pagination! @game_threads
+json.pagination! @pagination
