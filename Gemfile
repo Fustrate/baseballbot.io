@@ -2,40 +2,40 @@
 
 source 'https://rubygems.org'
 
-ruby '3.2.2'
+ruby file: '.ruby-version'
 
 # Rails! [https://github.com/rails/rails]
-gem 'rails', '~> 7.0.7'
+gem 'rails', '~> 7.0.8'
 
 # Postgres database [https://github.com/ged/ruby-pg]
-gem 'pg', '~> 1.4'
+gem 'pg', '~> 1.5'
 
 # HAML templates instead of ERB [https://github.com/haml/haml-rails]
-gem 'haml-rails', '~> 2.0'
+gem 'haml-rails', '~> 2.1'
 
 # JSON generation with a nice DSL [https://github.com/rails/jbuilder]
 gem 'jbuilder', '~> 2.11'
 
 # Postcss integration with Rails [https://github.com/rails/cssbundling-rails]
-gem 'cssbundling-rails', '~> 1.1'
+gem 'cssbundling-rails', '~> 1.3'
 
 # Esbuild integration with Rails [https://github.com/rails/jsbundling-rails]
-gem 'jsbundling-rails', '~> 1.0'
+gem 'jsbundling-rails', '~> 1.2'
 
 # New Rails asset pipeline [https://github.com/rails/propshaft]
-gem 'propshaft', '~> 0.6'
+gem 'propshaft', '~> 0.7'
 
 # Frontend routes [https://github.com/railsware/js-routes]
 gem 'js-routes', '~> 2.2', require: false
 
 # Faster raw json generation [https://github.com/ohler55/oj]
-gem 'oj', '~> 3.13'
+gem 'oj', '~> 3.16'
 
 # A few custom services and initializers [https://github.com/Fustrate/fustrate-rails]
 gem 'fustrate-rails', '~> 0.8', github: 'Fustrate/fustrate-rails'
 
 # Use Puma as the app server [https://github.com/puma/puma]
-gem 'puma', '~> 6.0'
+gem 'puma', '~> 6.3'
 
 # Fetch data from the MLB Stats API [https://github.com/Fustrate/mlb_stats_api]
 gem 'mlb_stats_api', '~> 0.2', github: 'Fustrate/mlb_stats_api'
@@ -44,10 +44,10 @@ gem 'mlb_stats_api', '~> 0.2', github: 'Fustrate/mlb_stats_api'
 gem 'redd', '>= 0.9.0.pre.3', github: 'Fustrate/redd'
 
 # App Monitoring [https://github.com/honeybadger-io/honeybadger-ruby]
-gem 'honeybadger', '~> 5.0'
+gem 'honeybadger', '~> 5.2'
 
 # Development evented file watcher [https://github.com/guard/listen]
-gem 'listen', '~> 3.7'
+gem 'listen', '~> 3.8'
 
 # "is_active" links in views [https://github.com/comfy/active_link_to]
 gem 'active_link_to', '~> 1.0'
@@ -62,7 +62,7 @@ gem 'sorcery', '~> 0.16'
 gem 'redis', '~> 5.0'
 
 # Background Jobs [https://github.com/mperham/sidekiq]
-gem 'sidekiq', '~> 7.0'
+gem 'sidekiq', '~> 7.1'
 
 # Keep a record of completed jobs in Sidekiq [https://github.com/russ/sidekiq-history]
 gem 'sidekiq-history', '~> 0.0.12', github: 'Fustrate/sidekiq-history'
