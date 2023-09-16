@@ -81,7 +81,7 @@ module Auror
     def subreddit_check!
       return unless self.class.subreddit_check && !Current.user.permission?(:subreddits, :manage)
 
-      raise Auror::NotSubredditModerator unless Current.user.subreddit_ids.include?(@resource.subreddit_id)
+      raise Auror::NotSubredditModerator if Current.user.subreddit_ids.exclude?(@resource.subreddit_id)
     end
 
     def user_permission!
