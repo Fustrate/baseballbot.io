@@ -84,263 +84,107 @@ export const config: RouterExposedMethods['config'];
 
 export const serialize: RouterExposedMethods['serialize'];
 
-/**
- * Generates rails route to
- * /accounts/authenticate(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const accountsAuthenticatePath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /game_threads/:id/edit(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const editGameThreadPath: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /subreddits/:id/edit(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const editSubredditPath: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /game_threads/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const gameThreadPath: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /game_threads(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const gameThreadsPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /subreddits/:id/game_threads(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const gameThreadsSubredditPath: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /gamechats(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const gamechatsPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /gameday(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const gamedayPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /login(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const loginPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /logout(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const logoutPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /game_threads/new(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const newGameThreadPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /rails/info(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const railsInfoPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /rails/info/properties(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const railsInfoPropertiesPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /rails/info/routes(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const railsInfoRoutesPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /rails/mailers(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const railsMailersPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const rootPath: ((
   options?: {} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /sidekiq
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const sidekiqWebPath: ((
   options?: {} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /sign_up/authorized(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const signUpAuthorizedPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /sign_up/finish(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const signUpFinishPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /sign_up/start(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const signUpStartPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /slack/commands/gdt(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const slackCommandsGDTPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /slack/interactivity(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const slackInteractivityPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /subreddits/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const subredditPath: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /subreddits(.:format)
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const subredditsPath: ((
   options?: {format?: OptionalRouteParameter} & RouteOptions
 ) => string) & RouteHelperExtras;
 
-/**
- * Generates rails route to
- * /templates/:id(.:format)
- * @param {any} id
- * @param {object | undefined} options
- * @returns {string} route path
- */
 export const templatePath: ((
   id: RequiredRouteParameter,
   options?: {format?: OptionalRouteParameter} & RouteOptions
