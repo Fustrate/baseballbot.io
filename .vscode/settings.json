@@ -52,8 +52,7 @@
     "ruby.useLanguageServer": true,
     "search.exclude": {
         ".yarn": true,
-        "app/frontend/javascript/i18n-translations.js": true,
-        "app/frontend/javascript/routes.js": true,
+        "app/frontend/utilities/routes.js": true,
         "node_modules": true,
         "yarn.lock": true,
     },

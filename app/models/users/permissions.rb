@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022 Valencia Management Group
-# All rights reserved.
-
 module Users
   class Permissions
     attr_reader :permissions

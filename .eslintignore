@@ -1,5 +1,5 @@
 # Ignore auto-generated files
-app/frontend/javascript/routes.js
+app/frontend/utilities/routes.js
 app/assets/builds
 
 # Ignore all type definition files
