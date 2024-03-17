@@ -294,7 +294,7 @@ GEM
       version_gem (~> 1.1)
     oj (3.16.3)
       bigdecimal (>= 3.0)
-    pagy (6.5.0)
+    pagy (7.0.10)
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -491,7 +491,7 @@ DEPENDENCIES
   mlb_stats_api (~> 0.2)!
   mock_redis (~> 0.32)
   oj (~> 3.16)
-  pagy (~> 6.0)
+  pagy (~> 7.0)
   pg (~> 1.5)
   propshaft (~> 0.7)
   puma (~> 6.3)

@@ -53,7 +53,7 @@ gem 'listen', '~> 3.8'
 gem 'active_link_to', '~> 1.0'
 
 # Pagination [https://github.com/ddnexus/pagy]
-gem 'pagy', '~> 6.0'
+gem 'pagy', '~> 7.0'
 
 # Authentication [https://github.com/Sorcery/sorcery]
 gem 'sorcery', '~> 0.16'
