@@ -1,6 +1,6 @@
 import BaseRecord from '@fustrate/rails/record';
 
-import { templatePath } from 'js/routes';
+import { templatePath } from 'utilities/routes';
 
 export type Types = 'game_thread' | 'game_thread_update' | 'no_hitter' | 'no_hitter_update' | 'off_day' | 'postgame'
 | 'pregame' | 'sidebar';

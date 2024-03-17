@@ -1,6 +1,6 @@
 import BaseRecord from '@fustrate/rails/record';
 
-import { subredditPath, subredditsPath } from 'js/routes';
+import { subredditPath, subredditsPath } from 'utilities/routes';
 import Template, { type JSONData as TemplateData } from './template';
 
 export interface SubredditOptions {

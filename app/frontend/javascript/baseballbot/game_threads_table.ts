@@ -11,7 +11,7 @@ import {
 
 import GameThread, { JSONData } from 'models/game_thread';
 
-import { subredditPath } from 'js/routes';
+import { subredditPath } from 'utilities/routes';
 
 interface PaginatedResponse<T> extends PaginatedData {
   data: T[];

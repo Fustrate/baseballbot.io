@@ -17,6 +17,7 @@
       "components/*": ["components/*"],
       "js/*": ["javascript/*"],
       "models/*": ["models/*"],
+      "utilities/*": ["utilities/*"],
     },
     "sourceMap": true,
     "strictBindCallApply": true,

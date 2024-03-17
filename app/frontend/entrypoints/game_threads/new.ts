@@ -6,7 +6,7 @@ import { setChildren } from 'js/utilities';
 
 import BaseballBot from 'js/baseballbot';
 import Subreddit, { JSONData as SubredditData } from 'models/subreddit';
-import { subredditsPath } from 'js/routes';
+import { subredditsPath } from 'utilities/routes';
 
 function optionForGame(game: ScheduleGame): HTMLOptionElement {
   const away = game.teams.away.team.teamName;
