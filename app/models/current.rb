@@ -9,7 +9,7 @@ class Current < ActiveSupport::CurrentAttributes
     if params.is_a? ActionController::Parameters
       super
     else
-      super ActionController::Parameters.new(params)
+      super(ActionController::Parameters.new(params))
     end
   end
 

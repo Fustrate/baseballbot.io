@@ -93,7 +93,7 @@ module Auror
     def action_authorized!
       return crud_delegation! if self.class.crud_delegation
 
-      case error = respond_to?("#{@action}?") ? __send__("#{@action}?") : any?
+      case error = respond_to?(:"#{@action}?") ? __send__(:"#{@action}?") : any?
       when Symbol, String then raise Auror::UnauthorizedAction, error_lang_string(error)
       when false
         human_name = @resource.class.human_name.humanize(capitalize: false)

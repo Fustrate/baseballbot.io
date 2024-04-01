@@ -12,7 +12,7 @@ module Users
       merge_permissions user.permissions
     end
 
-    def permission?(scope, name) = (@permissions.dig(scope.to_sym, name.to_sym) || false)
+    def permission?(scope, name) = @permissions.dig(scope.to_sym, name.to_sym) || false
 
     def as_json(options = nil) = permissions.as_json(options).deep_transform_keys { _1.to_s.camelize(:lower) }
 
