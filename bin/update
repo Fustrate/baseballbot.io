@@ -8,13 +8,15 @@ def run_command(command) = system(command) || abort("\n== Command #{command} fai
 
 chdir File.expand_path('..', __dir__) do
   puts "== bundle update =="
-  run_command 'bundle update'
+  run_command 'bundle update && bundle update --bundler'
+
+  # run_command 'yarn set version latest'
+
+  # run_command 'yarn add @fustrate/rails@https://github.com/Fustrate/fustrate-rails.js'
 
   puts "\n== yarn upgrade-interactive =="
   run_command 'yarn upgrade-interactive'
 
   puts "\n== rm yarn.lock && yarn install =="
   run_command 'rm yarn.lock && yarn install'
-
-  # run_command 'yarn add @fustrate/rails@https://github.com/Fustrate/fustrate-rails.js'
 end
