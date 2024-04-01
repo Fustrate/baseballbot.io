@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_25_222139) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_01_175823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_25_222139) do
     t.string "type"
     t.string "pre_game_post_id"
     t.string "post_game_post_id"
+    t.jsonb "options", default: {}, null: false
     t.index "game_pk, subreddit_id, date_trunc('day'::text, starts_at)", name: "index_game_threads_on_game_pk_subreddit_date_unique", unique: true, where: "(type IS NULL)"
     t.index "game_pk, subreddit_id, date_trunc('day'::text, starts_at), type", name: "index_game_threads_on_game_pk_subreddit_date_type_unique", unique: true
   end
