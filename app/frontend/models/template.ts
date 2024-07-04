@@ -18,6 +18,10 @@ export default class Template extends BaseRecord {
   public type: Types;
 
   public override path(options?: Record<string, any>): string {
+    if (this.id == null) {
+      throw new Error('Cannot generate a route for an unpersisted template.');
+    }
+
     return templatePath(this.id, options);
   }
 }

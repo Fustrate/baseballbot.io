@@ -17,7 +17,7 @@ function inningCell(inning: Record<string, { runs: number }>, side: 'home' | 'aw
     return '<td></td>';
   }
 
-  return `<td>${inning[side].runs == null ? '' : inning[side].runs}</td>`;
+  return `<td>${inning[side].runs ?? ''}</td>`;
 }
 
 function linescoreTotals(team): [number, number, number, number] {
@@ -41,7 +41,7 @@ export default class GameModal extends Modal {
   }
 
   public override async open(): Promise<void> {
-    this.modal.querySelector('.linescore').innerHTML = this.linescore();
+    this.modal.querySelector('.linescore')!.innerHTML = this.linescore();
 
     await super.open();
   }
@@ -69,7 +69,7 @@ export default class GameModal extends Modal {
       home.push(inningCell(inning, 'home'));
     }
 
-    if (this.game.status.abstractGameState === 'Final' && home[home.length - 1] === '<td></td>') {
+    if (this.game.status.abstractGameState === 'Final' && home.at(-1) === '<td></td>') {
       home[home.length - 1] = '<td class="did-not-play"></td>';
     }
 

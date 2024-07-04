@@ -44,11 +44,11 @@ class GameCard {
     this.game = game;
     this.card = elementFromString(template);
 
-    this.card.querySelector('.home-team').classList.add(this.game.teams.home.team.fileCode);
-    this.card.querySelector('.away-team').classList.add(this.game.teams.away.team.fileCode);
+    this.card.querySelector('.home-team')?.classList?.add(this.game.teams.home.team.fileCode);
+    this.card.querySelector('.away-team')?.classList?.add(this.game.teams.away.team.fileCode);
 
-    this.card.querySelector('.home-team .name').textContent = this.game.teams.home.team.abbreviation;
-    this.card.querySelector('.away-team .name').textContent = this.game.teams.away.team.abbreviation;
+    this.card.querySelector('.home-team .name')!.textContent = this.game.teams.home.team.abbreviation;
+    this.card.querySelector('.away-team .name')!.textContent = this.game.teams.away.team.abbreviation;
 
     this.card.addEventListener('click', this.openGameModal.bind(this));
 
@@ -71,30 +71,30 @@ class GameCard {
 
   protected refreshRunners(): void {
     if (this.game.isInProgress) {
-      this.card.querySelector<HTMLDivElement>('.runners').style.display = '';
+      this.card.querySelector<HTMLDivElement>('.runners')!.style.display = '';
     } else {
-      this.card.querySelector<HTMLDivElement>('.runners').style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.runners')!.style.display = 'none';
 
       return;
     }
 
-    setBaseRunner(this.card.querySelector<HTMLDivElement>('.first'), this.game.linescore.offense.first);
-    setBaseRunner(this.card.querySelector<HTMLDivElement>('.second'), this.game.linescore.offense.second);
-    setBaseRunner(this.card.querySelector<HTMLDivElement>('.third'), this.game.linescore.offense.third);
+    setBaseRunner(this.card.querySelector<HTMLDivElement>('.first')!, this.game.linescore.offense.first);
+    setBaseRunner(this.card.querySelector<HTMLDivElement>('.second')!, this.game.linescore.offense.second);
+    setBaseRunner(this.card.querySelector<HTMLDivElement>('.third')!, this.game.linescore.offense.third);
   }
 
   protected refreshOuts(): void {
     if (this.game.isInProgress) {
-      this.card.querySelector<HTMLDivElement>('.outs').style.display = '';
+      this.card.querySelector<HTMLDivElement>('.outs')!.style.display = '';
     } else {
-      this.card.querySelector<HTMLDivElement>('.outs').style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.outs')!.style.display = 'none';
     }
 
     if (!this.game.isInProgress) {
       return;
     }
 
-    const elements = [];
+    const elements: string[] = [];
 
     const outSpan = '<span class="out"></span>';
 
@@ -102,7 +102,7 @@ class GameCard {
       elements.push(outSpan);
     }
 
-    this.card.querySelector('.outs').innerHTML = elements.join('');
+    this.card.querySelector('.outs')!.innerHTML = elements.join('');
   }
 
   protected gameStatus(): string {
@@ -128,11 +128,11 @@ class GameCard {
     this.refreshRunners();
 
     if (!this.game.isPregame && this.game.linescore) {
-      this.card.querySelector('.home-team .runs').textContent = this.game.linescore.teams.home.runs;
-      this.card.querySelector('.away-team .runs').textContent = this.game.linescore.teams.away.runs;
+      this.card.querySelector('.home-team .runs')!.textContent = this.game.linescore.teams.home.runs;
+      this.card.querySelector('.away-team .runs')!.textContent = this.game.linescore.teams.away.runs;
     }
 
-    this.card.querySelector('.status').textContent = this.gameStatus();
+    this.card.querySelector('.status')!.textContent = this.gameStatus();
   }
 }
 

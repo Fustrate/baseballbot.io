@@ -28,32 +28,32 @@ class SubredditsTable extends GenericTable<Subreddit> {
   public override async reloadTable(): Promise<void> {
     const response = await getCurrentPageJSON();
 
-    this.reloadRows(response.data.data.map((row: SubredditData) => this.createRow(Subreddit.build(row))));
+    this.reloadRows(response.data.data.map((row: SubredditData) => this.createRow(Subreddit.build(row)!)));
   }
 
   public override updateRow(row: HTMLTableRowElement, subreddit: Subreddit): void {
-    row.querySelector('.name').innerHTML = linkTo(subreddit.name, subreddit);
-    row.querySelector('.team').textContent = subreddit.abbreviation;
-    row.querySelector('.account').textContent = subreddit.account.name;
+    row.querySelector('.name')!.innerHTML = linkTo(subreddit.name, subreddit);
+    row.querySelector('.team')!.textContent = subreddit.abbreviation;
+    row.querySelector('.account')!.textContent = subreddit.account.name;
 
     if (subreddit.options.sidebar?.enabled) {
-      row.querySelector('.sidebar').innerHTML = checkMark;
+      row.querySelector('.sidebar')!.innerHTML = checkMark;
     }
 
     if (subreddit.options.gameThreads?.enabled) {
       const { postAt } = subreddit.options.gameThreads;
 
-      row.querySelector('.game-threads').textContent = postAtFormat(postAt);
+      row.querySelector('.game-threads')!.textContent = postAtFormat(postAt);
     }
 
     if (subreddit.options.pregame?.enabled) {
       const { postAt } = subreddit.options.pregame;
 
-      row.querySelector('.pregames').textContent = postAtFormat(postAt);
+      row.querySelector('.pregames')!.textContent = postAtFormat(postAt);
     }
 
     if (subreddit.options.postgame?.enabled) {
-      row.querySelector('.postgames').innerHTML = checkMark;
+      row.querySelector('.postgames')!.innerHTML = checkMark;
     }
   }
 }

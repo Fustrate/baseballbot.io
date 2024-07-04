@@ -3,6 +3,12 @@ import { type GameStatus } from './definitions';
 const scheduleHydration = 'game(content(summary)),linescore(runners),flags,team';
 const apiEndpoint = `https://statsapi.mlb.com/api/v1/schedule/?sportId=1,51&hydrate=${scheduleHydration}`;
 
+interface ScheduleTeam {
+  team: {
+    teamName: string;
+  };
+}
+
 export interface ScheduleGame {
   gamePk: number;
   link: string;
@@ -11,7 +17,10 @@ export interface ScheduleGame {
   gameDate: string;
   officialDate: string;
   status: GameStatus;
-  teams: any;
+  teams: {
+    away: ScheduleTeam;
+    home: ScheduleTeam;
+  };
   linescore: any;
   venue: any;
   content: any;

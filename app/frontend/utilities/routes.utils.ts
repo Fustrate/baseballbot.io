@@ -1,6 +1,6 @@
 export type RequiredParameter = string | number;
 export type OptionalParameter = string | number | null;
-export type AnyParameter = string | number | string[] | number[];
+export type AnyParameter = string | number | string[] | number[] | undefined;
 
 export type RouteFormat = 'json' | 'html' | 'csv' | 'xlsx' | 'pdf' | 'zip' | 'text';
 

@@ -9,7 +9,7 @@ import {
   toHumanDate,
 } from '@fustrate/rails/utilities';
 
-import GameThread, { JSONData } from 'models/game_thread';
+import GameThread, { JSONData } from 'models/game-thread';
 
 import { subredditPath } from 'utilities/routes';
 
@@ -61,30 +61,30 @@ class GameThreadsTable extends GenericTable<GameThread> {
 
     const { data } = response.data;
 
-    this.reloadRows(data.map((row) => this.createRow(GameThread.build(row))));
+    this.reloadRows(data.map((row) => this.createRow(GameThread.build(row)!)));
 
     this.updatePagination(response.data);
   }
 
   public override updateRow(row: HTMLTableRowElement, gameThread: GameThread): void {
-    row.querySelector('.subreddit').innerHTML = linkTo(
+    row.querySelector('.subreddit')!.innerHTML = linkTo(
       gameThread.subreddit.name,
-      subredditPath(gameThread.subreddit.id),
+      subredditPath(gameThread.subreddit.id!),
     );
 
     if (gameThread.title) {
-      populateGameThreadTitle(row.querySelector('.title'), gameThread);
+      populateGameThreadTitle(row.querySelector('.title')!, gameThread);
     }
 
-    row.querySelector('.game-pk').innerHTML = linkTo(
+    row.querySelector('.game-pk')!.innerHTML = linkTo(
       `${gameThread.gamePk}`,
       `https://www.mlb.com/gameday/${gameThread.gamePk}`,
     );
 
-    row.querySelector('.post-at').textContent = toHumanDate(gameThread.postAt, true);
-    row.querySelector('.starts-at').textContent = toHumanDate(gameThread.startsAt, true);
+    row.querySelector('.post-at')!.textContent = toHumanDate(gameThread.postAt, true);
+    row.querySelector('.starts-at')!.textContent = toHumanDate(gameThread.startsAt, true);
 
-    row.querySelector('.status').innerHTML = statusLabel(gameThread);
+    row.querySelector('.status')!.innerHTML = statusLabel(gameThread);
   }
 }
 

@@ -2,10 +2,14 @@ import { start } from '@fustrate/rails';
 import { linkTo } from '@fustrate/rails/utilities';
 import { escapeMultilineHTML } from '@fustrate/rails/html';
 
-import GenericShow, { refresh } from 'components/generic_show';
+import GenericShow, { refresh } from 'components/generic-show';
 
 import Subreddit from 'models/subreddit';
 import { postAtFormat } from 'js/utilities';
+
+function stickyPosts(config: { enabled: boolean; sticky?: boolean } | undefined): boolean {
+  return config != null && config.enabled !== false && config.sticky !== false;
+}
 
 class ShowSubreddit extends GenericShow {
   public subreddit: Subreddit;
@@ -23,7 +27,7 @@ class ShowSubreddit extends GenericShow {
   public override async initialize(): Promise<void> {
     await super.initialize();
 
-    this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit });
+    this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit })!;
 
     await this.subreddit.reload();
 
@@ -37,7 +41,7 @@ class ShowSubreddit extends GenericShow {
     ];
 
     if (this.stickyAnyThreads) {
-      listItems.push(`<dt>Sticky Slot</dt><dd>${this.subreddit.options.stickySlot || 1}</dd>`);
+      listItems.push(`<dt>Sticky Slot</dt><dd>${this.subreddit.options.stickySlot ?? 1}</dd>`);
     }
 
     this.fields.generalOptions.innerHTML = listItems.join('');
@@ -173,10 +177,10 @@ class ShowSubreddit extends GenericShow {
   }
 
   protected get stickyAnyThreads(): boolean {
-    return (this.subreddit.options.gameThreads?.enabled && this.subreddit.options.gameThreads.sticky !== false)
-      || (this.subreddit.options.pregame?.enabled && this.subreddit.options.pregame.sticky !== false)
-      || (this.subreddit.options.postgame?.enabled && this.subreddit.options.postgame.sticky !== false)
-      || (this.subreddit.options.offDay?.enabled && this.subreddit.options.offDay.sticky !== false);
+    return stickyPosts(this.subreddit.options.gameThreads)
+      || stickyPosts(this.subreddit.options.pregame)
+      || stickyPosts(this.subreddit.options.postgame)
+      || stickyPosts(this.subreddit.options.offDay);
   }
 }
 

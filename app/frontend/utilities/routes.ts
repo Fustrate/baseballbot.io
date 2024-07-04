@@ -1,4 +1,4 @@
-import { buildRoute, type RouteOptions, type RequiredParameter, type OptionalParameter } from './routes.utils';
+import { buildRoute, type RouteOptions, type RequiredParameter } from './routes.utils';
 
 export const accountsAuthenticatePath = (options: RouteOptions = {}) => buildRoute('/accounts/authenticate(.:format)', { ...options });
 export const editGameThreadPath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/game_threads/:id/edit(.:format)', { id, ...options });

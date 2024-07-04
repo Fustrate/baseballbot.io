@@ -1,7 +1,7 @@
 import { start } from '@fustrate/rails';
 import GenericPage from '@fustrate/rails/generic-page';
 
-import GameCard from 'js/scoreboard/game_card';
+import GameCard from 'js/scoreboard/game-card';
 import Game from 'js/scoreboard/game';
 
 import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';

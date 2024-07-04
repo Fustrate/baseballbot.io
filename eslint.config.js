@@ -41,10 +41,6 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/require-await': 'off',
-
-      // This requires strictNullChecks to be enabled in tsconfig.json
-      '@typescript-eslint/prefer-nullish-coalescing': 'off',
 
       '@typescript-eslint/consistent-type-definitions': 'warn',
 
@@ -112,9 +108,6 @@ export default tseslint.config(
         ignoreRegExpLiterals: true,
         ignorePattern: '^export default class.*implements',
       }],
-
-      // https://eslint.org/docs/latest/rules/spaced-comment
-      'spaced-comment': ['error', 'always', { markers: ['#region', '#endregion'] }],
 
       // https://eslint.style/rules/js/quotes
       '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],

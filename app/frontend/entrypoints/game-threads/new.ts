@@ -67,7 +67,7 @@ class NewGameThreadForm extends GenericPage {
     this.updateAvailableGames(schedule.dates[0]?.games ?? []);
   }
 
-  protected async changedSubreddit(): Promise<void> {
+  protected changedSubreddit(): void {
     const subredditId = Number(this.fields.subredditId.value);
 
     const subreddit = this.subreddits[subredditId];
@@ -103,7 +103,7 @@ class NewGameThreadForm extends GenericPage {
     this.subreddits = {};
 
     data.data.forEach((subredditData: SubredditData) => {
-      this.subreddits[subredditData.id] = Subreddit.build(subredditData);
+      this.subreddits[subredditData.id] = Subreddit.build(subredditData)!;
     });
   }
 }

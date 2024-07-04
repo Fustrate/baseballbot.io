@@ -25,21 +25,25 @@ export interface JSONData {
 
 export default class GameThread extends BaseRecord {
   public static override classname = 'GameThread';
-  public static createPath = gameThreadsPath;
+  public static override createPath = gameThreadsPath;
 
   public gamePk: number;
   public postAt: DateTime;
-  public postId: string;
+  public postId: string | undefined;
   public startsAt: DateTime;
   public status: string;
   public subreddit: Subreddit;
-  public title: string;
+  public title: string | undefined;
 
   public override path(options?: Record<string, any>): string {
+    if (this.id == null) {
+      throw new Error('Cannot generate a route for an unpersisted game thread.');
+    }
+
     return gameThreadPath(this.id, options);
   }
 
-  public override extractFromData(data: Record<string, any>): Record<string, any> {
+  public override extractFromData(data: JSONData): Record<string, any> {
     super.extractFromData(data);
 
     this.id = data.id;
@@ -48,7 +52,7 @@ export default class GameThread extends BaseRecord {
     this.postId = data.postId;
     this.startsAt = DateTime.fromISO(data.startsAt);
     this.status = data.status;
-    this.subreddit = Subreddit.build(data.subreddit);
+    this.subreddit = Subreddit.build(data.subreddit)!;
     this.title = data.title;
 
     return data;

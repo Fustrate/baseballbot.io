@@ -76,7 +76,7 @@ export interface JSONData {
 
 export default class Subreddit extends BaseRecord {
   public static override classname = 'Subreddit';
-  public static createPath = subredditsPath;
+  public static override createPath = subredditsPath;
 
   public abbreviation: string;
   public account: { id: number; name: string };
@@ -86,6 +86,10 @@ export default class Subreddit extends BaseRecord {
   #templates: Template[] = [];
 
   public override path(options?: Record<string, any>): string {
+    if (this.id == null) {
+      throw new Error('Cannot generate a route for an unpersisted subreddit.');
+    }
+
     return subredditPath(this.id, options);
   }
 
