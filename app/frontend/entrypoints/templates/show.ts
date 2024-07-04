@@ -1,9 +1,9 @@
-import GenericPage, { refresh } from '@fustrate/rails/generic_page';
+import { start } from '@fustrate/rails';
+import GenericPage, { refresh } from '@fustrate/rails/generic-page';
 
 import hljs from 'highlight.js/lib/core';
 import handlebars from 'highlight.js/lib/languages/handlebars';
 
-import BaseballBot from 'js/baseballbot';
 import Template from 'models/template';
 
 hljs.registerLanguage('handlebars', handlebars);
@@ -16,7 +16,7 @@ class ShowTemplate extends GenericPage {
   };
 
   public override async initialize(): Promise<void> {
-    super.initialize();
+    await super.initialize();
 
     this.template = new Template(document.body.dataset.template);
 
@@ -33,4 +33,4 @@ class ShowTemplate extends GenericPage {
   }
 }
 
-BaseballBot.start(ShowTemplate);
+start(new ShowTemplate());

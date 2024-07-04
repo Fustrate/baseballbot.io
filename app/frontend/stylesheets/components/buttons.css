@@ -156,7 +156,9 @@ button {
 		text-align: left;
 
 		span::before {
-			@mixin font-awesome light full-width;
+			@mixin font-awesome;
+			@mixin font-awesome-light;
+			@mixin font-awesome-full-width;
 			padding-right: 6px;
 		}
 
@@ -172,7 +174,9 @@ button {
 	.create::before,
 	.delete::before,
 	.edit::before {
-		@mixin font-awesome solid full-width;
+		@mixin font-awesome;
+		@mixin font-awesome-solid;
+		@mixin font-awesome-full-width;
 		padding-right: 3px;
 	}
 

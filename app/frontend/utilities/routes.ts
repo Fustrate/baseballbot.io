@@ -1,0 +1,27 @@
+import { buildRoute, type RouteOptions, type RequiredParameter, type OptionalParameter } from './routes.utils';
+
+export const accountsAuthenticatePath = (options: RouteOptions = {}) => buildRoute('/accounts/authenticate(.:format)', { ...options });
+export const editGameThreadPath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/game_threads/:id/edit(.:format)', { id, ...options });
+export const editSubredditPath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/subreddits/:id/edit(.:format)', { id, ...options });
+export const gameThreadPath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/game_threads/:id(.:format)', { id, ...options });
+export const gameThreadsPath = (options: RouteOptions = {}) => buildRoute('/game_threads(.:format)', { ...options });
+export const gameThreadsSubredditPath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/subreddits/:id/game_threads(.:format)', { id, ...options });
+export const gamechatsPath = (options: RouteOptions = {}) => buildRoute('/gamechats(.:format)', { ...options });
+export const gamedayPath = (options: RouteOptions = {}) => buildRoute('/gameday(.:format)', { ...options });
+export const loginPath = (options: RouteOptions = {}) => buildRoute('/login(.:format)', { ...options });
+export const logoutPath = (options: RouteOptions = {}) => buildRoute('/logout(.:format)', { ...options });
+export const newGameThreadPath = (options: RouteOptions = {}) => buildRoute('/game_threads/new(.:format)', { ...options });
+export const railsInfoPath = (options: RouteOptions = {}) => buildRoute('/rails/info(.:format)', { ...options });
+export const railsInfoPropertiesPath = (options: RouteOptions = {}) => buildRoute('/rails/info/properties(.:format)', { ...options });
+export const railsInfoRoutesPath = (options: RouteOptions = {}) => buildRoute('/rails/info/routes(.:format)', { ...options });
+export const railsMailersPath = (options: RouteOptions = {}) => buildRoute('/rails/mailers(.:format)', { ...options });
+export const rootPath = (options: RouteOptions = {}) => buildRoute('/', { ...options });
+export const sidekiqWebPath = (options: RouteOptions = {}) => buildRoute('/sidekiq', { ...options });
+export const signUpAuthorizedPath = (options: RouteOptions = {}) => buildRoute('/sign_up/authorized(.:format)', { ...options });
+export const signUpFinishPath = (options: RouteOptions = {}) => buildRoute('/sign_up/finish(.:format)', { ...options });
+export const signUpStartPath = (options: RouteOptions = {}) => buildRoute('/sign_up/start(.:format)', { ...options });
+export const slackCommandsGDTPath = (options: RouteOptions = {}) => buildRoute('/slack/commands/gdt(.:format)', { ...options });
+export const slackInteractivityPath = (options: RouteOptions = {}) => buildRoute('/slack/interactivity(.:format)', { ...options });
+export const subredditPath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/subreddits/:id(.:format)', { id, ...options });
+export const subredditsPath = (options: RouteOptions = {}) => buildRoute('/subreddits(.:format)', { ...options });
+export const templatePath = (id: RequiredParameter, options: RouteOptions = {}) => buildRoute('/templates/:id(.:format)', { id, ...options });

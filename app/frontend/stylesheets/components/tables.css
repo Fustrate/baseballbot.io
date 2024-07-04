@@ -60,7 +60,9 @@ tr.no-records {
 }
 
 tr.loading td:before {
-	@mixin font-awesome regular spin;
+	@mixin font-awesome;
+	@mixin font-awesome-regular;
+	@mixin font-awesome-spin;
 	content: fa-var(spinner);
 	margin-right: 3px;
 }

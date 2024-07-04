@@ -34,12 +34,16 @@ h1.header {
 	}
 
 	i {
-		@mixin font-awesome light full-width;
+		@mixin font-awesome;
+		@mixin font-awesome-light;
+		@mixin font-awesome-full-width;
 		margin-right: .5rem;
 		color: $primary-400;
 
 		&.fab {
-			@mixin font-awesome brands full-width;
+			@mixin font-awesome;
+			@mixin font-awesome-brands;
+			@mixin font-awesome-full-width;
 		}
 
 		&.fa-reddit {

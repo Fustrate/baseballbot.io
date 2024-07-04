@@ -25,9 +25,6 @@ gem 'jsbundling-rails', '~> 1.2'
 # New Rails asset pipeline [https://github.com/rails/propshaft]
 gem 'propshaft', '~> 0.7'
 
-# Frontend routes [https://github.com/railsware/js-routes]
-gem 'js-routes', '~> 2.2', require: false
-
 # Faster raw json generation [https://github.com/ohler55/oj]
 gem 'oj', '~> 3.16'
 

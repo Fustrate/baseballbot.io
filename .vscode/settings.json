@@ -48,11 +48,9 @@
     "files.trimTrailingWhitespace": true,
     "javascript.preferences.quoteStyle": "single",
     "javascript.validate.enable": false,
-    "ruby.intellisense": false,
-    "ruby.useLanguageServer": true,
     "search.exclude": {
         ".yarn": true,
-        "app/frontend/utilities/routes.js": true,
+        "app/frontend/utilities/routes.ts": true,
         "node_modules": true,
         "yarn.lock": true,
     },

@@ -1,8 +1,8 @@
+import { start } from '@fustrate/rails';
 import GenericTable, { settings } from '@fustrate/rails/generic-table';
 import { getCurrentPageJSON } from '@fustrate/rails/json';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 
-import BaseballBot from 'js/baseballbot';
 import Subreddit, { JSONData as SubredditData } from 'models/subreddit';
 import { postAtFormat } from 'js/utilities';
 
@@ -58,4 +58,4 @@ class SubredditsTable extends GenericTable<Subreddit> {
   }
 }
 
-BaseballBot.start(SubredditsTable);
+start(new SubredditsTable());

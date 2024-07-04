@@ -14,9 +14,7 @@ export default tseslint.config(
     ignores: [
       '.yarn',
       'app/assets',
-      'app/frontend/utilities/i18n-translations.js',
-      'app/frontend/utilities/routes.js',
-      'app/frontend/**/*.d.ts',
+      'app/frontend/utilities/routes.ts',
       'node_modules',
       'public',
     ],

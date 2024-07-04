@@ -1,4 +1,5 @@
-import BaseballBot from '../javascript/baseballbot';
-import GameThreadsTable from '../javascript/baseballbot/game_threads_table';
+import { start } from '@fustrate/rails';
 
-BaseballBot.start(GameThreadsTable);
+import GameThreadsTable from 'js/baseballbot/game_threads_table';
+
+start(new GameThreadsTable());

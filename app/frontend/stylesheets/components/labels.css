@@ -58,7 +58,8 @@
 
 	&.no:before,
 	&.yes:before {
-		@mixin font-awesome regular;
+		@mixin font-awesome;
+		@mixin font-awesome-regular;
 		padding-right: 3px;
 	}
 

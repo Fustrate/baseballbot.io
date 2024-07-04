@@ -10,13 +10,13 @@ import postcssNested from 'postcss-nested';
 import postcssPresetEnv from 'postcss-preset-env';
 
 // Custom postcss plugins
-import colorMod from './lib/postcss/color-mod';
-import faFontUrls from './lib/postcss/fa-font-urls';
-import faVar from './lib/postcss/fa-var';
-import media from './lib/postcss/media';
-import remCalc from './lib/postcss/rem-calc';
+import colorMod from './lib/postcss/color-mod.js';
+import faFontUrls from './lib/postcss/fa-font-urls.js';
+import faVar from './lib/postcss/fa-var.js';
+import media from './lib/postcss/media.js';
+import remCalc from './lib/postcss/rem-calc.js';
 
-import variables from './app/frontend/stylesheets/variables';
+import variables from './app/frontend/stylesheets/variables.js';
 
 // We're literally only using variables here
 const variablesConfig = {
