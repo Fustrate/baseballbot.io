@@ -1,4 +1,4 @@
-import Modal from '@fustrate/rails/components/modal';
+import Modal, { settings } from '@fustrate/rails/components/modal';
 import Game from './game';
 
 const template = `
@@ -17,31 +17,33 @@ function inningCell(inning: Record<string, { runs: number }>, side: 'home' | 'aw
     return '<td></td>';
   }
 
-  return `<td>${inning[side].runs !== undefined ? inning[side].runs : ''}</td>`;
+  return `<td>${inning[side].runs == null ? '' : inning[side].runs}</td>`;
 }
 
-function linescoreTotals(team) {
-  return [team.runs, team.hits, team.errors, team.leftOnBase];
+function linescoreTotals(team): [number, number, number, number] {
+  return [Number(team.runs), Number(team.hits), Number(team.errors), Number(team.leftOnBase)];
 }
 
+@settings({
+  size: 'small',
+  template,
+  buttons: [],
+})
 export default class GameModal extends Modal {
   public game: Game;
 
   public constructor(game: Game) {
-    super({
-      size: 'small',
-      content: template,
-      title: `⚾ ${game.teams.away.team.name} @ ${game.teams.home.team.name}`,
-      buttons: [],
-    });
+    super();
 
     this.game = game;
+
+    this.setTitle(`⚾ ${game.teams.away.team.name} @ ${game.teams.home.team.name}`);
   }
 
   public override async open(): Promise<void> {
     this.modal.querySelector('.linescore').innerHTML = this.linescore();
 
-    super.open();
+    await super.open();
   }
 
   public linescore(): string {
@@ -71,9 +73,9 @@ export default class GameModal extends Modal {
       home[home.length - 1] = '<td class="did-not-play"></td>';
     }
 
-    headers = headers.concat('<th>R</th>', '<th>H</th>', '<th>E</th>', '<th>LOB</th>');
-    away = away.concat(linescoreTotals(this.game.linescore.teams.away).map((text) => `<th>${text}</th>`));
-    home = home.concat(linescoreTotals(this.game.linescore.teams.home).map((text) => `<th>${text}</th>`));
+    headers = [...headers, '<th>R</th>', '<th>H</th>', '<th>E</th>', '<th>LOB</th>'];
+    away = [...away, ...linescoreTotals(this.game.linescore.teams.away).map((text) => `<th>${text}</th>`)];
+    home = [...home, ...linescoreTotals(this.game.linescore.teams.home).map((text) => `<th>${text}</th>`)];
 
     return `
       <table class="linescore">

@@ -1,4 +1,4 @@
-const Color = require('color');
+import Color from 'color';
 
 const variables = {
   'fa-weight-light': 300,
@@ -79,9 +79,9 @@ const palette = {
   'green-900': Color('#2B4005'),
 };
 
-Object.keys(palette).forEach((key) => {
+for (const key of Object.keys(palette)) {
   variables[key] = palette[key].string();
-});
+}
 
 Object.assign(variables, {
   red: palette['red-700'].string(),
@@ -137,7 +137,7 @@ Object.assign(variables, {
   'dropdown-bg-color': '#fff',
   'dropdown-border-color': '#ccc',
   'dropdown-hover-bg-color': '#f4f4f4',
-  'dropdown-icon': "'\\25BE'",
+  'dropdown-icon': String.raw`'\25BE'`,
 
   // Component: Flash
   'flash-color': '#fff',
@@ -206,4 +206,4 @@ Object.assign(variables, {
   'tooltip-opacity': '.9',
 });
 
-module.exports = variables;
+export default variables;

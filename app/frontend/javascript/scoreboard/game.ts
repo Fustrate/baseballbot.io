@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 
-const pregameStatuses = ['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled'];
-const inProgressStatuses = ['In Progress', 'Manager Challenge'];
+const pregameStatuses = new Set(['Preview', 'Pre-Game', 'Warmup', 'Delayed Start', 'Scheduled']);
+const inProgressStatuses = new Set(['In Progress', 'Manager Challenge']);
 
 interface TeamsData {
   away: Record<string, any>;
@@ -27,11 +27,11 @@ class Game {
   }
 
   public get isPregame(): boolean {
-    return pregameStatuses.includes(this.data.status.detailedState);
+    return pregameStatuses.has(this.data.status.detailedState);
   }
 
   public get isInProgress(): boolean {
-    return inProgressStatuses.includes(this.data.status.detailedState);
+    return inProgressStatuses.has(this.data.status.detailedState);
   }
 
   public updateData(data: any): void {

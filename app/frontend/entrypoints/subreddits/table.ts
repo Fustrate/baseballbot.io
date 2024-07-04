@@ -1,5 +1,5 @@
-import GenericTable from '@fustrate/rails/generic_table';
-import { getCurrentPageJson } from '@fustrate/rails/ajax';
+import GenericTable, { settings } from '@fustrate/rails/generic-table';
+import { getCurrentPageJSON } from '@fustrate/rails/json';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 
 import BaseballBot from 'js/baseballbot';
@@ -19,16 +19,14 @@ const blankRow = `
 
 const checkMark = icon('check');
 
+@settings({
+  blankRow,
+  noRecordsMessage: 'No subreddits found.',
+  selector: 'table.subreddits',
+})
 class SubredditsTable extends GenericTable<Subreddit> {
-  public constructor() {
-    super('table.subreddits', {
-      blankRow,
-      noRecordsMessage: 'No subreddits found.',
-    });
-  }
-
   public override async reloadTable(): Promise<void> {
-    const response = await getCurrentPageJson();
+    const response = await getCurrentPageJSON();
 
     this.reloadRows(response.data.data.map((row: SubredditData) => this.createRow(Subreddit.build(row))));
   }
@@ -57,10 +55,6 @@ class SubredditsTable extends GenericTable<Subreddit> {
     if (subreddit.options.postgame?.enabled) {
       row.querySelector('.postgames').innerHTML = checkMark;
     }
-  }
-
-  protected static override get blankRow(): string {
-    return blankRow;
   }
 }
 

@@ -1,7 +1,9 @@
-import { linkTo, multilineEscapeHTML } from '@fustrate/rails/utilities';
+import { start } from '@fustrate/rails';
+import { linkTo } from '@fustrate/rails/utilities';
+import { escapeMultilineHTML } from '@fustrate/rails/html';
+
 import GenericShow, { refresh } from 'components/generic_show';
 
-import BaseballBot from 'js/baseballbot';
 import Subreddit from 'models/subreddit';
 import { postAtFormat } from 'js/utilities';
 
@@ -19,7 +21,7 @@ class ShowSubreddit extends GenericShow {
   };
 
   public override async initialize(): Promise<void> {
-    super.initialize();
+    await super.initialize();
 
     this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit });
 
@@ -52,11 +54,11 @@ class ShowSubreddit extends GenericShow {
     if (options?.enabled) {
       listItems.push(
         `<dt>Post At</dt><dd>${postAtFormat(options.postAt)}</dd>`,
-        `<dt>Sticky</dt><dd>${options.sticky !== false ? 'Yes' : 'No'}</dd>`,
+        `<dt>Sticky</dt><dd>${options.sticky === false ? 'No' : 'Yes'}</dd>`,
       );
 
       if (options.stickyComment) {
-        listItems.push(`<dt>Sticky Comment</dt><dd>${multilineEscapeHTML(options.stickyComment)}</dd>`);
+        listItems.push(`<dt>Sticky Comment</dt><dd>${escapeMultilineHTML(options.stickyComment)}</dd>`);
       }
 
       const template = this.subreddit.templates.find((temp) => temp.type === 'game_thread');
@@ -86,7 +88,7 @@ class ShowSubreddit extends GenericShow {
     if (options?.enabled) {
       listItems.push(
         `<dt>Post At</dt><dd>${postAtFormat(options.postAt)}</dd>`,
-        `<dt>Sticky</dt><dd>${options.sticky !== false ? 'Yes' : 'No'}</dd>`,
+        `<dt>Sticky</dt><dd>${options.sticky === false ? 'No' : 'Yes'}</dd>`,
       );
 
       const template = this.subreddit.templates.find((temp) => temp.type === 'pregame');
@@ -96,7 +98,7 @@ class ShowSubreddit extends GenericShow {
       );
 
       if (options.stickyComment) {
-        listItems.push(`<dt>Sticky Comment</dt><dd>${multilineEscapeHTML(options.stickyComment)}</dd>`);
+        listItems.push(`<dt>Sticky Comment</dt><dd>${escapeMultilineHTML(options.stickyComment)}</dd>`);
       }
     }
 
@@ -115,12 +117,12 @@ class ShowSubreddit extends GenericShow {
       const template = this.subreddit.templates.find((temp) => temp.type === 'postgame');
 
       listItems.push(
-        `<dt>Sticky</dt><dd>${options.sticky !== false ? 'Yes' : 'No'}</dd>`,
+        `<dt>Sticky</dt><dd>${options.sticky === false ? 'No' : 'Yes'}</dd>`,
         `<dt>Template</dt><dd>${template ? linkTo('Postgame Template', template.path()) : 'Template Missing'}</dd>`,
       );
 
       if (options.stickyComment) {
-        listItems.push(`<dt>Sticky Comment</dt><dd>${multilineEscapeHTML(options.stickyComment)}</dd>`);
+        listItems.push(`<dt>Sticky Comment</dt><dd>${escapeMultilineHTML(options.stickyComment)}</dd>`);
       }
     }
 
@@ -139,12 +141,12 @@ class ShowSubreddit extends GenericShow {
       const template = this.subreddit.templates.find((temp) => temp.type === 'off_day');
 
       listItems.push(
-        `<dt>Sticky</dt><dd>${options.sticky !== false ? 'Yes' : 'No'}</dd>`,
+        `<dt>Sticky</dt><dd>${options.sticky === false ? 'No' : 'Yes'}</dd>`,
         `<dt>Template</dt><dd>${template ? linkTo('Off Day Template', template.path()) : 'Template Missing'}</dd>`,
       );
 
       if (options.stickyComment) {
-        listItems.push(`<dt>Sticky Comment</dt><dd>${multilineEscapeHTML(options.stickyComment)}</dd>`);
+        listItems.push(`<dt>Sticky Comment</dt><dd>${escapeMultilineHTML(options.stickyComment)}</dd>`);
       }
     }
 
@@ -178,4 +180,4 @@ class ShowSubreddit extends GenericShow {
   }
 }
 
-BaseballBot.start(ShowSubreddit);
+start(new ShowSubreddit());

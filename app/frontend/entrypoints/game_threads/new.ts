@@ -1,10 +1,11 @@
-import GenericPage from '@fustrate/rails/generic_page';
 import { DateTime } from 'luxon';
 
-import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
-import { setChildren } from 'js/utilities';
+import { start } from '@fustrate/rails';
+import GenericPage from '@fustrate/rails/generic-page';
+import { setChildren } from '@fustrate/rails/html';
 
-import BaseballBot from 'js/baseballbot';
+import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
+
 import Subreddit, { JSONData as SubredditData } from 'models/subreddit';
 import { subredditsPath } from 'utilities/routes';
 
@@ -38,11 +39,11 @@ class NewGameThreadForm extends GenericPage {
   protected subreddits: Record<number, Subreddit> = {};
 
   public override async initialize(): Promise<void> {
-    super.initialize();
+    await super.initialize();
 
     await this.loadSubreddits();
 
-    this.changedDate();
+    await this.changedDate();
   }
 
   protected override addEventListeners(): void {
@@ -107,4 +108,4 @@ class NewGameThreadForm extends GenericPage {
   }
 }
 
-BaseballBot.start(NewGameThreadForm);
+start(new NewGameThreadForm());

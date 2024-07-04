@@ -1,6 +1,6 @@
-import GenericPage from '@fustrate/rails/generic_page';
+import { start } from '@fustrate/rails';
+import GenericPage from '@fustrate/rails/generic-page';
 
-import BaseballBot from 'js/baseballbot';
 import GameCard from 'js/scoreboard/game_card';
 import Game from 'js/scoreboard/game';
 
@@ -18,11 +18,11 @@ class Scoreboard extends GenericPage {
   };
 
   public override async initialize(): Promise<void> {
-    super.initialize();
+    await super.initialize();
 
     this.date = new Date();
 
-    this.createGameCards();
+    await this.createGameCards();
 
     window.setInterval(this.updateGameCards.bind(this), secondsBetweenReloads * 1000);
   }
@@ -36,13 +36,13 @@ class Scoreboard extends GenericPage {
     this.gameCards = gamesData.map((gameData) => {
       const gameCard = new GameCard(new Game(gameData));
 
-      this.fields.cardsContainer.appendChild(gameCard.card);
+      this.fields.cardsContainer.append(gameCard.card);
 
       return gameCard;
     });
 
     for (let i = 0; i < 5; i += 1) {
-      this.fields.cardsContainer.appendChild(spacer.cloneNode());
+      this.fields.cardsContainer.append(spacer.cloneNode());
     }
   }
 
@@ -71,4 +71,4 @@ class Scoreboard extends GenericPage {
   }
 }
 
-BaseballBot.start(Scoreboard);
+start(new Scoreboard());

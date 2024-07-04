@@ -69,5 +69,5 @@ export default async function loadSchedule(date: Date): Promise<Schedule> {
 
   const response = await window.fetch(`${apiEndpoint}&date=${dateStr}`);
 
-  return response.json();
+  return response.json() as Promise<Schedule>;
 }

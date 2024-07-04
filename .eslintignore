@@ -1,9 +1,0 @@
-# Ignore auto-generated files
-app/frontend/utilities/routes.js
-app/assets/builds
-
-# Ignore all type definition files
-app/frontend/**/*.d.ts
-
-# The build manifest file looks and smells like JS, but really isn't
-app/assets/config/manifest.js

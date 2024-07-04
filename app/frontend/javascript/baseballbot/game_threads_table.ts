@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import GenericTable from '@fustrate/rails/generic_table';
+import GenericTable, { settings } from '@fustrate/rails/generic-table';
 import { PaginatedData } from '@fustrate/rails/components/pagination';
-import { getCurrentPageJson } from '@fustrate/rails/ajax';
+import { getCurrentPageJSON } from '@fustrate/rails/json';
 import {
   icon,
   label,
@@ -51,16 +51,13 @@ const blankRow = `
     <td class="status"></td>
   </tr>`;
 
+@settings({
+  blankRow,
+  noRecordsMessage: 'No game threads found.',
+})
 class GameThreadsTable extends GenericTable<GameThread> {
-  public constructor() {
-    super('table.game-threads', {
-      blankRow,
-      noRecordsMessage: 'No game threads found.',
-    });
-  }
-
   public override async reloadTable(): Promise<void> {
-    const response = await getCurrentPageJson<PaginatedResponse<JSONData>>();
+    const response = await getCurrentPageJSON<PaginatedResponse<JSONData>>();
 
     const { data } = response.data;
 
@@ -72,7 +69,7 @@ class GameThreadsTable extends GenericTable<GameThread> {
   public override updateRow(row: HTMLTableRowElement, gameThread: GameThread): void {
     row.querySelector('.subreddit').innerHTML = linkTo(
       gameThread.subreddit.name,
-      subredditPath(gameThread.subreddit),
+      subredditPath(gameThread.subreddit.id),
     );
 
     if (gameThread.title) {

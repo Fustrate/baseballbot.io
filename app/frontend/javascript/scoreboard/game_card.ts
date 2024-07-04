@@ -1,4 +1,4 @@
-import { elementFromString } from '@fustrate/rails/utilities';
+import { elementFromString } from '@fustrate/rails/html';
 
 import Game from './game';
 import GameModal from './game_modal';
@@ -61,12 +61,12 @@ class GameCard {
     this.refresh();
   }
 
-  protected openGameModal(): void {
+  protected async openGameModal(): Promise<void> {
     if (!this.modal) {
       this.modal = new GameModal(this.game);
     }
 
-    this.modal.open();
+    await this.modal.open();
   }
 
   protected refreshRunners(): void {
@@ -117,7 +117,7 @@ class GameCard {
     }
 
     if (!this.game.isInProgress) {
-      return this.game.status.detailedState;
+      return String(this.game.status.detailedState);
     }
 
     return `${this.game.linescore.inningState} ${this.game.linescore.currentInning}`;

@@ -1,22 +1,22 @@
-const path = require('path');
-const autoprefixer = require('autoprefixer');
+import path from 'node:path';
+import autoprefixer from 'autoprefixer';
 
-const postcssAdvancedVars = require('postcss-advanced-variables');
-const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
-const postcssImport = require('postcss-import');
-const postcssMinify = require('postcss-minify');
-const postcssMixins = require('postcss-mixins');
-const postcssNested = require('postcss-nested');
-const postcssPresetEnv = require('postcss-preset-env');
+import postcssAdvancedVars from 'postcss-advanced-variables';
+import postcssFlexbugsFixes from 'postcss-flexbugs-fixes';
+import postcssImport from 'postcss-import';
+import postcssMinify from 'postcss-minify';
+import postcssMixins from 'postcss-mixins';
+import postcssNested from 'postcss-nested';
+import postcssPresetEnv from 'postcss-preset-env';
 
 // Custom postcss plugins
-const colorMod = require('./lib/postcss/color-mod');
-const faFontUrls = require('./lib/postcss/fa-font-urls');
-const faVar = require('./lib/postcss/fa-var');
-const media = require('./lib/postcss/media');
-const remCalc = require('./lib/postcss/rem-calc');
+import colorMod from './lib/postcss/color-mod';
+import faFontUrls from './lib/postcss/fa-font-urls';
+import faVar from './lib/postcss/fa-var';
+import media from './lib/postcss/media';
+import remCalc from './lib/postcss/rem-calc';
 
-const variables = require('./app/frontend/stylesheets/variables');
+import variables from './app/frontend/stylesheets/variables';
 
 // We're literally only using variables here
 const variablesConfig = {
@@ -27,14 +27,14 @@ const variablesConfig = {
 const isProduction = true;
 
 // Run variables multiple times
-module.exports = {
+export default {
   plugins: [
     postcssImport,
     postcssFlexbugsFixes,
     postcssAdvancedVars(variablesConfig),
     remCalc,
     // postcss-mixins must come before postcss-nested
-    postcssMixins({ mixinsDir: path.join(__dirname, 'lib', 'postcss', 'mixins') }),
+    postcssMixins({ mixinsDir: path.join(import.meta.dirname, 'lib', 'postcss', 'mixins') }),
     postcssAdvancedVars(variablesConfig),
     postcssNested,
     colorMod,
