@@ -54,6 +54,7 @@ const blankRow = `
 @settings({
   blankRow,
   noRecordsMessage: 'No game threads found.',
+  selector: 'table.game-threads',
 })
 class GameThreadsTable extends GenericTable<GameThread> {
   public override async reloadTable(): Promise<void> {
