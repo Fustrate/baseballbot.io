@@ -33,7 +33,7 @@ function statusLabel(gameThread: GameThread) {
 
 function populateGameThreadTitle(cell: HTMLTableCellElement, gameThread: GameThread) {
   if (!gameThread.postId) {
-    cell.textContent = gameThread.title;
+    cell.textContent = gameThread.title ?? '';
 
     return;
   }
