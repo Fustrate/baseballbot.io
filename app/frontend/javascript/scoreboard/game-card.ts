@@ -1,7 +1,7 @@
 import { elementFromString } from '@fustrate/rails/html';
 
 import Game from './game';
-import GameModal from './game_modal';
+import GameModal from './game-modal';
 
 const template = `
   <div class="game-card">

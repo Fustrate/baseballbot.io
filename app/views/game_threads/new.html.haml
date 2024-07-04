@@ -1,7 +1,7 @@
 :ruby
   title 'Add a Game Thread'
 
-  javascript 'game_threads/new'
+  javascript 'game-threads/new'
 
   my_subreddits_with_game_threads = Current.user.subreddits.where("options['game_threads']['enabled']::boolean IS TRUE")
 

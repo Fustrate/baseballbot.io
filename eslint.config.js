@@ -124,9 +124,6 @@ export default tseslint.config(
     // Rules and tweaks that only need to be applied to the frontend code
     files: ['app/frontend/**/*.ts'],
     rules: {
-      // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md
-      'unicorn/filename-case': ['error', { case: 'snakeCase' }],
-
       // This complains about bound methods in addEventListener
       // https://typescript-eslint.io/rules/no-misused-promises
       '@typescript-eslint/no-misused-promises': ['error', {
