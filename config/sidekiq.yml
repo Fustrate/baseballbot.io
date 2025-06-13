@@ -1,6 +1,5 @@
 ---
 :queues:
-  - slack
   - default
 
 :pidfile: tmp/pids/sidekiq.pid

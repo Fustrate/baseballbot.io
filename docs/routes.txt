@@ -1,6 +1,6 @@
 
-Prefix            | 
-Verb              | 
+Prefix            |
+Verb              |
 URI               | /assets
 Controller#Action | Propshaft::Server
 
@@ -19,7 +19,7 @@ Verb              | GET
 URI               | /game_threads(.:format)
 Controller#Action | game_threads#index
 
-Prefix            | 
+Prefix            |
 Verb              | POST
 URI               | /game_threads(.:format)
 Controller#Action | game_threads#create
@@ -39,17 +39,17 @@ Verb              | GET
 URI               | /game_threads/:id(.:format)
 Controller#Action | game_threads#show
 
-Prefix            | 
+Prefix            |
 Verb              | PATCH
 URI               | /game_threads/:id(.:format)
 Controller#Action | game_threads#update
 
-Prefix            | 
+Prefix            |
 Verb              | PUT
 URI               | /game_threads/:id(.:format)
 Controller#Action | game_threads#update
 
-Prefix            | 
+Prefix            |
 Verb              | DELETE
 URI               | /game_threads/:id(.:format)
 Controller#Action | game_threads#destroy
@@ -69,7 +69,7 @@ Verb              | GET
 URI               | /login(.:format)
 Controller#Action | sessions#new
 
-Prefix            | 
+Prefix            |
 Verb              | POST
 URI               | /login(.:format)
 Controller#Action | sessions#create
@@ -80,7 +80,7 @@ URI               | /logout(.:format)
 Controller#Action | sessions#destroy
 
 Prefix            | sidekiq_web
-Verb              | 
+Verb              |
 URI               | /sidekiq
 Controller#Action | Sidekiq::Web
 
@@ -98,16 +98,6 @@ Prefix            | sign_up_finish
 Verb              | POST
 URI               | /sign_up/finish(.:format)
 Controller#Action | sign_up#finish
-
-Prefix            | slack_commands_gdt
-Verb              | POST
-URI               | /slack/commands/gdt(.:format)
-Controller#Action | slack/commands#gdt
-
-Prefix            | slack_interactivity
-Verb              | POST
-URI               | /slack/interactivity(.:format)
-Controller#Action | slack#interactivity
 
 Prefix            | game_threads_subreddit
 Verb              | GET
@@ -129,12 +119,12 @@ Verb              | GET
 URI               | /subreddits/:id(.:format)
 Controller#Action | subreddits#show
 
-Prefix            | 
+Prefix            |
 Verb              | PATCH
 URI               | /subreddits/:id(.:format)
 Controller#Action | subreddits#update
 
-Prefix            | 
+Prefix            |
 Verb              | PUT
 URI               | /subreddits/:id(.:format)
 Controller#Action | subreddits#update
