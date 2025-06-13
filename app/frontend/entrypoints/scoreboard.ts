@@ -1,8 +1,8 @@
 import { start } from '@fustrate/rails';
 import GenericPage from '@fustrate/rails/generic-page';
 
-import GameCard from 'js/scoreboard/game-card';
 import Game from 'js/scoreboard/game';
+import GameCard from 'js/scoreboard/game-card';
 
 import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
 
@@ -51,13 +51,13 @@ class Scoreboard extends GenericPage {
 
     const dataByPk: Record<number, ScheduleGame> = {};
 
-    games.forEach((gameData) => {
+    for (const gameData of games) {
       dataByPk[gameData.gamePk] = gameData;
-    });
+    }
 
-    this.gameCards.forEach((gameCard) => {
+    for (const gameCard of this.gameCards) {
       gameCard.update(dataByPk[gameCard.game.gamePk]);
-    });
+    }
   }
 
   protected async reloadGameInfo(): Promise<ScheduleGame[]> {

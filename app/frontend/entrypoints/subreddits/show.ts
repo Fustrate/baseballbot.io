@@ -1,11 +1,11 @@
 import { start } from '@fustrate/rails';
-import { linkTo } from '@fustrate/rails/utilities';
 import { escapeMultilineHTML } from '@fustrate/rails/html';
+import { linkTo } from '@fustrate/rails/utilities';
 
 import GenericShow, { refresh } from 'components/generic-show';
 
-import Subreddit from 'models/subreddit';
 import { postAtFormat } from 'js/utilities';
+import Subreddit from 'models/subreddit';
 
 function stickyPosts(config: { enabled: boolean; sticky?: boolean } | undefined): boolean {
   return config != null && config.enabled !== false && config.sticky !== false;
@@ -27,7 +27,7 @@ class ShowSubreddit extends GenericShow {
   public override async initialize(): Promise<void> {
     await super.initialize();
 
-    this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit })!;
+    this.subreddit = Subreddit.build({ id: document.body.dataset.subreddit }) as Subreddit;
 
     await this.subreddit.reload();
 
@@ -36,9 +36,7 @@ class ShowSubreddit extends GenericShow {
 
   @refresh
   protected refreshGeneralSettings(): void {
-    const listItems = [
-      `<dt>Time Zone</dt><dd>${this.subreddit.options.timezone}</dd>`,
-    ];
+    const listItems = [`<dt>Time Zone</dt><dd>${this.subreddit.options.timezone}</dd>`];
 
     if (this.stickyAnyThreads) {
       listItems.push(`<dt>Sticky Slot</dt><dd>${this.subreddit.options.stickySlot ?? 1}</dd>`);
@@ -51,9 +49,7 @@ class ShowSubreddit extends GenericShow {
   protected refreshGameThreadSettings(): void {
     const options = this.subreddit.options.gameThreads;
 
-    const listItems = [
-      `<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`,
-    ];
+    const listItems = [`<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`];
 
     if (options?.enabled) {
       listItems.push(
@@ -85,9 +81,7 @@ class ShowSubreddit extends GenericShow {
   protected refreshPregameSettings(): void {
     const options = this.subreddit.options.pregame;
 
-    const listItems = [
-      `<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`,
-    ];
+    const listItems = [`<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`];
 
     if (options?.enabled) {
       listItems.push(
@@ -113,9 +107,7 @@ class ShowSubreddit extends GenericShow {
   protected refreshPostgameSettings(): void {
     const options = this.subreddit.options.postgame;
 
-    const listItems = [
-      `<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`,
-    ];
+    const listItems = [`<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`];
 
     if (options?.enabled) {
       const template = this.subreddit.templates.find((temp) => temp.type === 'postgame');
@@ -137,9 +129,7 @@ class ShowSubreddit extends GenericShow {
   protected refreshOffDaySettings(): void {
     const options = this.subreddit.options.offDay;
 
-    const listItems = [
-      `<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`,
-    ];
+    const listItems = [`<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`];
 
     if (options?.enabled) {
       const template = this.subreddit.templates.find((temp) => temp.type === 'off_day');
@@ -161,9 +151,7 @@ class ShowSubreddit extends GenericShow {
   protected refreshSidebarSettings(): void {
     const options = this.subreddit.options.sidebar;
 
-    const listItems = [
-      `<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`,
-    ];
+    const listItems = [`<dt>Enabled</dt><dd>${options?.enabled ? 'Yes' : 'No'}`];
 
     if (options?.enabled) {
       const template = this.subreddit.templates.find((temp) => temp.type === 'sidebar');
@@ -177,10 +165,12 @@ class ShowSubreddit extends GenericShow {
   }
 
   protected get stickyAnyThreads(): boolean {
-    return stickyPosts(this.subreddit.options.gameThreads)
-      || stickyPosts(this.subreddit.options.pregame)
-      || stickyPosts(this.subreddit.options.postgame)
-      || stickyPosts(this.subreddit.options.offDay);
+    return (
+      stickyPosts(this.subreddit.options.gameThreads) ||
+      stickyPosts(this.subreddit.options.pregame) ||
+      stickyPosts(this.subreddit.options.postgame) ||
+      stickyPosts(this.subreddit.options.offDay)
+    );
   }
 }
 

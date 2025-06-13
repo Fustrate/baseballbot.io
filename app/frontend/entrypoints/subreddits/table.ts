@@ -3,8 +3,8 @@ import GenericTable, { settings } from '@fustrate/rails/generic-table';
 import { getCurrentPageJSON } from '@fustrate/rails/json';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 
-import Subreddit, { type JSONData as SubredditData } from 'models/subreddit';
 import { postAtFormat } from 'js/utilities';
+import Subreddit, { type JSONData as SubredditData } from 'models/subreddit';
 
 const blankRow = `
   <tr>
@@ -28,32 +28,32 @@ class SubredditsTable extends GenericTable<Subreddit> {
   public override async reloadTable(): Promise<void> {
     const response = await getCurrentPageJSON();
 
-    this.reloadRows(response.data.data.map((row: SubredditData) => this.createRow(Subreddit.build(row)!)));
+    this.reloadRows(response.data.data.map((row: SubredditData) => this.createRow(Subreddit.build(row) as Subreddit)));
   }
 
   public override updateRow(row: HTMLTableRowElement, subreddit: Subreddit): void {
-    row.querySelector('.name')!.innerHTML = linkTo(subreddit.name, subreddit);
-    row.querySelector('.team')!.textContent = subreddit.abbreviation;
-    row.querySelector('.account')!.textContent = subreddit.account.name;
+    row.querySelector('.name')?.setHTMLUnsafe(linkTo(subreddit.name, subreddit));
+    row.querySelector('.team')?.replaceChildren(subreddit.abbreviation);
+    row.querySelector('.account')?.replaceChildren(subreddit.account.name);
 
     if (subreddit.options.sidebar?.enabled) {
-      row.querySelector('.sidebar')!.innerHTML = checkMark;
+      row.querySelector('.sidebar')?.setHTMLUnsafe(checkMark);
     }
 
     if (subreddit.options.gameThreads?.enabled) {
       const { postAt } = subreddit.options.gameThreads;
 
-      row.querySelector('.game-threads')!.textContent = postAtFormat(postAt);
+      row.querySelector('.game-threads')?.replaceChildren(postAtFormat(postAt));
     }
 
     if (subreddit.options.pregame?.enabled) {
       const { postAt } = subreddit.options.pregame;
 
-      row.querySelector('.pregames')!.textContent = postAtFormat(postAt);
+      row.querySelector('.pregames')?.replaceChildren(postAtFormat(postAt));
     }
 
     if (subreddit.options.postgame?.enabled) {
-      row.querySelector('.postgames')!.innerHTML = checkMark;
+      row.querySelector('.postgames')?.setHTMLUnsafe(checkMark);
     }
   }
 }

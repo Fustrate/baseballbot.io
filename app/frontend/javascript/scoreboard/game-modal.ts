@@ -41,7 +41,7 @@ export default class GameModal extends Modal {
   }
 
   public override async open(): Promise<void> {
-    this.modal.querySelector('.linescore')!.innerHTML = this.linescore();
+    this.modal.querySelector('.linescore')?.setHTMLUnsafe(this.linescore());
 
     await super.open();
   }

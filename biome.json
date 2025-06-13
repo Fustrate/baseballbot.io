@@ -10,7 +10,8 @@
 		"ignore": [
 			"app/assets/builds/",
 			"node_modules/",
-			"app/frontend/entrypoints/application.css",
+			"app/frontend/stylesheets",
+			"app/frontend/javascript/scoreboard",
 			"storage/",
 			"package.json"
 		]

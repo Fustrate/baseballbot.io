@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon';
 import BaseRecord from '@fustrate/rails/record';
+import { DateTime } from 'luxon';
 
 import { gameThreadPath, gameThreadsPath } from 'utilities/routes';
 import Subreddit from './subreddit';
@@ -52,7 +52,7 @@ export default class GameThread extends BaseRecord {
     this.postId = data.postId;
     this.startsAt = DateTime.fromISO(data.startsAt);
     this.status = data.status;
-    this.subreddit = Subreddit.build(data.subreddit)!;
+    this.subreddit = Subreddit.build(data.subreddit) as Subreddit;
     this.title = data.title;
 
     return data;

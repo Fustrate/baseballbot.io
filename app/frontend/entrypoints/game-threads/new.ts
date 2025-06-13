@@ -102,9 +102,9 @@ class NewGameThreadForm extends GenericPage {
 
     this.subreddits = {};
 
-    data.data.forEach((subredditData: SubredditData) => {
-      this.subreddits[subredditData.id] = Subreddit.build(subredditData)!;
-    });
+    for (const subredditData of data.data) {
+      this.subreddits[subredditData.id] = Subreddit.build(subredditData) as Subreddit;
+    }
   }
 }
 

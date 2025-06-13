@@ -47,8 +47,8 @@ class GameCard {
     this.card.querySelector('.home-team')?.classList?.add(this.game.teams.home.team.fileCode);
     this.card.querySelector('.away-team')?.classList?.add(this.game.teams.away.team.fileCode);
 
-    this.card.querySelector('.home-team .name')!.textContent = this.game.teams.home.team.abbreviation;
-    this.card.querySelector('.away-team .name')!.textContent = this.game.teams.away.team.abbreviation;
+    this.card.querySelector('.home-team .name')?.replaceChildren(this.game.teams.home.team.abbreviation);
+    this.card.querySelector('.away-team .name')?.replaceChildren(this.game.teams.away.team.abbreviation);
 
     this.card.addEventListener('click', this.openGameModal.bind(this));
 
@@ -71,9 +71,9 @@ class GameCard {
 
   protected refreshRunners(): void {
     if (this.game.isInProgress) {
-      this.card.querySelector<HTMLDivElement>('.runners')!.style.display = '';
+      this.card.querySelector<HTMLDivElement>('.runners')?.style.display = '';
     } else {
-      this.card.querySelector<HTMLDivElement>('.runners')!.style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.runners')?.style.display = 'none';
 
       return;
     }
@@ -85,9 +85,9 @@ class GameCard {
 
   protected refreshOuts(): void {
     if (this.game.isInProgress) {
-      this.card.querySelector<HTMLDivElement>('.outs')!.style.display = '';
+      this.card.querySelector<HTMLDivElement>('.outs')?.style.display = '';
     } else {
-      this.card.querySelector<HTMLDivElement>('.outs')!.style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.outs')?.style.display = 'none';
     }
 
     if (!this.game.isInProgress) {
@@ -102,7 +102,7 @@ class GameCard {
       elements.push(outSpan);
     }
 
-    this.card.querySelector('.outs')!.innerHTML = elements.join('');
+    this.card.querySelector('.outs')?.setHTMLUnsafe(elements.join(''));
   }
 
   protected gameStatus(): string {
@@ -128,11 +128,11 @@ class GameCard {
     this.refreshRunners();
 
     if (!this.game.isPregame && this.game.linescore) {
-      this.card.querySelector('.home-team .runs')!.textContent = this.game.linescore.teams.home.runs;
-      this.card.querySelector('.away-team .runs')!.textContent = this.game.linescore.teams.away.runs;
+      this.card.querySelector('.home-team .runs')?.replaceChildren(this.game.linescore.teams.home.runs);
+      this.card.querySelector('.away-team .runs')?.replaceChildren(this.game.linescore.teams.away.runs);
     }
 
-    this.card.querySelector('.status')!.textContent = this.gameStatus();
+    this.card.querySelector('.status')?.replaceChildren(this.gameStatus());
   }
 }
 

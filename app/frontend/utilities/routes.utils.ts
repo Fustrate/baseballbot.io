@@ -1,6 +1,6 @@
-export type RequiredParameter = string | number;
-export type OptionalParameter = string | number | null;
-export type AnyParameter = string | number | string[] | number[] | undefined;
+export type RequiredParameter = string | number | { id: number } | { toParam?: number | string };
+export type OptionalParameter = string | number | null | undefined;
+export type AnyParameter = RequiredParameter | string[] | number[] | null | undefined;
 
 export type RouteFormat = 'json' | 'html' | 'csv' | 'xlsx' | 'pdf' | 'zip' | 'text';
 
@@ -10,21 +10,43 @@ export interface RouteOptions {
   format?: string;
 }
 
+function stringifyValue(value: AnyParameter): string {
+  if (value == null) {
+    return '';
+  }
+
+  if (typeof value === 'object') {
+    // Allow some records to use an alternate ID in their URL, e.g. an email address
+    if ('toParam' in value) {
+      return String(value.toParam);
+    }
+
+    // Raw JSON data doesn't have a toParam method
+    if ('id' in value) {
+      return String(value.id);
+    }
+
+    throw new Error('route parameter objects must have an id or toParam attribute');
+  }
+
+  return String(value);
+}
+
 export function buildRoute(spec: string, options: Record<string, AnyParameter>) {
   let path = spec;
   const parameters = new URLSearchParams();
 
-  Object.entries(options).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(options)) {
     if (path.includes(`:${key}`)) {
-      path = path.replace(`:${key}`, String(value));
+      path = path.replace(`:${key}`, stringifyValue(value));
     } else if (Array.isArray(value)) {
-      value.forEach((val: string | number) => {
+      for (const val of value) {
         parameters.append(`${key}[]`, String(val));
-      });
+      }
     } else if (value != null) {
-      parameters.append(key, String(value));
+      parameters.append(key, stringifyValue(value));
     }
-  });
+  }
 
   path = path.replace(/\(([^)]+)\)/gi, (match, p1: string) => (match.includes(':') ? '' : p1));
 
