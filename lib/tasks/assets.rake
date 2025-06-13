@@ -18,6 +18,8 @@ module Baseballbot
       routes_file.write "#{HEADER}\n#{@routes.sort.join}"
 
       regenerate_route_docs!
+
+      `yarn run biome format #{routes_file} --fix`
     end
 
     protected
@@ -78,6 +80,8 @@ module Baseballbot
       ApplicationRecord.descendants.each { process_model(it) }
 
       constants_file.write @types.sort.join("\n")
+
+      `yarn run biome format #{constants_file} --fix`
     end
 
     protected

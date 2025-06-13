@@ -23,20 +23,15 @@
     "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.29.0",
-    "@stylistic/eslint-plugin": "^4.4.1",
+    "@biomejs/biome": "^1.9.4",
     "@types/lodash": "^4.17.17",
     "@types/luxon": "^3.6.2",
-    "eslint": "^9.29.0",
-    "eslint-plugin-lodash": "^8.0.0",
-    "eslint-plugin-unicorn": "^59.0.1",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.34.0"
+    "typescript": "^5.8.3"
   },
   "scripts": {
     "build": "node ./lib/yarn/esbuild.js",
     "build:css": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' postcss \"app/frontend/entrypoints/**/*.css\" --base app/frontend/entrypoints --dir app/assets/builds",
-    "lint": "eslint --cache",
+    "lint": "biome lint .",
     "tsc": "tsc --noEmit --incremental --project ./app/frontend"
   },
   "browserslist": [
