@@ -71,9 +71,9 @@ class GameCard {
 
   protected refreshRunners(): void {
     if (this.game.isInProgress) {
-      this.card.querySelector<HTMLDivElement>('.runners')?.style.display = '';
+      this.card.querySelector<HTMLDivElement>('.runners')!.style.display = '';
     } else {
-      this.card.querySelector<HTMLDivElement>('.runners')?.style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.runners')!.style.display = 'none';
 
       return;
     }
@@ -85,9 +85,9 @@ class GameCard {
 
   protected refreshOuts(): void {
     if (this.game.isInProgress) {
-      this.card.querySelector<HTMLDivElement>('.outs')?.style.display = '';
+      this.card.querySelector<HTMLDivElement>('.outs')!.style.display = '';
     } else {
-      this.card.querySelector<HTMLDivElement>('.outs')?.style.display = 'none';
+      this.card.querySelector<HTMLDivElement>('.outs')!.style.display = 'none';
     }
 
     if (!this.game.isInProgress) {
