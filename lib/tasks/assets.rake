@@ -5,7 +5,7 @@ module Baseballbot
     EXCLUDE = /api|conductor/
 
     HEADER = <<~TYPESCRIPT
-      import { buildRoute, type RouteOptions, type RequiredParameter, type OptionalParameter } from './routes.utils';
+      import { type OptionalParameter, type RequiredParameter, type RouteOptions, buildRoute } from './routes.utils';
     TYPESCRIPT
 
     def dump!
@@ -38,7 +38,7 @@ module Baseballbot
     def options_type(optional_parts)
       return 'RouteOptions' if optional_parts.none?
 
-      "{ #{optional_parts.map { "#{it}?: OptionalParameter" }.join('; ')} } & RouteOptions"
+      "{ #{list_of(optional_parts, separator: '; ') { "#{it}?: OptionalParameter" }} } & RouteOptions"
     end
 
     def signature(required_parts, optional_parts)
@@ -53,9 +53,12 @@ module Baseballbot
         .format(ActionDispatch::Routing::ConsoleFormatter::Expanded.new)
         .gsub(/^-.*/, '')
         .gsub(/\nSource.*/, '')
+        .gsub(/ +$/, '')
 
       Rails.root.join('docs/routes.txt').write("#{routes}\n")
     end
+
+    def list_of(items, separator:, &) = items.map(&).join(separator)
   end
 
   class ConstantDumper
@@ -115,7 +118,7 @@ module Baseballbot
 
       @types << <<~TYPESCRIPT
         // #{location}
-        export type #{type} = #{value.map { "'#{it}'" }.join(' | ')};
+        export type #{type} = #{list_of(value, separator: ' | ', &:inspect)};
         export const #{prefix.downcase_first}#{constant_name.downcase.camelize}: #{type}[] = #{escape_value(value)} as const;
       TYPESCRIPT
     end
@@ -145,17 +148,18 @@ module Baseballbot
       TYPESCRIPT
     end
 
-    def escape_key(key) = key[/[: ]/] ? "'#{key}'" : key.to_s
+    def escape_key(key) = key[/[: ]/] ? key.inspect : key.to_s
 
     def escape_value(value)
       case value
-      when String then "'#{value}'"
-      when Numeric, TrueClass, FalseClass then value.to_s
-      when Array then "[#{value.map { escape_value(it) }.join(', ')}]"
+      when String, Numeric, TrueClass, FalseClass then value.inspect
+      when Array then "[#{list_of(value, separator: ', ') { escape_value(it) }}]"
       end
     end
 
     def source_location(model, constant) = model.const_source_location(constant).join(':').split('app/models/').last
+
+    def list_of(items, separator:, &) = items.map(&).join(separator)
   end
 end
 
