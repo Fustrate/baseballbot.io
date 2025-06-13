@@ -7,7 +7,7 @@
 #   - systemctl enable puma-baseballbot
 #   - systemctl {start,stop,restart} puma-baseballbot
 #
-# This file corresponds to a single Sidekiq process.
+# This file corresponds to a single Puma process.
 # Add multiple copies to run multiple processes (puma-1, puma-2, etc).
 #
 # See Inspeqtor's Systemd wiki page for more detail about Systemd:

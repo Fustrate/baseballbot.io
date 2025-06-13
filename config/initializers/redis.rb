@@ -10,4 +10,3 @@ Rails.application.redis = Redis.new(host: 'localhost', port: 6379)
 
 # 0: Rails
 # 1: ActionCable
-# 2: Sidekiq

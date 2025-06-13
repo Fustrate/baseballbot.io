@@ -58,9 +58,6 @@ gem 'sorcery', '~> 0.16'
 # A more slim redis client [https://github.com/redis/redis-rb]
 gem 'redis', '~> 5.0'
 
-# Background Jobs [https://github.com/mperham/sidekiq]
-gem 'sidekiq', '~> 8.0'
-
 # ed25519 keys for deployment [https://github.com/RubyCrypto/ed25519]
 gem 'ed25519', '~> 1.2'
 

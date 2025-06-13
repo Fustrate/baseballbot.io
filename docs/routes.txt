@@ -79,11 +79,6 @@ Verb              | DELETE
 URI               | /logout(.:format)
 Controller#Action | sessions#destroy
 
-Prefix            | sidekiq_web
-Verb              |
-URI               | /sidekiq
-Controller#Action | Sidekiq::Web
-
 Prefix            | sign_up_start
 Verb              | GET
 URI               | /sign_up/start(.:format)

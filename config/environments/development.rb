@@ -42,7 +42,7 @@ Rails.application.configure do
     config.session_store(:cookie_store, expire_after: 14.days)
   end
 
-  config.active_job.queue_adapter = :sidekiq
+  # config.active_job.queue_adapter = :sidekiq
 
   config.action_controller.default_url_options = { host: }
   Rails.application.routes.default_url_options = { host: }
