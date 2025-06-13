@@ -1,0 +1,8 @@
+linters:
+  # Recommends %tag{ 'data-something': true } over %tag(data-something)
+  HtmlAttributes:
+    enabled: false
+
+  # Tailwind classes make lines way too long
+  LineLength:
+    enabled: false

@@ -83,6 +83,9 @@ group :development do
   # Capistrano rbenv integration [https://github.com/capistrano/rbenv]
   gem 'capistrano-rbenv', '~> 2.2', require: false
 
+  # HAML view linting [https://github.com/sds/haml-lint]
+  gem 'haml_lint', '~> 0.40', require: false
+
   # Ruby code linting [https://github.com/rubocop/rubocop]
   gem 'rubocop', '~> 1.31', require: false
 

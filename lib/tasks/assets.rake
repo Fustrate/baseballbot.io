@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) Valencia Management Group
-# All rights reserved.
-
-module Asgard
+module Baseballbot
   class RouteDumper
     EXCLUDE = /api|conductor/
 
@@ -165,17 +162,17 @@ end
 namespace :assets do
   desc 'Regenerate assets for the front end'
   task(regenerate: :environment) do
-    Asgard::ConstantDumper.new.dump!
-    Asgard::RouteDumper.new.dump!
+    Baseballbot::ConstantDumper.new.dump!
+    Baseballbot::RouteDumper.new.dump!
   end
 
   desc 'Regenerate constants from Ruby models to TypeScript'
   task(:regenerate_constants, [:models] => :environment) do |_, args|
-    Asgard::ConstantDumper.new(args[:models]).dump!
+    Baseballbot::ConstantDumper.new(args[:models]).dump!
   end
 
   desc 'Regenerate route assets'
   task(regenerate_routes: :environment) do
-    Asgard::RouteDumper.new.dump!
+    Baseballbot::RouteDumper.new.dump!
   end
 end

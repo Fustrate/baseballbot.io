@@ -20,6 +20,9 @@ set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} #{fetch :rbenv_path}/bin/rbe
 set :rbenv_map_bins, %w[bundle gem honeybadger puma rails rake ruby yarn]
 
 namespace :deploy do
+  before :starting, 'zeitwerk:ensure_loadable'
+
+  after :cleanup, 'assets:demolish'
+
   after :finished, 'puma:phased-restart'
-  after :finishing, :cleanup
 end

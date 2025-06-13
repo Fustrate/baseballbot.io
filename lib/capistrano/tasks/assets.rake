@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class PruneAssetsTask
-  extend Forwardable
-
   KEEP_ASSETS = 5
-
-  def_delegators :@ssh, :capture, :execute
 
   def initialize(ssh)
     @ssh = ssh
@@ -14,39 +10,40 @@ class PruneAssetsTask
   def prune!
     files_to_remove.each do |path|
       puts path
-      execute :rm, path
+      @ssh.execute :rm, path
     end
   end
 
   protected
 
   def files_to_remove
-    all_asset_files
+    grouped_assets
       .values
       .flat_map { it[KEEP_ASSETS..] }
       .compact
   end
 
-  def all_asset_files
+  # Creates a list of all versions of a particular asset, from newest to oldest.
+  def grouped_assets
     files = Hash.new { |h, k| h[k] = [] }
 
-    all_asset_directories.each do |section|
+    asset_sections.each do |section|
       lines = section.split("\n")
       directory = lines.shift[..-2]
 
       lines.each do |line|
         filename = line.split.last
 
-        files["#{directory}/#{filename.gsub(/-\h{64}/, '')}"] << "#{directory}/#{filename}"
+        files["#{directory}/#{filename.gsub(/-\h{40,64}/, '')}"] << "#{directory}/#{filename}"
       end
     end
 
     files
   end
 
-  # `ls -cltR` lists all files recursively, sorted by creation date. Directories are separated by two newlines.
-  def all_asset_directories
-    capture(:ls, '-cltR', '--time-style=+"%s"')
+  # `ls -cltR` lists all files recursively, sorted by creation descending. Directories are separated by two newlines.
+  def asset_sections
+    @ssh.capture(:ls, '-cltR', '--time-style=+"%s"')
       .lines
       .reject { it[/^(?:d|total)/] }
       .join

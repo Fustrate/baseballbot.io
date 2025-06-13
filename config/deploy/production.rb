@@ -8,3 +8,7 @@ set :ssh_options,
     user: 'baseballbot',
     keys: %w[/Users/steven/.ssh/id_rsa.pub],
     forward_agent: true
+
+namespace :deploy do
+  after :finished, 'git:tag_release'
+end
