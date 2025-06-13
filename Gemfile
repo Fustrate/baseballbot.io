@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 ruby file: '.ruby-version'
 
 # Rails! [https://github.com/rails/rails]
-gem 'rails', '~> 7.1.2'
+gem 'rails', '~> 8.0.1'
 
 # Postgres database [https://github.com/ged/ruby-pg]
 gem 'pg', '~> 1.5'
@@ -23,13 +23,13 @@ gem 'cssbundling-rails', '~> 1.3'
 gem 'jsbundling-rails', '~> 1.2'
 
 # New Rails asset pipeline [https://github.com/rails/propshaft]
-gem 'propshaft', '~> 0.7'
+gem 'propshaft', '~> 1.1'
 
 # Faster raw json generation [https://github.com/ohler55/oj]
 gem 'oj', '~> 3.16'
 
-# A few custom services and initializers [https://github.com/Fustrate/fustrate-rails]
-gem 'fustrate-rails', '~> 0.8', github: 'Fustrate/fustrate-rails'
+# A few custom services and initializers [https://github.com/Fustrate/unary_plus]
+gem 'unary_plus', '~> 0.8', github: 'Fustrate/unary_plus'
 
 # Use Puma as the app server [https://github.com/puma/puma]
 gem 'puma', '~> 6.3'
@@ -50,7 +50,7 @@ gem 'listen', '~> 3.8'
 gem 'active_link_to', '~> 1.0'
 
 # Pagination [https://github.com/ddnexus/pagy]
-gem 'pagy', '~> 7.0'
+gem 'pagy', '~> 9.3'
 
 # Authentication [https://github.com/Sorcery/sorcery]
 gem 'sorcery', '~> 0.16'
@@ -59,10 +59,7 @@ gem 'sorcery', '~> 0.16'
 gem 'redis', '~> 5.0'
 
 # Background Jobs [https://github.com/mperham/sidekiq]
-gem 'sidekiq', '~> 7.1'
-
-# Keep a record of completed jobs in Sidekiq [https://github.com/russ/sidekiq-history]
-gem 'sidekiq-history', '~> 0.0.12', github: 'Fustrate/sidekiq-history'
+gem 'sidekiq', '~> 8.0'
 
 # ed25519 keys for deployment [https://github.com/RubyCrypto/ed25519]
 gem 'ed25519', '~> 1.2'
@@ -72,7 +69,7 @@ gem 'bcrypt_pbkdf', '~> 1.1'
 
 group :development do
   # Detect n+1 issues [https://github.com/flyerhzm/bullet]
-  gem 'bullet', '~> 7.0'
+  gem 'bullet', '~> 8.0'
 
   # Access an IRB console on exception pages or by using `= console` in views [https://github.com/rails/web-console]
   gem 'web-console', '~> 4.2'
@@ -99,7 +96,7 @@ group :development do
   gem 'rubocop-rails', '~> 2.15', require: false
 
   # Rubocop - rspec cops [https://github.com/rubocop/rubocop-rspec]
-  gem 'rubocop-rspec', '~> 2.12', require: false
+  gem 'rubocop-rspec', '~> 3.6', require: false
 end
 
 group :development, :test do
@@ -107,7 +104,7 @@ group :development, :test do
   gem 'debug', '~> 1.5'
 
   # Make RSpec play nicely with Rails [https://github.com/rspec/rspec-rails]
-  gem 'rspec-rails', '~> 6.0'
+  gem 'rspec-rails', '~> 8.0'
 end
 
 group :test do
@@ -127,7 +124,7 @@ group :test do
   gem 'factory_bot_rails', '~> 6.2'
 
   # Launch the code editor from backtraces [https://github.com/copiousfreetime/launchy]
-  gem 'launchy', '~> 2.5'
+  gem 'launchy', '~> 3.1'
 
   # Access assigns in controller & view tests [https://github.com/rails/rails-controller-testing]
   gem 'rails-controller-testing', '~> 1.0'

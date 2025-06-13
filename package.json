@@ -3,36 +3,36 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
-    "@fortawesome/fontawesome-pro": "^6.5.2",
+    "@fortawesome/fontawesome-pro": "^6.7.2",
     "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js.git#commit=0fd5a94af97474967a9d9ddab6b11d344f37c9d5",
-    "autoprefixer": "^10.4.19",
-    "color": "^4.2.3",
-    "esbuild": "^0.23.0",
-    "highlight.js": "^11.9.0",
+    "autoprefixer": "^10.4.21",
+    "color": "^5.0.0",
+    "esbuild": "^0.25.5",
+    "highlight.js": "^11.11.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "luxon": "^3.4.4",
-    "postcss": "^8.4.39",
-    "postcss-advanced-variables": "^4.0.0",
-    "postcss-cli": "^11.0.0",
+    "luxon": "^3.6.1",
+    "postcss": "^8.5.5",
+    "postcss-advanced-variables": "^5.0.0",
+    "postcss-cli": "^11.0.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^16.1.0",
-    "postcss-minify": "^1.1.0",
-    "postcss-mixins": "^10.0.1",
-    "postcss-nested": "^6.0.1",
-    "postcss-preset-env": "^9.5.15",
-    "yaml": "^2.4.5"
+    "postcss-minify": "^1.2.0",
+    "postcss-mixins": "^11.0.3",
+    "postcss-nested": "^7.0.2",
+    "postcss-preset-env": "^10.2.3",
+    "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.6.0",
-    "@stylistic/eslint-plugin": "^2.3.0",
-    "@types/lodash": "^4.17.6",
-    "@types/luxon": "^3.4.2",
-    "eslint": "^9.6.0",
+    "@eslint/js": "^9.29.0",
+    "@stylistic/eslint-plugin": "^4.4.1",
+    "@types/lodash": "^4.17.17",
+    "@types/luxon": "^3.6.2",
+    "eslint": "^9.29.0",
     "eslint-plugin-lodash": "^8.0.0",
-    "eslint-plugin-unicorn": "^54.0.0",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^7.15.0"
+    "eslint-plugin-unicorn": "^59.0.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.0"
   },
   "scripts": {
     "build": "node ./lib/yarn/esbuild.js",
@@ -44,6 +44,6 @@
   "browserslist": [
     "defaults"
   ],
-  "packageManager": "yarn@4.3.1",
+  "packageManager": "yarn@4.9.2",
   "type": "module"
 }
