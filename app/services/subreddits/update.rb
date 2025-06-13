@@ -8,7 +8,7 @@ module Subreddits
 
       @subreddit.options.deep_merge!(all_settings)
 
-      deep_compact_hash! @subreddit.options
+      @subreddit.options = deep_compact_hash(@subreddit.options)
 
       @subreddit.save!
     end
@@ -82,12 +82,12 @@ module Subreddits
     end
 
     # The options hash is just a hash of hashes and string/integers/booleans, no need to test for arrays at this time
-    def deep_compact_hash!(value)
-      return unless value.is_a?(Hash)
+    def deep_compact_hash(value)
+      return value unless value.is_a?(Hash)
 
-      value.transform_values! { deep_compact_hash!(it) }
+      value.transform_values! { deep_compact_hash(it) }
 
-      value.compact!
+      value.compact
     end
 
     def boolean_value(value) = ActiveRecord::Type::Boolean.new.cast(value || false)
