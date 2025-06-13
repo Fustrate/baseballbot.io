@@ -28,25 +28,25 @@ module Asgard
     def routes_file = Rails.root.join('app/frontend/utilities/routes.ts')
 
     def process_route(name, route)
-      required_parts = route.required_parts.map { _1.to_s.camelize(:lower) }
-      optional_parts = (route.path.optional_names - %w[format]).map { _1.to_s.camelize(:lower) }
+      required_parts = route.required_parts.map { it.to_s.camelize(:lower) }
+      optional_parts = (route.path.optional_names - %w[format]).map { it.to_s.camelize(:lower) }
 
       <<~TYPESCRIPT
         export const #{name.to_s.camelize(:lower)}Path = (#{signature(required_parts, optional_parts)}) => buildRoute('#{camelized_spec(route)}', { #{[*required_parts, '...options'].join(', ')} });
       TYPESCRIPT
     end
 
-    def camelized_spec(route) = route.path.spec.to_s.gsub(/:[a-z_]+/) { _1.camelize(:lower) }
+    def camelized_spec(route) = route.path.spec.to_s.gsub(/:[a-z_]+/) { it.camelize(:lower) }
 
     def options_type(optional_parts)
       return 'RouteOptions' if optional_parts.none?
 
-      "{ #{optional_parts.map { "#{_1}?: OptionalParameter" }.join('; ')} } & RouteOptions"
+      "{ #{optional_parts.map { "#{it}?: OptionalParameter" }.join('; ')} } & RouteOptions"
     end
 
     def signature(required_parts, optional_parts)
       [
-        *required_parts.map { "#{_1}: RequiredParameter" },
+        *required_parts.map { "#{it}: RequiredParameter" },
         "options: #{options_type(optional_parts)} = {}"
       ].join(', ')
     end
@@ -75,7 +75,7 @@ module Asgard
     def dump!
       Rails.application.eager_load!
 
-      ApplicationRecord.descendants.each { process_model(_1) }
+      ApplicationRecord.descendants.each { process_model(it) }
 
       constants_file.write @types.sort.join("\n")
     end
@@ -93,7 +93,7 @@ module Asgard
 
       prefix = model.name.titleize.tr('/ ', '')
 
-      model.constants(false).each { process_constant(model, _1, prefix) }
+      model.constants(false).each { process_constant(model, it, prefix) }
     end
 
     def process_constant(model, constant, prefix)
@@ -118,7 +118,7 @@ module Asgard
 
       @types << <<~TYPESCRIPT
         // #{location}
-        export type #{type} = #{value.map { "'#{_1}'" }.join(' | ')};
+        export type #{type} = #{value.map { "'#{it}'" }.join(' | ')};
         export const #{prefix.downcase_first}#{constant_name.downcase.camelize}: #{type}[] = #{escape_value(value)} as const;
       TYPESCRIPT
     end
@@ -154,7 +154,7 @@ module Asgard
       case value
       when String then "'#{value}'"
       when Numeric, TrueClass, FalseClass then value.to_s
-      when Array then "[#{value.map { escape_value(_1) }.join(', ')}]"
+      when Array then "[#{value.map { escape_value(it) }.join(', ')}]"
       end
     end
 

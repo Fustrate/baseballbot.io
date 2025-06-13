@@ -41,7 +41,7 @@ module HandleExceptions
 
   def notify_honeybadger(exception)
     # We don't really care about users being told they're stupid
-    return if IGNORED_EXCEPTIONS.any? { exception.is_a?(_1) }
+    return if IGNORED_EXCEPTIONS.any? { exception.is_a?(it) }
 
     if Rails.env.production?
       Honeybadger.notify exception

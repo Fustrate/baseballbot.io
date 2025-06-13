@@ -3,7 +3,7 @@
 json.call @subreddit, :id, :name
 
 # jbuilder doesn't format nested keys
-json.options(@subreddit.options.deep_transform_keys { _1.to_s.camelize(:lower) })
+json.options(@subreddit.options.deep_transform_keys { it.to_s.camelize(:lower) })
 
 json.templates @subreddit.templates, :id, :type, :body
 

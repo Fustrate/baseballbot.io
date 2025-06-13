@@ -2,4 +2,4 @@
 
 Rails.application.config.i18n.enforce_available_locales = true
 
-Rails.application.config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml')]
+Rails.application.config.i18n.load_path += Rails.root.glob('config/locales/**/*.yml')

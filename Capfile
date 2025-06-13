@@ -14,6 +14,6 @@ require 'capistrano/rbenv'
 require 'capistrano/scm/git'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
-Dir.glob('lib/capistrano/tasks/*.rake').each { import _1 }
+Dir.glob('lib/capistrano/tasks/*.rake').each { import it }
 
 install_plugin Capistrano::SCM::Git

@@ -85,7 +85,7 @@ module Subreddits
     def deep_compact_hash!(value)
       return unless value.is_a?(Hash)
 
-      value.transform_values! { deep_compact_hash!(_1) }
+      value.transform_values! { deep_compact_hash!(it) }
 
       value.compact!
     end

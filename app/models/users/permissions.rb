@@ -14,7 +14,7 @@ module Users
 
     def permission?(scope, name) = @permissions.dig(scope.to_sym, name.to_sym) || false
 
-    def as_json(options = nil) = permissions.as_json(options).deep_transform_keys { _1.to_s.camelize(:lower) }
+    def as_json(options = nil) = permissions.as_json(options).deep_transform_keys { it.to_s.camelize(:lower) }
 
     protected
 

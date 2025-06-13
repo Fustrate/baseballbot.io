@@ -13,7 +13,7 @@ module IconHelper
 
     classes = icon_classes(names, style, options.delete(:class))
 
-    tag.i nil, **options.merge(class: classes.compact)
+    tag.i nil, **options, class: classes.compact
   end
 
   def loader(size = nil)
@@ -27,7 +27,7 @@ module IconHelper
   protected
 
   def icon_classes(names, style, class_option)
-    ["fa-#{style}", class_option, *(names.to_s.split.map { "fa-#{_1}" })].compact
+    ["fa-#{style}", class_option, *(names.to_s.split.map { "fa-#{it}" })].compact
   end
 
   def icon_style(options)
