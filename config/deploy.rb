@@ -19,6 +19,9 @@ set :rbenv_ruby, File.read(File.expand_path('../.ruby-version', __dir__)).strip
 set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} #{fetch :rbenv_path}/bin/rbenv exec"
 set :rbenv_map_bins, %w[bundle gem honeybadger puma rails rake ruby yarn]
 
+# capistrano-rails hasn't been updated to support propshaft's manifest filename
+set :assets_manifests, -> { [release_path.join('public', fetch(:assets_prefix), '.manifest.json')] }
+
 namespace :deploy do
   before :starting, 'zeitwerk:ensure_loadable'
 
