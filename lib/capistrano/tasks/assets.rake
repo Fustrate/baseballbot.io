@@ -60,4 +60,14 @@ namespace :assets do
       end
     end
   end
+
+  desc 'Remove build files'
+  task :demolish do
+    on roles(:app) do
+      within(current_path) do
+        execute :rm, '-r', 'app/assets/builds'
+        execute :rm, '-r', 'node_modules'
+      end
+    end
+  end
 end
