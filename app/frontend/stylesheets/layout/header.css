@@ -135,13 +135,13 @@ h2 {
 	}
 }
 
-@media small-only {
+@media only screen and (max-width: 48em) {
 	h1.header {
 		margin-bottom: 3px;
 	}
 }
 
-@media medium-up {
+@media only screen and (min-width: 56.063em) {
 	h1.header {
 		font-size: 1.625rem;
 	}

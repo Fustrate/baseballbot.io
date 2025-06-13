@@ -11,8 +11,6 @@ import postcssPresetEnv from 'postcss-preset-env';
 
 // Custom postcss plugins
 import colorMod from './lib/postcss/color-mod.js';
-import media from './lib/postcss/media.js';
-import remCalc from './lib/postcss/rem-calc.js';
 
 import variables from './app/frontend/stylesheets/variables.js';
 
@@ -30,13 +28,11 @@ export default {
     postcssImport,
     postcssFlexbugsFixes,
     postcssAdvancedVars(variablesConfig),
-    remCalc,
     // postcss-mixins must come before postcss-nested
     postcssMixins({ mixinsDir: path.join(import.meta.dirname, 'lib', 'postcss', 'mixins') }),
     postcssAdvancedVars(variablesConfig),
     postcssNested,
     colorMod,
-    media,
     postcssPresetEnv({ autoprefixer: { flexbox: 'no-2009' }, stage: 3 }),
     autoprefixer,
     (isProduction && postcssMinify),

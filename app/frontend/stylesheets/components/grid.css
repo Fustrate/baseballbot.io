@@ -262,7 +262,7 @@
 	margin-left: auto;
 	margin-right: auto
 }
-@media medium-up {
+@media only screen and (min-width: 56.063em) {
 	.grid .column.medium-1,
 	.grid .columns.medium-1 {
 		left: auto;
@@ -498,7 +498,7 @@
 		margin-right: auto
 	}
 }
-@media large-up {
+@media only screen and (min-width: 68.063em) {
 	.grid .column.large-1,
 	.grid .columns.large-1 {
 		left: auto;
@@ -734,7 +734,7 @@
 		margin-right: auto
 	}
 }
-@media xlarge-up {
+@media only screen and (min-width: 80.063em) {
 	.grid .column.xlarge-1,
 	.grid .columns.xlarge-1 {
 		left: auto;
