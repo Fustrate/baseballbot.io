@@ -11,8 +11,6 @@ import postcssPresetEnv from 'postcss-preset-env';
 
 // Custom postcss plugins
 import colorMod from './lib/postcss/color-mod.js';
-import faFontUrls from './lib/postcss/fa-font-urls.js';
-import faVar from './lib/postcss/fa-var.js';
 import media from './lib/postcss/media.js';
 import remCalc from './lib/postcss/rem-calc.js';
 
@@ -38,9 +36,7 @@ export default {
     postcssAdvancedVars(variablesConfig),
     postcssNested,
     colorMod,
-    faVar,
     media,
-    faFontUrls,
     postcssPresetEnv({ autoprefixer: { flexbox: 'no-2009' }, stage: 3 }),
     autoprefixer,
     (isProduction && postcssMinify),

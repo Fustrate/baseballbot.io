@@ -64,10 +64,12 @@
 	}
 
 	&.no:before {
-		content: fa-var(xmark);
+		/* fa-xmark */
+		content: "\f00d";
 	}
 
 	&.yes:before {
-		content: fa-var(check);
+		/* fa-check */
+		content: "\f00c";
 	}
 }

@@ -163,11 +163,13 @@ button {
 		}
 
 		.edit span::before {
-			content: fa-var(pencil);
+			/* fa-pencil */
+			content: "\f303";
 		}
 
 		.delete span::before {
-			content: fa-var(trash-can);
+			/* fa-trash-can */
+			content: "\f2ed";
 		}
 	}
 
@@ -181,15 +183,18 @@ button {
 	}
 
 	.create::before {
-		content: fa-var(plus);
+		/* fa-plus */
+		--timeline-icon: "\2b";
 	}
 
 	.delete::before {
-		content: fa-var(trash-can);
+		/* fa-trash-can */
+		content: "\f2ed";
 	}
 
 	.edit::before {
-		content: fa-var(pencil);
+		/* fa-pencil */
+		content: "\f303";
 	}
 }
 

@@ -813,19 +813,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-pro@npm:^6.7.2":
-  version: 6.7.2
-  resolution: "@fortawesome/fontawesome-pro@npm:6.7.2"
-  checksum: 10c0/34d77e99235dcf21ef73dc765dcad20c66ecc024eddefbde0bc6bd79039712883ca945a5706c6a220fc744702007e07355c17e09039571e76222af77fc5f845a
-  languageName: node
-  linkType: hard
-
 "@fustrate/baseballbot.io@workspace:.":
   version: 0.0.0-use.local
   resolution: "@fustrate/baseballbot.io@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.29.0"
-    "@fortawesome/fontawesome-pro": "npm:^6.7.2"
     "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js.git#commit=0fd5a94af97474967a9d9ddab6b11d344f37c9d5"
     "@stylistic/eslint-plugin": "npm:^4.4.1"
     "@types/lodash": "npm:^4.17.17"
