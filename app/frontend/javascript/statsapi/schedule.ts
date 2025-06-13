@@ -1,4 +1,4 @@
-import { type GameStatus } from './definitions';
+import type { GameStatus } from './definitions';
 
 const scheduleHydration = 'game(content(summary)),linescore(runners),flags,team';
 const apiEndpoint = `https://statsapi.mlb.com/api/v1/schedule/?sportId=1,51&hydrate=${scheduleHydration}`;

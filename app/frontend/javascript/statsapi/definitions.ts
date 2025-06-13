@@ -1,5 +1,5 @@
 // These definitions were hand-written on 2020-11-21 and are not guaranteed to be up to date.
-import { type Venue } from './venue';
+import type { Venue } from './venue';
 
 // Still need catchers interference
 type RunnerEventTypes = 'field_out' | 'single' | 'double' | 'triple' | 'home_run' | 'walk' | 'passed_ball' |

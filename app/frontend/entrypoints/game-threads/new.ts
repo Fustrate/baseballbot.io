@@ -6,7 +6,7 @@ import { setChildren } from '@fustrate/rails/html';
 
 import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
 
-import Subreddit, { JSONData as SubredditData } from 'models/subreddit';
+import Subreddit, { type JSONData as SubredditData } from 'models/subreddit';
 import { subredditsPath } from 'utilities/routes';
 
 function optionForGame(game: ScheduleGame): HTMLOptionElement {

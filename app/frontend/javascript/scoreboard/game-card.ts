@@ -1,6 +1,6 @@
 import { elementFromString } from '@fustrate/rails/html';
 
-import Game from './game';
+import type Game from './game';
 import GameModal from './game-modal';
 
 const template = `

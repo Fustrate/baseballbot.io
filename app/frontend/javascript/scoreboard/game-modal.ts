@@ -1,5 +1,5 @@
 import Modal, { settings } from '@fustrate/rails/components/modal';
-import Game from './game';
+import type Game from './game';
 
 const template = `
   <section>

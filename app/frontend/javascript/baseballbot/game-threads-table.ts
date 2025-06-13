@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import GenericTable, { settings } from '@fustrate/rails/generic-table';
-import { PaginatedData } from '@fustrate/rails/components/pagination';
+import type { PaginatedData } from '@fustrate/rails/components/pagination';
 import { getCurrentPageJSON } from '@fustrate/rails/json';
 import {
   icon,
@@ -9,7 +9,7 @@ import {
   toHumanDate,
 } from '@fustrate/rails/utilities';
 
-import GameThread, { JSONData } from 'models/game-thread';
+import GameThread, { type JSONData } from 'models/game-thread';
 
 import { subredditPath } from 'utilities/routes';
 
