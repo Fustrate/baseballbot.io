@@ -16,7 +16,7 @@ class Jbuilder
   def pagy_pagination(pagy)
     {
       page: pagy.page,
-      perPage: pagy.items,
+      perPage: pagy.limit,
       total: pagy.count,
       pages: pagy.last
     }
