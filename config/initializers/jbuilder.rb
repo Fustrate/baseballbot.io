@@ -7,18 +7,10 @@ class Jbuilder
   def pagination!(pagination)
     _set_value(
       :pagination,
-      pagination.is_a?(::Pagy) ? pagy_pagination(pagination) : pagination.pagination
+      page: pagination.page,
+      perPage: pagination.limit,
+      total: pagination.count,
+      pages: pagination.last
     )
-  end
-
-  protected
-
-  def pagy_pagination(pagy)
-    {
-      page: pagy.page,
-      perPage: pagy.limit,
-      total: pagy.count,
-      pages: pagy.last
-    }
   end
 end

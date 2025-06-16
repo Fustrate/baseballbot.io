@@ -41,8 +41,8 @@ const blankRow = `
     <td class="game-pk"></td>
     <td class="title"></td>
     <td class="subreddit"></td>
-    <td class="post-at no-wrap"></td>
-    <td class="starts-at no-wrap"></td>
+    <td class="post-at whitespace-nowrap"></td>
+    <td class="starts-at whitespace-nowrap"></td>
     <td class="status"></td>
   </tr>`;
 

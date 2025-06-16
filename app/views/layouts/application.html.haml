@@ -10,14 +10,14 @@
     = javascripts!
   %body{ data: body_dataset }
     %nav.toolbar{ role: 'navigation' }
-      = link_to 'Baseballbot', root_path, class: 'branding'
+      = link_to 'Baseballbot', root_path, class: 'branding inline-block'
 
       %section.main-menu
         = link_to 'Game Threads', game_threads_path
         = link_to 'Subreddits', subreddits_path
         = link_to 'Gameday', gameday_path
 
-      %section.main-menu.right
+      %section.main-menu.float-right
         - if logged_in?
           = link_to 'Log Out', :logout, method: :delete
         - else

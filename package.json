@@ -3,8 +3,10 @@
   "private": true,
   "license": "UNLICENSED",
   "dependencies": {
+    "@csstools/postcss-minify": "^2.0.4",
     "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js.git#commit=0fd5a94af97474967a9d9ddab6b11d344f37c9d5",
-    "autoprefixer": "^10.4.21",
+    "@tailwindcss/postcss": "^4.1.10",
+    "class-variance-authority": "^0.7.1",
     "color": "^5.0.0",
     "esbuild": "^0.25.5",
     "highlight.js": "^11.11.1",
@@ -12,14 +14,8 @@
     "lodash": "^4.17.21",
     "luxon": "^3.6.1",
     "postcss": "^8.5.5",
-    "postcss-advanced-variables": "^5.0.0",
     "postcss-cli": "^11.0.1",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-import": "^16.1.0",
-    "postcss-minify": "^1.2.0",
-    "postcss-mixins": "^11.0.3",
-    "postcss-nested": "^7.0.2",
-    "postcss-preset-env": "^10.2.3",
+    "tailwindcss": "^4.1.10",
     "yaml": "^2.8.0"
   },
   "devDependencies": {

@@ -1,3 +1,180 @@
-@import 'layout/design';
-@import 'layout/toolbar';
-@import 'layout/header';
+/* @import './layout/design'; */
+
+body {
+	@apply bg-slate-100
+}
+
+a .fa-reddit {
+	color: #ff4500;
+}
+
+.page-content {
+	@apply bg-white rounded-md m-6 px-5 py-4;
+
+	box-shadow: 0 .6rem 3rem rgba(0, 0, 0, .2);
+
+	> :last-child {
+		margin-bottom: 0;
+	}
+}
+
+th {
+	@apply whitespace-nowrap;
+}
+
+.label.game-thread {
+	&.live {
+		background-color: #70a854;
+		color: #fff;
+		text-shadow: 0 1px 1px #223219;
+	}
+
+	&.error {
+		background-color: #914141;
+		color: #fff;
+		text-shadow: 0 1px 1px #2c1414;
+	}
+
+	&.posted {
+		background-color: #3775a8;
+		color: #fff;
+		text-shadow: 0 1px 1px #112332;
+	}
+
+	&.pregame {
+		background-color: #7857db;
+		color: #fff;
+		text-shadow: 0 1px 1px #1f104c;
+	}
+
+	&.future {
+		background-color: #ddd;
+		color: #333;
+		text-shadow: 0 1px 1px #f5f5f5;
+	}
+}
+
+/* @import './layout/header'; */
+
+h1.header {
+	color: #0F609B;
+	padding: 0 0.75rem;
+	display: flex;
+	align-items: flex-end;
+	flex-wrap: wrap;
+
+	.title {
+		text-shadow: 0 1px 1px white;
+		margin-right: 1rem;
+	}
+
+	i {
+		font-family: var(--fa-style-family-classic);
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: antialiased;
+		display: var(--fa-display, inline-block);
+		font-style: normal;
+		font-variant: normal;
+		line-height: 1;
+		text-rendering: auto;
+		font-weight: 300;
+		text-align: center;
+		width: 1.25em;
+		margin-right: .5rem;
+		color: #4098D7;
+
+		&.fab {
+			font-family: var(--fa-style-family-brands);
+			text-align: center;
+			width: 1.25em;
+		}
+
+		&.fa-reddit {
+			color: #ff4500;
+		}
+	}
+
+	> * {
+		display: flex;
+		align-items: center;
+	}
+
+	input,
+	select {
+		margin-bottom: 0;
+		margin-left: 0.5rem;
+	}
+
+	.buttons {
+		margin-left: auto;
+
+		.button,
+		button {
+			margin-left: .5rem;
+			margin-bottom: 0;
+			box-shadow: 0 2px 4px #BCCCDC;
+		}
+
+		label {
+			margin-bottom: 0;
+		}
+	}
+
+	&::after {
+		clear: both;
+		content: "";
+		display: table;
+	}
+}
+
+h2 {
+	color: #0F609B;
+
+	i {
+		color: #186FAF;
+	}
+}
+
+@media only screen and (max-width: 48em) {
+	h1.header {
+		margin-bottom: 3px;
+	}
+}
+
+@media only screen and (min-width: 56.063em) {
+	h1.header {
+		font-size: 1.625rem;
+	}
+}
+
+/* @import './layout/toolbar'; */
+
+.toolbar {
+	background-color: #0b2d4d;
+	height: 60px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+
+	a {
+		color: #fff;
+		height: 40px;
+		line-height: 40px;
+		margin: 10px 0;
+	}
+
+	.branding {
+		font-size: 1.4rem;
+		padding: 0 20px;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, .8);
+	}
+
+	.main-menu {
+		@apply inline-block;
+	}
+
+	.main-menu a {
+		color: hsl(209.1, 0%, 85%);
+		display: inline-block;
+		font-size: 1rem;
+		padding: 0 10px;
+	}
+}

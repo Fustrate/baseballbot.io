@@ -36,7 +36,7 @@
     %label
       Post Title
       = f.text_field :title, 'data-field': 'title'
-      %p.help Leave blank to use the default post title for this subreddit
+      %p.text-sm.opacity-70 Leave blank to use the default post title for this subreddit
 
     .text-center
       = f.submit 'Save', class: 'button save', 'data-disable-with': 'Saving...'

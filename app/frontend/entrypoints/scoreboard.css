@@ -6,9 +6,21 @@
 	text-align: center;
 
 	&:before {
-		@mixin font-awesome;
-		@mixin font-awesome-regular;
-		@mixin font-awesome-spin;
+		font-family: var(--fa-style-family-classic);
+		-moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: antialiased;
+		display: var(--fa-display, inline-block);
+		font-style: normal;
+		font-variant: normal;
+		line-height: 1;
+		text-rendering: auto;
+		font-weight: 400;
+		animation-name: "fa-spin";
+		animation-delay: var(--fa-animation-delay, 0s);
+		animation-direction: var(--fa-animation-direction, normal);
+		animation-duration: var(--fa-animation-duration, 2s);
+		animation-iteration-count: var(--fa-animation-iteration-count, infinite);
+		animation-timing-function: var(--fa-animation-timing, linear);
 		/* fa-spinner */
 		content: "\f110";
 		margin-right: 3px;

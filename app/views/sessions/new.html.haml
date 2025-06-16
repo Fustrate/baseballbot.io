@@ -5,8 +5,8 @@
 
 = render 'flash_messages'
 
-.grid
-  .medium-6.columns
+.grid.md:grid-cols-2
+  .break-inside-avoid
     .panel
       = form_tag login_path do
         %label
@@ -23,6 +23,6 @@
 
         .text-center= submit_tag 'Log In', class: 'button'
 
-  .medium-6.columns
+  .break-inside-avoid
     %h3.text-center Don't have an account?
     %p.text-center #{link_to 'Click here', :sign_up_start} to sign up.

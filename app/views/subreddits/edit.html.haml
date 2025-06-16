@@ -8,8 +8,8 @@
 
 .panel
   = form_with model: @subreddit do |f|
-    .grid
-      .medium-6.columns
+    .grid.md:grid-cols-2
+      .break-inside-avoid
         %h2.text-center Game Threads
 
         %label
@@ -28,7 +28,7 @@
           Sticky Comment
           = text_area_tag 'subreddit[options][postgame][sticky_comment]', @subreddit.options.dig('postgame', 'sticky_comment'), rows: 5
 
-      .medium-6.columns
+      .break-inside-avoid
         %h2.text-center Off Day Threads
 
         %label

@@ -12,40 +12,40 @@
     .buttons
       = link_to '', edit_subreddit_path(@subreddit), class: 'button edit plain', title: 'Edit Subreddit'
 
-.grid
-  .medium-6.columns
+.grid.md:grid-cols-2
+  .break-inside-avoid
     %h2.text-center General Settings
 
     .panel
       %dl{ 'data-field' => 'generalOptions' }
 
-  .medium-6.columns
+  .break-inside-avoid
     %h2.text-center Sidebar Settings
 
     .panel
       %dl{ 'data-field' => 'sidebarOptions' }
 
-.grid
-  .medium-6.columns
+.grid.md:grid-cols-2
+  .break-inside-avoid
     %h2.text-center Game Thread Settings
 
     .panel
       %dl{ 'data-field' => 'gameThreadOptions' }
 
-  .medium-6.columns
+  .break-inside-avoid
     %h2.text-center Pregame Settings
 
     .panel
       %dl{ 'data-field' => 'pregameOptions' }
 
-.grid
-  .medium-6.columns
+.grid.md:grid-cols-2
+  .break-inside-avoid
     %h2.text-center Postgame Settings
 
     .panel
       %dl{ 'data-field' => 'postgameOptions' }
 
-  .medium-6.columns
+  .break-inside-avoid
     %h2.text-center Off Day Settings
 
     .panel
