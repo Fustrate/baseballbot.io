@@ -137,7 +137,11 @@ module Baseballbot
     end
 
     def hash_elements(hash, camelize: false)
-      hash.sort.map { |k, v| "#{camelize ? escape_key(k).camelize(:lower) : escape_key(k)}: #{escape_value(v)}" }
+      hash.tap do |thing|
+        thing.sort!
+
+        thing.map { |k, v| "#{camelize ? escape_key(k).camelize(:lower) : escape_key(k)}: #{escape_value(v)}" }
+      end
     end
 
     def process_array_of_hashes(prefix, constant_name, value, location)

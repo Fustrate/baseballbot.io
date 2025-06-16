@@ -291,7 +291,7 @@ button {
 
 	.create::before {
 		/* fa-plus */
-		--timeline-icon: "\2b";
+		content: "\2b";
 	}
 
 	.edit::before {

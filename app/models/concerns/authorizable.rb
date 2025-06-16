@@ -8,6 +8,6 @@ module Authorizable
       @auror ||= "#{name}Auror".constantize.new
     end
 
-    def auror = self.class.auror
+    delegate :auror, to: :class
   end
 end

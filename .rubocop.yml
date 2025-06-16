@@ -11,15 +11,19 @@ AllCops:
     - '**/Capfile'
     - '**/Gemfile'
     - '**/Rakefile'
+
   # Exclude auto-generated files and migrations
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
     - 'db/schema.rb'
     - 'node_modules/**/*'
+
   # Always enable new cops, disabling manually when they don't fit.
   EnabledByDefault: true
   NewCops: enable
+
+  SuggestExtensions: false
 
 Rails:
   Enabled: true
@@ -35,6 +39,9 @@ Layout/MultilineMethodCallIndentation:
 # Prefer `def method_name\nend` over `def method_name; end`
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+Rails/EnvironmentVariableAccess:
+  AllowReads: true
 
 # ------------------------------------------------------------------------------
 # Cops excluded for specific files/directories
