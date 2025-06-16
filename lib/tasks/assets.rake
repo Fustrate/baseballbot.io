@@ -2,7 +2,7 @@
 
 module Baseballbot
   class RouteDumper
-    EXCLUDE = /api|conductor/
+    EXCLUDE = /api|conductor|rails/
 
     HEADER = <<~TYPESCRIPT
       import { type OptionalParameter, type RequiredParameter, type RouteOptions, buildRoute } from './routes.utils';

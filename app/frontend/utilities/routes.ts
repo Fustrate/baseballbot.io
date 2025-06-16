@@ -17,14 +17,6 @@ export const loginPath = (options: RouteOptions = {}) => buildRoute('/login(.:fo
 export const logoutPath = (options: RouteOptions = {}) => buildRoute('/logout(.:format)', { ...options });
 export const newGameThreadPath = (options: RouteOptions = {}) =>
   buildRoute('/game_threads/new(.:format)', { ...options });
-export const railsInfoNotesPath = (options: RouteOptions = {}) =>
-  buildRoute('/rails/info/notes(.:format)', { ...options });
-export const railsInfoPath = (options: RouteOptions = {}) => buildRoute('/rails/info(.:format)', { ...options });
-export const railsInfoPropertiesPath = (options: RouteOptions = {}) =>
-  buildRoute('/rails/info/properties(.:format)', { ...options });
-export const railsInfoRoutesPath = (options: RouteOptions = {}) =>
-  buildRoute('/rails/info/routes(.:format)', { ...options });
-export const railsMailersPath = (options: RouteOptions = {}) => buildRoute('/rails/mailers(.:format)', { ...options });
 export const rootPath = (options: RouteOptions = {}) => buildRoute('/', { ...options });
 export const signUpAuthorizedPath = (options: RouteOptions = {}) =>
   buildRoute('/sign_up/authorized(.:format)', { ...options });
