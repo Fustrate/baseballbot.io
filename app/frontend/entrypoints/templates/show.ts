@@ -4,7 +4,7 @@ import GenericPage, { refresh } from '@fustrate/rails/generic-page';
 import hljs from 'highlight.js/lib/core';
 import handlebars from 'highlight.js/lib/languages/handlebars';
 
-import Template from 'models/template';
+import Template from '@/models/template';
 
 hljs.registerLanguage('handlebars', handlebars);
 

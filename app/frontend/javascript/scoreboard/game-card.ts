@@ -44,11 +44,17 @@ class GameCard {
     this.game = game;
     this.card = elementFromString(template);
 
-    this.card.querySelector('.home-team')?.classList?.add(this.game.teams.home.team.fileCode);
-    this.card.querySelector('.away-team')?.classList?.add(this.game.teams.away.team.fileCode);
+    const { home, away } = game.teams;
 
-    this.card.querySelector('.home-team .name')?.replaceChildren(this.game.teams.home.team.abbreviation);
-    this.card.querySelector('.away-team .name')?.replaceChildren(this.game.teams.away.team.abbreviation);
+    this.card
+      .querySelector('.home-team')
+      ?.classList?.add(`bg-${home.team.fileCode}-primary`, `text-${home.team.fileCode}-secondary`);
+    this.card
+      .querySelector('.away-team')
+      ?.classList?.add(`bg-${away.team.fileCode}-primary`, `text-${away.team.fileCode}-secondary`);
+
+    this.card.querySelector('.home-team .name')?.replaceChildren(home.team.abbreviation);
+    this.card.querySelector('.away-team .name')?.replaceChildren(away.team.abbreviation);
 
     this.card.addEventListener('click', this.openGameModal.bind(this));
 

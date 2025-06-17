@@ -3,10 +3,8 @@ import GenericTable, { settings } from '@fustrate/rails/generic-table';
 import { getCurrentPageJSON } from '@fustrate/rails/json';
 import { icon, label, linkTo, toHumanDate } from '@fustrate/rails/utilities';
 import { DateTime } from 'luxon';
-
-import GameThread, { type JSONData } from 'models/game-thread';
-
-import { subredditPath } from 'utilities/routes';
+import GameThread, { type JSONData } from '@/models/game-thread';
+import { subredditPath } from '@/utilities/routes';
 
 interface PaginatedResponse<T> extends PaginatedData {
   data: T[];

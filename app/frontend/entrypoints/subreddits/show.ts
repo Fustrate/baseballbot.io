@@ -2,10 +2,9 @@ import { start } from '@fustrate/rails';
 import { escapeMultilineHTML } from '@fustrate/rails/html';
 import { linkTo } from '@fustrate/rails/utilities';
 
-import GenericShow, { refresh } from 'components/generic-show';
-
-import { postAtFormat } from 'js/utilities';
-import Subreddit from 'models/subreddit';
+import GenericShow, { refresh } from '@/components/generic-show';
+import Subreddit from '@/models/subreddit';
+import { postAtFormat } from '@/utilities';
 
 function stickyPosts(config: { enabled: boolean; sticky?: boolean } | undefined): boolean {
   return config != null && config.enabled !== false && config.sticky !== false;

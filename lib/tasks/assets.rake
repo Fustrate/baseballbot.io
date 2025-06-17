@@ -5,6 +5,7 @@ module Baseballbot
     EXCLUDE = /api|conductor|rails/
 
     HEADER = <<~TYPESCRIPT
+      /* biome-ignore lint/correctness/noUnusedImports: auto-generated */
       import { type OptionalParameter, type RequiredParameter, type RouteOptions, buildRoute } from './routes.utils';
     TYPESCRIPT
 
@@ -24,7 +25,7 @@ module Baseballbot
 
     protected
 
-    def routes_file = Rails.root.join('app/frontend/utilities/routes.ts')
+    def routes_file = Rails.root.join('app/frontend/javascript/utilities/routes.ts')
 
     def process_route(name, route)
       required_parts = route.required_parts.map { it.to_s.camelize(:lower) }
@@ -86,7 +87,7 @@ module Baseballbot
 
     protected
 
-    def constants_file = Rails.root.join('app/frontend/utilities/constants.ts')
+    def constants_file = Rails.root.join('app/frontend/javascript/utilities/constants.ts')
 
     def skip_model?(model) = !model.table_exists? || model.abstract_class?
 

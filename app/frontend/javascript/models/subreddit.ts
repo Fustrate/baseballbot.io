@@ -1,6 +1,6 @@
 import BaseRecord from '@fustrate/rails/record';
 
-import { subredditPath, subredditsPath } from 'utilities/routes';
+import { subredditPath, subredditsPath } from '@/utilities/routes';
 import Template, { type JSONData as TemplateData } from './template';
 
 export interface SubredditOptions {
@@ -93,7 +93,9 @@ export default class Subreddit extends BaseRecord {
     return subredditPath(this.id, options);
   }
 
-  public get templates(): Template[] { return this.#templates; }
+  public get templates(): Template[] {
+    return this.#templates;
+  }
   public set templates(value: Template[] | TemplateData[]) {
     this.#templates = Template.buildList(value, { eventable: this });
   }

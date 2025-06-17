@@ -1,7 +1,7 @@
 import BaseRecord from '@fustrate/rails/record';
 import { DateTime } from 'luxon';
 
-import { gameThreadPath, gameThreadsPath } from 'utilities/routes';
+import { gameThreadPath, gameThreadsPath } from '@/utilities/routes';
 import Subreddit from './subreddit';
 
 export interface JSONData {

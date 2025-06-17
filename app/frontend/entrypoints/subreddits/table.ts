@@ -3,8 +3,8 @@ import GenericTable, { settings } from '@fustrate/rails/generic-table';
 import { getCurrentPageJSON } from '@fustrate/rails/json';
 import { icon, linkTo } from '@fustrate/rails/utilities';
 
-import { postAtFormat } from 'js/utilities';
-import Subreddit, { type JSONData as SubredditData } from 'models/subreddit';
+import Subreddit, { type JSONData as SubredditData } from '@/models/subreddit';
+import { postAtFormat } from '@/utilities';
 
 const blankRow = `
   <tr>

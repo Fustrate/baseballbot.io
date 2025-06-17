@@ -1,10 +1,10 @@
 import { start } from '@fustrate/rails';
 import GenericPage from '@fustrate/rails/generic-page';
 
-import Game from 'js/scoreboard/game';
-import GameCard from 'js/scoreboard/game-card';
+import Game from '@/scoreboard/game';
+import GameCard from '@/scoreboard/game-card';
 
-import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
+import loadSchedule, { type ScheduleGame } from '@/statsapi/schedule';
 
 const secondsBetweenReloads = 30;
 

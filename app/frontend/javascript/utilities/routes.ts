@@ -1,3 +1,4 @@
+/* biome-ignore lint/correctness/noUnusedImports: auto-generated */
 import { type OptionalParameter, type RequiredParameter, type RouteOptions, buildRoute } from './routes.utils';
 
 export const accountsAuthenticatePath = (options: RouteOptions = {}) =>

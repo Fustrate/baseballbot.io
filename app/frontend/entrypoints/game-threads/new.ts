@@ -1,13 +1,11 @@
-import { DateTime } from 'luxon';
-
 import { start } from '@fustrate/rails';
 import GenericPage from '@fustrate/rails/generic-page';
 import { setChildren } from '@fustrate/rails/html';
+import { DateTime } from 'luxon';
 
-import loadSchedule, { type ScheduleGame } from 'js/statsapi/schedule';
-
-import Subreddit, { type JSONData as SubredditData } from 'models/subreddit';
-import { subredditsPath } from 'utilities/routes';
+import Subreddit from '@/models/subreddit';
+import loadSchedule, { type ScheduleGame } from '@/statsapi/schedule';
+import { subredditsPath } from '@/utilities/routes';
 
 function optionForGame(game: ScheduleGame): HTMLOptionElement {
   const away = game.teams.away.team.teamName;
