@@ -19,8 +19,8 @@
     "yaml": "^2.8.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.0",
-    "@types/lodash": "^4.17.17",
+    "@biomejs/biome": "^2.0.4",
+    "@types/lodash": "^4.17.18",
     "@types/luxon": "^3.6.2",
     "typescript": "^5.8.3"
   },
