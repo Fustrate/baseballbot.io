@@ -81,4 +81,6 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.hosts << host
+
+  config.action_dispatch.tld_length = 2
 end
