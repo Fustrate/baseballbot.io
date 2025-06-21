@@ -3,6 +3,7 @@ import { type OptionalParameter, type RequiredParameter, type RouteOptions, buil
 
 export const accountsAuthenticatePath = (options: RouteOptions = {}) =>
   buildRoute('/accounts/authenticate(.:format)', { ...options });
+export const appPath = (options: RouteOptions = {}) => buildRoute('/', { ...options });
 export const editGameThreadPath = (id: RequiredParameter, options: RouteOptions = {}) =>
   buildRoute('/game_threads/:id/edit(.:format)', { id, ...options });
 export const editSubredditPath = (id: RequiredParameter, options: RouteOptions = {}) =>

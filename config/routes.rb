@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'home#home'
+  constraints subdomain: 'app' do
+    get '*', to: 'app#app'
 
-  Rails.root.glob('config/routes/*.rb').each { instance_eval File.read(it) }
+    root to: 'app#app', as: :app
+  end
+
+  constraints subdomain: '' do
+    Rails.root.glob('config/routes/*.rb').each { instance_eval File.read(it) }
+
+    root to: 'home#home'
+  end
 end

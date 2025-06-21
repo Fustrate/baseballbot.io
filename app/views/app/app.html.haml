@@ -1,0 +1,12 @@
+!!!
+%html{ lang: :en }
+  %head
+    %title Baseballbot
+    %meta{ charset: 'utf-8' }
+    %meta{ name: :viewport, content: 'width=device-width, initial-scale=1.0' }
+    = csrf_meta_tags
+    = stylesheets!
+    = stylesheet_link_tag 'https://kit.fontawesome.com/eacb1922fa.css', crossorigin: 'anonymous', nonce: true
+    = javascript_include_tag :app, defer: true, type: 'module'
+  %body
+    #root

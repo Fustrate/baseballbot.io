@@ -36,10 +36,6 @@ Rails:
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-# Prefer `def method_name\nend` over `def method_name; end`
-Style/EmptyMethod:
-  EnforcedStyle: expanded
-
 Rails/EnvironmentVariableAccess:
   AllowReads: true
 

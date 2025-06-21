@@ -13,7 +13,8 @@
 			"!node_modules",
 			"!app/frontend/stylesheets",
 			"!app/frontend/javascript/scoreboard",
-			"!package.json"
+			"!package.json",
+			"!app/frontend/routeTree.gen.ts"
 		]
 	},
 	"assist": {

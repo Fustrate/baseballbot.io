@@ -2,5 +2,4 @@
 
 resources :game_threads
 
-# Temporary? Ha.
-get :gamechats, to: 'game_threads#index'
+get '/gamechats', to: redirect('/game_threads')
