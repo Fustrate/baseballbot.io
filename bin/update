@@ -7,12 +7,13 @@ include FileUtils
 def run_command(command) = system(command) || abort("\n== Command #{command} failed ==")
 
 chdir File.expand_path('..', __dir__) do
+  # Make sure we're on the latest revision before running dependency updates
+  run_command 'git pull'
+
   puts "== bundle update =="
   run_command 'bundle update && bundle update --bundler'
 
   # run_command 'yarn set version latest'
-
-  # run_command 'yarn add @fustrate/rails@https://github.com/Fustrate/fustrate-rails.js'
 
   puts "\n== yarn upgrade-interactive =="
   run_command 'yarn upgrade-interactive'
