@@ -2,24 +2,55 @@
 import type { Venue } from './venue';
 
 // Still need catchers interference
-type RunnerEventTypes = 'field_out' | 'single' | 'double' | 'triple' | 'home_run' | 'walk' | 'passed_ball' |
-  'wild_pitch' | 'intent_walk' | `stolen_base_${'2b' | '3b' | 'home'}` | 'hit_by_pitch' | 'field_error' |
-  `grounded_into_${'double' | 'triple'}_play`;
+type RunnerEventTypes =
+  | 'field_out'
+  | 'single'
+  | 'double'
+  | 'triple'
+  | 'home_run'
+  | 'walk'
+  | 'passed_ball'
+  | 'wild_pitch'
+  | 'intent_walk'
+  | `stolen_base_${'2b' | '3b' | 'home'}`
+  | 'hit_by_pitch'
+  | 'field_error'
+  | `grounded_into_${'double' | 'triple'}_play`;
 
-type RunnerMovementReasons = 'r_adv_force' | 'r_adv_play' | 'r_force_out' | 'r_doubled_off' |
-  `r_${'stolen_base' | 'caught_stealing'}_${'2b' | '3b' | 'home'}`;
+type RunnerMovementReasons =
+  | 'r_adv_force'
+  | 'r_adv_play'
+  | 'r_force_out'
+  | 'r_doubled_off'
+  | `r_${'stolen_base' | 'caught_stealing'}_${'2b' | '3b' | 'home'}`;
 
 type FielderCredits = `f_${'putout' | 'fielded_ball' | 'assist' | 'deflection' | 'assist_of' | 'fielding_error'}`;
 
 // Still need catchers interference
-type PlayEventTypes = 'field_out' | 'walk' | 'single' | 'double' | 'triple' | 'sac_fly' |
-  'strikeout' | 'grounded_into_double_play' | 'hit_by_pitch' | 'force_out' | 'triple_play' |
-  'intent_walk' | 'field_error';
+type PlayEventTypes =
+  | 'field_out'
+  | 'walk'
+  | 'single'
+  | 'double'
+  | 'triple'
+  | 'sac_fly'
+  | 'strikeout'
+  | 'grounded_into_double_play'
+  | 'hit_by_pitch'
+  | 'force_out'
+  | 'triple_play'
+  | 'intent_walk'
+  | 'field_error';
 
 // I assume these types are going to grow rather large.
 type GameEvent = 'field_out' | 'game_finished' | 'strikeout';
-type LogicalEvent = 'midInning' | 'countChange' | 'newLeftHandedHit' | 'gameStateChangeToGameOver' |
-  `count${0 | 1 | 2 | 3}${0 | 1 | 2 | 3}` | `count4${0 | 1 | 2}`;
+type LogicalEvent =
+  | 'midInning'
+  | 'countChange'
+  | 'newLeftHandedHit'
+  | 'gameStateChangeToGameOver'
+  | `count${0 | 1 | 2 | 3}${0 | 1 | 2 | 3}`
+  | `count4${0 | 1 | 2}`;
 
 export interface GameStatus {
   abstractGameState: 'Final';
@@ -74,16 +105,66 @@ interface Call {
   description: string;
 }
 
-interface Pitcher { code: '1'; name: 'Pitcher'; type: 'Pitcher'; abbreviation: 'P' }
-interface Catcher { code: '2'; name: 'Catcher'; type: 'Catcher'; abbreviation: 'C' }
-interface FirstBase { code: '3'; name: 'First Base'; type: 'Infielder'; abbreviation: '1B' }
-interface SecondBase { code: '4'; name: 'Second Base'; type: 'Infielder'; abbreviation: '2B' }
-interface ThirdBase { code: '5'; name: 'Third Base'; type: 'Infielder'; abbreviation: '3B' }
-interface Shortstop { code: '6'; name: 'Shortstop'; type: 'Infielder'; abbreviation: 'SS' }
-interface LeftFielder { code: '7'; name: 'Outfielder'; type: 'Outfielder'; abbreviation: 'LF' }
-interface CenterFielder { code: '8'; name: 'Outfielder'; type: 'Outfielder'; abbreviation: 'CF' }
-interface RightFielder { code: '9'; name: 'Outfielder'; type: 'Outfielder'; abbreviation: 'RF' }
-interface DesignatedHitter { code: '10'; name: 'Designated Hitter'; type: 'Hitter'; abbreviation: 'DH' }
+interface Pitcher {
+  code: '1';
+  name: 'Pitcher';
+  type: 'Pitcher';
+  abbreviation: 'P';
+}
+interface Catcher {
+  code: '2';
+  name: 'Catcher';
+  type: 'Catcher';
+  abbreviation: 'C';
+}
+interface FirstBase {
+  code: '3';
+  name: 'First Base';
+  type: 'Infielder';
+  abbreviation: '1B';
+}
+interface SecondBase {
+  code: '4';
+  name: 'Second Base';
+  type: 'Infielder';
+  abbreviation: '2B';
+}
+interface ThirdBase {
+  code: '5';
+  name: 'Third Base';
+  type: 'Infielder';
+  abbreviation: '3B';
+}
+interface Shortstop {
+  code: '6';
+  name: 'Shortstop';
+  type: 'Infielder';
+  abbreviation: 'SS';
+}
+interface LeftFielder {
+  code: '7';
+  name: 'Outfielder';
+  type: 'Outfielder';
+  abbreviation: 'LF';
+}
+interface CenterFielder {
+  code: '8';
+  name: 'Outfielder';
+  type: 'Outfielder';
+  abbreviation: 'CF';
+}
+interface RightFielder {
+  code: '9';
+  name: 'Outfielder';
+  type: 'Outfielder';
+  abbreviation: 'RF';
+}
+interface DesignatedHitter {
+  code: '10';
+  name: 'Designated Hitter';
+  type: 'Hitter';
+  abbreviation: 'DH';
+}
 
 type Outfielder = LeftFielder | CenterFielder | RightFielder;
 type Infielder = FirstBase | SecondBase | ThirdBase | Shortstop;

@@ -1,7 +1,7 @@
-@import 'animate.css/animate.css';
+@import "animate.css/animate.css";
 
-@import '../stylesheets/layout';
-@import '../stylesheets/components';
+@import "../stylesheets/layout";
+@import "../stylesheets/components";
 
 @import "tailwindcss";
 

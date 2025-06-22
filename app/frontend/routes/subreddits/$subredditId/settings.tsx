@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/subreddits/$subredditId/settings')({
   component: RouteComponent,
@@ -7,8 +7,8 @@ export const Route = createFileRoute('/subreddits/$subredditId/settings')({
 
     return { subredditId };
   },
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/subreddits/$subredditId/settings"!</div>
+  return <div>Hello "/subreddits/$subredditId/settings"!</div>;
 }

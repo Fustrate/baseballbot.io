@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/subreddits/$subredditId/game_threads')({
   component: RouteComponent,
@@ -7,8 +7,8 @@ export const Route = createFileRoute('/subreddits/$subredditId/game_threads')({
 
     return { subredditId };
   },
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/subreddits/$subredditId/game_threads"!</div>
+  return <div>Hello "/subreddits/$subredditId/game_threads"!</div>;
 }
