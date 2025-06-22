@@ -32,3 +32,6 @@ Rails.application.configure do
   # Report violations without enforcing the policy.
   # config.content_security_policy_report_only = true
 end
+
+Rails.application.config.action_dispatch
+  .default_headers['Access-Control-Allow-Origin'] = "https://app.baseballbot.io#{'.test' unless Rails.env.production?}"
