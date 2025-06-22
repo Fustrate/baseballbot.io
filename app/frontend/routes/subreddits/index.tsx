@@ -1,10 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+async function fetchSubreddits() {
+  return fetch('//baseballbot.io.test/subreddits.json').then((res) => res.json());
+}
+
 export const Route = createFileRoute('/subreddits/')({
   component: RouteComponent,
-  loader: async () => {
-    return fetch('//baseballbot.io.test/subreddits.json').then((res) => res.json());
-  },
+  loader: fetchSubreddits,
 });
 
 function RouteComponent() {
