@@ -9,9 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
+import { Route as GamedayRouteImport } from './routes/gameday'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubredditsIndexRouteImport } from './routes/subreddits/index'
+import { Route as Game_threadsIndexRouteImport } from './routes/game_threads/index'
 import { Route as SubredditsSubredditIdRouteImport } from './routes/subreddits/$subredditId'
 import { Route as Game_threadsThreadIdRouteImport } from './routes/game_threads/$threadId'
 import { Route as SubredditsSubredditIdSettingsRouteImport } from './routes/subreddits/$subredditId/settings'
@@ -19,9 +20,9 @@ import { Route as SubredditsSubredditIdGame_threadsRouteImport } from './routes/
 import { Route as Game_threadsThreadIdEditRouteImport } from './routes/game_threads/$threadId/edit'
 import { Route as SubredditsSubredditIdGame_threadsNewRouteImport } from './routes/subreddits/$subredditId/game_threads/new'
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const GamedayRoute = GamedayRouteImport.update({
+  id: '/gameday',
+  path: '/gameday',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const SubredditsIndexRoute = SubredditsIndexRouteImport.update({
   id: '/subreddits/',
   path: '/subreddits/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Game_threadsIndexRoute = Game_threadsIndexRouteImport.update({
+  id: '/game_threads/',
+  path: '/game_threads/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubredditsSubredditIdRoute = SubredditsSubredditIdRouteImport.update({
@@ -71,9 +77,10 @@ const SubredditsSubredditIdGame_threadsNewRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/gameday': typeof GamedayRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRouteWithChildren
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRouteWithChildren
+  '/game_threads': typeof Game_threadsIndexRoute
   '/subreddits': typeof SubredditsIndexRoute
   '/game_threads/$threadId/edit': typeof Game_threadsThreadIdEditRoute
   '/subreddits/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
@@ -82,9 +89,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/gameday': typeof GamedayRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRouteWithChildren
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRouteWithChildren
+  '/game_threads': typeof Game_threadsIndexRoute
   '/subreddits': typeof SubredditsIndexRoute
   '/game_threads/$threadId/edit': typeof Game_threadsThreadIdEditRoute
   '/subreddits/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
@@ -94,9 +102,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/gameday': typeof GamedayRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRouteWithChildren
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRouteWithChildren
+  '/game_threads/': typeof Game_threadsIndexRoute
   '/subreddits/': typeof SubredditsIndexRoute
   '/game_threads/$threadId/edit': typeof Game_threadsThreadIdEditRoute
   '/subreddits/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
@@ -107,9 +116,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
+    | '/gameday'
     | '/game_threads/$threadId'
     | '/subreddits/$subredditId'
+    | '/game_threads'
     | '/subreddits'
     | '/game_threads/$threadId/edit'
     | '/subreddits/$subredditId/game_threads'
@@ -118,9 +128,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
+    | '/gameday'
     | '/game_threads/$threadId'
     | '/subreddits/$subredditId'
+    | '/game_threads'
     | '/subreddits'
     | '/game_threads/$threadId/edit'
     | '/subreddits/$subredditId/game_threads'
@@ -129,9 +140,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/about'
+    | '/gameday'
     | '/game_threads/$threadId'
     | '/subreddits/$subredditId'
+    | '/game_threads/'
     | '/subreddits/'
     | '/game_threads/$threadId/edit'
     | '/subreddits/$subredditId/game_threads'
@@ -141,19 +153,20 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  GamedayRoute: typeof GamedayRoute
   Game_threadsThreadIdRoute: typeof Game_threadsThreadIdRouteWithChildren
   SubredditsSubredditIdRoute: typeof SubredditsSubredditIdRouteWithChildren
+  Game_threadsIndexRoute: typeof Game_threadsIndexRoute
   SubredditsIndexRoute: typeof SubredditsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/gameday': {
+      id: '/gameday'
+      path: '/gameday'
+      fullPath: '/gameday'
+      preLoaderRoute: typeof GamedayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/subreddits'
       fullPath: '/subreddits'
       preLoaderRoute: typeof SubredditsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game_threads/': {
+      id: '/game_threads/'
+      path: '/game_threads'
+      fullPath: '/game_threads'
+      preLoaderRoute: typeof Game_threadsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subreddits/$subredditId': {
@@ -259,9 +279,10 @@ const SubredditsSubredditIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  GamedayRoute: GamedayRoute,
   Game_threadsThreadIdRoute: Game_threadsThreadIdRouteWithChildren,
   SubredditsSubredditIdRoute: SubredditsSubredditIdRouteWithChildren,
+  Game_threadsIndexRoute: Game_threadsIndexRoute,
   SubredditsIndexRoute: SubredditsIndexRoute,
 }
 export const routeTree = rootRouteImport

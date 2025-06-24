@@ -1,7 +1,7 @@
 :ruby
   title t('sessions.log_in.title')
 
-%h1= t('sessions.log_in.title')
+%h1.text-2xl= t('sessions.log_in.title')
 
 = render 'flash_messages'
 
@@ -24,5 +24,5 @@
         .text-center= submit_tag 'Log In', class: 'button'
 
   .break-inside-avoid
-    %h3.text-center Don't have an account?
+    %h3.text-lg.text-center Don't have an account?
     %p.text-center #{link_to 'Click here', :sign_up_start} to sign up.

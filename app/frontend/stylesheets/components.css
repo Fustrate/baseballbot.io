@@ -84,22 +84,6 @@ h4 {
 	text-rendering: optimizeLegibility;
 }
 
-h1 {
-	@apply text-2xl;
-}
-
-h2 {
-	@apply text-xl;
-}
-
-h3 {
-	@apply text-lg;
-}
-
-h4 {
-	@apply text-base;
-}
-
 hr {
 	border: solid #c8c8c8;
 	border-width: 1px 0 0;

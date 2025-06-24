@@ -1,9 +1,5 @@
 /* @import './layout/design'; */
 
-body {
-	@apply bg-slate-100
-}
-
 a .fa-reddit {
 	color: #ff4500;
 }
@@ -14,10 +10,6 @@ a .fa-reddit {
 	> :last-child {
 		margin-bottom: 0;
 	}
-}
-
-th {
-	@apply whitespace-nowrap;
 }
 
 .label.game-thread {
@@ -163,10 +155,6 @@ h2 {
 		font-size: 1.4rem;
 		padding: 0 20px;
 		text-shadow: 0 2px 4px rgba(0, 0, 0, .8);
-	}
-
-	.main-menu {
-		@apply inline-block;
 	}
 
 	.main-menu a {

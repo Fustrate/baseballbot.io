@@ -3,7 +3,7 @@
 
   javascript 'subreddits/show', subreddit: @subreddit.id
 
-%h1.header
+%h1.text-2xl.header
   .title
     %i.fa.fab.fa-reddit
     \/r/#{@subreddit.name} Settings
@@ -14,39 +14,39 @@
 
 .grid.md:grid-cols-2
   .break-inside-avoid
-    %h2.text-center General Settings
+    %h2.text-xl.text-center General Settings
 
     .panel
       %dl{ 'data-field' => 'generalOptions' }
 
   .break-inside-avoid
-    %h2.text-center Sidebar Settings
+    %h2.text-xl.text-center Sidebar Settings
 
     .panel
       %dl{ 'data-field' => 'sidebarOptions' }
 
 .grid.md:grid-cols-2
   .break-inside-avoid
-    %h2.text-center Game Thread Settings
+    %h2.text-xl.text-center Game Thread Settings
 
     .panel
       %dl{ 'data-field' => 'gameThreadOptions' }
 
   .break-inside-avoid
-    %h2.text-center Pregame Settings
+    %h2.text-xl.text-center Pregame Settings
 
     .panel
       %dl{ 'data-field' => 'pregameOptions' }
 
 .grid.md:grid-cols-2
   .break-inside-avoid
-    %h2.text-center Postgame Settings
+    %h2.text-xl.text-center Postgame Settings
 
     .panel
       %dl{ 'data-field' => 'postgameOptions' }
 
   .break-inside-avoid
-    %h2.text-center Off Day Settings
+    %h2.text-xl.text-center Off Day Settings
 
     .panel
       %dl{ 'data-field' => 'offDayOptions' }

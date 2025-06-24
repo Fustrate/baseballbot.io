@@ -33,7 +33,7 @@ class SubredditsTable extends GenericTable<Subreddit> {
 
   public override updateRow(row: HTMLTableRowElement, subreddit: Subreddit): void {
     row.querySelector('.name')?.setHTMLUnsafe(linkTo(subreddit.name, subreddit));
-    row.querySelector('.team')?.replaceChildren(subreddit.abbreviation);
+    row.querySelector('.team')?.replaceChildren(subreddit.abbreviation ?? '');
     row.querySelector('.account')?.replaceChildren(subreddit.account.name);
 
     if (subreddit.options.sidebar?.enabled) {

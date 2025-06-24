@@ -7,7 +7,7 @@
 
   now = Time.zone.now
 
-%h1.text-center Add a Game Thread
+%h1.text-2xl.text-center Add a Game Thread
 
 .panel
   = form_with model: @game_thread do |f|
@@ -46,9 +46,9 @@
   %table
     %thead
       %tr
-        %th Token
-        %th Description
-        %th Example
+        %th.whitespace-nowrap Token
+        %th.whitespace-nowrap Description
+        %th.whitespace-nowrap Example
     %tbody
       %tr
         %td
