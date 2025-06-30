@@ -8,6 +8,9 @@ import PageHeader from '@/components/PageHeader';
 export const Route = createFileRoute('/game_threads/')({
   component: RouteComponent,
   loader: fetchGameThreads,
+  head: () => ({
+    meta: [{ title: 'Game Threads' }],
+  }),
 });
 
 function RouteComponent() {
@@ -15,8 +18,6 @@ function RouteComponent() {
 
   return (
     <>
-      <title>Game Threads ({gameThreads.length})</title>
-
       <PageHeader>Game Threads</PageHeader>
 
       <Main>
