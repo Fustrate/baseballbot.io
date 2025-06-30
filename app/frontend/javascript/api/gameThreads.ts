@@ -39,8 +39,10 @@ function buildGameThread(data: GameThreadJSON): GameThread {
   };
 }
 
-export async function fetchGameThreads(): Promise<PaginatedData<GameThread>> {
-  return fetch(apiGameThreadsPath())
+export async function fetchGameThreads({ date }: { date: DateTime }): Promise<PaginatedData<GameThread>> {
+  console.log({ date });
+
+  return fetch(apiGameThreadsPath({ date: date.toISODate() }))
     .then((res) => res.json())
     .then((data) => {
       return {

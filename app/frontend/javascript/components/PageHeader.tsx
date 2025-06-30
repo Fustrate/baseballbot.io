@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-
+import type { ReactNode } from 'react';
 import { cn } from '@/utilities';
 
 const variants = cva(['shadow-xs'], {
@@ -14,23 +14,28 @@ const variants = cva(['shadow-xs'], {
   },
 });
 
-type LabelVariantProps = VariantProps<typeof variants>;
-export type LabelColor = LabelVariantProps['color'];
+type PageHeaderVariantProps = VariantProps<typeof variants>;
+export type PageHeaderColor = PageHeaderVariantProps['color'];
 
 interface PageHeaderProps
   extends Omit<
-      React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>,
+      React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>,
       'disabled' | 'ref' | 'color'
     >,
-    LabelVariantProps {}
+    PageHeaderVariantProps {
+  leftButton?: ReactNode;
+  rightButton?: ReactNode;
+}
 
 export default function PageHeader(props: PageHeaderProps) {
   const { className, color, ...rest } = props;
 
   return (
     <header className={cn(variants({ color }), className)} {...rest}>
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        {props.leftButton ?? <span />}
         <h1 className="text-center font-semibold text-lg/6">{props.children}</h1>
+        {props.rightButton ?? <span />}
       </div>
     </header>
   );
