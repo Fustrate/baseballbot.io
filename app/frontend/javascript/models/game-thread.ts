@@ -1,7 +1,7 @@
 import BaseRecord from '@fustrate/rails/record';
 import { DateTime } from 'luxon';
 
-import { gameThreadPath, gameThreadsPath } from '@/utilities/routes';
+import { apiGameThreadPath, apiGameThreadsPath } from '@/utilities/routes';
 import Subreddit from './subreddit';
 
 export interface JSONData {
@@ -25,7 +25,7 @@ export interface JSONData {
 
 export default class GameThread extends BaseRecord {
   public static override classname = 'GameThread';
-  public static override createPath = gameThreadsPath;
+  public static override createPath = apiGameThreadsPath;
 
   public gamePk: number;
   public postAt: DateTime;
@@ -40,7 +40,7 @@ export default class GameThread extends BaseRecord {
       throw new Error('Cannot generate a route for an unpersisted game thread.');
     }
 
-    return gameThreadPath(this.id, options);
+    return apiGameThreadPath(this.id, options);
   }
 
   public override extractFromData(data: JSONData): Record<string, any> {

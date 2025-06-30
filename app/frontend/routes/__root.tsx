@@ -1,11 +1,16 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { createRootRoute, HeadContent, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import PageHeader from '@/components/PageHeader';
 
 export const Route = createRootRoute({
   component: RootComponent,
+  notFoundComponent: () => {
+    return <PageHeader color="red">404 - Page Not Found</PageHeader>;
+  },
 });
 
 const user = {
@@ -36,6 +41,8 @@ function classNames(...classes: string[]) {
 function RootComponent() {
   return (
     <>
+      <HeadContent />
+
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-sky-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

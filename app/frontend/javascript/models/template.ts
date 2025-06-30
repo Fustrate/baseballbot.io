@@ -1,6 +1,6 @@
 import BaseRecord from '@fustrate/rails/record';
 
-import { templatePath } from '@/utilities/routes';
+import { apiTemplatePath } from '@/utilities/routes';
 
 export type Types =
   | 'game_thread'
@@ -29,6 +29,6 @@ export default class Template extends BaseRecord {
       throw new Error('Cannot generate a route for an unpersisted template.');
     }
 
-    return templatePath(this.id, options);
+    return apiTemplatePath(this.id, options);
   }
 }

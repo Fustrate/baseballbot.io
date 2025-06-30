@@ -1,6 +1,6 @@
 import BaseRecord from '@fustrate/rails/record';
 
-import { subredditPath, subredditsPath } from '@/utilities/routes';
+import { apiSubredditPath, apiSubredditsPath } from '@/utilities/routes';
 import Template, { type JSONData as TemplateData } from './template';
 
 export interface SubredditOptions {
@@ -76,7 +76,7 @@ export interface JSONData {
 
 export default class Subreddit extends BaseRecord {
   public static override classname = 'Subreddit';
-  public static override createPath = subredditsPath;
+  public static override createPath = apiSubredditsPath;
 
   public abbreviation: string;
   public account: { id: number; name: string };
@@ -90,7 +90,7 @@ export default class Subreddit extends BaseRecord {
       throw new Error('Cannot generate a route for an unpersisted subreddit.');
     }
 
-    return subredditPath(this.id, options);
+    return apiSubredditPath(this.id, options);
   }
 
   public get templates(): Template[] {

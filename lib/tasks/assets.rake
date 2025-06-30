@@ -2,7 +2,7 @@
 
 module Baseballbot
   class RouteDumper
-    EXCLUDE = /api|conductor|rails/
+    EXCLUDE = /conductor|rails/
 
     HEADER = <<~TYPESCRIPT
       /* biome-ignore lint/correctness/noUnusedImports: auto-generated */

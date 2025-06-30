@@ -68,10 +68,6 @@ Rails.application.configure do
 
   config.session_store(:cache_store, expire_after: 14.days)
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter = :sidekiq
-  # config.active_job.queue_name_prefix = "baseballbot_production"
-
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.

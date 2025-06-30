@@ -1,34 +1,19 @@
-import type { PaginatedData } from '@fustrate/rails/generic-table';
 import { toHumanDate } from '@fustrate/rails/utilities';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
-import Badge from '@/badge';
 
-interface GameThread {
-  id: number;
-  postAt: string;
-  startsAt: string;
-  status: string;
-  title: string;
-  postId: string | null;
-  gamePk: number;
-  preGamePostId: string | null;
-  postGamePostId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  subreddit: {
-    id: number;
-    name: string;
-    teamId: number | null;
-  };
-}
+import { fetchGameThreads, type GameThread } from '@/api/gameThreads';
+
+import Badge from '@/components/Badge';
+import DataTable from '@/components/DataTable';
+import Main from '@/components/Main';
+import PageHeader from '@/components/PageHeader';
 
 function StatusBadge({ gameThread }: { gameThread: GameThread }) {
-  const postAt = DateTime.fromISO(gameThread.postAt);
-  const startsAt = DateTime.fromISO(gameThread.startsAt);
+  const { postAt, startsAt, status } = gameThread;
 
-  if (postAt < DateTime.now() && gameThread.status === 'Future') {
+  if (postAt < DateTime.now() && status === 'Future') {
     return (
       <Badge color="red" className="w-full">
         Error
@@ -36,7 +21,7 @@ function StatusBadge({ gameThread }: { gameThread: GameThread }) {
     );
   }
 
-  if (startsAt < DateTime.now() && gameThread.status === 'Posted') {
+  if (startsAt < DateTime.now() && status === 'Posted') {
     return (
       <Badge color="green" className="w-full">
         Live
@@ -44,16 +29,15 @@ function StatusBadge({ gameThread }: { gameThread: GameThread }) {
     );
   }
 
-  return <Badge className="w-full">{gameThread.status}</Badge>;
-}
-
-async function fetchGameThreads(): Promise<PaginatedData<GameThread>> {
-  return fetch('//baseballbot.io.test/game_threads.json').then((res) => res.json());
+  return <Badge className="w-full">{status}</Badge>;
 }
 
 export const Route = createFileRoute('/game_threads/')({
   component: RouteComponent,
   loader: fetchGameThreads,
+  head: () => ({
+    meta: [{ title: 'Game Threads' }],
+  }),
 });
 
 const linkClasses = 'text-sky-600 hover:text-sky-900';
@@ -95,15 +79,23 @@ const columns = [
       </Link>
     ),
   }),
-  columnHelper.accessor((row) => DateTime.fromISO(row.postAt), {
-    id: 'postAt',
-    header: () => 'Post At',
-    cell: (info) => <span className="whitespace-nowrap">{toHumanDate(info.getValue(), true)}</span>,
-  }),
-  columnHelper.accessor((row) => DateTime.fromISO(row.startsAt), {
+  columnHelper.accessor((row) => row.startsAt, {
     id: 'startsAt',
     header: () => 'Starts At',
     cell: (info) => <span className="whitespace-nowrap">{toHumanDate(info.getValue(), true)}</span>,
+    // meta: { cellClasses: 'hidden xl:table-cell' } as ColumnMeta,
+  }),
+  columnHelper.accessor((row) => row.postAt, {
+    id: 'postAt',
+    header: () => 'Post At',
+    cell: (info) => {
+      if (info.row.original.postAt.hasSame(info.row.original.startsAt, 'day')) {
+        return <span className="whitespace-nowrap">{info.getValue().toFormat('t')}</span>;
+      }
+
+      return <span className="whitespace-nowrap">{toHumanDate(info.getValue(), true)}</span>;
+    },
+    // meta: { cellClasses: 'hidden lg:table-cell' } as ColumnMeta,
   }),
   columnHelper.accessor((row) => row.status, {
     id: 'status',
@@ -124,49 +116,11 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="bg-white shadow-xs">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <h1 className="font-semibold text-lg/6 text-slate-900">Game Threads</h1>
-        </div>
-      </header>
+      <PageHeader>Game Threads</PageHeader>
 
-      <main>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="overflow-hidden bg-white ring-1 ring-slate-300 sm:mx-0 sm:rounded-lg">
-            <table className="w-full">
-              <thead className="border-slate-300 border-b bg-slate-50">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <th key={header.id} className="px-3 py-3.5 text-left">
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody className="bg-white">
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="even:bg-slate-50">
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="px-3 py-4">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-                {table.getRowModel().rows.length === 0 && (
-                  <tr>
-                    <td colSpan={columns.length} className="px-3 py-4 text-center text-slate-500">
-                      No game threads found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
+      <Main>
+        <DataTable table={table} />
+      </Main>
     </>
   );
 }

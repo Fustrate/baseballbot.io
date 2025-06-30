@@ -4,6 +4,9 @@
 @source inline("bg-{ana,ari,ath,atl,bal,bos,chc,cin,cle,col,cws,det,hou,kc,la,mia,mil,min,nym,nyy,phi,pit,sd,sea,sf,stl,tb,tex,tor,was}-primary");
 @source inline("text-{ana,ari,ath,atl,bal,bos,chc,cin,cle,col,cws,det,hou,kc,la,mia,mil,min,nym,nyy,phi,pit,sd,sea,sf,stl,tb,tex,tor,was}-secondary");
 
+/* Toggle to disable dark mode in development mode */
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+
 @theme {
 	--color-ana-primary: hsl(346, 96.8%, 37.1%);
 	--color-ana-secondary: hsl(0, 0%, 100%);

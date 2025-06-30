@@ -1,90 +1,23 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
+import { fetchSubreddits, type Subreddit } from '@/api/subreddits';
+
+import DataTable from '@/components/DataTable';
+import Main from '@/components/Main';
+import PageHeader from '@/components/PageHeader';
+
 import { postAtFormat } from '@/utilities';
-
-interface SubredditGameThreadOptions {
-  enabled: boolean;
-  flairId?: string;
-  postAt: string;
-  sticky?: boolean;
-  stickyComment?: string;
-  title:
-    | string
-    | {
-        default: string;
-        postseason?: string;
-      };
-}
-
-interface SubredditPregameOptions {
-  enabled: boolean;
-  postAt: string;
-  sticky?: boolean;
-  stickyComment?: string;
-}
-
-interface SubredditPostgameOptions {
-  enabled: boolean;
-  sticky?: boolean;
-  stickyComment?: string;
-  title:
-    | string
-    | {
-        default: string;
-        won?: string;
-        lost?: string;
-      };
-}
-
-interface SubredditOffDayOptions {
-  enabled: boolean;
-  sticky?: boolean;
-  stickyComment?: string;
-  title: string;
-  postAt: string;
-  lastRunAt: string;
-}
-
-interface SubredditSidebarOptions {
-  enabled: boolean;
-}
-
-interface SubredditOptions {
-  timezone: `America/${'Chicago' | 'Denver' | 'Detroit' | 'Los_Angeles' | 'New_York' | 'Phoenix'}`;
-  subreddits?: {
-    downcase: boolean;
-  };
-  stickySlot?: 1 | 2;
-  sidebar?: SubredditSidebarOptions;
-  gameThreads?: SubredditGameThreadOptions;
-  pregame?: SubredditPregameOptions;
-  postgame?: SubredditPostgameOptions;
-  offDay?: SubredditOffDayOptions;
-}
-
-interface Subreddit {
-  id: number;
-  name: string;
-  abbreviation: string;
-  options: SubredditOptions;
-  account: {
-    id: number;
-    name: string;
-  };
-}
-
-async function fetchSubreddits(): Promise<Subreddit[]> {
-  return fetch('//baseballbot.io.test/subreddits.json')
-    .then((res) => res.json())
-    .then((data) => data.data);
-}
 
 export const Route = createFileRoute('/subreddits/')({
   component: RouteComponent,
   loader: fetchSubreddits,
+  head: () => ({
+    meta: [{ title: 'Subreddits' }],
+  }),
 });
 
-const linkClasses = 'text-sky-600 hover:text-sky-900';
+const linkClasses = 'text-sky-600 hover:text-sky-900 dark:text-sky-300 dark:hover:text-sky-100';
 
 const columnHelper = createColumnHelper<Subreddit>();
 
@@ -146,42 +79,11 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="bg-white shadow-xs">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <h1 className="font-semibold text-lg/6 text-slate-900">Subreddits</h1>
-        </div>
-      </header>
+      <PageHeader>Subreddits</PageHeader>
 
-      <main>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="overflow-hidden bg-white ring-1 ring-slate-300 sm:mx-0 sm:rounded-lg">
-            <table className="w-full">
-              <thead className="border-slate-300 border-b bg-slate-50">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <th key={header.id} className="px-3 py-3.5 text-left">
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody className="bg-white">
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="even:bg-slate-50">
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="px-3 py-4">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
+      <Main>
+        <DataTable table={table} />
+      </Main>
     </>
   );
 }

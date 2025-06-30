@@ -4,7 +4,7 @@ import { getCurrentPageJSON } from '@fustrate/rails/json';
 import { icon, label, linkTo, toHumanDate } from '@fustrate/rails/utilities';
 import { DateTime } from 'luxon';
 import GameThread, { type JSONData } from '@/models/game-thread';
-import { subredditPath } from '@/utilities/routes';
+import { apiSubredditPath } from '@/utilities/routes';
 
 interface PaginatedResponse<T> extends PaginatedData {
   data: T[];
@@ -63,7 +63,7 @@ class GameThreadsTable extends GenericTable<GameThread> {
   public override updateRow(row: HTMLTableRowElement, gameThread: GameThread): void {
     row
       .querySelector('.subreddit')
-      ?.setHTMLUnsafe(linkTo(gameThread.subreddit.name, subredditPath(gameThread.subreddit.id as number)));
+      ?.setHTMLUnsafe(linkTo(gameThread.subreddit.name, apiSubredditPath(gameThread.subreddit.id as number)));
 
     if (gameThread.title) {
       populateGameThreadTitle(row.querySelector('.title') as HTMLTableCellElement, gameThread);

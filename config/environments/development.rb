@@ -42,8 +42,6 @@ Rails.application.configure do
     config.session_store(:cookie_store, expire_after: 14.days)
   end
 
-  # config.active_job.queue_adapter = :sidekiq
-
   config.action_controller.default_url_options = { host: }
   Rails.application.routes.default_url_options = { host: }
 
@@ -81,7 +79,4 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.hosts << host
-  config.hosts << "app.#{host}"
-
-  config.action_dispatch.tld_length = 2
 end
