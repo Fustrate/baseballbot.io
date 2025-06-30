@@ -55,6 +55,9 @@ gem 'pagy', '~> 9.3'
 # Authentication [https://github.com/Sorcery/sorcery]
 gem 'sorcery', '~> 0.16'
 
+# OAuth server [https://github.com/doorkeeper-gem/doorkeeper]
+gem 'doorkeeper', '~> 5.8'
+
 # A more slim redis client [https://github.com/redis/redis-rb]
 gem 'redis', '~> 5.0'
 
