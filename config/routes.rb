@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     resources :templates, only: %i[show update]
   end
 
+  get '/*path.json', to: redirect('api/%{path}.json')
+
   get '*', to: 'app#app'
 
   root to: 'app#app', as: :app
