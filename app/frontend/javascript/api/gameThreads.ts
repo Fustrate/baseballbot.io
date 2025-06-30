@@ -1,10 +1,11 @@
 import type { PaginatedData } from '@fustrate/rails/components/pagination';
 import { DateTime } from 'luxon';
+import type { GameThreadStatus } from '@/utilities/constants';
 import { apiGameThreadPath, apiGameThreadsPath, gameThreadsApiSubredditPath } from '@/utilities/routes';
 
 interface GameThreadJSON {
   id: number;
-  status: string;
+  status: GameThreadStatus;
   title: string;
   postId: string | null;
   gamePk: number;
