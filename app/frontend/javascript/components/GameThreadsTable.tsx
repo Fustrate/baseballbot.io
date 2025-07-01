@@ -1,7 +1,8 @@
 import { toHumanDate } from '@fustrate/rails/utilities';
 import { DateTime } from 'luxon';
 import type { GameThread } from '@/api/gameThreads';
-import { Badge } from '@/catalyst/badge';
+import type { Subreddit } from '@/api/subreddits';
+import { Badge, BadgeButton } from '@/catalyst/badge';
 import { Link } from '@/catalyst/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/catalyst/table';
 
@@ -35,6 +36,16 @@ interface GameThreadsTableProps {
   showSubreddit?: boolean;
 }
 
+function defaultTitle(subreddit: Subreddit) {
+  const { title } = subreddit.options?.gameThreads || {};
+
+  if (typeof title === 'string') {
+    return title;
+  }
+
+  return title?.default ?? 'Game Thread';
+}
+
 export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThreadsTableProps) {
   return (
     <Table dense className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
@@ -42,7 +53,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
         <TableRow>
           <TableHeader>PK</TableHeader>
           <TableHeader>Title</TableHeader>
-          {showSubreddit !== false && <TableHeader>Subreddit</TableHeader>}
+          {showSubreddit !== false && <TableHeader className="hidden lg:table-cell">Subreddit</TableHeader>}
           <TableHeader className="hidden lg:table-cell">Starts At</TableHeader>
           <TableHeader className="hidden lg:table-cell">Post At</TableHeader>
           <TableHeader className="hidden lg:table-cell">Status</TableHeader>
@@ -58,26 +69,31 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
               </Link>
             </TableCell>
             <TableCell className="whitespace-normal">
-              {gameThread.postId ? (
-                <Link inline href={`//redd.it/${gameThread.postId}`}>
-                  {gameThread.title}
-                </Link>
-              ) : (
-                <span>{gameThread.title}</span>
-              )}
-              <div className="mt-1 flex items-center gap-1 lg:hidden">
-                <Badge color="zinc">Starts @ {gameThread.startsAt.toFormat('t')}</Badge>
-                <Badge color="zinc">
-                  Post @{' '}
-                  {gameThread.postAt.hasSame(gameThread.startsAt, 'day')
-                    ? gameThread.postAt.toFormat('t')
-                    : toHumanDate(gameThread.postAt, true)}
-                </Badge>
-                <StatusBadge gameThread={gameThread} />
+              <div className="flex flex-col gap-1.5">
+                {gameThread.postId ? (
+                  <Link inline href={`//redd.it/${gameThread.postId}`}>
+                    {gameThread.title}
+                  </Link>
+                ) : (
+                  <span>{gameThread.title ?? gameThread.subreddit.options?.gameThreads?.title?.default}</span>
+                )}
+                <BadgeButton href={`/subreddits/${gameThread.subreddit.name}`} className="lg:hidden">
+                  {gameThread.subreddit.name}
+                </BadgeButton>
+                <div className="flex items-center gap-1 lg:hidden">
+                  <Badge color="zinc">Starts @ {gameThread.startsAt.toFormat('t')}</Badge>
+                  <Badge color="zinc">
+                    Post @{' '}
+                    {gameThread.postAt.hasSame(gameThread.startsAt, 'day')
+                      ? gameThread.postAt.toFormat('t')
+                      : toHumanDate(gameThread.postAt, true)}
+                  </Badge>
+                  <StatusBadge gameThread={gameThread} />
+                </div>
               </div>
             </TableCell>
             {showSubreddit !== false && (
-              <TableCell>
+              <TableCell className="hidden lg:table-cell">
                 <Link inline to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
                   {gameThread.subreddit.name}
                 </Link>

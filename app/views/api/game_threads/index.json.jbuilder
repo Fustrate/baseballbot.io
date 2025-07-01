@@ -6,7 +6,7 @@ json.data(@game_threads) do |game_thread|
     :created_at, :updated_at
   )
 
-  json.subreddit game_thread.subreddit, :id, :name, :team_id
+  json.subreddit game_thread.subreddit, :id, :name, :team_id, :options
 end
 
 json.pagination! @pagination

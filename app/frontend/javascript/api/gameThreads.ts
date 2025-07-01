@@ -1,9 +1,10 @@
 import type { PaginatedData } from '@fustrate/rails/components/pagination';
 import { DateTime } from 'luxon';
+import type { Subreddit } from '@/api/subreddits';
 import type { GameThreadStatus } from '@/utilities/constants';
 import { apiGameThreadPath, apiGameThreadsPath, gameThreadsApiSubredditPath } from '@/utilities/routes';
 
-interface GameThreadJSON {
+export interface GameThreadJSON {
   id: number;
   status: GameThreadStatus;
   title: string;
@@ -15,11 +16,7 @@ interface GameThreadJSON {
   postAt: string;
   createdAt: string;
   updatedAt: string;
-  subreddit: {
-    id: number;
-    name: string;
-    teamId: number | null;
-  };
+  subreddit: Subreddit;
 }
 
 export interface GameThread extends Omit<GameThreadJSON, 'startsAt' | 'postAt' | 'createdAt' | 'updatedAt'> {
