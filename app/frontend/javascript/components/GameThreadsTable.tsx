@@ -29,7 +29,7 @@ function StatusBadge({ gameThread }: { gameThread: GameThread }) {
 
 export default function GameThreadsTable({ gameThreads }: { gameThreads: GameThread[] }) {
   return (
-    <Table dense bleed className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+    <Table dense className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
       <TableHead>
         <TableRow>
           <TableHeader>PK</TableHeader>

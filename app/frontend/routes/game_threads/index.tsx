@@ -6,7 +6,6 @@ import { fetchGameThreads } from '@/api/gameThreads';
 import { Button } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
 import GameThreadsTable from '@/components/GameThreadsTable';
-import Main from '@/components/Main';
 import type { GameThreadStatus } from '@/utilities/constants';
 
 // Trying to get this working with real Date or DateTime objects is fucking insane. It should not be this hard to parse
@@ -78,9 +77,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      <Main>
-        <GameThreadsTable gameThreads={sortedGameThreads} />
-      </Main>
+      <GameThreadsTable gameThreads={sortedGameThreads} />
     </>
   );
 }
