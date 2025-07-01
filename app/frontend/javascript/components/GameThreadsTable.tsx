@@ -28,7 +28,52 @@ function StatusBadge(props: { gameThread: GameThread; className?: string }) {
     );
   }
 
-  return <Badge className={className}>{status}</Badge>;
+  switch (status) {
+    case 'Future':
+      return (
+        <Badge color="blue" className={className}>
+          Future
+        </Badge>
+      );
+    case 'Posted':
+      return (
+        <Badge color="purple" className={className}>
+          Posted
+        </Badge>
+      );
+    case 'Pregame':
+      return (
+        <Badge color="teal" className={className}>
+          Pregame
+        </Badge>
+      );
+    case 'Over':
+      return (
+        <Badge color="indigo" className={className}>
+          Over
+        </Badge>
+      );
+    case 'Removed':
+      return (
+        <Badge color="amber" className={className}>
+          Removed
+        </Badge>
+      );
+    case 'Postponed':
+      return (
+        <Badge color="yellow" className={className}>
+          Postponed
+        </Badge>
+      );
+    case 'External':
+      return (
+        <Badge color="violet" className={className}>
+          External
+        </Badge>
+      );
+    default:
+      return <Badge className={className}>{status}</Badge>;
+  }
 }
 
 interface GameThreadsTableProps {
