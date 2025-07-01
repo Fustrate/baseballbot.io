@@ -50,11 +50,15 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
         {gameThreads.map((gameThread) => (
           <TableRow key={gameThread.id}>
             <TableCell>
-              <Link href={`https://www.mlb.com/gameday/${gameThread.gamePk}`}>{gameThread.gamePk}</Link>
+              <Link inline href={`https://www.mlb.com/gameday/${gameThread.gamePk}`}>
+                {gameThread.gamePk}
+              </Link>
             </TableCell>
             <TableCell className="whitespace-normal">
               {gameThread.postId ? (
-                <Link href={`//redd.it/${gameThread.postId}`}>{gameThread.title}</Link>
+                <Link inline href={`//redd.it/${gameThread.postId}`}>
+                  {gameThread.title}
+                </Link>
               ) : (
                 <span>{gameThread.title}</span>
               )}
@@ -70,7 +74,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
             </TableCell>
             {showSubreddit !== false && (
               <TableCell>
-                <Link to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
+                <Link inline to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
                   {gameThread.subreddit.name}
                 </Link>
               </TableCell>

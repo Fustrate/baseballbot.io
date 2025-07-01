@@ -66,11 +66,19 @@ function RouteComponent() {
       <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
         <Heading>{date.toLocaleString(DateTime.DATE_FULL)}</Heading>
         <div className="flex gap-4">
-          <Button href={`/game_threads?date=${previousDate.toISODate()}`} className="inline-flex items-center gap-1">
+          <Button
+            outline
+            href={`/game_threads?date=${previousDate.toISODate()}`}
+            className="inline-flex items-center gap-1"
+          >
             <i className="fas fa-angle-left" />
             <span className="hidden md:inline">{previousDate.toFormat('M/d')}</span>
           </Button>
-          <Button href={`/game_threads?date=${nextDate.toISODate()}`} className="inline-flex items-center gap-1">
+          <Button
+            outline
+            href={`/game_threads?date=${nextDate.toISODate()}`}
+            className="inline-flex items-center gap-1"
+          >
             <span className="hidden md:inline">{nextDate.toFormat('M/d')}</span>
             <i className="fas fa-angle-right" />
           </Button>

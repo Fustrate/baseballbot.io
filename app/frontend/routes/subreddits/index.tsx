@@ -40,7 +40,7 @@ function RouteComponent() {
           {subreddits.map((subreddit: Subreddit) => (
             <TableRow key={subreddit.id}>
               <TableCell>
-                <Link to="/subreddits/$subredditId" params={{ subredditId: subreddit.name }}>
+                <Link inline to="/subreddits/$subredditId" params={{ subredditId: subreddit.name }}>
                   {subreddit.name}
                 </Link>
               </TableCell>
