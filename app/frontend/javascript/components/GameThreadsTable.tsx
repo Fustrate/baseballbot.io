@@ -27,14 +27,19 @@ function StatusBadge({ gameThread }: { gameThread: GameThread }) {
   return <Badge className="w-full">{status}</Badge>;
 }
 
-export default function GameThreadsTable({ gameThreads }: { gameThreads: GameThread[] }) {
+interface GameThreadsTableProps {
+  gameThreads: GameThread[];
+  showSubreddit?: boolean;
+}
+
+export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThreadsTableProps) {
   return (
     <Table dense className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
       <TableHead>
         <TableRow>
           <TableHeader>PK</TableHeader>
-          <TableHeader>Subreddit</TableHeader>
           <TableHeader>Title</TableHeader>
+          {showSubreddit !== false && <TableHeader>Subreddit</TableHeader>}
           <TableHeader className="hidden lg:table-cell">Starts At</TableHeader>
           <TableHeader className="hidden lg:table-cell">Post At</TableHeader>
           <TableHeader>Status</TableHeader>
@@ -63,11 +68,13 @@ export default function GameThreadsTable({ gameThreads }: { gameThreads: GameThr
                 </Badge>
               </div>
             </TableCell>
-            <TableCell>
-              <Link to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
-                {gameThread.subreddit.name}
-              </Link>
-            </TableCell>
+            {showSubreddit !== false && (
+              <TableCell>
+                <Link to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
+                  {gameThread.subreddit.name}
+                </Link>
+              </TableCell>
+            )}
             <TableCell className="hidden whitespace-nowrap lg:table-cell">
               {gameThread.startsAt.toFormat('t')}
             </TableCell>
