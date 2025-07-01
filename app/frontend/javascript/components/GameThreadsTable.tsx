@@ -40,6 +40,16 @@ function defaultTitle(subreddit: Subreddit) {
   return subreddit.options?.gameThreads?.title?.default ?? 'Game Thread';
 }
 
+function postAt(gameThread: GameThread) {
+  if (gameThread.status === 'External') {
+    return;
+  }
+
+  return gameThread.postAt.hasSame(gameThread.startsAt, 'day')
+    ? gameThread.postAt.toFormat('t')
+    : toHumanDate(gameThread.postAt, true);
+}
+
 export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThreadsTableProps) {
   return (
     <Table dense className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
@@ -76,12 +86,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
                 </BadgeButton>
                 <div className="flex items-center gap-1 lg:hidden">
                   <Badge color="zinc">Starts @ {gameThread.startsAt.toFormat('t')}</Badge>
-                  <Badge color="zinc">
-                    Post @{' '}
-                    {gameThread.postAt.hasSame(gameThread.startsAt, 'day')
-                      ? gameThread.postAt.toFormat('t')
-                      : toHumanDate(gameThread.postAt, true)}
-                  </Badge>
+                  {gameThread.status !== 'External' && <Badge color="zinc">Post @ {postAt(gameThread)}</Badge>}
                   <StatusBadge gameThread={gameThread} />
                 </div>
               </div>
@@ -96,11 +101,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
             <TableCell className="hidden whitespace-nowrap lg:table-cell">
               {gameThread.startsAt.toFormat('t')}
             </TableCell>
-            <TableCell className="hidden whitespace-nowrap lg:table-cell">
-              {gameThread.postAt.hasSame(gameThread.startsAt, 'day')
-                ? gameThread.postAt.toFormat('t')
-                : toHumanDate(gameThread.postAt, true)}
-            </TableCell>
+            <TableCell className="hidden whitespace-nowrap lg:table-cell">{postAt(gameThread)}</TableCell>
             <TableCell className="hidden lg:table-cell">
               <StatusBadge gameThread={gameThread} className="w-full" />
             </TableCell>
