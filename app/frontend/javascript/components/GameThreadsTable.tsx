@@ -37,13 +37,7 @@ interface GameThreadsTableProps {
 }
 
 function defaultTitle(subreddit: Subreddit) {
-  const { title } = subreddit.options?.gameThreads || {};
-
-  if (typeof title === 'string') {
-    return title;
-  }
-
-  return title?.default ?? 'Game Thread';
+  return subreddit.options?.gameThreads?.title?.default ?? 'Game Thread';
 }
 
 export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThreadsTableProps) {
@@ -75,7 +69,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
                     {gameThread.title}
                   </Link>
                 ) : (
-                  <span>{gameThread.title ?? gameThread.subreddit.options?.gameThreads?.title?.default}</span>
+                  (gameThread.title ?? defaultTitle(gameThread.subreddit))
                 )}
                 <BadgeButton href={`/subreddits/${gameThread.subreddit.name}`} className="lg:hidden">
                   {gameThread.subreddit.name}

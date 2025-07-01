@@ -6,12 +6,10 @@ interface SubredditGameThreadOptions {
   postAt: string;
   sticky?: boolean;
   stickyComment?: string;
-  title:
-    | string
-    | {
-        default: string;
-        postseason?: string;
-      };
+  title: {
+    default: string;
+    postseason?: string;
+  };
 }
 
 interface SubredditPregameOptions {
@@ -25,13 +23,11 @@ interface SubredditPostgameOptions {
   enabled: boolean;
   sticky?: boolean;
   stickyComment?: string;
-  title:
-    | string
-    | {
-        default: string;
-        won?: string;
-        lost?: string;
-      };
+  title: {
+    default: string;
+    won?: string;
+    lost?: string;
+  };
 }
 
 interface SubredditOffDayOptions {
