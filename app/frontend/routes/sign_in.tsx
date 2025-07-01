@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { Heading } from '@/catalyst/heading';
 import Main from '@/components/Main';
-import PageHeader from '@/components/PageHeader';
 
 export const Route = createFileRoute('/sign_in')({
   component: RouteComponent,
@@ -9,7 +9,9 @@ export const Route = createFileRoute('/sign_in')({
 function RouteComponent() {
   return (
     <>
-      <PageHeader>Game Threads</PageHeader>
+      <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
+        <Heading>Sign In</Heading>
+      </div>
 
       <Main>
         <div className="overflow-hidden bg-white text-slate-900 ring-1 ring-slate-300 sm:mx-0 sm:rounded-lg dark:bg-slate-950 dark:text-slate-300 dark:ring-slate-800">

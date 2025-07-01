@@ -1,11 +1,12 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { DateTime } from 'luxon';
 import { z } from 'zod/v4';
 import type { GameThread } from '@/api/gameThreads';
 import { fetchGameThreads } from '@/api/gameThreads';
+import { Button } from '@/catalyst/button';
+import { Heading } from '@/catalyst/heading';
 import GameThreadsTable from '@/components/GameThreadsTable';
 import Main from '@/components/Main';
-import PageHeader from '@/components/PageHeader';
 import type { GameThreadStatus } from '@/utilities/constants';
 
 // Trying to get this working with real Date or DateTime objects is fucking insane. It should not be this hard to parse
@@ -61,33 +62,21 @@ function RouteComponent() {
   const previousDate = date.minus({ days: 1 });
   const nextDate = date.plus({ days: 1 });
 
-  const previousButton = (
-    <Link
-      to="/game_threads"
-      search={{ date: previousDate.toISODate() as string }}
-      className="inline-flex items-center gap-1"
-    >
-      <i className="far fa-angle-left" />
-      <span className="hidden md:inline">{previousDate.toFormat('M/d')}</span>
-    </Link>
-  );
-
-  const nextButton = (
-    <Link
-      to="/game_threads"
-      search={{ date: nextDate.toISODate() as string }}
-      className="inline-flex items-center gap-1"
-    >
-      <span className="hidden md:inline">{nextDate.toFormat('M/d')}</span>
-      <i className="far fa-angle-right" />
-    </Link>
-  );
-
   return (
     <>
-      <PageHeader leftButton={previousButton} rightButton={nextButton}>
-        {date.toLocaleString(DateTime.DATE_FULL)}
-      </PageHeader>
+      <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
+        <Heading>{date.toLocaleString(DateTime.DATE_FULL)}</Heading>
+        <div className="flex gap-4">
+          <Button href={`/game_threads?date=${previousDate.toISODate()}`} className="inline-flex items-center gap-1">
+            <i className="fas fa-angle-left" />
+            <span className="hidden md:inline">{previousDate.toFormat('M/d')}</span>
+          </Button>
+          <Button href={`/game_threads?date=${nextDate.toISODate()}`} className="inline-flex items-center gap-1">
+            <span className="hidden md:inline">{nextDate.toFormat('M/d')}</span>
+            <i className="fas fa-angle-right" />
+          </Button>
+        </div>
+      </div>
 
       <Main>
         <GameThreadsTable gameThreads={sortedGameThreads} />

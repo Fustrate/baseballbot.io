@@ -1,12 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createFileRoute } from '@tanstack/react-router';
 
 import { fetchSubreddits, type Subreddit } from '@/api/subreddits';
-
-import DataTable from '@/components/DataTable';
-import Main from '@/components/Main';
-import PageHeader from '@/components/PageHeader';
-
+import { Heading } from '@/catalyst/heading';
+import { Link } from '@/catalyst/link';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/catalyst/table';
 import { postAtFormat } from '@/utilities';
 
 export const Route = createFileRoute('/subreddits/')({
@@ -17,73 +14,53 @@ export const Route = createFileRoute('/subreddits/')({
   }),
 });
 
-const linkClasses = 'text-sky-600 hover:text-sky-900 dark:text-sky-300 dark:hover:text-sky-100';
-
-const columnHelper = createColumnHelper<Subreddit>();
-
-const columns = [
-  columnHelper.display({
-    id: 'name',
-    header: () => 'Name',
-    cell: (info) => (
-      <Link to="/subreddits/$subredditId" params={{ subredditId: info.row.original.name }} className={linkClasses}>
-        {info.row.original.name}
-      </Link>
-    ),
-  }),
-  columnHelper.accessor((row) => row.abbreviation, {
-    id: 'abbreviation',
-    header: () => 'Team',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor((row) => row.account.name, {
-    id: 'accountName',
-    header: () => 'Account',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.display({
-    id: 'sidebar',
-    header: () => 'Sidebar',
-    cell: (info) => info.row.original.options.sidebar?.enabled && <i className="fa fa-check" />,
-  }),
-  columnHelper.accessor((row) => row.options.gameThreads, {
-    id: 'gameThreads',
-    header: () => 'Game Threads',
-    cell: (info) => info.getValue()?.enabled && postAtFormat(info.getValue()?.postAt),
-  }),
-  columnHelper.accessor((row) => row.options.pregame, {
-    id: 'pregame',
-    header: () => 'Pre Game',
-    cell: (info) => info.getValue()?.enabled && postAtFormat(info.getValue()?.postAt),
-  }),
-  columnHelper.accessor((row) => row.options.postgame?.enabled, {
-    id: 'postgame',
-    header: () => 'Post Game',
-    cell: (info) => info.getValue() && <i className="fa fa-check" />,
-  }),
-  columnHelper.accessor((row) => row.options.offDay, {
-    id: 'offDay',
-    header: () => 'Off Day',
-    cell: (info) => info.getValue()?.enabled && postAtFormat(info.getValue()?.postAt),
-  }),
-];
-
 function RouteComponent() {
   const subreddits = Route.useLoaderData();
 
-  const table = useReactTable({
-    data: subreddits,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   return (
     <>
-      <PageHeader>Subreddits</PageHeader>
+      <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
+        <Heading>Subreddits</Heading>
+      </div>
 
-      <Main>
-        <DataTable table={table} />
-      </Main>
+      <Table dense bleed className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+        <TableHead>
+          <TableRow>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>Team</TableHeader>
+            <TableHeader>Account</TableHeader>
+            <TableHeader>Game Threads</TableHeader>
+            <TableHeader>Pre Game</TableHeader>
+            <TableHeader>Post Game</TableHeader>
+            <TableHeader>Off Day</TableHeader>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {subreddits.map((subreddit: Subreddit) => (
+            <TableRow key={subreddit.id}>
+              <TableCell>
+                <Link to="/subreddits/$subredditId" params={{ subredditId: subreddit.name }}>
+                  {subreddit.name}
+                </Link>
+              </TableCell>
+              <TableCell>{subreddit.abbreviation}</TableCell>
+              <TableCell>{subreddit.account.name}</TableCell>
+              <TableCell>{subreddit.options.sidebar?.enabled && <i className="fa fa-check" />}</TableCell>
+              <TableCell>
+                {subreddit.options.gameThreads?.enabled && postAtFormat(subreddit.options.gameThreads?.postAt)}
+              </TableCell>
+              <TableCell>
+                {subreddit.options.pregame?.enabled && postAtFormat(subreddit.options.pregame?.postAt)}
+              </TableCell>
+              <TableCell>{subreddit.options.postgame?.enabled && <i className="fa fa-check" />}</TableCell>
+              <TableCell>
+                {subreddit.options.offDay?.enabled && postAtFormat(subreddit.options.offDay?.postAt)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </>
   );
 }

@@ -1,12 +1,9 @@
 import { toHumanDate } from '@fustrate/rails/utilities';
-import { Link } from '@tanstack/react-router';
-import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
-
 import type { GameThread } from '@/api/gameThreads';
-
-import Badge from '@/components/Badge';
-import DataTable from '@/components/DataTable';
+import { Badge } from '@/catalyst/badge';
+import { Link } from '@/catalyst/link';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/catalyst/table';
 
 function StatusBadge({ gameThread }: { gameThread: GameThread }) {
   const { postAt, startsAt, status } = gameThread;
@@ -30,77 +27,61 @@ function StatusBadge({ gameThread }: { gameThread: GameThread }) {
   return <Badge className="w-full">{status}</Badge>;
 }
 
-const linkClasses = 'text-sky-600 hover:text-sky-900';
-
-const columnHelper = createColumnHelper<GameThread>();
-
-const columns = [
-  columnHelper.display({
-    id: 'pk',
-    header: () => 'PK',
-    cell: (info) => (
-      <a href={`//www.mlb.com/gameday/${info.row.original.gamePk}`} className={linkClasses}>
-        {info.row.original.gamePk}
-      </a>
-    ),
-  }),
-  columnHelper.display({
-    id: 'title',
-    header: () => 'Title',
-    cell: (info) =>
-      info.row.original.postId ? (
-        <a href={`//redd.it/${info.row.original.postId}`} className={linkClasses}>
-          {info.row.original.title}
-        </a>
-      ) : (
-        info.row.original.title
-      ),
-  }),
-  columnHelper.display({
-    id: 'subreddit',
-    header: () => 'Subreddit',
-    cell: (info) => (
-      <Link
-        to="/subreddits/$subredditId"
-        params={{ subredditId: info.row.original.subreddit.name }}
-        className={linkClasses}
-      >
-        {info.row.original.subreddit.name}
-      </Link>
-    ),
-  }),
-  columnHelper.accessor((row) => row.startsAt, {
-    id: 'startsAt',
-    header: () => 'Starts At',
-    cell: (info) => <span className="whitespace-nowrap">{toHumanDate(info.getValue(), true)}</span>,
-    // meta: { cellClasses: 'hidden xl:table-cell' } as ColumnMeta,
-  }),
-  columnHelper.accessor((row) => row.postAt, {
-    id: 'postAt',
-    header: () => 'Post At',
-    cell: (info) => {
-      if (info.row.original.postAt.hasSame(info.row.original.startsAt, 'day')) {
-        return <span className="whitespace-nowrap">{info.getValue().toFormat('t')}</span>;
-      }
-
-      return <span className="whitespace-nowrap">{toHumanDate(info.getValue(), true)}</span>;
-    },
-    // meta: { cellClasses: 'hidden lg:table-cell' } as ColumnMeta,
-  }),
-  columnHelper.accessor((row) => row.status, {
-    id: 'status',
-    header: () => 'Status',
-    cell: (info) => <StatusBadge gameThread={info.row.original} />,
-  }),
-];
-
 export default function GameThreadsTable({ gameThreads }: { gameThreads: GameThread[] }) {
-  const table = useReactTable({
-    data: gameThreads,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    manualSorting: true,
-  });
+  return (
+    <Table dense bleed className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
+      <TableHead>
+        <TableRow>
+          <TableHeader>PK</TableHeader>
+          <TableHeader>Subreddit</TableHeader>
+          <TableHeader>Title</TableHeader>
+          <TableHeader className="hidden lg:table-cell">Starts At</TableHeader>
+          <TableHeader className="hidden lg:table-cell">Post At</TableHeader>
+          <TableHeader>Status</TableHeader>
+        </TableRow>
+      </TableHead>
 
-  return <DataTable table={table} />;
+      <TableBody>
+        {gameThreads.map((gameThread) => (
+          <TableRow key={gameThread.id}>
+            <TableCell>
+              <Link href={`https://www.mlb.com/gameday/${gameThread.gamePk}`}>{gameThread.gamePk}</Link>
+            </TableCell>
+            <TableCell className="whitespace-normal">
+              {gameThread.postId ? (
+                <Link href={`//redd.it/${gameThread.postId}`}>{gameThread.title}</Link>
+              ) : (
+                <span>{gameThread.title}</span>
+              )}
+              <div className="mt-1 flex items-center gap-1 lg:hidden">
+                <Badge color="zinc">Starts @ {gameThread.startsAt.toFormat('t')}</Badge>
+                <Badge color="zinc">
+                  Post @{' '}
+                  {gameThread.postAt.hasSame(gameThread.startsAt, 'day')
+                    ? gameThread.postAt.toFormat('t')
+                    : toHumanDate(gameThread.postAt, true)}
+                </Badge>
+              </div>
+            </TableCell>
+            <TableCell>
+              <Link to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
+                {gameThread.subreddit.name}
+              </Link>
+            </TableCell>
+            <TableCell className="hidden whitespace-nowrap lg:table-cell">
+              {gameThread.startsAt.toFormat('t')}
+            </TableCell>
+            <TableCell className="hidden whitespace-nowrap lg:table-cell">
+              {gameThread.postAt.hasSame(gameThread.startsAt, 'day')
+                ? gameThread.postAt.toFormat('t')
+                : toHumanDate(gameThread.postAt, true)}
+            </TableCell>
+            <TableCell>
+              <StatusBadge gameThread={gameThread} />
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
 }
