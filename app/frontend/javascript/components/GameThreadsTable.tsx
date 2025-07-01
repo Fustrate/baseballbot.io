@@ -5,12 +5,15 @@ import { Badge } from '@/catalyst/badge';
 import { Link } from '@/catalyst/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/catalyst/table';
 
-function StatusBadge({ gameThread }: { gameThread: GameThread }) {
-  const { postAt, startsAt, status } = gameThread;
+function StatusBadge(props: { gameThread: GameThread; className?: string }) {
+  const {
+    gameThread: { postAt, startsAt, status },
+    className,
+  } = props;
 
   if (postAt < DateTime.now() && status === 'Future') {
     return (
-      <Badge color="red" className="w-full">
+      <Badge color="red" className={className}>
         Error
       </Badge>
     );
@@ -18,13 +21,13 @@ function StatusBadge({ gameThread }: { gameThread: GameThread }) {
 
   if (startsAt < DateTime.now() && status === 'Posted') {
     return (
-      <Badge color="green" className="w-full">
+      <Badge color="green" className={className}>
         Live
       </Badge>
     );
   }
 
-  return <Badge className="w-full">{status}</Badge>;
+  return <Badge className={className}>{status}</Badge>;
 }
 
 interface GameThreadsTableProps {
@@ -42,7 +45,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
           {showSubreddit !== false && <TableHeader>Subreddit</TableHeader>}
           <TableHeader className="hidden lg:table-cell">Starts At</TableHeader>
           <TableHeader className="hidden lg:table-cell">Post At</TableHeader>
-          <TableHeader>Status</TableHeader>
+          <TableHeader className="hidden lg:table-cell">Status</TableHeader>
         </TableRow>
       </TableHead>
 
@@ -70,6 +73,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
                     ? gameThread.postAt.toFormat('t')
                     : toHumanDate(gameThread.postAt, true)}
                 </Badge>
+                <StatusBadge gameThread={gameThread} />
               </div>
             </TableCell>
             {showSubreddit !== false && (
@@ -87,8 +91,8 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
                 ? gameThread.postAt.toFormat('t')
                 : toHumanDate(gameThread.postAt, true)}
             </TableCell>
-            <TableCell>
-              <StatusBadge gameThread={gameThread} />
+            <TableCell className="hidden lg:table-cell">
+              <StatusBadge gameThread={gameThread} className="w-full" />
             </TableCell>
           </TableRow>
         ))}
