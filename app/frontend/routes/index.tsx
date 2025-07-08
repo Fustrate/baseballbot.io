@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Heading } from '@/catalyst/heading';
-import Main from '@/components/Main';
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,

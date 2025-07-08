@@ -7,7 +7,6 @@ export function Divider({
 }: { soft?: boolean } & React.ComponentPropsWithoutRef<'hr'>) {
   return (
     <hr
-      role="presentation"
       {...props}
       className={clsx(
         className,
