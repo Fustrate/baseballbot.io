@@ -1,19 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { DateTime } from 'luxon';
 import { z } from 'zod';
-import type { GameThread } from '@/api/gameThreads';
-import { fetchGameThreads } from '@/api/gameThreads';
+
+import { fetchGameThreads, type GameThread } from '@/api/gameThreads';
+
 import { Button } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
+
 import GameThreadsTable from '@/components/GameThreadsTable';
+
 import type { GameThreadStatus } from '@/utilities/constants';
 
-const gameThreadsSearchSchema = z.object({
-  date: z.iso.date().default(() => DateTime.now().toISODate()),
-});
-
 export const Route = createFileRoute('/game_threads/')({
-  validateSearch: gameThreadsSearchSchema,
+  validateSearch: z.object({
+    date: z.iso.date().default(() => DateTime.now().toISODate()),
+  }),
   loaderDeps: ({ search: { date } }) => ({ date }),
   component: RouteComponent,
   loader: ({ deps: { date } }) => fetchGameThreads({ date: DateTime.fromISO(date) }),

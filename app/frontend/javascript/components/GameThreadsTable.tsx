@@ -1,5 +1,6 @@
 import { toHumanDate } from '@fustrate/rails/utilities';
 import { DateTime } from 'luxon';
+import type { ReactNode } from 'react';
 import type { GameThread } from '@/api/gameThreads';
 import type { Subreddit } from '@/api/subreddits';
 import { Badge, BadgeButton } from '@/catalyst/badge';
@@ -95,6 +96,56 @@ function postAt(gameThread: GameThread) {
     : toHumanDate(gameThread.postAt, true);
 }
 
+// Date/time interpolations can be run without having to load MLB data
+function interpolationText(target: string, gameThread: GameThread) {
+  switch (target) {
+    case '{{start_time_et}}':
+      return gameThread.startsAt.setZone('America/New_York').toLocaleString(DateTime.TIME_SIMPLE);
+    case '{{start_time}}':
+      return gameThread.startsAt.setZone(gameThread.subreddit.options.timezone).toLocaleString(DateTime.TIME_SIMPLE);
+    case '{{day}}':
+      return gameThread.startsAt.toFormat('d');
+    case '{{short_day_of_week}}':
+      return gameThread.startsAt.toFormat('ccc');
+    case '{{month}}':
+      return gameThread.startsAt.month;
+    case '{{month_name}}':
+      return gameThread.startsAt.toFormat('LLLL');
+    case '{{short_month}}':
+      return gameThread.startsAt.toFormat('LLL');
+    case '{{short_year}}':
+      return gameThread.startsAt.toFormat('yy');
+    case '{{year}}':
+      return gameThread.startsAt.year;
+    default:
+      return <span className="text-teal-700">{target}</span>;
+  }
+}
+
+function highlightInterpolations(gameThread: GameThread) {
+  let input = gameThread.title ?? defaultTitle(gameThread.subreddit);
+  const output: (string | ReactNode)[] = [];
+  let startIndex = input.indexOf('{{');
+
+  while (startIndex > -1) {
+    output.push(input.slice(0, startIndex));
+
+    const endIndex = input.indexOf('}}', startIndex + 2);
+
+    if (endIndex > -1) {
+      output.push(interpolationText(input.slice(startIndex, endIndex + 2), gameThread));
+
+      input = input.slice(endIndex + 2);
+
+      startIndex = input.indexOf('{{');
+    } else {
+      startIndex = -1;
+    }
+  }
+
+  return <div>{[...output, input]}</div>;
+}
+
 export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThreadsTableProps) {
   return (
     <Table dense className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
@@ -124,7 +175,7 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
                     {gameThread.title}
                   </Link>
                 ) : (
-                  (gameThread.title ?? defaultTitle(gameThread.subreddit))
+                  highlightInterpolations(gameThread)
                 )}
                 <BadgeButton href={`/subreddits/${gameThread.subreddit.name}`} className="lg:hidden">
                   {gameThread.subreddit.name}
