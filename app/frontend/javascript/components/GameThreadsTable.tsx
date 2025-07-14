@@ -118,7 +118,7 @@ function interpolationText(target: string, gameThread: GameThread) {
     case '{{year}}':
       return gameThread.startsAt.year;
     default:
-      return <span className="text-teal-700">{target}</span>;
+      return <Badge color="zinc">{target.slice(2, -2)}</Badge>;
   }
 }
 
