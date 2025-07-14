@@ -8,14 +8,8 @@ import { Heading } from '@/catalyst/heading';
 import GameThreadsTable from '@/components/GameThreadsTable';
 import type { GameThreadStatus } from '@/utilities/constants';
 
-// Trying to get this working with real Date or DateTime objects is fucking insane. It should not be this hard to parse
-// a date string with DateTime, check isValid, and then return the object.
 const gameThreadsSearchSchema = z.object({
-  date: z
-    .string()
-    .regex(/^20\d{2}-(?:0[1-9]|1[012])-(?:0[1-9]|[12]\d|3[01])$/)
-    .transform((date) => (DateTime.fromISO(date).isValid ? date : DateTime.now().toISODate()))
-    .default(() => DateTime.now().toISODate()),
+  date: z.iso.date().default(() => DateTime.now().toISODate()),
 });
 
 export const Route = createFileRoute('/game_threads/')({
