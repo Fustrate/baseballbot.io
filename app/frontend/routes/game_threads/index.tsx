@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { DateTime } from 'luxon';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 import type { GameThread } from '@/api/gameThreads';
 import { fetchGameThreads } from '@/api/gameThreads';
 import { Button } from '@/catalyst/button';
