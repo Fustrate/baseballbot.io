@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { Text } from '@/catalyst/text';
 
 export const Route = createFileRoute('/subreddits_/$subredditId/game_threads')({
   component: RouteComponent,
@@ -10,5 +11,5 @@ export const Route = createFileRoute('/subreddits_/$subredditId/game_threads')({
 });
 
 function RouteComponent() {
-  return <div>Hello "/subreddits/$subredditId/game_threads"!</div>;
+  return <Text>Hello "/subreddits/$subredditId/game_threads"!</Text>;
 }
