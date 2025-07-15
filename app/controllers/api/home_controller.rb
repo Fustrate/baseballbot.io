@@ -20,9 +20,5 @@ module Api
         .includes(:subreddit)
         .order(DEFAULT_ORDER)
     end
-
-    def gameday
-      render :gameday, layout: 'no_container'
-    end
   end
 end
