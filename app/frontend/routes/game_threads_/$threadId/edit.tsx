@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/game_threads/$threadId/edit')({
+export const Route = createFileRoute('/game_threads_/$threadId/edit')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const { threadId } = params;

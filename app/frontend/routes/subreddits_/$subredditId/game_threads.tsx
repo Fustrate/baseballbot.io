@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/subreddits/$subredditId/game_threads/new')({
+export const Route = createFileRoute('/subreddits_/$subredditId/game_threads')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const { subredditId } = params;
@@ -10,5 +10,5 @@ export const Route = createFileRoute('/subreddits/$subredditId/game_threads/new'
 });
 
 function RouteComponent() {
-  return <div>Hello "/subreddits/$subredditId/game_threads/new"!</div>;
+  return <div>Hello "/subreddits/$subredditId/game_threads"!</div>;
 }
