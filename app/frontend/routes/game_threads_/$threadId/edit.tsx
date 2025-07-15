@@ -11,5 +11,7 @@ export const Route = createFileRoute('/game_threads_/$threadId/edit')({
 });
 
 function RouteComponent() {
-  return <Text>Hello "/game_threads/$threadId/edit"!</Text>;
+  const { threadId } = Route.useLoaderData();
+
+  return <Text>Hello "/game_threads/{threadId}/edit"!</Text>;
 }
