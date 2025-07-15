@@ -10,9 +10,6 @@ gem 'rails', '~> 8.0.1'
 # Postgres database [https://github.com/ged/ruby-pg]
 gem 'pg', '~> 1.5'
 
-# HAML templates instead of ERB [https://github.com/haml/haml-rails]
-gem 'haml-rails', '~> 2.1'
-
 # JSON generation with a nice DSL [https://github.com/rails/jbuilder]
 gem 'jbuilder', '~> 2.11'
 
@@ -85,9 +82,6 @@ group :development do
 
   # Capistrano rbenv integration [https://github.com/capistrano/rbenv]
   gem 'capistrano-rbenv', '~> 2.2', require: false
-
-  # HAML view linting [https://github.com/sds/haml-lint]
-  gem 'haml_lint', '~> 0.40', require: false
 
   # Ruby code linting [https://github.com/rubocop/rubocop]
   gem 'rubocop', '~> 1.31', require: false

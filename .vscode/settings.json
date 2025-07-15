@@ -1,8 +1,4 @@
 {
-	"[haml]": {
-		"editor.rulers": [120],
-		"editor.tabSize": 2
-	},
 	"[javascript]": {
 		"editor.defaultFormatter": "biomejs.biome",
 		"editor.rulers": [120],
@@ -12,11 +8,6 @@
 		}
 	},
 	"[markdown]": {
-		"editor.rulers": [120],
-		"editor.tabSize": 2
-	},
-	// I don't like the HAML extensions
-	"[plaintext]": {
 		"editor.rulers": [120],
 		"editor.tabSize": 2
 	},
