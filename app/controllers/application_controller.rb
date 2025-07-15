@@ -5,8 +5,6 @@ class ApplicationController < ActionController::Base
   include HandleExceptions
   include Authenticate
 
-  layout false
-
   def self.restrict_formats(format, **options)
     before_action(options) do
       raise ActionController::UnknownFormat unless request.format.symbol == format
