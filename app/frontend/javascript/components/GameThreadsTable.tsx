@@ -146,6 +146,59 @@ function highlightInterpolations(gameThread: GameThread) {
   return <div>{[...output, input]}</div>;
 }
 
+function GameThreadRow({ gameThread, showSubreddit }: { gameThread: GameThread; showSubreddit?: boolean }) {
+  return (
+    <TableRow>
+      <TableCell>
+        <Link inline href={`https://www.mlb.com/gameday/${gameThread.gamePk}`}>
+          {gameThread.gamePk}
+        </Link>
+      </TableCell>
+      <TableCell className="whitespace-normal">
+        <div className="flex flex-col gap-1.5">
+          {gameThread.postId ? (
+            <Link inline href={`//redd.it/${gameThread.postId}`}>
+              {gameThread.title}
+            </Link>
+          ) : (
+            highlightInterpolations(gameThread)
+          )}
+          <BadgeButton href={`/subreddits/${gameThread.subreddit.name}`} className="lg:hidden">
+            {gameThread.subreddit.name}
+          </BadgeButton>
+          <div className="flex items-center gap-1 lg:hidden">
+            <Badge color="zinc">Starts @ {gameThread.startsAt.toFormat('t')}</Badge>
+            {gameThread.status !== 'External' && <Badge color="zinc">Post @ {postAt(gameThread)}</Badge>}
+            <StatusBadge gameThread={gameThread} />
+          </div>
+        </div>
+      </TableCell>
+      {showSubreddit !== false && (
+        <TableCell className="hidden lg:table-cell">
+          <Link inline to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
+            {gameThread.subreddit.name}
+          </Link>
+        </TableCell>
+      )}
+      <TableCell className="hidden whitespace-nowrap lg:table-cell">{gameThread.startsAt.toFormat('t')}</TableCell>
+      <TableCell className="hidden whitespace-nowrap lg:table-cell">{postAt(gameThread)}</TableCell>
+      <TableCell className="hidden lg:table-cell">
+        <StatusBadge gameThread={gameThread} className="w-full" />
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function EmptyTableRow() {
+  return (
+    <TableRow key="empty">
+      <TableCell colSpan={10} className="text-center">
+        There are no game threads scheduled on this date.
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThreadsTableProps) {
   return (
     <Table dense className="[--gutter:--spacing(6)] sm:[--gutter:--spacing(8)]">
@@ -162,47 +215,9 @@ export default function GameThreadsTable({ gameThreads, showSubreddit }: GameThr
 
       <TableBody>
         {gameThreads.map((gameThread) => (
-          <TableRow key={gameThread.id}>
-            <TableCell>
-              <Link inline href={`https://www.mlb.com/gameday/${gameThread.gamePk}`}>
-                {gameThread.gamePk}
-              </Link>
-            </TableCell>
-            <TableCell className="whitespace-normal">
-              <div className="flex flex-col gap-1.5">
-                {gameThread.postId ? (
-                  <Link inline href={`//redd.it/${gameThread.postId}`}>
-                    {gameThread.title}
-                  </Link>
-                ) : (
-                  highlightInterpolations(gameThread)
-                )}
-                <BadgeButton href={`/subreddits/${gameThread.subreddit.name}`} className="lg:hidden">
-                  {gameThread.subreddit.name}
-                </BadgeButton>
-                <div className="flex items-center gap-1 lg:hidden">
-                  <Badge color="zinc">Starts @ {gameThread.startsAt.toFormat('t')}</Badge>
-                  {gameThread.status !== 'External' && <Badge color="zinc">Post @ {postAt(gameThread)}</Badge>}
-                  <StatusBadge gameThread={gameThread} />
-                </div>
-              </div>
-            </TableCell>
-            {showSubreddit !== false && (
-              <TableCell className="hidden lg:table-cell">
-                <Link inline to="/subreddits/$subredditId" params={{ subredditId: gameThread.subreddit.name }}>
-                  {gameThread.subreddit.name}
-                </Link>
-              </TableCell>
-            )}
-            <TableCell className="hidden whitespace-nowrap lg:table-cell">
-              {gameThread.startsAt.toFormat('t')}
-            </TableCell>
-            <TableCell className="hidden whitespace-nowrap lg:table-cell">{postAt(gameThread)}</TableCell>
-            <TableCell className="hidden lg:table-cell">
-              <StatusBadge gameThread={gameThread} className="w-full" />
-            </TableCell>
-          </TableRow>
+          <GameThreadRow key={gameThread.id} gameThread={gameThread} showSubreddit={showSubreddit} />
         ))}
+        {gameThreads.length === 0 && <EmptyTableRow />}
       </TableBody>
     </Table>
   );
