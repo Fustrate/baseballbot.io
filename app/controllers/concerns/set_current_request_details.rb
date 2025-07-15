@@ -8,6 +8,7 @@ module SetCurrentRequestDetails
     before_action do
       Current.request = request
       Current.params = params
+      Current.session = session
     end
   end
 end

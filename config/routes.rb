@@ -2,16 +2,7 @@
 
 Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
-    namespace :accounts do
-      get :authenticate
-    end
-
     resources :game_threads, only: %i[index show create update destroy]
-
-    controller :sessions do
-      post   :login,  action: :create
-      delete :logout, action: :destroy
-    end
 
     resources :subreddits, only: %i[index show update] do
       get :game_threads, on: :member
@@ -19,6 +10,15 @@ Rails.application.routes.draw do
     end
 
     resources :templates, only: %i[show update]
+  end
+
+  namespace :accounts do
+    get :authenticate
+  end
+
+  controller :sessions do
+    get    :login
+    delete :logout
   end
 
   get '*', to: 'app#app'
