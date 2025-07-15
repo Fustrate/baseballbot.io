@@ -36,7 +36,7 @@ module HandleExceptions
 
     flash[:error] = @error_message
 
-    redirect_back_or_to :root
+    redirect_back_or_to :app
   end
 
   def notify_honeybadger(exception)

@@ -38,7 +38,7 @@ class AccountsController < ApplicationController
   def authenticate
     if params[:error]
       flash[:error] = "Reddit returned an error: #{params[:error]}"
-      redirect_to :root
+      redirect_to :app
     elsif params[:state] && params[:code]
       finish_authentication
     else
@@ -55,11 +55,11 @@ class AccountsController < ApplicationController
 
     flash[:success] = t('authentication.success')
 
-    redirect_to :root
+    redirect_to :app
   rescue Redd::AuthenticationError
     flash[:error] = t('authentication.invalid_token')
 
-    redirect_to :root
+    redirect_to :app
   end
 
   def redirect_to_reddit

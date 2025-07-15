@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
   def sign_out
     logout
 
-    redirect_to :root
+    redirect_to :app
   end
 
   def authorized
@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
 
     auto_login(user, true)
 
-    redirect_to :root
+    redirect_to :app
   end
 
   protected
