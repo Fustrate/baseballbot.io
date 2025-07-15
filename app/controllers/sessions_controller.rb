@@ -5,11 +5,11 @@
 class SessionsController < ApplicationController
   AUTH_SCOPE = %i[identity].freeze
 
-  def log_in
+  def sign_in
     redirect_to auth_url, status: :moved_permanently, allow_other_host: true
   end
 
-  def log_out
+  def sign_out
     logout
 
     redirect_to :root

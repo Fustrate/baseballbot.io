@@ -17,8 +17,9 @@ Rails.application.routes.draw do
   end
 
   controller :sessions do
-    get    :login
-    delete :logout
+    get    :sign_in
+    delete :sign_out
+    get    :authorized
   end
 
   get '*', to: 'app#app'
