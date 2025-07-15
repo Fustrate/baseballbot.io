@@ -21,12 +21,7 @@ module Api
     end
 
     def game_threads
-      respond_to do |format|
-        format.html
-        format.json do
-          @pagination, @game_threads = GameThreads::LoadPage.call(scope: @subreddit.game_threads)
-        end
-      end
+      @pagination, @game_threads = GameThreads::LoadPage.call(scope: @subreddit.game_threads)
     end
 
     protected
