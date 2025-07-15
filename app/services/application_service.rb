@@ -16,6 +16,8 @@ class ApplicationService
 
   def params = Current.params
 
+  def session = Current.session
+
   def log_edit(...) = ::LogEdit.call(...)
 
   class LoadPage < self
