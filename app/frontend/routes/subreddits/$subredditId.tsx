@@ -1,15 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { fetchSubreddit } from '@/api/subreddits';
 import { Text } from '@/catalyst/text';
 
 export const Route = createFileRoute('/subreddits/$subredditId')({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const { subredditId } = params;
+    const subreddit = await fetchSubreddit(params.subredditId);
 
-    return { subredditId };
+    return { subreddit };
   },
 });
 
 function RouteComponent() {
-  return <Text>Hello "/subreddits/$subredditId"!</Text>;
+  const { subreddit } = Route.useLoaderData();
+
+  return <Text>Hello {subreddit.name}!</Text>;
 }

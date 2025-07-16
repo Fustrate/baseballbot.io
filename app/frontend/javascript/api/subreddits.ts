@@ -74,5 +74,11 @@ export async function fetchSubreddits(): Promise<Subreddit[]> {
 }
 
 export async function fetchSubreddit(nameOrId: string | number): Promise<Subreddit> {
-  return fetch(apiSubredditPath(nameOrId)).then((res) => res.json());
+  const response = await fetch(apiSubredditPath(nameOrId));
+
+  if (!response.ok) {
+    throw new Error('Failed to load subreddit.');
+  }
+
+  return response.json();
 }
