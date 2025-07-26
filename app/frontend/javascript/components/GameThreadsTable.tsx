@@ -157,7 +157,7 @@ function GameThreadRow({ gameThread, showSubreddit }: { gameThread: GameThread; 
       <TableCell className="whitespace-normal">
         <div className="flex flex-col gap-1.5">
           {gameThread.postId ? (
-            <Link inline href={`//redd.it/${gameThread.postId}`}>
+            <Link inline href={`https://redd.it/${gameThread.postId}`}>
               {gameThread.title}
             </Link>
           ) : (
