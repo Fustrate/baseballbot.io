@@ -14,7 +14,8 @@
 			"!app/frontend/stylesheets",
 			"!app/frontend/javascript/scoreboard",
 			"!package.json",
-			"!app/frontend/routeTree.gen.ts"
+			"!app/frontend/routeTree.gen.ts",
+			"!app/frontend/entrypoints/application.css"
 		]
 	},
 	"assist": {
