@@ -29,7 +29,7 @@ gem 'oj', '~> 3.16'
 gem 'unary_plus', '~> 0.8', github: 'Fustrate/unary_plus'
 
 # Use Puma as the app server [https://github.com/puma/puma]
-gem 'puma', '~> 6.3'
+gem 'puma', '~> 7.0'
 
 # Fetch data from the MLB Stats API [https://github.com/Fustrate/mlb_stats_api]
 gem 'mlb_stats_api', '~> 0.2', github: 'Fustrate/mlb_stats_api'
@@ -38,7 +38,7 @@ gem 'mlb_stats_api', '~> 0.2', github: 'Fustrate/mlb_stats_api'
 gem 'redd', '>= 0.9.0.pre.3', github: 'Fustrate/redd'
 
 # App Monitoring [https://github.com/honeybadger-io/honeybadger-ruby]
-gem 'honeybadger', '~> 5.2'
+gem 'honeybadger', '~> 6.1'
 
 # Development evented file watcher [https://github.com/guard/listen]
 gem 'listen', '~> 3.8'
