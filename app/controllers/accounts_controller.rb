@@ -116,7 +116,6 @@ class AccountsController < ApplicationController
 
   def create_new_account(name, reddit_session, expires_in)
     Account.create(
-      id: Account.order('id DESC').limit(1).ids.first + 1,
       name:,
       scope: AUTH_SCOPE,
       access_token: reddit_session.client.access.access_token,
