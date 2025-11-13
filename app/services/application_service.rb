@@ -4,7 +4,7 @@ class ApplicationService
   # Lets us use `t` and `l` helpers.
   include ActionView::Helpers::TranslationHelper
 
-  include Pagy::Backend
+  include Pagy::Method
 
   def self.call(...) = new.call(...)
 
