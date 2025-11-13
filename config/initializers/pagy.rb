@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
-# Overflow extra: Allow for easy handling of overflowing pages [https://ddnexus.github.io/pagy/docs/extras/overflow]
-require 'pagy/extras/overflow'
+# See https://ddnexus.github.io/pagy/toolbox/options/ for details.
 
-Pagy::DEFAULT[:limit] = 25
+# Limit the items per page
+Pagy.options[:limit] = 25
 
-Pagy::DEFAULT[:overflow] = :last_page
+# The client can request a limit up to 100
+# Pagy.options[:client_max_limit] = 100
 
-Pagy::DEFAULT.freeze
+# Allow only 200 pages
+# Pagy.options[:max_pages] = 200
+
+# Use JSON:API compliant URLs
+# Pagy.options[:jsonapi] = true

@@ -300,7 +300,9 @@ GEM
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     ostruct (0.6.3)
-    pagy (9.4.0)
+    pagy (43.0.4)
+      json
+      yaml
     parallel (1.27.0)
     parser (3.3.10.0)
       ast (~> 2.4.1)
@@ -470,6 +472,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yaml (0.4.0)
     zeitwerk (2.7.3)
 
 PLATFORMS
@@ -503,7 +506,7 @@ DEPENDENCIES
   mlb_stats_api (~> 0.2)!
   mock_redis (~> 0.32)
   oj (~> 3.16)
-  pagy (~> 9.3)
+  pagy (~> 43.0)
   pg (~> 1.5)
   propshaft (~> 1.1)
   puma (~> 7.0)
