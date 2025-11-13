@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 ruby file: '.ruby-version'
 
 # Rails! [https://github.com/rails/rails]
-gem 'rails', '~> 8.0.1'
+gem 'rails', '~> 8.1.0'
 
 # Postgres database [https://github.com/ged/ruby-pg]
 gem 'pg', '~> 1.5'
