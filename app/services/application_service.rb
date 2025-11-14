@@ -33,7 +33,8 @@ class ApplicationService
           .joins(joins || self.class::DEFAULT_JOINS)
           .reorder(order || default_order),
         count: self.class::RESULTS_PER_PAGE,
-        page: page || params[:page]
+        page: page || params[:page],
+        request: Current.request
       )
     end
 
