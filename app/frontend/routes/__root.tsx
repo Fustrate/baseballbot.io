@@ -1,7 +1,8 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+// Bun double exports a function from this file
+// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Heading } from '@/catalyst/heading';
 import { Navbar, NavbarDivider, NavbarItem, NavbarSection, NavbarSpacer } from '@/catalyst/navbar';
 import { Sidebar, SidebarBody, SidebarHeader, SidebarItem, SidebarSection } from '@/catalyst/sidebar';
@@ -68,7 +69,7 @@ function RootComponent() {
       >
         <Outlet />
 
-        <TanStackRouterDevtools />
+        {/* <TanStackRouterDevtools /> */}
       </StackedLayout>
     </>
   );
