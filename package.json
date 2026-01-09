@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@csstools/postcss-minify": "^2.0.5",
-    "@fustrate/rails": "https://github.com/Fustrate/fustrate-rails.js.git#commit=5b95c8975aa267507411caaa0691a5177f5e5035",
+    "@fustrate/rails": "git@github.com:Fustrate/fustrate-rails.js.git#5b95c8975aa267507411caaa0691a5177f5e5035",
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.18",
@@ -40,7 +40,7 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build": "node ./lib/yarn/esbuild.js",
+    "build": "bun bun.config.js",
     "build:css": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' postcss \"app/frontend/entrypoints/**/*.css\" --base app/frontend/entrypoints --dir app/assets/builds",
     "lint": "biome lint .",
     "tsc": "tsc --noEmit --incremental --project ./app/frontend",
@@ -49,6 +49,5 @@
   "browserslist": [
     "defaults"
   ],
-  "packageManager": "yarn@4.12.0",
   "type": "module"
 }

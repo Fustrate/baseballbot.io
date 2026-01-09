@@ -3,11 +3,5 @@
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated
 
-# Mark the yarn lockfile as having been generated.
-yarn.lock linguist-generated
-
 # Mark the bundler lockfile as having been generated.
 Gemfile.lock linguist-generated
-
-/.yarn/releases/** binary
-/.yarn/plugins/** binary

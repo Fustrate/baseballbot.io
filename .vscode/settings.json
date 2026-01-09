@@ -51,9 +51,8 @@
 	"files.insertFinalNewline": true,
 	"files.trimTrailingWhitespace": true,
 	"search.exclude": {
-		".yarn": true,
 		"node_modules": true,
-		"yarn.lock": true
+		"bun.lock": true
 	},
 	// Javascript
 	"javascript.autoClosingTags": true,

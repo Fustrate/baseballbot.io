@@ -20,7 +20,7 @@ module Baseballbot
 
       regenerate_route_docs!
 
-      `yarn run biome format #{routes_file} --fix`
+      `bun run biome format #{routes_file} --fix`
     end
 
     protected
@@ -82,7 +82,7 @@ module Baseballbot
 
       constants_file.write @types.sort.join("\n")
 
-      `yarn run biome format #{constants_file} --fix`
+      `bun run biome format #{constants_file} --fix`
     end
 
     protected

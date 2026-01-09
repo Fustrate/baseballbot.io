@@ -1,2 +1,2 @@
-js: yarn build --watch
-css: yarn build:css --watch --verbose
+js: bun run build --watch
+css: bun run build:css --watch --verbose

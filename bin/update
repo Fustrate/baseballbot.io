@@ -17,11 +17,11 @@ chdir File.expand_path('..', __dir__) do
 
   run_command 'bundle update --bundler && bundle update --all'
 
-  # run_command 'yarn set version latest'
+  # run_command 'bun upgrade'
 
-  run_command 'yarn upgrade-interactive'
+  run_command 'bun update --interactive'
 
-  run_command 'rm yarn.lock && yarn install'
+  run_command 'rm bun.lock && bun install'
 
-  run_command 'yarn run biome migrate --write', silent: true
+  run_command 'bun run biome migrate --write', silent: true
 end
