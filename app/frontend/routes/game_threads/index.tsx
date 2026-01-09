@@ -11,6 +11,8 @@ import GameThreadsTable from '@/components/GameThreadsTable';
 
 import type { GameThreadStatus } from '@/utilities/constants';
 
+z.config({ jitless: true });
+
 export const Route = createFileRoute('/game_threads/')({
   validateSearch: z.object({
     date: z.iso.date().default(() => DateTime.now().toISODate()),
