@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     resource :session, only: %i[show]
   end
 
-  resources :accounts, only: %i[new] do
+  resources :bots, only: %i[new] do
     get :authorized, on: :collection
   end
 

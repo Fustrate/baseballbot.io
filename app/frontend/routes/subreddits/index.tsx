@@ -45,7 +45,7 @@ function RouteComponent() {
                 </Link>
               </TableCell>
               <TableCell>{subreddit.abbreviation}</TableCell>
-              <TableCell>{subreddit.account.name}</TableCell>
+              <TableCell>{subreddit.bot.name}</TableCell>
               <TableCell>{subreddit.options.sidebar?.enabled && <i className="fa fa-check" />}</TableCell>
               <TableCell>
                 {subreddit.options.gameThreads?.enabled && postAtFormat(subreddit.options.gameThreads?.postAt)}

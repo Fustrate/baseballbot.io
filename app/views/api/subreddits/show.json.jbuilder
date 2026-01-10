@@ -11,4 +11,4 @@ abbreviation = @api.team(@subreddit.team_id).abbreviation if @subreddit.team_id
 
 json.abbreviation abbreviation
 
-json.account @subreddit.account, :id, :name
+json.bot @subreddit.bot, :id, :name

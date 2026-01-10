@@ -79,15 +79,15 @@ Verb              | GET
 URI               | /api/session(.:format)
 Controller#Action | api/sessions#show {format: "json"}
 
-Prefix            | authorized_accounts
+Prefix            | authorized_bots
 Verb              | GET
-URI               | /accounts/authorized(.:format)
-Controller#Action | accounts#authorized
+URI               | /bots/authorized(.:format)
+Controller#Action | bots#authorized
 
-Prefix            | new_account
+Prefix            | new_bot
 Verb              | GET
-URI               | /accounts/new(.:format)
-Controller#Action | accounts#new
+URI               | /bots/new(.:format)
+Controller#Action | bots#new
 
 Prefix            | authorized_sessions
 Verb              | GET

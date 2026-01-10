@@ -10,18 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_03_10_031956) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_10_201327) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
-
-  create_table "accounts", id: :serial, force: :cascade do |t|
-    t.string "access_token"
-    t.datetime "expires_at", precision: nil
-    t.string "name"
-    t.string "refresh_token"
-    t.string "scope", default: [], array: true
-  end
 
   create_table "bot_actions", force: :cascade do |t|
     t.string "action", null: false
@@ -31,6 +23,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_03_10_031956) do
     t.bigint "subject_id", null: false
     t.string "subject_type", null: false
     t.index ["subject_type", "subject_id"], name: "index_bot_actions_on_subject_type_and_subject_id"
+  end
+
+  create_table "bots", id: :serial, force: :cascade do |t|
+    t.string "access_token"
+    t.datetime "expires_at", precision: nil
+    t.string "name"
+    t.string "refresh_token"
+    t.string "scope", default: [], array: true
   end
 
   create_table "edits", force: :cascade do |t|
@@ -148,7 +148,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_03_10_031956) do
   end
 
   create_table "subreddits", id: :serial, force: :cascade do |t|
-    t.integer "account_id"
+    t.integer "bot_id"
     t.string "moderators", default: [], array: true
     t.string "name"
     t.jsonb "options"
@@ -201,7 +201,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_03_10_031956) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "scheduled_posts", "subreddits"
-  add_foreign_key "subreddits", "accounts"
+  add_foreign_key "subreddits", "bots"
   add_foreign_key "subreddits_users", "subreddits"
   add_foreign_key "subreddits_users", "users"
   add_foreign_key "templates", "subreddits"

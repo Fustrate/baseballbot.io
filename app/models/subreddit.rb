@@ -8,7 +8,7 @@ class Subreddit < ApplicationRecord
   has_many :game_threads, dependent: :destroy
   has_many :templates, dependent: :destroy
 
-  belongs_to :account
+  belongs_to :bot
 
   has_many :subreddits_users, dependent: :destroy
   has_many :users, through: :subreddits_users

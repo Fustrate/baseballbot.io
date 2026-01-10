@@ -8,5 +8,5 @@ json.data(@subreddits) do |subreddit|
 
   json.abbreviation @api.team(subreddit.team_id).abbreviation
 
-  json.account subreddit.account, :id, :name
+  json.bot subreddit.bot, :id, :name
 end

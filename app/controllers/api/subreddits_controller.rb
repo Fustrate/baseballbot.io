@@ -9,7 +9,7 @@ module Api
     before_action :load_subreddit, except: %i[index]
 
     def index
-      @subreddits = Subreddit.order(:name).includes(:account)
+      @subreddits = Subreddit.order(:name).includes(:bot)
     end
 
     def show; end

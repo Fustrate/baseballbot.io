@@ -61,7 +61,7 @@ export interface Subreddit {
   name: string;
   abbreviation: string;
   options: SubredditOptions;
-  account: {
+  bot: {
     id: number;
     name: string;
   };

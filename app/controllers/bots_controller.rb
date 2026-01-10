@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-# Accounts are used to run game threads and update sidebars - see `SessionsController` for moderator login
-class AccountsController < ApplicationController
+# Bots are used to run game threads and update sidebars - see `SessionsController` for moderator login
+class BotsController < ApplicationController
   # edit:             update game threads
   # flair:            assign flair to self and own submissions
   # history:          user comment/submission history
-  # identity:         initially find the account name
+  # identity:         initially find the bot name
   # modconfig:        update sidebar
   # modflair:         manage flair templates
   # modmail:          read & archive modmail
@@ -53,7 +53,7 @@ class AccountsController < ApplicationController
   def finish_authentication
     raise UserError, 'Invalid state!' unless params[:state] == session[:state]
 
-    save_account
+    save_bot
 
     flash[:success] = t('authentication.success')
 
@@ -79,7 +79,7 @@ class AccountsController < ApplicationController
     redirect_to auth_url, status: :moved_permanently, allow_other_host: true
   end
 
-  def save_account
+  def save_bot
     reddit_session = Redd.it(
       code: params[:code],
       client_id: Rails.application.credentials.dig(:reddit, :client_id),
@@ -89,26 +89,26 @@ class AccountsController < ApplicationController
 
     # reddit_session.client.refresh if reddit_session.client.access.expired?
 
-    create_or_update_account(reddit_session)
+    create_or_update_bot(reddit_session)
   end
 
-  def create_or_update_account(reddit_session)
+  def create_or_update_bot(reddit_session)
     name = reddit_session.me.name
     expires_in = reddit_session.client.access.expires_in
 
-    existing = Account.where('LOWER(name) = ?', name.downcase).first
+    existing = Bot.where('LOWER(name) = ?', name.downcase).first
 
     if existing
-      update_existing_account(existing, reddit_session, expires_in)
+      update_existing_bot(existing, reddit_session, expires_in)
 
       existing
     else
-      create_new_account(name, reddit_session, expires_in)
+      create_new_bot(name, reddit_session, expires_in)
     end
   end
 
-  def update_existing_account(account, reddit_session, expires_in)
-    account.update(
+  def update_existing_bot(bot, reddit_session, expires_in)
+    bot.update(
       scope: AUTH_SCOPE,
       access_token: reddit_session.client.access.access_token,
       refresh_token: reddit_session.client.access.refresh_token,
@@ -116,8 +116,8 @@ class AccountsController < ApplicationController
     )
   end
 
-  def create_new_account(name, reddit_session, expires_in)
-    Account.create(
+  def create_new_bot(name, reddit_session, expires_in)
+    Bot.create(
       name:,
       scope: AUTH_SCOPE,
       access_token: reddit_session.client.access.access_token,
