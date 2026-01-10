@@ -1,14 +1,4 @@
 
-Prefix            |
-Verb              |
-URI               | /assets
-Controller#Action | Propshaft::Server
-
-Prefix            | api_accounts_authenticate
-Verb              | GET
-URI               | /api/accounts/authenticate(.:format)
-Controller#Action | api/accounts#authenticate {format: "json"}
-
 Prefix            | api_game_threads
 Verb              | GET
 URI               | /api/game_threads(.:format)
@@ -38,16 +28,6 @@ Prefix            |
 Verb              | DELETE
 URI               | /api/game_threads/:id(.:format)
 Controller#Action | api/game_threads#destroy {format: "json"}
-
-Prefix            | api_login
-Verb              | POST
-URI               | /api/login(.:format)
-Controller#Action | api/sessions#create {format: "json"}
-
-Prefix            | api_logout
-Verb              | DELETE
-URI               | /api/logout(.:format)
-Controller#Action | api/sessions#destroy {format: "json"}
 
 Prefix            | game_threads_api_subreddit
 Verb              | GET
@@ -94,6 +74,36 @@ Verb              | PUT
 URI               | /api/templates/:id(.:format)
 Controller#Action | api/templates#update {format: "json"}
 
+Prefix            | api_session
+Verb              | GET
+URI               | /api/session(.:format)
+Controller#Action | api/sessions#show {format: "json"}
+
+Prefix            | authorized_accounts
+Verb              | GET
+URI               | /accounts/authorized(.:format)
+Controller#Action | accounts#authorized
+
+Prefix            | new_account
+Verb              | GET
+URI               | /accounts/new(.:format)
+Controller#Action | accounts#new
+
+Prefix            | authorized_sessions
+Verb              | GET
+URI               | /sessions/authorized(.:format)
+Controller#Action | sessions#authorized
+
+Prefix            | new_session
+Verb              | GET
+URI               | /sessions/new(.:format)
+Controller#Action | sessions#new
+
+Prefix            | session
+Verb              | DELETE
+URI               | /sessions/:id(.:format)
+Controller#Action | sessions#destroy
+
 Prefix            |
 Verb              | GET
 URI               | /*(.:format)
@@ -103,3 +113,4 @@ Prefix            | app
 Verb              | GET
 URI               | /
 Controller#Action | app#app
+

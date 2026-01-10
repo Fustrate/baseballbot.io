@@ -26,7 +26,7 @@ function RouteComponent() {
         </div>
 
         <div className="space-y-4">
-          <Button href="/accounts/authenticate" className="w-full" color="dark">
+          <Button href="/sessions/new" className="w-full" color="dark">
             <i className="fab fa-reddit mr-2" />
             Sign in with Reddit
           </Button>

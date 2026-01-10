@@ -35,15 +35,17 @@ class AccountsController < ApplicationController
 
   # def destroy; end
 
-  def authenticate
-    if params[:error]
-      flash[:error] = "Reddit returned an error: #{params[:error]}"
-      redirect_to :app
-    elsif params[:state] && params[:code]
-      finish_authentication
-    else
-      redirect_to_reddit
-    end
+  def new
+    redirect_to_reddit
+  end
+
+  def authorized
+    return finish_authentication if params[:state] && params[:code]
+
+    flash[:error] = "Reddit returned an error: #{params[:error]}"
+    session[:state] = nil
+
+    redirect_to :app
   end
 
   protected

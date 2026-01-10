@@ -14,14 +14,12 @@ Rails.application.routes.draw do
     resource :session, only: %i[show]
   end
 
-  namespace :accounts do
-    get :authenticate
+  resources :accounts, only: %i[new] do
+    get :authorized, on: :collection
   end
 
-  controller :sessions do
-    get    :sign_in
-    delete :sign_out
-    get    :authorized
+  resources :sessions, only: %i[new destroy] do
+    get :authorized, on: :collection
   end
 
   get '*', to: 'app#app'
