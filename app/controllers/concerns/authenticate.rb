@@ -21,6 +21,7 @@ module Authenticate
     Current.user = logged_in? ? current_user : Guest.new
   end
 
+  # This method is called when Sorcery denies access to a resource due to the user not being authenticated
   def not_authenticated
     respond_to do |format|
       format.html do

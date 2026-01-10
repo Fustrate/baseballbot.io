@@ -1,15 +1,28 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router';
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownDivider,
+  DropdownItem,
+  DropdownLabel,
+  DropdownMenu,
+} from '@/catalyst/dropdown';
 // Bun double exports a function from this file
 // import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Heading } from '@/catalyst/heading';
 import { Navbar, NavbarDivider, NavbarItem, NavbarSection, NavbarSpacer } from '@/catalyst/navbar';
 import { Sidebar, SidebarBody, SidebarHeader, SidebarItem, SidebarSection } from '@/catalyst/sidebar';
 import { StackedLayout } from '@/catalyst/stacked-layout';
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
 
 export const Route = createRootRoute({
-  component: RootComponent,
+  component: () => (
+    <AuthProvider>
+      <RootComponent />
+    </AuthProvider>
+  ),
   notFoundComponent: () => {
     return <Heading color="red">404 - Page Not Found</Heading>;
   },
@@ -20,6 +33,46 @@ const navItems = [
   { label: 'Subreddits', url: '/subreddits' },
   { label: 'Gameday', url: '/gameday' },
 ];
+
+function UserMenu() {
+  const { isLoggedIn, user } = useAuth();
+
+  if (!isLoggedIn || !user) {
+    return (
+      <NavbarItem href="/sign_in">
+        <i className="fas fa-sign-in-alt mr-2" />
+        Sign In
+      </NavbarItem>
+    );
+  }
+
+  const handleSignOut = () => {
+    fetch('/sign_out', { method: 'DELETE' })
+      .then(() => {
+        window.location.href = '/';
+      })
+      .catch((error) => {
+        console.error('Sign out failed:', error);
+      });
+  };
+
+  return (
+    <Dropdown>
+      <DropdownButton as={NavbarItem}>{user.username}</DropdownButton>
+      <DropdownMenu className="min-w-64" anchor="bottom end">
+        <DropdownItem>
+          <i className="fas fa-user mr-2" />
+          <DropdownLabel>u/{user.username}</DropdownLabel>
+        </DropdownItem>
+        <DropdownDivider />
+        <DropdownItem onClick={handleSignOut}>
+          <i className="fas fa-sign-out-alt mr-2" />
+          <DropdownLabel>Sign out</DropdownLabel>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
+}
 
 function RootComponent() {
   return (
@@ -45,6 +98,10 @@ function RootComponent() {
             </NavbarSection>
 
             <NavbarSpacer />
+
+            <NavbarSection>
+              <UserMenu />
+            </NavbarSection>
           </Navbar>
         }
         sidebar={

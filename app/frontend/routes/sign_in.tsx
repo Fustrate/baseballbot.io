@@ -1,21 +1,42 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Navigate } from '@tanstack/react-router';
 import { AuthLayout } from '@/catalyst/auth-layout';
+import { Button } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
+import { Text } from '@/catalyst/text';
+import { useAuth } from '@/hooks/useAuth';
 
 export const Route = createFileRoute('/sign_in')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return (
-    <>
-      <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
-        <Heading>Sign In</Heading>
-      </div>
+  const { isLoggedIn, isLoading } = useAuth();
 
-      <AuthLayout>
-        <p className="px-4 py-2">I should probably get this reimplemented.</p>
-      </AuthLayout>
-    </>
+  // Redirect if already logged in
+  if (isLoggedIn && !isLoading) {
+    return <Navigate to="/" />;
+  }
+
+  return (
+    <AuthLayout>
+      <div className="w-full max-w-md space-y-6">
+        <div className="text-center">
+          <Heading level={2}>Sign into Baseballbot.io</Heading>
+          <Text className="mt-2">Sign in with your Reddit account to manage game threads and subreddit settings.</Text>
+        </div>
+
+        <div className="space-y-4">
+          <Button href="/accounts/authenticate" className="w-full" color="dark">
+            <i className="fab fa-reddit mr-2" />
+            Sign in with Reddit
+          </Button>
+
+          <Text className="text-center text-sm">
+            By signing in, you agree to authenticate via Reddit OAuth. We only access the permissions needed to manage
+            your subreddit.
+          </Text>
+        </div>
+      </div>
+    </AuthLayout>
   );
 }

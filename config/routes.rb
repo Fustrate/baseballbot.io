@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     end
 
     resources :templates, only: %i[show update]
+
+    resource :session, only: %i[show]
   end
 
   namespace :accounts do
