@@ -1,6 +1,6 @@
-import { createFileRoute, Navigate } from '@tanstack/react-router';
+import { createFileRoute, Link, Navigate } from '@tanstack/react-router';
 import { AuthLayout } from '@/catalyst/auth-layout';
-import { Button } from '@/catalyst/button';
+import { ButtonLink } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
 import { Text } from '@/catalyst/text';
 import { useAuth } from '@/hooks/useAuth';
@@ -29,10 +29,14 @@ function RouteComponent() {
         </div>
 
         <div className="space-y-4">
-          <Button href="/sessions/new" className="w-full" color="dark">
-            <i className="fab fa-reddit mr-2" />
+          <ButtonLink href="/sessions/new" reloadDocument className="w-full" color="dark">
+            <i className="fab fa-reddit-alien" />
             Sign in with Reddit
-          </Button>
+          </ButtonLink>
+
+          <Link to="/sessions/new" reloadDocument>
+            New Session
+          </Link>
 
           <Text className="text-center text-sm">
             By signing in, you agree to authenticate via Reddit OAuth. We only access the permissions needed to manage
