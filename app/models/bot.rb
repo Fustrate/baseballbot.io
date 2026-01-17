@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Account < ApplicationRecord
+class Bot < ApplicationRecord
   has_many :subreddits, dependent: :nullify
 
   # Use this method to make sure we refresh expired tokens and save the new ones
