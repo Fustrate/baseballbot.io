@@ -7,6 +7,9 @@ import { useAuth } from '@/hooks/useAuth';
 
 export const Route = createFileRoute('/sign_in')({
   component: RouteComponent,
+  head: () => ({
+    meta: [{ title: 'Sign In' }],
+  }),
 });
 
 function RouteComponent() {
