@@ -87,8 +87,8 @@ export interface FileRoutesByFullPath {
   '/sign_in': typeof Sign_inRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
-  '/game_threads': typeof Game_threadsIndexRoute
-  '/subreddits': typeof SubredditsIndexRoute
+  '/game_threads/': typeof Game_threadsIndexRoute
+  '/subreddits/': typeof SubredditsIndexRoute
   '/game_threads/$threadId/edit': typeof Game_threadsThreadIdEditRoute
   '/subreddits/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
   '/subreddits/$subredditId/settings': typeof SubredditsSubredditIdSettingsRoute
@@ -129,8 +129,8 @@ export interface FileRouteTypes {
     | '/sign_in'
     | '/game_threads/$threadId'
     | '/subreddits/$subredditId'
-    | '/game_threads'
-    | '/subreddits'
+    | '/game_threads/'
+    | '/subreddits/'
     | '/game_threads/$threadId/edit'
     | '/subreddits/$subredditId/game_threads'
     | '/subreddits/$subredditId/settings'
@@ -202,14 +202,14 @@ declare module '@tanstack/react-router' {
     '/subreddits/': {
       id: '/subreddits/'
       path: '/subreddits'
-      fullPath: '/subreddits'
+      fullPath: '/subreddits/'
       preLoaderRoute: typeof SubredditsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game_threads/': {
       id: '/game_threads/'
       path: '/game_threads'
-      fullPath: '/game_threads'
+      fullPath: '/game_threads/'
       preLoaderRoute: typeof Game_threadsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
