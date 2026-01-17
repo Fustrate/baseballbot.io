@@ -13,7 +13,7 @@ append :linked_dirs, 'log', 'public/system', 'tmp/cache', 'tmp/pids', 'tmp/socke
 
 append :linked_files, 'config/database.yml', 'config/honeybadger.yml', 'config/credentials/production.key'
 
-set :default_env, path: '/opt/ruby/bin:$PATH'
+set :default_env, path: "/home/#{fetch :user}/.bun/bin:/opt/ruby/bin:$PATH"
 
 set :rbenv_ruby, File.read(File.expand_path('../.ruby-version', __dir__)).strip
 set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} #{fetch :rbenv_path}/bin/rbenv exec"
