@@ -6,7 +6,7 @@
       "name": "@fustrate/baseballbot.io",
       "dependencies": {
         "@csstools/postcss-minify": "^3.0.0",
-        "@fustrate/rails": "git@github.com:Fustrate/fustrate-rails.js.git#5b95c8975aa267507411caaa0691a5177f5e5035",
+        "@fustrate/rails": "github:fustrate/fustrate-rails.js#b3bae9c",
         "@headlessui/react": "^2.2.9",
         "@heroicons/react": "^2.2.0",
         "@tailwindcss/postcss": "^4.1.18",
@@ -170,7 +170,7 @@
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.10", "", {}, "sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ=="],
 
-    "@fustrate/rails": ["@fustrate/rails@git+ssh://git@github.com:Fustrate/fustrate-rails.js.git#5b95c8975aa267507411caaa0691a5177f5e5035", { "dependencies": { "@popperjs/core": "^2.11.8", "axios": "^1.13.2", "es-toolkit": "^1.43.0", "reflect-metadata": "^0.2.2" } }, "5b95c8975aa267507411caaa0691a5177f5e5035"],
+    "@fustrate/rails": ["@fustrate/rails@github:fustrate/fustrate-rails.js#b3bae9c", { "dependencies": { "@popperjs/core": "^2.11.8", "axios": "^1.13.2", "es-toolkit": "^1.44.0", "reflect-metadata": "^0.2.2" } }, "Fustrate-fustrate-rails.js-b3bae9c"],
 
     "@headlessui/react": ["@headlessui/react@2.2.9", "", { "dependencies": { "@floating-ui/react": "^0.26.16", "@react-aria/focus": "^3.20.2", "@react-aria/interactions": "^3.25.0", "@tanstack/react-virtual": "^3.13.9", "use-sync-external-store": "^1.5.0" }, "peerDependencies": { "react": "^18 || ^19 || ^19.0.0-rc", "react-dom": "^18 || ^19 || ^19.0.0-rc" } }, "sha512-Mb+Un58gwBn0/yWZfyrCh0TJyurtT+dETj7YHleylHk5od3dv2XqETPGWMyQ5/7sYN7oWdyM1u9MvC0OC8UmzQ=="],
 

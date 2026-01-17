@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@csstools/postcss-minify": "^3.0.0",
-    "@fustrate/rails": "git@github.com:Fustrate/fustrate-rails.js.git#5b95c8975aa267507411caaa0691a5177f5e5035",
+    "@fustrate/rails": "github:fustrate/fustrate-rails.js#b3bae9c",
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.18",
