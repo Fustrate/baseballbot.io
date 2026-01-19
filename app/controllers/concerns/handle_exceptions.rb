@@ -64,27 +64,15 @@ module HandleExceptions
     end
   end
 
-  def model_errors(exception)
-    [:not_acceptable, exception.message.to_a.to_sentence]
-  end
+  def model_errors(exception) = [:not_acceptable, exception.message.to_a.to_sentence]
 
-  def record_invalid(exception)
-    [:not_acceptable, exception.record.errors.to_a.to_sentence]
-  end
+  def record_invalid(exception) = [:not_acceptable, exception.record.errors.to_a.to_sentence]
 
-  def record_not_found
-    [:not_found, t('record_not_found')]
-  end
+  def record_not_found = [:not_found, t('record_not_found')]
 
-  def policy_violation
-    [:unauthorized, t('access_denied')]
-  end
+  def policy_violation = [:unauthorized, t('access_denied')]
 
-  def unknown_format
-    [:not_acceptable, t('unknown_format')]
-  end
+  def unknown_format = [:not_acceptable, t('unknown_format')]
 
-  def invalid_token
-    [:forbidden, t('sessions.log_in.please_log_in')]
-  end
+  def invalid_token = [:forbidden, t('please_log_in')]
 end

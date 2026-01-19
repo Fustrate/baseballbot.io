@@ -1,9 +1,0 @@
-en:
-  sessions:
-    log_in:
-      title: Log In
-      username: Reddit Username
-      submit: Log In
-      please_log_in: Please log in before trying to perform this action.
-
-    logged_out: You have successfully logged out.
