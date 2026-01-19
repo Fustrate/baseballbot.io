@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Text } from '@/catalyst/text';
 
-export const Route = createFileRoute('/subreddits_/$subredditId/settings')({
+export const Route = createFileRoute('/subreddits_/$subredditId/edit')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const { subredditId } = params;
@@ -11,5 +11,5 @@ export const Route = createFileRoute('/subreddits_/$subredditId/settings')({
 });
 
 function RouteComponent() {
-  return <Text>Hello "/subreddits/$subredditId/settings"!</Text>;
+  return <Text>Hello "/subreddits/$subredditId/edit"!</Text>;
 }

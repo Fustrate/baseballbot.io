@@ -16,8 +16,8 @@ import { Route as SubredditsIndexRouteImport } from './routes/subreddits/index'
 import { Route as Game_threadsIndexRouteImport } from './routes/game_threads/index'
 import { Route as SubredditsSubredditIdRouteImport } from './routes/subreddits/$subredditId'
 import { Route as Game_threadsThreadIdRouteImport } from './routes/game_threads/$threadId'
-import { Route as SubredditsSubredditIdSettingsRouteImport } from './routes/subreddits_/$subredditId/settings'
 import { Route as SubredditsSubredditIdGame_threadsRouteImport } from './routes/subreddits_/$subredditId/game_threads'
+import { Route as SubredditsSubredditIdEditRouteImport } from './routes/subreddits_/$subredditId/edit'
 import { Route as Game_threadsThreadIdEditRouteImport } from './routes/game_threads_/$threadId/edit'
 import { Route as SubredditsSubredditIdGame_threadsNewRouteImport } from './routes/subreddits_/$subredditId/game_threads/new'
 
@@ -56,16 +56,16 @@ const Game_threadsThreadIdRoute = Game_threadsThreadIdRouteImport.update({
   path: '/game_threads/$threadId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SubredditsSubredditIdSettingsRoute =
-  SubredditsSubredditIdSettingsRouteImport.update({
-    id: '/subreddits_/$subredditId/settings',
-    path: '/subreddits/$subredditId/settings',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const SubredditsSubredditIdGame_threadsRoute =
   SubredditsSubredditIdGame_threadsRouteImport.update({
     id: '/subreddits_/$subredditId/game_threads',
     path: '/subreddits/$subredditId/game_threads',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SubredditsSubredditIdEditRoute =
+  SubredditsSubredditIdEditRouteImport.update({
+    id: '/subreddits_/$subredditId/edit',
+    path: '/subreddits/$subredditId/edit',
     getParentRoute: () => rootRouteImport,
   } as any)
 const Game_threadsThreadIdEditRoute =
@@ -90,8 +90,8 @@ export interface FileRoutesByFullPath {
   '/game_threads/': typeof Game_threadsIndexRoute
   '/subreddits/': typeof SubredditsIndexRoute
   '/game_threads/$threadId/edit': typeof Game_threadsThreadIdEditRoute
+  '/subreddits/$subredditId/edit': typeof SubredditsSubredditIdEditRoute
   '/subreddits/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
-  '/subreddits/$subredditId/settings': typeof SubredditsSubredditIdSettingsRoute
   '/subreddits/$subredditId/game_threads/new': typeof SubredditsSubredditIdGame_threadsNewRoute
 }
 export interface FileRoutesByTo {
@@ -103,8 +103,8 @@ export interface FileRoutesByTo {
   '/game_threads': typeof Game_threadsIndexRoute
   '/subreddits': typeof SubredditsIndexRoute
   '/game_threads/$threadId/edit': typeof Game_threadsThreadIdEditRoute
+  '/subreddits/$subredditId/edit': typeof SubredditsSubredditIdEditRoute
   '/subreddits/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
-  '/subreddits/$subredditId/settings': typeof SubredditsSubredditIdSettingsRoute
   '/subreddits/$subredditId/game_threads/new': typeof SubredditsSubredditIdGame_threadsNewRoute
 }
 export interface FileRoutesById {
@@ -117,8 +117,8 @@ export interface FileRoutesById {
   '/game_threads/': typeof Game_threadsIndexRoute
   '/subreddits/': typeof SubredditsIndexRoute
   '/game_threads_/$threadId/edit': typeof Game_threadsThreadIdEditRoute
+  '/subreddits_/$subredditId/edit': typeof SubredditsSubredditIdEditRoute
   '/subreddits_/$subredditId/game_threads': typeof SubredditsSubredditIdGame_threadsRouteWithChildren
-  '/subreddits_/$subredditId/settings': typeof SubredditsSubredditIdSettingsRoute
   '/subreddits_/$subredditId/game_threads/new': typeof SubredditsSubredditIdGame_threadsNewRoute
 }
 export interface FileRouteTypes {
@@ -132,8 +132,8 @@ export interface FileRouteTypes {
     | '/game_threads/'
     | '/subreddits/'
     | '/game_threads/$threadId/edit'
+    | '/subreddits/$subredditId/edit'
     | '/subreddits/$subredditId/game_threads'
-    | '/subreddits/$subredditId/settings'
     | '/subreddits/$subredditId/game_threads/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -145,8 +145,8 @@ export interface FileRouteTypes {
     | '/game_threads'
     | '/subreddits'
     | '/game_threads/$threadId/edit'
+    | '/subreddits/$subredditId/edit'
     | '/subreddits/$subredditId/game_threads'
-    | '/subreddits/$subredditId/settings'
     | '/subreddits/$subredditId/game_threads/new'
   id:
     | '__root__'
@@ -158,8 +158,8 @@ export interface FileRouteTypes {
     | '/game_threads/'
     | '/subreddits/'
     | '/game_threads_/$threadId/edit'
+    | '/subreddits_/$subredditId/edit'
     | '/subreddits_/$subredditId/game_threads'
-    | '/subreddits_/$subredditId/settings'
     | '/subreddits_/$subredditId/game_threads/new'
   fileRoutesById: FileRoutesById
 }
@@ -172,8 +172,8 @@ export interface RootRouteChildren {
   Game_threadsIndexRoute: typeof Game_threadsIndexRoute
   SubredditsIndexRoute: typeof SubredditsIndexRoute
   Game_threadsThreadIdEditRoute: typeof Game_threadsThreadIdEditRoute
+  SubredditsSubredditIdEditRoute: typeof SubredditsSubredditIdEditRoute
   SubredditsSubredditIdGame_threadsRoute: typeof SubredditsSubredditIdGame_threadsRouteWithChildren
-  SubredditsSubredditIdSettingsRoute: typeof SubredditsSubredditIdSettingsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -227,18 +227,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Game_threadsThreadIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/subreddits_/$subredditId/settings': {
-      id: '/subreddits_/$subredditId/settings'
-      path: '/subreddits/$subredditId/settings'
-      fullPath: '/subreddits/$subredditId/settings'
-      preLoaderRoute: typeof SubredditsSubredditIdSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/subreddits_/$subredditId/game_threads': {
       id: '/subreddits_/$subredditId/game_threads'
       path: '/subreddits/$subredditId/game_threads'
       fullPath: '/subreddits/$subredditId/game_threads'
       preLoaderRoute: typeof SubredditsSubredditIdGame_threadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subreddits_/$subredditId/edit': {
+      id: '/subreddits_/$subredditId/edit'
+      path: '/subreddits/$subredditId/edit'
+      fullPath: '/subreddits/$subredditId/edit'
+      preLoaderRoute: typeof SubredditsSubredditIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game_threads_/$threadId/edit': {
@@ -282,9 +282,9 @@ const rootRouteChildren: RootRouteChildren = {
   Game_threadsIndexRoute: Game_threadsIndexRoute,
   SubredditsIndexRoute: SubredditsIndexRoute,
   Game_threadsThreadIdEditRoute: Game_threadsThreadIdEditRoute,
+  SubredditsSubredditIdEditRoute: SubredditsSubredditIdEditRoute,
   SubredditsSubredditIdGame_threadsRoute:
     SubredditsSubredditIdGame_threadsRouteWithChildren,
-  SubredditsSubredditIdSettingsRoute: SubredditsSubredditIdSettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
