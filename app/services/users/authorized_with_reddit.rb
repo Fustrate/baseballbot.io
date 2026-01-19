@@ -32,7 +32,7 @@ module Users
     def update_subreddits
       moderated_subreddits = reddit_session.my_subreddits(:moderator, limit: 100).map(&:display_name)
 
-      @user.subreddits_users.destroy_all
+      SubredditsUser.where(user: @user).delete_all if @user.persisted?
 
       Subreddit.where(name: moderated_subreddits).find_each do |subreddit|
         @user.subreddits_users.new(subreddit:)
