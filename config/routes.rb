@@ -18,8 +18,8 @@ Rails.application.routes.draw do
     get :authorized, on: :collection
   end
 
-  resources :sessions, only: %i[new destroy] do
-    get :authorized, on: :collection
+  resource :session, only: %i[new destroy] do
+    get :authorized
   end
 
   get '*', to: 'app#app'

@@ -89,19 +89,19 @@ Verb              | GET
 URI               | /bots/new(.:format)
 Controller#Action | bots#new
 
-Prefix            | authorized_sessions
+Prefix            | authorized_session
 Verb              | GET
-URI               | /sessions/authorized(.:format)
+URI               | /session/authorized(.:format)
 Controller#Action | sessions#authorized
 
 Prefix            | new_session
 Verb              | GET
-URI               | /sessions/new(.:format)
+URI               | /session/new(.:format)
 Controller#Action | sessions#new
 
 Prefix            | session
 Verb              | DELETE
-URI               | /sessions/:id(.:format)
+URI               | /session(.:format)
 Controller#Action | sessions#destroy
 
 Prefix            |

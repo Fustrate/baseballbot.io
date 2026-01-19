@@ -15,13 +15,12 @@ export const apiTemplatePath = (id: RequiredParameter, options: RouteOptions = {
 export const appPath = (options: RouteOptions = {}) => buildRoute('/', { ...options });
 export const authorizedBotsPath = (options: RouteOptions = {}) =>
   buildRoute('/bots/authorized(.:format)', { ...options });
-export const authorizedSessionsPath = (options: RouteOptions = {}) =>
-  buildRoute('/sessions/authorized(.:format)', { ...options });
+export const authorizedSessionPath = (options: RouteOptions = {}) =>
+  buildRoute('/session/authorized(.:format)', { ...options });
 export const gameThreadsApiSubredditPath = (id: RequiredParameter, options: RouteOptions = {}) =>
   buildRoute('/api/subreddits/:id/game_threads(.:format)', { id, ...options });
 export const newBotPath = (options: RouteOptions = {}) => buildRoute('/bots/new(.:format)', { ...options });
-export const newSessionPath = (options: RouteOptions = {}) => buildRoute('/sessions/new(.:format)', { ...options });
-export const sessionPath = (id: RequiredParameter, options: RouteOptions = {}) =>
-  buildRoute('/sessions/:id(.:format)', { id, ...options });
+export const newSessionPath = (options: RouteOptions = {}) => buildRoute('/session/new(.:format)', { ...options });
+export const sessionPath = (options: RouteOptions = {}) => buildRoute('/session(.:format)', { ...options });
 export const templatesApiSubredditPath = (id: RequiredParameter, options: RouteOptions = {}) =>
   buildRoute('/api/subreddits/:id/templates(.:format)', { id, ...options });

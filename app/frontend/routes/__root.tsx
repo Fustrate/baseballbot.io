@@ -47,7 +47,7 @@ function UserMenu() {
   }
 
   const handleSignOut = () => {
-    fetch('/sign_out', { method: 'DELETE' })
+    fetch('/session', { method: 'DELETE' })
       .then(() => {
         window.location.href = '/';
       })
