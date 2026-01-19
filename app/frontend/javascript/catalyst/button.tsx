@@ -177,8 +177,10 @@ const variants = cva(
 type ButtonVariantProps = VariantProps<typeof variants>;
 // export type ButtonColor = ButtonVariantProps['color'];
 
-export function buttonClasses(args?: ButtonVariantProps) {
-  return cn(variants(args));
+export function buttonClasses(args?: ButtonVariantProps & { className?: string }) {
+  const { className, ...rest } = args || {};
+
+  return cn(variants(rest), className);
 }
 
 type ButtonProps = ButtonVariantProps & { className?: string; children: React.ReactNode } & Omit<
@@ -190,7 +192,7 @@ export const Button = forwardRef(function Button(
   { color, style, className, children, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLElement>,
 ) {
-  const classes = cn(buttonClasses({ color, style }), className);
+  const classes = buttonClasses({ color, style, className });
 
   return (
     <Headless.Button {...props} className={cn(classes, 'cursor-default')} ref={ref}>
