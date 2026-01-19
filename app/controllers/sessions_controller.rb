@@ -3,7 +3,7 @@
 # Just use Reddit to log in, there's no need to maintain separate passwords and whatnot. If you can access a reddit
 # account, you can update its subreddits.
 class SessionsController < ApplicationController
-  AUTH_SCOPE = %i[identity].freeze
+  AUTH_SCOPE = %i[identity mysubreddits].freeze
 
   def new
     redirect_to auth_url, status: :moved_permanently, allow_other_host: true

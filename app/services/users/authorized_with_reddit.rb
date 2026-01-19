@@ -7,7 +7,7 @@ module Users
 
       @user = User.find_or_initialize_by username: reddit_session.me.name
 
-      initial_setup unless @user.persisted?
+      update_subreddits
 
       @user
     end
@@ -21,7 +21,7 @@ module Users
     end
 
     def reddit_session
-      Redd.it(
+      @reddit_session ||= Redd.it(
         code: params[:code],
         client_id: Rails.application.credentials.dig(:reddit_login, :client_id),
         secret: Rails.application.credentials.dig(:reddit_login, :secret),
@@ -29,11 +29,13 @@ module Users
       )
     end
 
-    def initial_setup
-      @user.password = SecureRandom.base58(64)
+    def update_subreddits
+      moderated_subreddits = reddit_session.my_subreddits(:moderator, limit: 100).map(&:display_name)
 
-      Subreddit.where('? = ANY(moderators)', @user.username.downcase).ids.each do |subreddit_id|
-        @user.subreddits.new(subreddit_id:)
+      @user.subreddits.destroy_all
+
+      Subreddit.where(name: moderated_subreddits).find_each do |subreddit|
+        @user.subreddits.new(subreddit:)
       end
 
       @user.save!
