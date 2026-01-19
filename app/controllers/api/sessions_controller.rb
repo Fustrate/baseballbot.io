@@ -13,7 +13,8 @@ module Api
         loggedIn: true,
         user: {
           id: current_user.id,
-          username: current_user.username
+          username: current_user.username,
+          subreddits: current_user.subreddit_ids
         }
       }
     end

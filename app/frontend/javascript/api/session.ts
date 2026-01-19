@@ -1,6 +1,7 @@
 export interface User {
   id: number;
   username: string;
+  subreddits: number[];
 }
 
 export interface SessionData {
