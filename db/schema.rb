@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_19_195630) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_19_205752) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -28,7 +28,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_195630) do
   create_table "bots", id: :serial, force: :cascade do |t|
     t.string "access_token"
     t.datetime "expires_at", precision: nil
-    t.string "name"
+    t.citext "name"
     t.string "refresh_token"
     t.string "scope", default: [], array: true
   end
@@ -150,7 +150,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_195630) do
   create_table "subreddits", id: :serial, force: :cascade do |t|
     t.integer "bot_id"
     t.string "moderators", default: [], array: true
-    t.string "name"
+    t.citext "name"
     t.jsonb "options"
     t.string "slack_id"
     t.string "team_code"
