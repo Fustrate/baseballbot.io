@@ -1,4 +1,0 @@
-en:
-  authentication:
-    success: Your account is now active for use with BaseballBot.
-    invalid_token: Reddit sent an invalid token - did you take too long?

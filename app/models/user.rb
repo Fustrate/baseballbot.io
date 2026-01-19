@@ -10,7 +10,6 @@ class User < ApplicationRecord
   has_many :subreddits, through: :subreddits_users
 
   validates :username, uniqueness: true, presence: true, allow_blank: false
-  validates :password, presence: true, on: :create, allow_blank: false
 
   alias_attribute :to_s, :username
 

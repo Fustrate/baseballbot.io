@@ -85,6 +85,6 @@ module HandleExceptions
   end
 
   def invalid_token
-    [:forbidden, t('please_log_in')]
+    [:forbidden, t('sessions.log_in.please_log_in')]
   end
 end
