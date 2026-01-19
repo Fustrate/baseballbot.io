@@ -47,7 +47,14 @@ function UserMenu() {
   }
 
   const handleSignOut = () => {
-    fetch('/session', { method: 'DELETE' })
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    fetch('/sessions', { 
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-Token': csrfToken || '',
+      }
+    })
       .then(() => {
         window.location.href = '/';
       })
