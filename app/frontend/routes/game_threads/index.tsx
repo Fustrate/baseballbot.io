@@ -15,7 +15,7 @@ z.config({ jitless: true });
 
 export const Route = createFileRoute('/game_threads/')({
   validateSearch: z.object({
-    date: z.iso.date().default(() => DateTime.now().toISODate()),
+    date: z.string().default(() => DateTime.now().toISODate() || ''),
   }),
   loaderDeps: ({ search: { date } }) => ({ date }),
   component: RouteComponent,
@@ -65,7 +65,8 @@ function RouteComponent() {
         <div className="flex gap-4">
           <ButtonLink
             style="outline"
-            href={`/game_threads?date=${previousDate.toISODate()}`}
+            to="/game_threads"
+            search={{ date: previousDate.toISODate() || '' }}
             className="inline-flex items-center gap-1"
           >
             <i className="fas fa-angle-left" />
@@ -73,7 +74,8 @@ function RouteComponent() {
           </ButtonLink>
           <ButtonLink
             style="outline"
-            href={`/game_threads?date=${nextDate.toISODate()}`}
+            to="/game_threads"
+            search={{ date: nextDate.toISODate() || '' }}
             className="inline-flex items-center gap-1"
           >
             <span className="hidden md:inline">{nextDate.toFormat('M/d')}</span>
