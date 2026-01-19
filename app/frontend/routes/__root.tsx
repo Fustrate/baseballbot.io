@@ -16,6 +16,7 @@ import { Navbar, NavbarDivider, NavbarItem, NavbarSection, NavbarSpacer } from '
 import { Sidebar, SidebarBody, SidebarHeader, SidebarItem, SidebarSection } from '@/catalyst/sidebar';
 import { StackedLayout } from '@/catalyst/stacked-layout';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
+import { sessionPath } from '@/utilities/routes';
 
 export const Route = createRootRoute({
   component: () => (
@@ -47,13 +48,13 @@ function UserMenu() {
   }
 
   const handleSignOut = () => {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    
-    fetch('/sessions', { 
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+
+    fetch(sessionPath(), {
       method: 'DELETE',
       headers: {
-        'X-CSRF-Token': csrfToken || '',
-      }
+        'X-CSRF-Token': csrfToken,
+      },
     })
       .then(() => {
         window.location.href = '/';
