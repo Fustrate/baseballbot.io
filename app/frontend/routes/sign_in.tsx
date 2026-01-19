@@ -1,6 +1,6 @@
 import { createFileRoute, Navigate } from '@tanstack/react-router';
 import { AuthLayout } from '@/catalyst/auth-layout';
-import { ButtonLink, buttonClasses } from '@/catalyst/button';
+import { buttonClasses } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
 import { Text } from '@/catalyst/text';
 import { useAuth } from '@/hooks/useAuth';

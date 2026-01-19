@@ -4,7 +4,7 @@ import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router';
 import {
   Dropdown,
   DropdownButton,
-  DropdownDivider,
+  // DropdownDivider,
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
@@ -58,13 +58,15 @@ function UserMenu() {
 
   return (
     <Dropdown>
-      <DropdownButton as={NavbarItem}>{user.username}</DropdownButton>
+      <DropdownButton as={NavbarItem} className="cursor-pointer">
+        u/{user.username}
+      </DropdownButton>
       <DropdownMenu className="min-w-64" anchor="bottom end">
-        <DropdownItem>
+        {/* <DropdownItem>
           <i className="fas fa-user mr-2" />
           <DropdownLabel>u/{user.username}</DropdownLabel>
         </DropdownItem>
-        <DropdownDivider />
+        <DropdownDivider /> */}
         <DropdownItem onClick={handleSignOut}>
           <i className="fas fa-sign-out-alt mr-2" />
           <DropdownLabel>Sign out</DropdownLabel>
