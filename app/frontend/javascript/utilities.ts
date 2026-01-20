@@ -7,12 +7,14 @@ export function postAtFormat(postAt?: string, inTimeZone?: string): string {
     return '3 Hours Pregame';
   }
 
-  if (/^-?\d{1,2}$/.test(postAt)) {
-    return `${Math.abs(Number.parseInt(postAt, 10))} Hours Pregame`;
+  const parsedNumber = Number.parseInt(postAt, 10);
+
+  if (parsedNumber < 0) {
+    return `${Math.abs(parsedNumber)} Hours Pregame`;
   }
 
-  // This needs to be converted to the team's time zone for display purposes
-  if (/(1[0-2]|\d)(:\d\d|) ?(am|pm)?/i.test(postAt)) {
+  // A specific time like "7:00", converted to the team's time zone for display purposes.
+  if (/(1[0-2]|\d):00/i.test(postAt)) {
     return DateTime.fromFormat(postAt, 'h:mm', { zone: 'America/Los_Angeles' })
       .setZone(inTimeZone || 'America/Los_Angeles')
       .toFormat('h:mm a ZZZZ')
