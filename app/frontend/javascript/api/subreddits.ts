@@ -28,7 +28,7 @@ interface SubredditPostgameOptions {
   enabled: boolean;
   sticky?: boolean;
   stickyComment?: string;
-  title: {
+  title?: {
     default?: string;
     won?: string;
     lost?: string;

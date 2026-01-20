@@ -106,9 +106,9 @@ function SubredditOptions({ subreddit }: { subreddit: Subreddit }) {
         {options.postgame?.enabled && (
           <>
             <ListItem label="Sticky">{options.postgame.sticky === false ? 'No' : 'Yes'}</ListItem>
-            <ListItem label="Default Title">{options.postgame.title.default}</ListItem>
-            <ListItem label="Won Title">{options.postgame.title.won || 'Not set'}</ListItem>
-            <ListItem label="Lost Title">{options.postgame.title.lost || 'Not set'}</ListItem>
+            <ListItem label="Default Title">{options.postgame.title?.default}</ListItem>
+            <ListItem label="Won Title">{options.postgame.title?.won || 'Not set'}</ListItem>
+            <ListItem label="Lost Title">{options.postgame.title?.lost || 'Not set'}</ListItem>
             <ListItem label="Sticky Comment">{options.postgame.stickyComment || 'Not set'}</ListItem>
           </>
         )}
