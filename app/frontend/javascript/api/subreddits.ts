@@ -2,7 +2,9 @@ import { apiSubredditPath, apiSubredditsPath } from '@/utilities/routes';
 
 interface SubredditGameThreadOptions {
   enabled: boolean;
-  flairId?: string;
+  flairId?: {
+    default?: string;
+  };
   postAt: string;
   sticky?: boolean;
   stickyComment?: string;
@@ -17,6 +19,9 @@ interface SubredditPregameOptions {
   postAt: string;
   sticky?: boolean;
   stickyComment?: string;
+  flairId?: {
+    default?: string;
+  };
 }
 
 interface SubredditPostgameOptions {
@@ -25,6 +30,11 @@ interface SubredditPostgameOptions {
   stickyComment?: string;
   title: {
     default: string;
+    won?: string;
+    lost?: string;
+  };
+  flairId?: {
+    default?: string;
     won?: string;
     lost?: string;
   };
@@ -37,6 +47,9 @@ interface SubredditOffDayOptions {
   title: string;
   postAt: string;
   lastRunAt: string;
+  flairId?: {
+    default?: string;
+  };
 }
 
 interface SubredditSidebarOptions {
