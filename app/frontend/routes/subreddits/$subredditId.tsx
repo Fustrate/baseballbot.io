@@ -13,6 +13,9 @@ export const Route = createFileRoute('/subreddits/$subredditId')({
 
     return { subreddit };
   },
+  head: ({ params }) => ({
+    meta: [{ title: `Baseballbot - /r/${params.subredditId}` }],
+  }),
 });
 
 function RouteComponent() {
