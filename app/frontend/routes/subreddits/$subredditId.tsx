@@ -85,9 +85,9 @@ function SubredditOptions({ subreddit }: { subreddit: Subreddit }) {
             <ListItem label="Post At">{postAtFormat(options.gameThreads.postAt, options.timezone)}</ListItem>
             <ListItem label="Sticky">{options.gameThreads.sticky === false ? 'No' : 'Yes'}</ListItem>
             <ListItem label="Flair ID">{options.gameThreads.flairId?.default || 'Not set'}</ListItem>
-            <ListItem label="Default Title">{options.gameThreads.title.default}</ListItem>
-            <ListItem label="Postseason Title">{options.gameThreads.title.postseason || 'Not set'}</ListItem>
-            <ListItem label="Sticky Comment">{options.gameThreads.stickyComment || 'Not set'}</ListItem>
+            <ListItem label="Default Title">{options.gameThreads?.title?.default}</ListItem>
+            <ListItem label="Postseason Title">{options.gameThreads?.title?.postseason || 'Not set'}</ListItem>
+            <ListItem label="Sticky Comment">{options.gameThreads?.stickyComment || 'Not set'}</ListItem>
           </>
         )}
       </OptionsList>

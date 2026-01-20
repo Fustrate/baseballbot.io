@@ -5,18 +5,18 @@ interface SubredditGameThreadOptions {
   flairId?: {
     default?: string;
   };
-  postAt: string;
+  postAt?: string;
   sticky?: boolean;
   stickyComment?: string;
-  title: {
-    default: string;
+  title?: {
+    default?: string;
     postseason?: string;
   };
 }
 
 interface SubredditPregameOptions {
   enabled: boolean;
-  postAt: string;
+  postAt?: string;
   sticky?: boolean;
   stickyComment?: string;
   flairId?: {
@@ -29,7 +29,7 @@ interface SubredditPostgameOptions {
   sticky?: boolean;
   stickyComment?: string;
   title: {
-    default: string;
+    default?: string;
     won?: string;
     lost?: string;
   };
@@ -44,9 +44,9 @@ interface SubredditOffDayOptions {
   enabled: boolean;
   sticky?: boolean;
   stickyComment?: string;
-  title: string;
-  postAt: string;
-  lastRunAt: string;
+  title?: string;
+  postAt?: string;
+  lastRunAt?: string;
   flairId?: {
     default?: string;
   };
@@ -56,7 +56,7 @@ interface SubredditSidebarOptions {
   enabled: boolean;
 }
 
-interface SubredditOptions {
+export interface SubredditOptions {
   timezone: `America/${'Chicago' | 'Denver' | 'Detroit' | 'Los_Angeles' | 'New_York' | 'Phoenix'}`;
   subreddits?: {
     downcase: boolean;
@@ -91,6 +91,25 @@ export async function fetchSubreddit(nameOrId: string | number): Promise<Subredd
 
   if (!response.ok) {
     throw new Error('Failed to load subreddit.');
+  }
+
+  return response.json();
+}
+
+export async function updateSubreddit(nameOrId: string | number, options: SubredditOptions): Promise<Subreddit> {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+
+  const response = await fetch(apiSubredditPath(nameOrId), {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken,
+    },
+    body: JSON.stringify({ subreddit: { options } }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update subreddit.');
   }
 
   return response.json();
