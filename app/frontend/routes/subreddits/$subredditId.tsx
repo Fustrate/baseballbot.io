@@ -136,7 +136,7 @@ function OptionsList(options: { label: string; children?: React.ReactNode; enabl
         {'enabled' in options && <StatusBadge enabled={options.enabled} />} {options.label}
       </Subheading>
 
-      {options.enabled === false && <FeatureDisabled />}
+      {'enabled' in options && !options.enabled && <FeatureDisabled />}
       {options.enabled !== false && (
         <dl className="divide-y divide-zinc-950/10 dark:divide-white/10">{options.children}</dl>
       )}
