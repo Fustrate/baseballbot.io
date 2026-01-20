@@ -1,13 +1,8 @@
 import * as Headless from '@headlessui/react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import clsx, { type ClassValue } from 'clsx';
 import { forwardRef, type default as React } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '@/utilities';
 import { Link } from './link';
-
-export function cn(...classes: ClassValue[]) {
-  return twMerge(clsx(...classes));
-}
 
 const variants = cva(
   [
