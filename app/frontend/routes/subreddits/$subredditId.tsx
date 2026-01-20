@@ -21,14 +21,14 @@ function RouteComponent() {
   const isModerator = isLoggedIn && user?.subreddits.includes(subreddit.id);
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
         <Heading>/r/{subreddit.name}</Heading>
         {isModerator && <EditButton subredditId={subreddit.name} />}
       </div>
 
       <WelcomeMessage subreddit={subreddit} isModerator={isModerator} />
-    </>
+    </div>
   );
 }
 
