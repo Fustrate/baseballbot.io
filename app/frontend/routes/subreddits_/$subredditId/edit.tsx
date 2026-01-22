@@ -42,6 +42,7 @@ function RouteComponent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setIsSaving(true);
     setError(null);
 
@@ -95,7 +96,7 @@ function RouteComponent() {
           <FieldGroup>
             <CheckboxField>
               <Checkbox
-                name="sidebar.enabled"
+                name="subreddit[options][sidebar][enabled]"
                 checked={options.sidebar?.enabled ?? false}
                 onChange={(checked) => setOptions({ ...options, sidebar: { ...options.sidebar, enabled: checked } })}
               />
@@ -110,7 +111,7 @@ function RouteComponent() {
           <FieldGroup>
             <CheckboxField>
               <Checkbox
-                name="gameThreads.enabled"
+                name="subreddit[options][gameThreads][enabled]"
                 checked={options.gameThreads?.enabled ?? false}
                 onChange={(checked) =>
                   setOptions({
@@ -126,28 +127,24 @@ function RouteComponent() {
               <>
                 <Field>
                   <Label>Post At</Label>
-                  <Input
-                    name="gameThreads.postAt"
-                    value={options.gameThreads.postAt}
+                  <Select
+                    name="subreddit[options][gameThreads][postAt]"
+                    value={options.gameThreads.postAt ?? '-3'}
                     onChange={(e) =>
                       setOptions({
                         ...options,
-                        gameThreads: {
-                          ...(options.gameThreads ?? { enabled: true }),
-                          postAt: e.target.value,
-                        },
+                        gameThreads: { ...(options.gameThreads ?? { enabled: true }), postAt: e.target.value },
                       })
                     }
-                  />
-                  <Description>
-                    Hours before game start (e.g., "-3") or time (e.g., "7:00"). Note that times are always interpreted
-                    in the Pacific time zone.
-                  </Description>
+                  >
+                    <PostAtOptions offset clock />
+                  </Select>
+                  <Description>Note that times are always interpreted in the Pacific time zone.</Description>
                 </Field>
 
                 <CheckboxField>
                   <Checkbox
-                    name="gameThreads.sticky"
+                    name="subreddit[options][gameThreads][sticky]"
                     checked={options.gameThreads.sticky !== false}
                     onChange={(checked) =>
                       setOptions({
@@ -218,7 +215,7 @@ function RouteComponent() {
                 <Field>
                   <Label>Sticky Comment</Label>
                   <Textarea
-                    name="gameThreads.stickyComment"
+                    name="subreddit[options][gameThreads][stickyComment]"
                     value={options.gameThreads.stickyComment ?? ''}
                     rows={3}
                     onChange={(e) =>
@@ -244,7 +241,7 @@ function RouteComponent() {
           <FieldGroup>
             <CheckboxField>
               <Checkbox
-                name="pregame.enabled"
+                name="subreddit[options][pregame][enabled]"
                 checked={options.pregame?.enabled ?? false}
                 onChange={(checked) =>
                   setOptions({
@@ -260,28 +257,24 @@ function RouteComponent() {
               <>
                 <Field>
                   <Label>Post At</Label>
-                  <Input
-                    name="pregame.postAt"
-                    value={options.pregame.postAt}
+                  <Select
+                    name="subreddit[options][pregame][postAt]"
+                    value={options.pregame.postAt ?? '-3'}
                     onChange={(e) =>
                       setOptions({
                         ...options,
-                        pregame: {
-                          ...(options.pregame ?? { enabled: true }),
-                          postAt: e.target.value,
-                        },
+                        pregame: { ...(options.pregame ?? { enabled: true }), postAt: e.target.value },
                       })
                     }
-                  />
-                  <Description>
-                    Hours before game start (e.g., "-4") or a fixed time (e.g., "6:00"). Note that times are always
-                    interpreted in the Pacific time zone.
-                  </Description>
+                  >
+                    <PostAtOptions offset clock />
+                  </Select>
+                  <Description>Note that times are always interpreted in the Pacific time zone.</Description>
                 </Field>
 
                 <CheckboxField>
                   <Checkbox
-                    name="pregame.sticky"
+                    name="subreddit[options][pregame][sticky]"
                     checked={options.pregame.sticky !== false}
                     onChange={(checked) =>
                       setOptions({
@@ -299,7 +292,7 @@ function RouteComponent() {
                 <Field>
                   <Label>Sticky Comment</Label>
                   <Textarea
-                    name="pregame.stickyComment"
+                    name="subreddit[options][pregame][stickyComment]"
                     value={options.pregame.stickyComment ?? ''}
                     rows={3}
                     onChange={(e) =>
@@ -325,7 +318,7 @@ function RouteComponent() {
           <FieldGroup>
             <CheckboxField>
               <Checkbox
-                name="postgame.enabled"
+                name="subreddit[options][postgame][enabled]"
                 checked={options.postgame?.enabled ?? false}
                 onChange={(checked) =>
                   setOptions({
@@ -344,7 +337,7 @@ function RouteComponent() {
               <>
                 <CheckboxField>
                   <Checkbox
-                    name="postgame.sticky"
+                    name="subreddit[options][postgame][sticky]"
                     checked={options.postgame.sticky !== false}
                     onChange={(checked) =>
                       setOptions({
@@ -415,7 +408,7 @@ function RouteComponent() {
                 <Field>
                   <Label>Sticky Comment</Label>
                   <Textarea
-                    name="postgame.stickyComment"
+                    name="subreddit[options][postgame][stickyComment]"
                     value={options.postgame.stickyComment ?? ''}
                     rows={3}
                     onChange={(e) =>
@@ -441,7 +434,7 @@ function RouteComponent() {
           <FieldGroup>
             <CheckboxField>
               <Checkbox
-                name="offDay.enabled"
+                name="subreddit[options][offDay][enabled]"
                 checked={options.offDay?.enabled ?? false}
                 onChange={(checked) =>
                   setOptions({
@@ -458,7 +451,7 @@ function RouteComponent() {
                 <Field>
                   <Label>Title</Label>
                   <Input
-                    name="offDay.title"
+                    name="subreddit[options][offDay][title]"
                     value={options.offDay.title}
                     onChange={(e) =>
                       setOptions({
@@ -474,27 +467,24 @@ function RouteComponent() {
 
                 <Field>
                   <Label>Post At</Label>
-                  <Input
-                    name="offDay.postAt"
-                    value={options.offDay.postAt}
+                  <Select
+                    name="subreddit[options][offDay][postAt]"
+                    value={options.offDay.postAt ?? '-3'}
                     onChange={(e) =>
                       setOptions({
                         ...options,
-                        offDay: {
-                          ...(options.offDay ?? { enabled: true }),
-                          postAt: e.target.value,
-                        },
+                        offDay: { ...(options.offDay ?? { enabled: true }), postAt: e.target.value },
                       })
                     }
-                  />
-                  <Description>
-                    Time to post (e.g., "10:00"). Note that times are always interpreted in the Pacific time zone.
-                  </Description>
+                  >
+                    <PostAtOptions clock />
+                  </Select>
+                  <Description>Note that times are always interpreted in the Pacific time zone.</Description>
                 </Field>
 
                 <CheckboxField>
                   <Checkbox
-                    name="offDay.sticky"
+                    name="subreddit[options][offDay][sticky]"
                     checked={options.offDay.sticky !== false}
                     onChange={(checked) =>
                       setOptions({
@@ -512,7 +502,7 @@ function RouteComponent() {
                 <Field>
                   <Label>Sticky Comment</Label>
                   <Textarea
-                    name="offDay.stickyComment"
+                    name="subreddit[options][offDay][stickyComment]"
                     value={options.offDay.stickyComment ?? ''}
                     rows={3}
                     onChange={(e) =>
@@ -546,5 +536,44 @@ function RouteComponent() {
         </div>
       </form>
     </div>
+  );
+}
+
+function PostAtOptions({ offset, clock }: { offset?: boolean; clock?: boolean }) {
+  return (
+    <>
+      {offset && (
+        <>
+          <option value="-1">1 Hour Pregame</option>
+          <option value="-2">2 Hours Pregame</option>
+          <option value="-3">3 Hours Pregame</option>
+          <option value="-4">4 Hours Pregame</option>
+          <option value="-5">5 Hours Pregame</option>
+          <option value="-6">6 Hours Pregame</option>
+          <option value="-7">7 Hours Pregame</option>
+          <option value="-8">8 Hours Pregame</option>
+          <option value="-9">9 Hours Pregame</option>
+          <option value="-10">10 Hours Pregame</option>
+          <option value="-11">11 Hours Pregame</option>
+          <option value="-12">12 Hours Pregame</option>
+        </>
+      )}
+      {clock && (
+        <>
+          <option value="1:00">1 AM Pacific</option>
+          <option value="2:00">2 AM Pacific</option>
+          <option value="3:00">3 AM Pacific</option>
+          <option value="4:00">4 AM Pacific</option>
+          <option value="5:00">5 AM Pacific</option>
+          <option value="6:00">6 AM Pacific</option>
+          <option value="7:00">7 AM Pacific</option>
+          <option value="8:00">8 AM Pacific</option>
+          <option value="9:00">9 AM Pacific</option>
+          <option value="10:00">10 AM Pacific</option>
+          <option value="11:00">11 AM Pacific</option>
+          <option value="12:00">12 PM Pacific</option>
+        </>
+      )}
+    </>
   );
 }
