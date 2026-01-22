@@ -1,7 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { type SetStateAction, useState } from 'react';
 import { fetchSession } from '@/api/session';
-import { fetchSubreddit, updateSubreddit } from '@/api/subreddits';
+import { fetchSubreddit, type SubredditOptions, updateSubreddit } from '@/api/subreddits';
 import { Button } from '@/catalyst/button';
 import { Checkbox, CheckboxField } from '@/catalyst/checkbox';
 import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '@/catalyst/fieldset';
@@ -35,9 +35,9 @@ export const Route = createFileRoute('/subreddits_/$subredditId/edit')({
 function RouteComponent() {
   const { subreddit } = Route.useLoaderData();
   const navigate = useNavigate();
+
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [options, setOptions] = useState(subreddit.options);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,459 +68,17 @@ function RouteComponent() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-10">
-        {/* General Settings */}
-        <Fieldset>
-          <Legend>General Settings</Legend>
-          <FieldGroup>
-            <Field>
-              <Label>Sticky Slot</Label>
-              <Select
-                name="stickySlot"
-                value={options.stickySlot ?? ''}
-                onChange={(e) =>
-                  setOptions({ ...options, stickySlot: e.target.value ? (Number(e.target.value) as 1 | 2) : undefined })
-                }
-              >
-                <option value="">Default</option>
-                <option value="1">Prefer Slot 1</option>
-                <option value="2">Prefer Slot 2</option>
-              </Select>
-              <Description>Which sticky position to use (1 or 2)</Description>
-            </Field>
-          </FieldGroup>
-        </Fieldset>
+        <GeneralSettings options={options} setOptions={setOptions} />
 
-        {/* Sidebar Updates */}
-        <Fieldset>
-          <Legend>Sidebar Updates</Legend>
-          <FieldGroup>
-            <CheckboxField>
-              <Checkbox
-                name="subreddit[options][sidebar][enabled]"
-                checked={options.sidebar?.enabled ?? false}
-                onChange={(checked) => setOptions({ ...options, sidebar: { ...options.sidebar, enabled: checked } })}
-              />
-              <Label>Enable Sidebar Updates</Label>
-            </CheckboxField>
-          </FieldGroup>
-        </Fieldset>
+        <SidebarSettings options={options.sidebar} setOptions={setOptions} />
 
-        {/* Game Threads */}
-        <Fieldset>
-          <Legend>Game Threads</Legend>
-          <FieldGroup>
-            <CheckboxField>
-              <Checkbox
-                name="subreddit[options][gameThreads][enabled]"
-                checked={options.gameThreads?.enabled ?? false}
-                onChange={(checked) =>
-                  setOptions({
-                    ...options,
-                    gameThreads: { ...options.gameThreads, enabled: checked },
-                  })
-                }
-              />
-              <Label>Enable Game Threads</Label>
-            </CheckboxField>
+        <GameThreadSettings options={options.gameThreads} setOptions={setOptions} />
 
-            {options.gameThreads?.enabled && (
-              <>
-                <Field>
-                  <Label>Post At</Label>
-                  <Select
-                    name="subreddit[options][gameThreads][postAt]"
-                    value={options.gameThreads.postAt ?? '-3'}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        gameThreads: { ...(options.gameThreads ?? { enabled: true }), postAt: e.target.value },
-                      })
-                    }
-                  >
-                    <PostAtOptions offset clock />
-                  </Select>
-                  <Description>Note that times are always interpreted in the Pacific time zone.</Description>
-                </Field>
+        <PreGameSettings options={options.pregame} setOptions={setOptions} />
 
-                <CheckboxField>
-                  <Checkbox
-                    name="subreddit[options][gameThreads][sticky]"
-                    checked={options.gameThreads.sticky !== false}
-                    onChange={(checked) =>
-                      setOptions({
-                        ...options,
-                        gameThreads: {
-                          ...(options.gameThreads ?? { enabled: true }),
-                          sticky: checked,
-                        },
-                      })
-                    }
-                  />
-                  <Label>Sticky Game Threads</Label>
-                </CheckboxField>
+        <PostGameSettings options={options.postgame} setOptions={setOptions} />
 
-                <Field>
-                  <Label>Flair ID</Label>
-                  <Input
-                    name="gameThreads.flairId.default"
-                    value={options.gameThreads.flairId?.default ?? ''}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        gameThreads: {
-                          ...(options.gameThreads ?? { enabled: true }),
-                          flairId: { default: e.target.value || undefined },
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional flair template ID for the post</Description>
-                </Field>
-
-                <Field>
-                  <Label>Default Title</Label>
-                  <Input
-                    name="gameThreads.title.default"
-                    value={options.gameThreads.title?.default ?? ''}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        gameThreads: {
-                          ...(options.gameThreads ?? { enabled: true }),
-                          title: { ...options.gameThreads?.title, default: e.target.value },
-                        },
-                      })
-                    }
-                  />
-                </Field>
-
-                <Field>
-                  <Label>Postseason Title</Label>
-                  <Input
-                    name="gameThreads.title.postseason"
-                    value={options.gameThreads.title?.postseason ?? ''}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        gameThreads: {
-                          ...(options.gameThreads ?? { enabled: true }),
-                          title: { ...options.gameThreads?.title, postseason: e.target.value },
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional separate title for postseason games</Description>
-                </Field>
-
-                <Field>
-                  <Label>Sticky Comment</Label>
-                  <Textarea
-                    name="subreddit[options][gameThreads][stickyComment]"
-                    value={options.gameThreads.stickyComment ?? ''}
-                    rows={3}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        gameThreads: {
-                          ...(options.gameThreads ?? { enabled: true }),
-                          stickyComment: e.target.value || undefined,
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional comment to sticky at the top of the thread</Description>
-                </Field>
-              </>
-            )}
-          </FieldGroup>
-        </Fieldset>
-
-        {/* Pregame Threads */}
-        <Fieldset>
-          <Legend>Pregame Threads</Legend>
-          <FieldGroup>
-            <CheckboxField>
-              <Checkbox
-                name="subreddit[options][pregame][enabled]"
-                checked={options.pregame?.enabled ?? false}
-                onChange={(checked) =>
-                  setOptions({
-                    ...options,
-                    pregame: { ...options.pregame, enabled: checked },
-                  })
-                }
-              />
-              <Label>Enable Pregame Threads</Label>
-            </CheckboxField>
-
-            {options.pregame?.enabled && (
-              <>
-                <Field>
-                  <Label>Post At</Label>
-                  <Select
-                    name="subreddit[options][pregame][postAt]"
-                    value={options.pregame.postAt ?? '-3'}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        pregame: { ...(options.pregame ?? { enabled: true }), postAt: e.target.value },
-                      })
-                    }
-                  >
-                    <PostAtOptions offset clock />
-                  </Select>
-                  <Description>Note that times are always interpreted in the Pacific time zone.</Description>
-                </Field>
-
-                <CheckboxField>
-                  <Checkbox
-                    name="subreddit[options][pregame][sticky]"
-                    checked={options.pregame.sticky !== false}
-                    onChange={(checked) =>
-                      setOptions({
-                        ...options,
-                        pregame: {
-                          ...(options.pregame ?? { enabled: true }),
-                          sticky: checked,
-                        },
-                      })
-                    }
-                  />
-                  <Label>Sticky Pregame Threads</Label>
-                </CheckboxField>
-
-                <Field>
-                  <Label>Sticky Comment</Label>
-                  <Textarea
-                    name="subreddit[options][pregame][stickyComment]"
-                    value={options.pregame.stickyComment ?? ''}
-                    rows={3}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        pregame: {
-                          ...(options.pregame ?? { enabled: true }),
-                          stickyComment: e.target.value || undefined,
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional comment to sticky at the top of the thread</Description>
-                </Field>
-              </>
-            )}
-          </FieldGroup>
-        </Fieldset>
-
-        {/* Postgame Threads */}
-        <Fieldset>
-          <Legend>Postgame Threads</Legend>
-          <FieldGroup>
-            <CheckboxField>
-              <Checkbox
-                name="subreddit[options][postgame][enabled]"
-                checked={options.postgame?.enabled ?? false}
-                onChange={(checked) =>
-                  setOptions({
-                    ...options,
-                    postgame: {
-                      ...options.postgame,
-                      enabled: checked,
-                    },
-                  })
-                }
-              />
-              <Label>Enable Postgame Threads</Label>
-            </CheckboxField>
-
-            {options.postgame?.enabled && (
-              <>
-                <CheckboxField>
-                  <Checkbox
-                    name="subreddit[options][postgame][sticky]"
-                    checked={options.postgame.sticky !== false}
-                    onChange={(checked) =>
-                      setOptions({
-                        ...options,
-                        postgame: {
-                          ...(options.postgame ?? { enabled: true }),
-                          sticky: checked,
-                        },
-                      })
-                    }
-                  />
-                  <Label>Sticky Postgame Threads</Label>
-                </CheckboxField>
-
-                <Field>
-                  <Label>Postgame Title</Label>
-                  <Input
-                    name="postgame.title.default"
-                    value={options.postgame.title?.default ?? ''}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        postgame: {
-                          ...(options.postgame ?? { enabled: true }),
-                          title: { ...options.postgame?.title, default: e.target.value },
-                        },
-                      })
-                    }
-                  />
-                </Field>
-
-                <Field>
-                  <Label>Postgame Title - Win</Label>
-                  <Input
-                    name="postgame.title.won"
-                    value={options.postgame.title?.won ?? ''}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        postgame: {
-                          ...(options.postgame ?? { enabled: true }),
-                          title: { ...options.postgame?.title, won: e.target.value || undefined },
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional separate title when your team wins</Description>
-                </Field>
-
-                <Field>
-                  <Label>Postgame Title - Loss</Label>
-                  <Input
-                    name="postgame.title.lost"
-                    value={options.postgame.title?.lost ?? ''}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        postgame: {
-                          ...(options.postgame ?? { enabled: true }),
-                          title: { ...options.postgame?.title, lost: e.target.value || undefined },
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional separate title when your team loses</Description>
-                </Field>
-
-                <Field>
-                  <Label>Sticky Comment</Label>
-                  <Textarea
-                    name="subreddit[options][postgame][stickyComment]"
-                    value={options.postgame.stickyComment ?? ''}
-                    rows={3}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        postgame: {
-                          ...(options.postgame ?? { enabled: true }),
-                          stickyComment: e.target.value || undefined,
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional comment to sticky at the top of the postgame thread</Description>
-                </Field>
-              </>
-            )}
-          </FieldGroup>
-        </Fieldset>
-
-        {/* Off Day Threads */}
-        <Fieldset>
-          <Legend>Off Day Threads</Legend>
-          <FieldGroup>
-            <CheckboxField>
-              <Checkbox
-                name="subreddit[options][offDay][enabled]"
-                checked={options.offDay?.enabled ?? false}
-                onChange={(checked) =>
-                  setOptions({
-                    ...options,
-                    offDay: { ...options.offDay, enabled: checked },
-                  })
-                }
-              />
-              <Label>Enable off day threads</Label>
-            </CheckboxField>
-
-            {options.offDay?.enabled && (
-              <>
-                <Field>
-                  <Label>Title</Label>
-                  <Input
-                    name="subreddit[options][offDay][title]"
-                    value={options.offDay.title}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        offDay: {
-                          ...(options.offDay ?? { enabled: true }),
-                          title: e.target.value,
-                        },
-                      })
-                    }
-                  />
-                </Field>
-
-                <Field>
-                  <Label>Post At</Label>
-                  <Select
-                    name="subreddit[options][offDay][postAt]"
-                    value={options.offDay.postAt ?? '-3'}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        offDay: { ...(options.offDay ?? { enabled: true }), postAt: e.target.value },
-                      })
-                    }
-                  >
-                    <PostAtOptions clock />
-                  </Select>
-                  <Description>Note that times are always interpreted in the Pacific time zone.</Description>
-                </Field>
-
-                <CheckboxField>
-                  <Checkbox
-                    name="subreddit[options][offDay][sticky]"
-                    checked={options.offDay.sticky !== false}
-                    onChange={(checked) =>
-                      setOptions({
-                        ...options,
-                        offDay: {
-                          ...(options.offDay ?? { enabled: true }),
-                          sticky: checked,
-                        },
-                      })
-                    }
-                  />
-                  <Label>Sticky thread</Label>
-                </CheckboxField>
-
-                <Field>
-                  <Label>Sticky Comment</Label>
-                  <Textarea
-                    name="subreddit[options][offDay][stickyComment]"
-                    value={options.offDay.stickyComment ?? ''}
-                    rows={3}
-                    onChange={(e) =>
-                      setOptions({
-                        ...options,
-                        offDay: {
-                          ...(options.offDay ?? { enabled: true }),
-                          stickyComment: e.target.value || undefined,
-                        },
-                      })
-                    }
-                  />
-                  <Description>Optional comment to sticky at the top of the thread</Description>
-                </Field>
-              </>
-            )}
-          </FieldGroup>
-        </Fieldset>
+        <OffDaySettings options={options.offDay} setOptions={setOptions} />
 
         <div className="flex gap-4">
           <Button type="submit" disabled={isSaving}>
@@ -536,6 +94,401 @@ function RouteComponent() {
         </div>
       </form>
     </div>
+  );
+}
+
+function GeneralSettings({
+  options,
+  setOptions,
+}: {
+  options: SubredditOptions;
+  setOptions: (value: SetStateAction<SubredditOptions>) => void;
+}) {
+  return (
+    <Fieldset>
+      <Legend>General Settings</Legend>
+      <FieldGroup>
+        <Field>
+          <Label>Sticky Slot</Label>
+          <Select
+            name="stickySlot"
+            value={options.stickySlot ?? ''}
+            onChange={(e) =>
+              setOptions({ ...options, stickySlot: e.target.value ? (Number(e.target.value) as 1 | 2) : undefined })
+            }
+          >
+            <option value="">Default</option>
+            <option value="1">Prefer Slot 1</option>
+            <option value="2">Prefer Slot 2</option>
+          </Select>
+          <Description>Which sticky position to use (1 or 2)</Description>
+        </Field>
+      </FieldGroup>
+    </Fieldset>
+  );
+}
+
+function SidebarSettings({
+  options,
+  setOptions,
+}: {
+  options: SubredditOptions['sidebar'];
+  setOptions: (value: SetStateAction<SubredditOptions>) => void;
+}) {
+  function setSidebarOption(setting: Partial<SubredditOptions['sidebar']>) {
+    setOptions((existing) => ({
+      ...existing,
+      sidebar: { enabled: true, ...options, ...setting },
+    }));
+  }
+
+  return (
+    <Fieldset>
+      <Legend>Sidebar Updates</Legend>
+      <FieldGroup>
+        <CheckboxField>
+          <Checkbox
+            name="subreddit[options][sidebar][enabled]"
+            checked={options?.enabled ?? false}
+            onChange={(checked) => setSidebarOption({ enabled: checked })}
+          />
+          <Label>Enable Sidebar Updates</Label>
+        </CheckboxField>
+      </FieldGroup>
+    </Fieldset>
+  );
+}
+
+function GameThreadSettings({
+  options,
+  setOptions,
+}: {
+  options: SubredditOptions['gameThreads'];
+  setOptions: (value: SetStateAction<SubredditOptions>) => void;
+}) {
+  function setGameThreadOption(setting: Partial<SubredditOptions['gameThreads']>) {
+    setOptions((existing) => ({
+      ...existing,
+      gameThreads: { enabled: true, ...options, ...setting },
+    }));
+  }
+
+  return (
+    <Fieldset>
+      <Legend>Game Threads</Legend>
+      <FieldGroup>
+        <CheckboxField>
+          <Checkbox
+            name="subreddit[options][gameThreads][enabled]"
+            checked={options?.enabled ?? false}
+            onChange={(checked) => setGameThreadOption({ enabled: checked })}
+          />
+          <Label>Enable Game Threads</Label>
+        </CheckboxField>
+
+        {options?.enabled && (
+          <>
+            <Field>
+              <Label>Post At</Label>
+              <Select
+                name="subreddit[options][gameThreads][postAt]"
+                value={options.postAt ?? '-3'}
+                onChange={(e) => setGameThreadOption({ postAt: e.target.value })}
+              >
+                <PostAtOptions offset clock />
+              </Select>
+              <Description>Note that times are always interpreted in the Pacific time zone.</Description>
+            </Field>
+
+            <CheckboxField>
+              <Checkbox
+                name="subreddit[options][gameThreads][sticky]"
+                checked={options.sticky !== false}
+                onChange={(checked) => setGameThreadOption({ sticky: checked })}
+              />
+              <Label>Sticky Game Threads</Label>
+            </CheckboxField>
+
+            <Field>
+              <Label>Flair ID</Label>
+              <Input
+                name="gameThreads.flairId.default"
+                value={options.flairId?.default ?? ''}
+                onChange={(e) =>
+                  setGameThreadOption({ flairId: { ...options.flairId, default: e.target.value || undefined } })
+                }
+              />
+              <Description>Optional flair template ID for the post</Description>
+            </Field>
+
+            <Field>
+              <Label>Default Title</Label>
+              <Input
+                name="gameThreads.title.default"
+                value={options.title?.default ?? ''}
+                onChange={(e) =>
+                  setGameThreadOption({ title: { ...options.title, default: e.target.value || undefined } })
+                }
+              />
+              <Description>Optional flair template ID for the post</Description>
+            </Field>
+
+            <Field>
+              <Label>Postseason Title</Label>
+              <Input
+                name="gameThreads.title.postseason"
+                value={options.title?.postseason ?? ''}
+                onChange={(e) =>
+                  setGameThreadOption({ title: { ...options.title, postseason: e.target.value || undefined } })
+                }
+              />
+              <Description>Optional separate title for postseason games</Description>
+            </Field>
+
+            <Field>
+              <Label>Sticky Comment</Label>
+              <Textarea
+                name="subreddit[options][gameThreads][stickyComment]"
+                value={options.stickyComment ?? ''}
+                rows={3}
+                onChange={(e) => setGameThreadOption({ stickyComment: e.target.value || undefined })}
+              />
+              <Description>Optional comment to sticky at the top of the thread</Description>
+            </Field>
+          </>
+        )}
+      </FieldGroup>
+    </Fieldset>
+  );
+}
+
+function PreGameSettings({
+  options,
+  setOptions,
+}: {
+  options: SubredditOptions['pregame'];
+  setOptions: (value: SetStateAction<SubredditOptions>) => void;
+}) {
+  function setPreGameOption(setting: Partial<SubredditOptions['pregame']>) {
+    setOptions((existing) => ({
+      ...existing,
+      pregame: { enabled: true, ...options, ...setting },
+    }));
+  }
+
+  return (
+    <Fieldset>
+      <Legend>Pregame Threads</Legend>
+      <FieldGroup>
+        <CheckboxField>
+          <Checkbox
+            name="subreddit[options][pregame][enabled]"
+            checked={options?.enabled ?? false}
+            onChange={(checked) => setPreGameOption({ enabled: checked })}
+          />
+          <Label>Enable Pregame Threads</Label>
+        </CheckboxField>
+
+        {options?.enabled && (
+          <>
+            <Field>
+              <Label>Post At</Label>
+              <Select
+                name="subreddit[options][pregame][postAt]"
+                value={options.postAt ?? '-3'}
+                onChange={(e) => setPreGameOption({ postAt: e.target.value })}
+              >
+                <PostAtOptions offset clock />
+              </Select>
+              <Description>Note that times are always interpreted in the Pacific time zone.</Description>
+            </Field>
+
+            <CheckboxField>
+              <Checkbox
+                name="subreddit[options][pregame][sticky]"
+                checked={options.sticky !== false}
+                onChange={(checked) => setPreGameOption({ sticky: checked })}
+              />
+              <Label>Sticky Pregame Threads</Label>
+            </CheckboxField>
+
+            <Field>
+              <Label>Sticky Comment</Label>
+              <Textarea
+                name="subreddit[options][pregame][stickyComment]"
+                value={options.stickyComment ?? ''}
+                rows={3}
+                onChange={(e) => setPreGameOption({ stickyComment: e.target.value || undefined })}
+              />
+              <Description>Optional comment to sticky at the top of the thread</Description>
+            </Field>
+          </>
+        )}
+      </FieldGroup>
+    </Fieldset>
+  );
+}
+
+function PostGameSettings({
+  options,
+  setOptions,
+}: {
+  options: SubredditOptions['postgame'];
+  setOptions: (value: SetStateAction<SubredditOptions>) => void;
+}) {
+  function setPostgameOption(setting: Partial<SubredditOptions['postgame']>) {
+    setOptions((existing) => ({
+      ...existing,
+      postgame: { enabled: true, ...options, ...setting },
+    }));
+  }
+
+  return (
+    <Fieldset>
+      <Legend>Postgame Threads</Legend>
+      <FieldGroup>
+        <CheckboxField>
+          <Checkbox
+            name="subreddit[options][postgame][enabled]"
+            checked={options?.enabled ?? false}
+            onChange={(checked) => setPostgameOption({ enabled: checked })}
+          />
+          <Label>Enable Postgame Threads</Label>
+        </CheckboxField>
+
+        {options?.enabled && (
+          <>
+            <CheckboxField>
+              <Checkbox
+                name="subreddit[options][postgame][sticky]"
+                checked={options.sticky !== false}
+                onChange={(checked) => setPostgameOption({ sticky: checked })}
+              />
+              <Label>Sticky Postgame Threads</Label>
+            </CheckboxField>
+
+            <Field>
+              <Label>Postgame Title</Label>
+              <Input
+                name="subreddit[options][postgame][title][default]"
+                value={options.title?.default ?? ''}
+                onChange={(e) =>
+                  setPostgameOption({ title: { ...options.title, default: e.target.value || undefined } })
+                }
+              />
+            </Field>
+
+            <Field>
+              <Label>Postgame Title - Win</Label>
+              <Input
+                name="subreddit[options][postgame][title][won]"
+                value={options.title?.won ?? ''}
+                onChange={(e) => setPostgameOption({ title: { ...options.title, won: e.target.value || undefined } })}
+                required
+              />
+              <Description>Optional separate title when your team wins</Description>
+            </Field>
+
+            <Field>
+              <Label>Postgame Title - Loss</Label>
+              <Input
+                name="subreddit[options][postgame][title][lost]"
+                value={options.title?.lost ?? ''}
+                onChange={(e) => setPostgameOption({ title: { ...options.title, lost: e.target.value || undefined } })}
+              />
+              <Description>Optional separate title when your team loses</Description>
+            </Field>
+
+            <Field>
+              <Label>Sticky Comment</Label>
+              <Textarea
+                name="subreddit[options][postgame][stickyComment]"
+                value={options.stickyComment ?? ''}
+                rows={3}
+                onChange={(e) => setPostgameOption({ stickyComment: e.target.value || undefined })}
+              />
+              <Description>Optional comment to sticky at the top of the postgame thread</Description>
+            </Field>
+          </>
+        )}
+      </FieldGroup>
+    </Fieldset>
+  );
+}
+
+function OffDaySettings({
+  options,
+  setOptions,
+}: {
+  options: SubredditOptions['offDay'];
+  setOptions: (options: any) => void;
+}) {
+  function setOffDayOption(setting: Partial<SubredditOptions['offDay']>) {
+    setOptions((existing) => ({
+      ...existing,
+      offDay: { enabled: true, ...options, ...setting },
+    }));
+  }
+
+  return (
+    <Fieldset>
+      <Legend>Off Day Threads</Legend>
+      <FieldGroup>
+        <CheckboxField>
+          <Checkbox
+            name="subreddit[options][offDay][enabled]"
+            checked={options?.enabled ?? false}
+            onChange={(checked) => setOffDayOption({ enabled: checked })}
+          />
+          <Label>Enable off day threads</Label>
+        </CheckboxField>
+
+        {options?.enabled && (
+          <>
+            <Field>
+              <Label>Title</Label>
+              <Input
+                name="subreddit[options][offDay][title]"
+                value={options?.title}
+                onChange={(e) => setOffDayOption({ title: e.target.value })}
+              />
+            </Field>
+
+            <Field>
+              <Label>Post At</Label>
+              <Select
+                name="subreddit[options][offDay][postAt]"
+                value={options?.postAt ?? '-3'}
+                onChange={(e) => setOffDayOption({ postAt: e.target.value })}
+              >
+                <PostAtOptions clock />
+              </Select>
+              <Description>Note that times are always interpreted in the Pacific time zone.</Description>
+            </Field>
+
+            <CheckboxField>
+              <Checkbox
+                name="subreddit[options][offDay][sticky]"
+                checked={options?.sticky !== false}
+                onChange={(checked) => setOffDayOption({ sticky: checked })}
+              />
+              <Label>Sticky thread</Label>
+            </CheckboxField>
+
+            <Field>
+              <Label>Sticky Comment</Label>
+              <Textarea
+                name="subreddit[options][offDay][stickyComment]"
+                value={options?.stickyComment ?? ''}
+                rows={3}
+                onChange={(e) => setOffDayOption({ stickyComment: e.target.value || undefined })}
+              />
+              <Description>Optional comment to sticky at the top of the thread</Description>
+            </Field>
+          </>
+        )}
+      </FieldGroup>
+    </Fieldset>
   );
 }
 

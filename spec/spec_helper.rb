@@ -1,22 +1,34 @@
 # frozen_string_literal: true
 
-# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+ENV['RAILS_ENV'] ||= 'test'
+
+require File.expand_path('../config/environment', __dir__)
+
+require 'rake'
+
+require 'rspec/rails'
+
+Rails.application.load_tasks
+
+# The following line is provided for convenience purposes. It has the downside of increasing the boot-up time by
+# auto-requiring all files in the support directory. Alternatively, in the individual `*_spec.rb` files, manually
+# require only the support files necessary.
+Rails.root.glob('spec/support/**/*.rb').each { require it }
+
+# Checks for pending migrations and applies them before tests are run.
+ActiveRecord::Migration.maintain_test_schema!
+
 RSpec.configure do |config|
-  config.expect_with :rspec do |expectations|
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-  end
+  config.fixture_paths = [Rails.root.join('spec/fixtures')]
 
-  config.mock_with :rspec do |mocks|
-    mocks.verify_partial_doubles = true
-  end
+  config.use_transactional_fixtures = true
 
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
-  config.disable_monkey_patching!
-  config.warnings = true
-  config.default_formatter = 'doc' if config.files_to_run.one?
-  config.profile_examples = 10
-  config.order = :random
+  config.infer_spec_type_from_file_location!
 
-  Kernel.srand config.seed
+  # Filter lines from Rails gems in backtraces.
+  config.filter_rails_from_backtrace!
+
+  config.include FactoryBot::Syntax::Methods
+
+  config.before { Current.reset }
 end
