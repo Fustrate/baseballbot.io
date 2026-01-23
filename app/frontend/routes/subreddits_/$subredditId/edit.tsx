@@ -212,11 +212,9 @@ function GameThreadSettings({
             <Field>
               <Label>Flair ID</Label>
               <Input
-                name="gameThreads.flairId.default"
-                value={options.flairId?.default ?? ''}
-                onChange={(e) =>
-                  setGameThreadOption({ flairId: { ...options.flairId, default: e.target.value || undefined } })
-                }
+                name="subreddit[options][gameThreads][flairId]"
+                value={options.flairId ?? ''}
+                onChange={(e) => setGameThreadOption({ flairId: e.target.value })}
               />
               <Description>Optional flair template ID for the post</Description>
             </Field>
@@ -224,11 +222,9 @@ function GameThreadSettings({
             <Field>
               <Label>Default Title</Label>
               <Input
-                name="gameThreads.title.default"
-                value={options.title?.default ?? ''}
-                onChange={(e) =>
-                  setGameThreadOption({ title: { ...options.title, default: e.target.value || undefined } })
-                }
+                name="subreddit[options][gameThreads][title]"
+                value={options.title ?? ''}
+                onChange={(e) => setGameThreadOption({ title: e.target.value })}
               />
               <Description>Optional flair template ID for the post</Description>
             </Field>
@@ -236,11 +232,9 @@ function GameThreadSettings({
             <Field>
               <Label>Postseason Title</Label>
               <Input
-                name="gameThreads.title.postseason"
-                value={options.title?.postseason ?? ''}
-                onChange={(e) =>
-                  setGameThreadOption({ title: { ...options.title, postseason: e.target.value || undefined } })
-                }
+                name="subreddit[options][gameThreads][title.postseason]"
+                value={options['title.postseason'] ?? ''}
+                onChange={(e) => setGameThreadOption({ 'title.postseason': e.target.value })}
               />
               <Description>Optional separate title for postseason games</Description>
             </Field>
@@ -251,7 +245,7 @@ function GameThreadSettings({
                 name="subreddit[options][gameThreads][stickyComment]"
                 value={options.stickyComment ?? ''}
                 rows={3}
-                onChange={(e) => setGameThreadOption({ stickyComment: e.target.value || undefined })}
+                onChange={(e) => setGameThreadOption({ stickyComment: e.target.value })}
               />
               <Description>Optional comment to sticky at the top of the thread</Description>
             </Field>
@@ -318,7 +312,7 @@ function PreGameSettings({
                 name="subreddit[options][pregame][stickyComment]"
                 value={options.stickyComment ?? ''}
                 rows={3}
-                onChange={(e) => setPreGameOption({ stickyComment: e.target.value || undefined })}
+                onChange={(e) => setPreGameOption({ stickyComment: e.target.value })}
               />
               <Description>Optional comment to sticky at the top of the thread</Description>
             </Field>
@@ -370,20 +364,18 @@ function PostGameSettings({
             <Field>
               <Label>Postgame Title</Label>
               <Input
-                name="subreddit[options][postgame][title][default]"
-                value={options.title?.default ?? ''}
-                onChange={(e) =>
-                  setPostgameOption({ title: { ...options.title, default: e.target.value || undefined } })
-                }
+                name="subreddit[options][postgame][title]"
+                value={options.title ?? ''}
+                onChange={(e) => setPostgameOption({ title: e.target.value })}
               />
             </Field>
 
             <Field>
               <Label>Postgame Title - Win</Label>
               <Input
-                name="subreddit[options][postgame][title][won]"
-                value={options.title?.won ?? ''}
-                onChange={(e) => setPostgameOption({ title: { ...options.title, won: e.target.value || undefined } })}
+                name="subreddit[options][postgame][title.won]"
+                value={options['title.won'] ?? ''}
+                onChange={(e) => setPostgameOption({ 'title.won': e.target.value })}
                 required
               />
               <Description>Optional separate title when your team wins</Description>
@@ -392,9 +384,9 @@ function PostGameSettings({
             <Field>
               <Label>Postgame Title - Loss</Label>
               <Input
-                name="subreddit[options][postgame][title][lost]"
-                value={options.title?.lost ?? ''}
-                onChange={(e) => setPostgameOption({ title: { ...options.title, lost: e.target.value || undefined } })}
+                name="subreddit[options][postgame][title.lost]"
+                value={options['title.lost'] ?? ''}
+                onChange={(e) => setPostgameOption({ 'title.lost': e.target.value })}
               />
               <Description>Optional separate title when your team loses</Description>
             </Field>
@@ -405,7 +397,7 @@ function PostGameSettings({
                 name="subreddit[options][postgame][stickyComment]"
                 value={options.stickyComment ?? ''}
                 rows={3}
-                onChange={(e) => setPostgameOption({ stickyComment: e.target.value || undefined })}
+                onChange={(e) => setPostgameOption({ stickyComment: e.target.value })}
               />
               <Description>Optional comment to sticky at the top of the postgame thread</Description>
             </Field>
@@ -481,7 +473,7 @@ function OffDaySettings({
                 name="subreddit[options][offDay][stickyComment]"
                 value={options?.stickyComment ?? ''}
                 rows={3}
-                onChange={(e) => setOffDayOption({ stickyComment: e.target.value || undefined })}
+                onChange={(e) => setOffDayOption({ stickyComment: e.target.value })}
               />
               <Description>Optional comment to sticky at the top of the thread</Description>
             </Field>

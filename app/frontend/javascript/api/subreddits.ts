@@ -2,16 +2,12 @@ import { apiSubredditPath, apiSubredditsPath } from '@/utilities/routes';
 
 interface SubredditGameThreadOptions {
   enabled: boolean;
-  flairId?: {
-    default?: string;
-  };
+  flairId?: string;
   postAt?: string;
   sticky?: boolean;
   stickyComment?: string;
-  title?: {
-    default?: string;
-    postseason?: string;
-  };
+  title?: string;
+  'title.postseason'?: string;
 }
 
 interface SubredditPregameOptions {
@@ -19,25 +15,19 @@ interface SubredditPregameOptions {
   postAt?: string;
   sticky?: boolean;
   stickyComment?: string;
-  flairId?: {
-    default?: string;
-  };
+  flairId?: string;
 }
 
 interface SubredditPostgameOptions {
   enabled: boolean;
   sticky?: boolean;
   stickyComment?: string;
-  title?: {
-    default?: string;
-    won?: string;
-    lost?: string;
-  };
-  flairId?: {
-    default?: string;
-    won?: string;
-    lost?: string;
-  };
+  title?: string;
+  'title.won'?: string;
+  'title.lost'?: string;
+  flairId?: string;
+  'flairId.won'?: string;
+  'flairId.lost'?: string;
 }
 
 interface SubredditOffDayOptions {
@@ -47,9 +37,7 @@ interface SubredditOffDayOptions {
   title?: string;
   postAt?: string;
   lastRunAt?: string;
-  flairId?: {
-    default?: string;
-  };
+  flairId?: string;
 }
 
 interface SubredditSidebarOptions {

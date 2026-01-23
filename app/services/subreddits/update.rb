@@ -14,8 +14,9 @@ module Subreddits
           required: true
         ],
         sticky: [:boolean],
-        flair_id: [:guid]
-        # title: [:string, keys: %i[default postseason]]
+        flair_id: [:guid],
+        title: [:string],
+        'title.postseason': [:string]
       },
       pregame: {
         enabled: [:boolean],
@@ -26,15 +27,22 @@ module Subreddits
           required: true
         ],
         sticky: [:boolean],
-        flair_id: [:guid]
-        # title: [:string, keys: %i[default postseason]]
+        flair_id: [:guid],
+        title: [:string],
+        'title.postseason': [:string]
       },
       postgame: {
         enabled: [:boolean],
         sticky_comment: [:string],
-        sticky: [:boolean]
-        # flair_id: [:guid, keys: %i[default won lost postseason]],
-        # title: [:string, keys: %i[default won lost postseason]]
+        sticky: [:boolean],
+        flair_id: [:string],
+        'flair_id.postseason': [:string],
+        'flair_id.won': [:string],
+        'flair_id.lost': [:string],
+        title: [:string],
+        'title.postseason': [:string],
+        'title.won': [:string],
+        'title.lost': [:string]
       },
       off_day: {
         enabled: [:boolean],
