@@ -75,6 +75,26 @@ RSpec.describe Subreddits::Update do
         end
       end
 
+      context 'with title variations' do
+        let(:options) do
+          {
+            game_threads: {
+              title: 'Game Thread',
+              'title.postseason': 'Postseason Game Thread',
+              post_at: '7:00'
+            }
+          }
+        end
+
+        it 'accepts both title and title.postseason' do
+          service
+          subreddit.reload
+
+          expect(subreddit.options['game_threads']['title']).to eq('Game Thread')
+          expect(subreddit.options['game_threads']['title.postseason']).to eq('Postseason Game Thread')
+        end
+      end
+
       context 'when post_at is missing and enabled is true' do
         let(:initial_options) do
           {
@@ -221,6 +241,26 @@ RSpec.describe Subreddits::Update do
             .to raise_error(ArgumentError, /pregame\.post_at is required/)
         end
       end
+
+      context 'with title variations' do
+        let(:options) do
+          {
+            pregame: {
+              title: 'Pregame Thread',
+              'title.postseason': 'Postseason Pregame Thread',
+              post_at: '-3'
+            }
+          }
+        end
+
+        it 'accepts both title and title.postseason' do
+          service
+          subreddit.reload
+
+          expect(subreddit.options['pregame']['title']).to eq('Pregame Thread')
+          expect(subreddit.options['pregame']['title.postseason']).to eq('Postseason Pregame Thread')
+        end
+      end
     end
 
     context 'when updating postgame settings' do
@@ -241,6 +281,112 @@ RSpec.describe Subreddits::Update do
         expect(subreddit.options['postgame']['enabled']).to be true
         expect(subreddit.options['postgame']['sticky_comment']).to eq('Postgame sticky')
         expect(subreddit.options['postgame']['sticky']).to be true
+      end
+
+      context 'with flair_id variations' do
+        let(:options) do
+          {
+            postgame: {
+              flair_id: '11111111-2222-3333-4444-555555555555',
+              'flair_id.postseason': '22222222-3333-4444-5555-666666666666',
+              'flair_id.won': '33333333-4444-5555-6666-777777777777',
+              'flair_id.lost': '44444444-5555-6666-7777-888888888888'
+            }
+          }
+        end
+
+        it 'accepts all flair_id variations as valid GUIDs' do
+          service
+          subreddit.reload
+
+          expect(subreddit.options['postgame']['flair_id']).to eq('11111111-2222-3333-4444-555555555555')
+          expect(subreddit.options['postgame']['flair_id.postseason']).to eq('22222222-3333-4444-5555-666666666666')
+          expect(subreddit.options['postgame']['flair_id.won']).to eq('33333333-4444-5555-6666-777777777777')
+          expect(subreddit.options['postgame']['flair_id.lost']).to eq('44444444-5555-6666-7777-888888888888')
+        end
+      end
+
+      context 'with invalid flair_id' do
+        let(:options) do
+          {
+            postgame: {
+              flair_id: 'not-a-guid'
+            }
+          }
+        end
+
+        it 'raises an error for invalid flair_id' do
+          expect { service }
+            .to raise_error(ArgumentError, /postgame\.flair_id must be a GUID/)
+        end
+      end
+
+      context 'with invalid flair_id.postseason' do
+        let(:options) do
+          {
+            postgame: {
+              'flair_id.postseason': 'invalid-guid'
+            }
+          }
+        end
+
+        it 'raises an error for invalid flair_id.postseason' do
+          expect { service }
+            .to raise_error(ArgumentError, /postgame\.flair_id\.postseason must be a GUID/)
+        end
+      end
+
+      context 'with invalid flair_id.won' do
+        let(:options) do
+          {
+            postgame: {
+              'flair_id.won': 'bad-guid'
+            }
+          }
+        end
+
+        it 'raises an error for invalid flair_id.won' do
+          expect { service }
+            .to raise_error(ArgumentError, /postgame\.flair_id\.won must be a GUID/)
+        end
+      end
+
+      context 'with invalid flair_id.lost' do
+        let(:options) do
+          {
+            postgame: {
+              'flair_id.lost': 'wrong-format'
+            }
+          }
+        end
+
+        it 'raises an error for invalid flair_id.lost' do
+          expect { service }
+            .to raise_error(ArgumentError, /postgame\.flair_id\.lost must be a GUID/)
+        end
+      end
+
+      context 'with title variations' do
+        let(:options) do
+          {
+            postgame: {
+              title: 'Postgame Thread',
+              'title.postseason': 'Postseason Postgame Thread',
+              'title.won': 'We Won!',
+              'title.lost': 'We Lost'
+            }
+          }
+        end
+
+        it 'accepts all title variations' do
+          service
+          subreddit.reload
+
+          expect(subreddit.options['postgame']['title']).to eq('Postgame Thread')
+          expect(subreddit.options['postgame']['title.postseason']).to eq('Postseason Postgame Thread')
+          expect(subreddit.options['postgame']['title.won']).to eq('We Won!')
+          expect(subreddit.options['postgame']['title.lost']).to eq('We Lost')
+        end
       end
     end
 
