@@ -831,5 +831,27 @@ RSpec.describe Subreddits::Update do
         expect(subreddit.options['game_threads']['post_at']).to eq('8:00')
       end
     end
+
+    context 'when logging edits' do
+      let(:options) do
+        {
+          game_threads: {
+            enabled: true,
+            post_at: '7:00'
+          }
+        }
+      end
+
+      it 'creates an edit record' do
+        expect { service }
+          .to change { subreddit.edits.count }.by(1)
+      end
+
+      it 'logs the edit with Subreddits::LogEdit' do
+        expect(Subreddits::LogEdit).to receive(:call).with(subreddit)
+        
+        service
+      end
+    end
   end
 end

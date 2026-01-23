@@ -72,6 +72,8 @@ module Subreddits
       # Assign the modified options back to the subreddit
       @subreddit.options = deep_compact_hash(@working_options)
 
+      Subreddits::LogEdit.call @subreddit
+
       @subreddit.save!
     end
 
