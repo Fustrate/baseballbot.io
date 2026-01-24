@@ -5,8 +5,7 @@ module Baseballbot
     EXCLUDE = /conductor|rails/
 
     HEADER = <<~TYPESCRIPT
-      /* biome-ignore lint/correctness/noUnusedImports: auto-generated */
-      import { type OptionalParameter, type RequiredParameter, type RouteOptions, buildRoute } from './routes.utils';
+      import { buildRoute, type RequiredParameter, type RouteOptions } from './routes.utils';
     TYPESCRIPT
 
     def dump!

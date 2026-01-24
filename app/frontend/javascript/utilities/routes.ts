@@ -1,5 +1,4 @@
-/* biome-ignore lint/correctness/noUnusedImports: auto-generated */
-import { type OptionalParameter, type RequiredParameter, type RouteOptions, buildRoute } from './routes.utils';
+import { buildRoute, type RequiredParameter, type RouteOptions } from './routes.utils';
 
 export const apiGameThreadPath = (id: RequiredParameter, options: RouteOptions = {}) =>
   buildRoute('/api/game_threads/:id(.:format)', { id, ...options });
