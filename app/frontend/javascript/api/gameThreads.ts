@@ -54,3 +54,36 @@ export async function fetchGameThread(id: number): Promise<GameThread> {
 export async function fetchSubredditGameThreads(subreddit: string | number): Promise<PaginatedData<GameThread>> {
   return fetch(gameThreadsApiSubredditPath(subreddit)).then((res) => res.json());
 }
+
+export async function createGameThread(data: {
+  subredditId: number;
+  gamePk: number;
+  title?: string;
+  hours?: number;
+}): Promise<GameThread> {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+
+  const response = await fetch(apiGameThreadsPath(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken,
+    },
+    body: JSON.stringify({
+      game_thread: {
+        subreddit_id: data.subredditId,
+        game_pk: data.gamePk,
+        title: data.title,
+        hours: data.hours,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Failed to create game thread' }));
+    throw new Error(error.error || 'Failed to create game thread');
+  }
+
+  const json = await response.json();
+  return buildGameThread(json);
+}

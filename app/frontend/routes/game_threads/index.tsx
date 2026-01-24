@@ -6,6 +6,7 @@ import { fetchGameThreads, type GameThread } from '@/api/gameThreads';
 
 import { ButtonLink } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
+import { useAuth } from '@/hooks/useAuth';
 
 import GameThreadsTable from '@/components/GameThreadsTable';
 
@@ -48,8 +49,10 @@ function gameThreadSortOrder(gameThread: GameThread): string {
 function RouteComponent() {
   const { data: gameThreads } = Route.useLoaderData();
   const { date: searchDate } = Route.useSearch();
+  const { isLoggedIn, user } = useAuth();
 
   const date = DateTime.fromISO(searchDate);
+  const moderatedSubIds = user?.subreddits || [];
 
   const sortedGameThreads = gameThreads.sort((a, b) => {
     return gameThreadSortOrder(a) < gameThreadSortOrder(b) ? -1 : 1;
@@ -63,6 +66,12 @@ function RouteComponent() {
       <div className="flex w-full flex-wrap items-end justify-between gap-4 border-zinc-950/10 border-b pb-6 dark:border-white/10">
         <Heading>{date.toLocaleString(DateTime.DATE_FULL)}</Heading>
         <div className="flex gap-4">
+          {isLoggedIn && moderatedSubIds.length > 0 && (
+            <ButtonLink style="solid" to={'/game_threads/new' as any}>
+              <i className="fas fa-plus" />
+              <span className="hidden sm:inline">New Game Thread</span>
+            </ButtonLink>
+          )}
           <ButtonLink
             style="outline"
             to="/game_threads"

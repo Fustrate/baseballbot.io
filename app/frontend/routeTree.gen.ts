@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubredditsIndexRouteImport } from './routes/subreddits/index'
 import { Route as Game_threadsIndexRouteImport } from './routes/game_threads/index'
 import { Route as SubredditsSubredditIdRouteImport } from './routes/subreddits/$subredditId'
+import { Route as Game_threadsNewRouteImport } from './routes/game_threads/new'
 import { Route as Game_threadsThreadIdRouteImport } from './routes/game_threads/$threadId'
 import { Route as SubredditsSubredditIdGame_threadsRouteImport } from './routes/subreddits_/$subredditId/game_threads'
 import { Route as SubredditsSubredditIdEditRouteImport } from './routes/subreddits_/$subredditId/edit'
@@ -49,6 +50,11 @@ const Game_threadsIndexRoute = Game_threadsIndexRouteImport.update({
 const SubredditsSubredditIdRoute = SubredditsSubredditIdRouteImport.update({
   id: '/subreddits/$subredditId',
   path: '/subreddits/$subredditId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Game_threadsNewRoute = Game_threadsNewRouteImport.update({
+  id: '/game_threads/new',
+  path: '/game_threads/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Game_threadsThreadIdRoute = Game_threadsThreadIdRouteImport.update({
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/gameday': typeof GamedayRoute
   '/sign_in': typeof Sign_inRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
+  '/game_threads/new': typeof Game_threadsNewRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
   '/game_threads/': typeof Game_threadsIndexRoute
   '/subreddits/': typeof SubredditsIndexRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/gameday': typeof GamedayRoute
   '/sign_in': typeof Sign_inRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
+  '/game_threads/new': typeof Game_threadsNewRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
   '/game_threads': typeof Game_threadsIndexRoute
   '/subreddits': typeof SubredditsIndexRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/gameday': typeof GamedayRoute
   '/sign_in': typeof Sign_inRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
+  '/game_threads/new': typeof Game_threadsNewRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
   '/game_threads/': typeof Game_threadsIndexRoute
   '/subreddits/': typeof SubredditsIndexRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/gameday'
     | '/sign_in'
     | '/game_threads/$threadId'
+    | '/game_threads/new'
     | '/subreddits/$subredditId'
     | '/game_threads/'
     | '/subreddits/'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/gameday'
     | '/sign_in'
     | '/game_threads/$threadId'
+    | '/game_threads/new'
     | '/subreddits/$subredditId'
     | '/game_threads'
     | '/subreddits'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/gameday'
     | '/sign_in'
     | '/game_threads/$threadId'
+    | '/game_threads/new'
     | '/subreddits/$subredditId'
     | '/game_threads/'
     | '/subreddits/'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   GamedayRoute: typeof GamedayRoute
   Sign_inRoute: typeof Sign_inRoute
   Game_threadsThreadIdRoute: typeof Game_threadsThreadIdRoute
+  Game_threadsNewRoute: typeof Game_threadsNewRoute
   SubredditsSubredditIdRoute: typeof SubredditsSubredditIdRoute
   Game_threadsIndexRoute: typeof Game_threadsIndexRoute
   SubredditsIndexRoute: typeof SubredditsIndexRoute
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       path: '/subreddits/$subredditId'
       fullPath: '/subreddits/$subredditId'
       preLoaderRoute: typeof SubredditsSubredditIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game_threads/new': {
+      id: '/game_threads/new'
+      path: '/game_threads/new'
+      fullPath: '/game_threads/new'
+      preLoaderRoute: typeof Game_threadsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game_threads/$threadId': {
@@ -278,6 +298,7 @@ const rootRouteChildren: RootRouteChildren = {
   GamedayRoute: GamedayRoute,
   Sign_inRoute: Sign_inRoute,
   Game_threadsThreadIdRoute: Game_threadsThreadIdRoute,
+  Game_threadsNewRoute: Game_threadsNewRoute,
   SubredditsSubredditIdRoute: SubredditsSubredditIdRoute,
   Game_threadsIndexRoute: Game_threadsIndexRoute,
   SubredditsIndexRoute: SubredditsIndexRoute,
