@@ -72,7 +72,7 @@ export function PaginationPage({
       aria-current={current ? 'page' : undefined}
       className={clsx(
         className,
-        'before:-inset-px min-w-9 before:absolute before:rounded-lg',
+        'min-w-9 before:absolute before:-inset-px before:rounded-lg',
         current && 'before:bg-zinc-950/5 dark:before:bg-white/10',
       )}
     >

@@ -58,7 +58,7 @@ export function SidebarSection({ className, ...props }: React.ComponentPropsWith
 }
 
 export function SidebarDivider({ className, ...props }: React.ComponentPropsWithoutRef<'hr'>) {
-  return <hr {...props} className={clsx(className, 'lg:-mx-4 my-4 border-zinc-950/5 border-t dark:border-white/5')} />;
+  return <hr {...props} className={clsx(className, 'my-4 border-zinc-950/5 border-t lg:-mx-4 dark:border-white/5')} />;
 }
 
 export function SidebarSpacer({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
@@ -110,7 +110,7 @@ export const SidebarItem = forwardRef(function SidebarItem(
       {current && (
         <motion.span
           layoutId="current-indicator"
-          className="-left-4 absolute inset-y-2 w-0.5 rounded-full bg-zinc-950 dark:bg-white"
+          className="absolute inset-y-2 -left-4 w-0.5 rounded-full bg-zinc-950 dark:bg-white"
         />
       )}
       {'href' in props ? (
