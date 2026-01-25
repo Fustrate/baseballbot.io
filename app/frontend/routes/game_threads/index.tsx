@@ -6,9 +6,8 @@ import { fetchGameThreads, type GameThread } from '@/api/gameThreads';
 
 import { ButtonLink } from '@/catalyst/button';
 import { Heading } from '@/catalyst/heading';
-import { useAuth } from '@/hooks/useAuth';
-
 import GameThreadsTable from '@/components/GameThreadsTable';
+import { useAuth } from '@/hooks/useAuth';
 
 import type { GameThreadStatus } from '@/utilities/constants';
 

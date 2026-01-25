@@ -83,7 +83,7 @@ interface GameThreadsTableProps {
 }
 
 function defaultTitle(subreddit: Subreddit) {
-  return subreddit.options?.gameThreads?.title?.default ?? 'Game Thread';
+  return subreddit.options?.gameThreads?.title ?? 'Game Thread';
 }
 
 function postAt(gameThread: GameThread) {

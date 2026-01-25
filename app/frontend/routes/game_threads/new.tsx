@@ -23,7 +23,8 @@ export const Route = createFileRoute('/game_threads/new')({
   }),
   component: RouteComponent,
   loader: async () => {
-    const [subreddits] = await Promise.all([fetchSubreddits()]);
+    const subreddits = await fetchSubreddits();
+
     return { subreddits };
   },
   head: () => ({
@@ -67,18 +68,18 @@ function RouteComponent() {
     try {
       const dateObj = new Date(date);
       const dateTime = DateTime.fromISO(date);
-      
+
       // Fetch both games and existing threads in parallel
       const [fetchedGames, threadsData] = await Promise.all([
         fetchGames(dateObj),
         fetchGameThreads({ date: dateTime }),
       ]);
-      
+
       setGames(fetchedGames);
-      
+
       // Filter threads for this subreddit
       const subredditThreads = threadsData.data.filter(
-        (thread) => thread.subreddit.id.toString() === selectedSubredditId
+        (thread) => thread.subreddit.id.toString() === selectedSubredditId,
       );
       setExistingThreads(subredditThreads);
     } catch (err) {
@@ -131,7 +132,7 @@ function RouteComponent() {
     if (postAt.startsWith('-')) {
       return Math.abs(Number.parseInt(postAt, 10));
     }
-    
+
     // If it's a time like "3:00", calculate hours from that time on game day to game start
     // Note: postAt times are in Pacific timezone according to the UI
     const timeMatch = postAt.match(/^(\d{1,2}):(\d{2})$/);
@@ -139,28 +140,28 @@ function RouteComponent() {
       const [, hourStr, minuteStr] = timeMatch;
       const hour = Number.parseInt(hourStr, 10);
       const minute = Number.parseInt(minuteStr, 10);
-      
+
       // Convert game start time to Pacific timezone for calculation
       const gameStartPacific = gameStartTime.setZone('America/Los_Angeles');
-      
+
       // Create a DateTime for the post time on the game day (in Pacific time)
       const postTime = gameStartPacific.startOf('day').set({ hour, minute });
-      
+
       // Calculate difference in hours
       const diff = gameStartPacific.diff(postTime, 'hours');
       const hoursBefore = Math.round(diff.hours);
-      
+
       // If post time is after game start, return 0 (shouldn't happen, but handle it)
       return Math.max(0, hoursBefore);
     }
-    
+
     // Default to 1 hour if we can't parse it
     return 1;
   };
 
   const handleGameSelect = (game: ScheduleGame) => {
     setSelectedGame(game);
-    
+
     // Calculate and set default hours based on postAt and game start time
     if (selectedSubreddit) {
       const postAt = selectedSubreddit.options.gameThreads?.postAt;
@@ -215,7 +216,6 @@ function RouteComponent() {
       setCreating(false);
     }
   };
-
 
   if (!isLoggedIn) {
     return (
@@ -284,11 +284,9 @@ function RouteComponent() {
                     </TableHead>
                     <TableBody>
                       {games.map((game) => {
-                        const hasExistingThread = existingThreads.some(
-                          (thread) => thread.gamePk === game.gamePk
-                        );
+                        const hasExistingThread = existingThreads.some((thread) => thread.gamePk === game.gamePk);
                         const isSelected = selectedGame?.gamePk === game.gamePk;
-                        
+
                         return (
                           <TableRow
                             key={game.gamePk}
@@ -296,7 +294,7 @@ function RouteComponent() {
                               isSelected
                                 ? 'bg-blue-50 dark:bg-blue-950/20'
                                 : hasExistingThread
-                                  ? 'opacity-50 bg-zinc-50 dark:bg-zinc-900/20'
+                                  ? 'bg-zinc-50 opacity-50 dark:bg-zinc-900/20'
                                   : ''
                             }
                           >
@@ -311,13 +309,12 @@ function RouteComponent() {
                             <TableCell>
                               {hasExistingThread ? (
                                 <div className="flex flex-col gap-1">
-                                  <Text className="text-sm text-zinc-500 dark:text-zinc-400">
-                                    Already scheduled
-                                  </Text>
+                                  <Text className="text-sm text-zinc-500 dark:text-zinc-400">Already scheduled</Text>
                                   <Link
                                     to={'/game_threads/$threadId/edit' as any}
                                     params={{
-                                      threadId: existingThreads.find((t) => t.gamePk === game.gamePk)?.id.toString() || '',
+                                      threadId:
+                                        existingThreads.find((t) => t.gamePk === game.gamePk)?.id.toString() || '',
                                     }}
                                     className="text-sm"
                                   >

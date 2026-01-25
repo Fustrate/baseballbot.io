@@ -84,10 +84,10 @@ function SubredditOptions({ subreddit }: { subreddit: Subreddit }) {
           <>
             <ListItem label="Post At">{postAtFormat(options.gameThreads.postAt, options.timezone)}</ListItem>
             <ListItem label="Sticky">{options.gameThreads.sticky === false ? 'No' : 'Yes'}</ListItem>
-            <ListItem label="Flair ID">{options.gameThreads.flairId?.default || 'Not set'}</ListItem>
-            <ListItem label="Default Title">{options.gameThreads?.title?.default}</ListItem>
-            <ListItem label="Postseason Title">{options.gameThreads?.title?.postseason || 'Not set'}</ListItem>
-            <ListItem label="Sticky Comment">{options.gameThreads?.stickyComment || 'Not set'}</ListItem>
+            <ListItem label="Flair ID">{options.gameThreads.flairId || 'Not set'}</ListItem>
+            <ListItem label="Default Title">{options.gameThreads.title}</ListItem>
+            <ListItem label="Postseason Title">{options.gameThreads['title.postseason'] || 'Not set'}</ListItem>
+            <ListItem label="Sticky Comment">{options.gameThreads.stickyComment || 'Not set'}</ListItem>
           </>
         )}
       </OptionsList>
@@ -106,9 +106,9 @@ function SubredditOptions({ subreddit }: { subreddit: Subreddit }) {
         {options.postgame?.enabled && (
           <>
             <ListItem label="Sticky">{options.postgame.sticky === false ? 'No' : 'Yes'}</ListItem>
-            <ListItem label="Default Title">{options.postgame.title?.default}</ListItem>
-            <ListItem label="Won Title">{options.postgame.title?.won || 'Not set'}</ListItem>
-            <ListItem label="Lost Title">{options.postgame.title?.lost || 'Not set'}</ListItem>
+            <ListItem label="Default Title">{options.postgame.title}</ListItem>
+            <ListItem label="Won Title">{options.postgame['title.won'] || 'Not set'}</ListItem>
+            <ListItem label="Lost Title">{options.postgame['title.lost'] || 'Not set'}</ListItem>
             <ListItem label="Sticky Comment">{options.postgame.stickyComment || 'Not set'}</ListItem>
           </>
         )}
