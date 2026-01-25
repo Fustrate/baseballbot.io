@@ -844,12 +844,13 @@ RSpec.describe Subreddits::Update do
 
       it 'creates an edit record' do
         expect { service }
-          .to change { subreddit.edits.count }.by(1)
+          .to(change { subreddit.edits.count }
+            .by(1))
       end
 
       it 'logs the edit with Subreddits::LogEdit' do
         expect(Subreddits::LogEdit).to receive(:call).with(subreddit)
-        
+
         service
       end
     end

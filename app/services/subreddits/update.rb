@@ -86,18 +86,22 @@ module Subreddits
         @working_options[category] ||= {}.with_indifferent_access
 
         category_settings.each do |key, (type, options)|
-          next unless @options[category]&.key?(key)
-
-          case type
-          when :string then update_string_value(category, key, **options)
-          when :boolean then update_boolean_value(category, key)
-          when :guid then update_guid_value(category, key)
-          when :integer then update_integer_value(category, key, **options)
-          end
+          update_setting(type, category, key, **options)
         end
 
         # Check for required fields after all updates in this category
         validate_required_fields(category, category_settings) if @working_options[category]['enabled']
+      end
+    end
+
+    def update_setting(type, category, key, **)
+      return unless @options[category]&.key?(key)
+
+      case type
+      when :string then update_string_value(category, key, **)
+      when :boolean then update_boolean_value(category, key)
+      when :guid then update_guid_value(category, key)
+      when :integer then update_integer_value(category, key, **)
       end
     end
 
