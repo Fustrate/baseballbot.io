@@ -1,13 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { fetchSubreddit } from '@/api/subreddits';
 import { Text } from '@/catalyst/text';
 
 export const Route = createFileRoute('/subreddits_/$subredditId/game_threads')({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const { subredditId } = params;
+    const subreddit = await fetchSubreddit(params.subredditId);
 
-    return { subredditId };
+    return { subreddit };
   },
+  head: ({ params }) => ({
+    meta: [{ title: `Baseballbot - /r/${params.subredditId} - Game Threads` }],
+  }),
 });
 
 function RouteComponent() {
