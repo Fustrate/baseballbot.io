@@ -74,13 +74,14 @@ export async function createGameThread(data: {
         subreddit_id: data.subredditId,
         game_pk: data.gamePk,
         title: data.title,
-        postAt: data.postAt.toISO(),
+        post_at: data.postAt.toISO(),
       },
     }),
   });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Failed to create game thread' }));
+
     throw new Error(error.error || 'Failed to create game thread');
   }
 

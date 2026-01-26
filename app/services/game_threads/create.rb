@@ -2,7 +2,7 @@
 
 module GameThreads
   class Create < ApplicationService
-    PERMITTED_PARAMS = %i[subreddit_id title game_pk].freeze
+    PERMITTED_PARAMS = %i[subreddit_id title game_pk post_at].freeze
 
     def call
       @game_thread = GameThread.build_from_params(PERMITTED_PARAMS, status: 'Future')
@@ -10,7 +10,6 @@ module GameThreads
       authorize! :create, @game_thread
 
       @game_thread.starts_at = game_starts_at
-      @game_thread.post_at = @game_thread.starts_at - (params[:hours]&.to_i || 1).hours
 
       @game_thread.events.new type: 'Created', user: Current.user
 
