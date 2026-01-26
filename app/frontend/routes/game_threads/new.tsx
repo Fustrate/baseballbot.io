@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { z } from 'zod';
 import { fetchGames, type ScheduleGame } from '@/api/games';
 import { createGameThread, fetchGameThreads, type GameThread } from '@/api/gameThreads';
-import { fetchSubreddits } from '@/api/subreddits';
+import { fetchSubreddits, type Subreddit } from '@/api/subreddits';
 import { Button } from '@/catalyst/button';
 import { Field, Fieldset, Label } from '@/catalyst/fieldset';
 import { Heading } from '@/catalyst/heading';
@@ -245,103 +245,28 @@ function RouteComponent() {
       </div>
 
       <div className="mt-6 space-y-6">
-        <Fieldset>
-          <Field>
-            <Label>Subreddit</Label>
-            <Select value={selectedSubredditId} onChange={(e) => handleSubredditChange(e.target.value)}>
-              <option value="">Select a subreddit</option>
-              {moderatedSubreddits.map((subreddit) => (
-                <option key={subreddit.id} value={subreddit.id.toString()}>
-                  r/{subreddit.name}
-                </option>
-              ))}
-            </Select>
-          </Field>
-        </Fieldset>
+        <SubredditSelector
+          selectedSubredditId={selectedSubredditId}
+          handleSubredditChange={handleSubredditChange}
+          moderatedSubreddits={moderatedSubreddits}
+        />
 
         {selectedSubredditId && (
           <>
-            <Fieldset>
-              <Field>
-                <Label>Date</Label>
-                <Input type="date" value={selectedDate} onChange={(e) => handleDateChange(e.target.value)} />
-              </Field>
-            </Fieldset>
+            <DateSelector selectedDate={selectedDate} handleDateChange={handleDateChange} />
 
             {loading && <Text>Loading games...</Text>}
             {error && <Text className="text-red-600 dark:text-red-400">{error}</Text>}
 
             {!loading && games.length > 0 && (
               <>
-                <div>
-                  <Heading level={2} className="mb-4">
-                    Games on {DateTime.fromISO(selectedDate).toLocaleString(DateTime.DATE_FULL)}
-                  </Heading>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableHeader>Time</TableHeader>
-                        <TableHeader>Away Team</TableHeader>
-                        <TableHeader>Home Team</TableHeader>
-                        <TableHeader>Status</TableHeader>
-                        <TableHeader />
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {games.map((game) => {
-                        const hasExistingThread = existingThreads.some((thread) => thread.gamePk === game.gamePk);
-                        const isSelected = selectedGame?.gamePk === game.gamePk;
-
-                        return (
-                          <TableRow
-                            key={game.gamePk}
-                            className={
-                              isSelected
-                                ? 'bg-blue-50 dark:bg-blue-950/20'
-                                : hasExistingThread
-                                  ? 'bg-zinc-50 opacity-50 dark:bg-zinc-900/20'
-                                  : ''
-                            }
-                          >
-                            <TableCell>
-                              {game.gameDate
-                                ? DateTime.fromISO(game.gameDate).toLocaleString(DateTime.TIME_SIMPLE)
-                                : 'TBD'}
-                            </TableCell>
-                            <TableCell>{game.teams.away.team.teamName}</TableCell>
-                            <TableCell>{game.teams.home.team.teamName}</TableCell>
-                            <TableCell>{game.status.abstractGameState}</TableCell>
-                            <TableCell>
-                              {hasExistingThread ? (
-                                <div className="flex flex-col gap-1">
-                                  <Text className="text-sm text-zinc-500 dark:text-zinc-400">Already scheduled</Text>
-                                  <Link
-                                    to={'/game_threads/$threadId/edit' as any}
-                                    params={{
-                                      threadId:
-                                        existingThreads.find((t) => t.gamePk === game.gamePk)?.id.toString() || '',
-                                    }}
-                                    className="text-sm"
-                                  >
-                                    Edit thread
-                                  </Link>
-                                </div>
-                              ) : (
-                                <Button
-                                  style={isSelected ? 'solid' : 'outline'}
-                                  onClick={() => handleGameSelect(game)}
-                                  disabled={hasExistingThread}
-                                >
-                                  {isSelected ? 'Selected' : 'Select'}
-                                </Button>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
+                <GameSelector
+                  selectedDate={selectedDate}
+                  games={games}
+                  existingThreads={existingThreads}
+                  selectedGame={selectedGame}
+                  handleGameSelect={handleGameSelect}
+                />
 
                 {selectedGame && (
                   <>
@@ -394,5 +319,131 @@ function RouteComponent() {
         )}
       </div>
     </>
+  );
+}
+
+function SubredditSelector({
+  selectedSubredditId,
+  handleSubredditChange,
+  moderatedSubreddits,
+}: {
+  selectedSubredditId: string;
+  handleSubredditChange: (subredditId: string) => void;
+  moderatedSubreddits: Subreddit[];
+}) {
+  return (
+    <Fieldset>
+      <Field>
+        <Label>Subreddit</Label>
+        <Select value={selectedSubredditId} onChange={(e) => handleSubredditChange(e.target.value)}>
+          <option value="">Select a subreddit</option>
+          {moderatedSubreddits.map((subreddit) => (
+            <option key={subreddit.id} value={subreddit.id.toString()}>
+              r/{subreddit.name}
+            </option>
+          ))}
+        </Select>
+      </Field>
+    </Fieldset>
+  );
+}
+
+function DateSelector({
+  selectedDate,
+  handleDateChange,
+}: {
+  selectedDate: string;
+  handleDateChange: (newDate: string) => void;
+}) {
+  return (
+    <Fieldset>
+      <Field>
+        <Label>Date</Label>
+        <Input type="date" value={selectedDate} onChange={(e) => handleDateChange(e.target.value)} />
+      </Field>
+    </Fieldset>
+  );
+}
+
+function GameSelector({
+  selectedDate,
+  games,
+  existingThreads,
+  selectedGame,
+  handleGameSelect,
+}: {
+  selectedDate: string;
+  games: ScheduleGame[];
+  existingThreads: GameThread[];
+  selectedGame: ScheduleGame | null;
+  handleGameSelect: (game: ScheduleGame) => void;
+}) {
+  return (
+    <div>
+      <Heading level={2} className="mb-4">
+        Games on {DateTime.fromISO(selectedDate).toLocaleString(DateTime.DATE_FULL)}
+      </Heading>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader>Time</TableHeader>
+            <TableHeader>Away Team</TableHeader>
+            <TableHeader>Home Team</TableHeader>
+            <TableHeader>Status</TableHeader>
+            <TableHeader />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {games.map((game) => {
+            const hasExistingThread = existingThreads.some((thread) => thread.gamePk === game.gamePk);
+            const isSelected = selectedGame?.gamePk === game.gamePk;
+
+            return (
+              <TableRow
+                key={game.gamePk}
+                className={
+                  isSelected
+                    ? 'bg-blue-50 dark:bg-blue-950/20'
+                    : hasExistingThread
+                      ? 'bg-zinc-50 opacity-50 dark:bg-zinc-900/20'
+                      : ''
+                }
+              >
+                <TableCell>
+                  {game.gameDate ? DateTime.fromISO(game.gameDate).toLocaleString(DateTime.TIME_SIMPLE) : 'TBD'}
+                </TableCell>
+                <TableCell>{game.teams.away.team.teamName}</TableCell>
+                <TableCell>{game.teams.home.team.teamName}</TableCell>
+                <TableCell>{game.status.abstractGameState}</TableCell>
+                <TableCell>
+                  {hasExistingThread ? (
+                    <div className="flex flex-col gap-1">
+                      <Text className="text-sm text-zinc-500 dark:text-zinc-400">Already scheduled</Text>
+                      <Link
+                        to={'/game_threads/$threadId/edit' as any}
+                        params={{
+                          threadId: existingThreads.find((t) => t.gamePk === game.gamePk)?.id.toString() || '',
+                        }}
+                        className="text-sm"
+                      >
+                        Edit thread
+                      </Link>
+                    </div>
+                  ) : (
+                    <Button
+                      style={isSelected ? 'solid' : 'outline'}
+                      onClick={() => handleGameSelect(game)}
+                      disabled={hasExistingThread}
+                    >
+                      {isSelected ? 'Selected' : 'Select'}
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
