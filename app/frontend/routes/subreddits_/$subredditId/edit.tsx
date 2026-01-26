@@ -1,7 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { type SetStateAction, useState } from 'react';
 import { fetchSession } from '@/api/session';
-import { fetchSubreddit, type SubredditOptions, updateSubreddit } from '@/api/subreddits';
+import { fetchSubreddit, isModerator, type SubredditOptions, updateSubreddit } from '@/api/subreddits';
 import { Button } from '@/catalyst/button';
 import { Checkbox, CheckboxField } from '@/catalyst/checkbox';
 import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '@/catalyst/fieldset';
@@ -16,9 +16,9 @@ export const Route = createFileRoute('/subreddits_/$subredditId/edit')({
   loader: async ({ params }) => {
     const { subredditId } = params;
 
-    const [session, subreddit] = await Promise.all([fetchSession(), fetchSubreddit(subredditId)]);
+    const [{ user }, subreddit] = await Promise.all([fetchSession(), fetchSubreddit(subredditId)]);
 
-    if (!session.loggedIn || !session.user?.subreddits.includes(subreddit.id)) {
+    if (!isModerator(user, subreddit)) {
       throw redirect({
         to: '/subreddits/$subredditId',
         params: { subredditId },

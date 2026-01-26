@@ -1,3 +1,4 @@
+import type { User } from '@/api/session';
 import { apiSubredditPath, apiSubredditsPath } from '@/utilities/routes';
 
 interface SubredditGameThreadOptions {
@@ -101,4 +102,8 @@ export async function updateSubreddit(nameOrId: string | number, options: Subred
   }
 
   return response.json();
+}
+
+export function isModerator(user: User | null | undefined, subreddit: Subreddit): boolean {
+  return user != null && (user.type === 'admin' || user.subreddits.includes(subreddit.id));
 }

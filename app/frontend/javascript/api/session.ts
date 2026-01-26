@@ -2,6 +2,7 @@ export interface User {
   id: number;
   username: string;
   subreddits: number[];
+  type: 'user' | 'admin';
 }
 
 export interface SessionData {

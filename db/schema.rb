@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_19_205752) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_25_010704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -188,6 +188,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_205752) do
     t.datetime "last_logout_at", precision: nil
     t.string "remember_me_token"
     t.datetime "remember_me_token_expires_at", precision: nil
+    t.string "type", default: "user", null: false
     t.datetime "updated_at", precision: nil, null: false
     t.citext "username", null: false
     t.index ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at"
