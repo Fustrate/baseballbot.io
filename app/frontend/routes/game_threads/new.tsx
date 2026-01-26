@@ -137,38 +137,6 @@ function RouteComponent() {
     }
   };
 
-  const calculateHoursFromPostAt = (postAt: string, gameStartTime: DateTime): number => {
-    // If postAt is like "-3", it's 3 hours before game start
-    if (postAt.startsWith('-')) {
-      return Math.abs(Number.parseInt(postAt, 10));
-    }
-
-    // If it's a time like "3:00", calculate hours from that time on game day to game start
-    // Note: postAt times are in Pacific timezone according to the UI
-    const timeMatch = postAt.match(/^(\d{1,2}):(\d{2})$/);
-    if (timeMatch) {
-      const [, hourStr, minuteStr] = timeMatch;
-      const hour = Number.parseInt(hourStr, 10);
-      const minute = Number.parseInt(minuteStr, 10);
-
-      // Convert game start time to Pacific timezone for calculation
-      const gameStartPacific = gameStartTime.setZone('America/Los_Angeles');
-
-      // Create a DateTime for the post time on the game day (in Pacific time)
-      const postTime = gameStartPacific.startOf('day').set({ hour, minute });
-
-      // Calculate difference in hours
-      const diff = gameStartPacific.diff(postTime, 'hours');
-      const hoursBefore = Math.round(diff.hours);
-
-      // If post time is after game start, return 0 (shouldn't happen, but handle it)
-      return Math.max(0, hoursBefore);
-    }
-
-    // Default to 1 hour if we can't parse it
-    return 1;
-  };
-
   const handleGameSelect = (game: ScheduleGame) => {
     setSelectedGame(game);
 
