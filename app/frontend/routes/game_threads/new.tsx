@@ -171,7 +171,7 @@ function RouteComponent() {
     setError(null);
 
     try {
-      await createGameThread({
+      const gameThread = await createGameThread({
         subredditId: Number.parseInt(selectedSubredditId, 10),
         gamePk: selectedGame.gamePk,
         title: title.trim(),
@@ -179,8 +179,8 @@ function RouteComponent() {
       });
 
       navigate({
-        to: '/game_threads',
-        search: { date: selectedDate },
+        to: '/game_threads/$threadId',
+        params: { threadId: String(gameThread.id) },
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create game thread. Please try again.');
