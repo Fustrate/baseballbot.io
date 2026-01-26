@@ -17,6 +17,16 @@ import { useAuth } from '@/hooks/useAuth';
 
 z.config({ jitless: true });
 
+function adjustPostAt(startTime: DateTime, postAt: string): DateTime {
+  if (postAt.startsWith('-')) {
+    return startTime.minus({ hour: Number.parseInt(postAt, 10) });
+  }
+
+  const [hour, minute] = postAt.split(':').map(Number);
+
+  return startTime.set({ hour, minute });
+}
+
 export const Route = createFileRoute('/game_threads/new')({
   validateSearch: z.object({
     date: z.string().optional(),
@@ -48,7 +58,7 @@ function RouteComponent() {
   const [loading, setLoading] = useState(false);
   const [selectedGame, setSelectedGame] = useState<ScheduleGame | null>(null);
   const [title, setTitle] = useState<string>('');
-  const [hours, setHours] = useState<string>('');
+  const [postAt, setPostAt] = useState<DateTime>();
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,10 +114,10 @@ function RouteComponent() {
 
       // Set default hours from postAt - will be calculated when game is selected
       // For now, set a placeholder
-      setHours('');
+      setPostAt(undefined);
     } else {
       setTitle('');
-      setHours('');
+      setPostAt(undefined);
     }
 
     // Reload games if date is already selected
@@ -167,13 +177,9 @@ function RouteComponent() {
       const postAt = selectedSubreddit.options.gameThreads?.postAt;
       if (postAt && game.gameDate) {
         const gameStartTime = DateTime.fromISO(game.gameDate);
-        const calculatedHours = calculateHoursFromPostAt(postAt, gameStartTime);
-        setHours(calculatedHours.toString());
-      } else if (!hours) {
-        setHours('1');
+
+        setPostAt(adjustPostAt(gameStartTime, postAt));
       }
-    } else if (!hours) {
-      setHours('1');
     }
   };
 
@@ -188,9 +194,8 @@ function RouteComponent() {
       return;
     }
 
-    const hoursNum = Number.parseInt(hours, 10);
-    if (Number.isNaN(hoursNum) || hoursNum < 0) {
-      setError('Please enter a valid number of hours (0 or greater).');
+    if (!DateTime.isDateTime(postAt)) {
+      setError('Please enter a valid posting time.');
       return;
     }
 
@@ -202,7 +207,7 @@ function RouteComponent() {
         subredditId: Number.parseInt(selectedSubredditId, 10),
         gamePk: selectedGame.gamePk,
         title: title.trim(),
-        hours: hoursNum,
+        postAt,
       });
 
       navigate({
@@ -354,17 +359,13 @@ function RouteComponent() {
 
                     <Fieldset>
                       <Field>
-                        <Label>Post Hours Before Game</Label>
+                        <Label>Post At</Label>
                         <Input
-                          type="number"
-                          min="0"
-                          value={hours}
-                          onChange={(e) => setHours(e.target.value)}
-                          placeholder="1"
+                          type="datetime-local"
+                          value={postAt?.toISO() ?? ''}
+                          onChange={(e) => setPostAt(DateTime.fromISO(e.target.value))}
+                          placeholder="Select a time"
                         />
-                        <Text className="text-sm text-zinc-500 dark:text-zinc-400">
-                          Number of hours before game start to post the thread
-                        </Text>
                       </Field>
                     </Fieldset>
 
@@ -377,7 +378,7 @@ function RouteComponent() {
                         onClick={() => {
                           setSelectedGame(null);
                           setTitle('');
-                          setHours('');
+                          setPostAt(undefined);
                         }}
                       >
                         Cancel

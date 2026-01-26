@@ -58,8 +58,8 @@ export async function fetchSubredditGameThreads(subreddit: string | number): Pro
 export async function createGameThread(data: {
   subredditId: number;
   gamePk: number;
-  title?: string;
-  hours?: number;
+  title: string;
+  postAt: DateTime;
 }): Promise<GameThread> {
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
 
@@ -74,7 +74,7 @@ export async function createGameThread(data: {
         subreddit_id: data.subredditId,
         game_pk: data.gamePk,
         title: data.title,
-        hours: data.hours,
+        postAt: data.postAt.toISO(),
       },
     }),
   });
