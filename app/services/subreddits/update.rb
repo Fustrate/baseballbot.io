@@ -64,6 +64,8 @@ module Subreddits
       @subreddit = subreddit
       @options = params.dig(:subreddit, :options) || {}
 
+      authorize! :update, @subreddit
+
       # Create a working copy with indifferent access
       @working_options = ActiveSupport::HashWithIndifferentAccess.new(@subreddit.options || {})
 
