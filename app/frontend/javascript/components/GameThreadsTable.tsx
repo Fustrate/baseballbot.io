@@ -105,6 +105,8 @@ function interpolationText(target: string, gameThread: GameThread) {
       return gameThread.startsAt.setZone(gameThread.subreddit.options.timezone).toLocaleString(DateTime.TIME_SIMPLE);
     case '{{day}}':
       return gameThread.startsAt.toFormat('d');
+    case '{{day_of_week}}':
+      return gameThread.startsAt.toFormat('cccc');
     case '{{short_day_of_week}}':
       return gameThread.startsAt.toFormat('ccc');
     case '{{month}}':
