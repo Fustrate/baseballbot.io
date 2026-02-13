@@ -150,7 +150,7 @@ function highlightInterpolations(gameThread: GameThread) {
 
 function GameThreadRow({ gameThread, showSubreddit }: { gameThread: GameThread; showSubreddit?: boolean }) {
   return (
-    <TableRow>
+    <TableRow key={gameThread.id}>
       <TableCell>
         <Link inline href={`https://www.mlb.com/gameday/${gameThread.gamePk}`}>
           {gameThread.gamePk}
