@@ -120,7 +120,11 @@ function interpolationText(target: string, gameThread: GameThread) {
     case '{{year}}':
       return gameThread.startsAt.year;
     default:
-      return <Badge color="zinc">{target.slice(2, -2)}</Badge>;
+      return (
+        <Badge color="zinc" key={target}>
+          {target.slice(2, -2)}
+        </Badge>
+      );
   }
 }
 
