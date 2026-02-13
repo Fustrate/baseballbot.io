@@ -125,7 +125,7 @@ function interpolationText(target: string, gameThread: GameThread) {
 }
 
 function highlightInterpolations(gameThread: GameThread) {
-  let input = gameThread.title ?? defaultTitle(gameThread.subreddit) ?? 'No title set for game threads';
+  let input = gameThread.title ?? defaultTitle(gameThread.subreddit);
   const output: (string | ReactNode)[] = [];
   let startIndex = input.indexOf('{{');
 
