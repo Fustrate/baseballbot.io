@@ -22,14 +22,8 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  config.action_mailer.default_url_options = default_url_options
-
   config.action_controller.default_url_options = default_url_options
   Rails.application.routes.default_url_options = default_url_options
-
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
 
   # Ensures that a master key has been made available in ENV["RAILS_MASTER_KEY"], config/master.key, or an environment
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
@@ -67,12 +61,6 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   config.session_store(:cache_store, expire_after: 14.days)
-
-  config.action_mailer.perform_caching = false
-
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  config.action_mailer.raise_delivery_errors = false
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
