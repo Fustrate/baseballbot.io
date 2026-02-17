@@ -12,7 +12,7 @@ Rails.application.configure do
     policy.font_src    :self, :data, :https
     policy.img_src     :self, :data, :https
     policy.object_src  :none
-    policy.script_src  :self, :https
+    policy.script_src  :self, 'https://static.cloudflareinsights.com', :https
     policy.style_src   :self, :unsafe_inline, :https
 
     # CSP blocks the React DevTools extension in Firefox
