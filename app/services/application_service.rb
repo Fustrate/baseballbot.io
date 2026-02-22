@@ -24,7 +24,6 @@ class ApplicationService
     DEFAULT_INCLUDES = nil
     DEFAULT_JOINS = nil
     DEFAULT_ORDER = nil
-    RESULTS_PER_PAGE = 25
 
     def call(page: nil, includes: nil, scope: nil, order: nil, joins: nil)
       pagy(
@@ -32,7 +31,6 @@ class ApplicationService
           .includes(includes || self.class::DEFAULT_INCLUDES)
           .joins(joins || self.class::DEFAULT_JOINS)
           .reorder(order || default_order),
-        count: self.class::RESULTS_PER_PAGE,
         page: page || params[:page],
         request: Current.request
       )
