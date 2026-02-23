@@ -21,7 +21,7 @@ module Api
     end
 
     def game_threads
-      @pagination, @game_threads = GameThreads::LoadPage.call(scope: @subreddit.game_threads)
+      @pagination, @game_threads = paginate GameThreads::LoadPage.call(scope: @subreddit.game_threads)
     end
 
     protected

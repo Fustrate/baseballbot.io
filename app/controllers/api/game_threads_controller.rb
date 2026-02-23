@@ -9,7 +9,7 @@ module Api
       respond_to do |format|
         format.html
         format.json do
-          @pagination, @game_threads = GameThreads::LoadPage.call(scope: game_threads_scope)
+          @pagination, @game_threads = paginate GameThreads::LoadPage.call(scope: game_threads_scope)
         end
       end
     end

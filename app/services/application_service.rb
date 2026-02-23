@@ -4,8 +4,6 @@ class ApplicationService
   # Lets us use `t` and `l` helpers.
   include ActionView::Helpers::TranslationHelper
 
-  include Pagy::Method
-
   def self.call(...) = new.call(...)
 
   protected
@@ -25,15 +23,11 @@ class ApplicationService
     DEFAULT_JOINS = nil
     DEFAULT_ORDER = nil
 
-    def call(page: nil, includes: nil, scope: nil, order: nil, joins: nil)
-      pagy(
-        (scope || default_scope)
-          .includes(includes || self.class::DEFAULT_INCLUDES)
-          .joins(joins || self.class::DEFAULT_JOINS)
-          .reorder(order || default_order),
-        page: page || params[:page],
-        request: Current.request
-      )
+    def call(includes: nil, scope: nil, order: nil, joins: nil)
+      (scope || default_scope)
+        .includes(includes || self.class::DEFAULT_INCLUDES)
+        .joins(joins || self.class::DEFAULT_JOINS)
+        .reorder(order || default_order)
     end
 
     protected
