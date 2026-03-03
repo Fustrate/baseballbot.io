@@ -32,7 +32,6 @@ export const Route = createRootRoute({
 const navItems = [
   { label: 'Game Threads', url: '/game_threads' },
   { label: 'Subreddits', url: '/subreddits' },
-  { label: 'Gameday', url: '/gameday' },
 ];
 
 function UserMenu() {
