@@ -1,7 +1,7 @@
 import type { GameStatus } from './definitions';
 
 const scheduleHydration = 'game(content(summary)),linescore(runners),flags,team';
-const apiEndpoint = `https://statsapi.mlb.com/api/v1/schedule/?sportId=1,51&hydrate=${scheduleHydration}`;
+const apiEndpoint = 'https://statsapi.mlb.com/api/v1/schedule/';
 
 interface ScheduleTeam {
   team: {
@@ -73,10 +73,10 @@ export interface Schedule {
   dates: ScheduleDate[];
 }
 
-export default async function loadSchedule(date: Date): Promise<Schedule> {
+export default async function loadSchedule(date: Date, sportId = 1): Promise<Schedule> {
   const dateStr = date.toISOString().slice(0, 10);
 
-  const response = await window.fetch(`${apiEndpoint}&date=${dateStr}`);
+  const response = await window.fetch(`${apiEndpoint}?sportId=${sportId}&hydrate=${scheduleHydration}&date=${dateStr}`);
 
   return response.json() as Promise<Schedule>;
 }

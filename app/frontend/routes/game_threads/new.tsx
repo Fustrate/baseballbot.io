@@ -17,6 +17,11 @@ import { useAuth } from '@/hooks/useAuth';
 
 z.config({ jitless: true });
 
+const SPORT_OPTIONS = [
+  { label: 'Major League Baseball', value: '1' },
+  { label: 'International Baseball', value: '51' },
+] as const;
+
 function adjustPostAt(startTime: DateTime, postAt: string): DateTime {
   if (postAt.startsWith('-')) {
     return startTime.minus({ hour: Number.parseInt(postAt, 10) });
@@ -52,6 +57,7 @@ function RouteComponent() {
   const moderatedSubreddits = subreddits.filter((sub) => moderatedSubIds.includes(sub.id));
 
   const [selectedSubredditId, setSelectedSubredditId] = useState<string>('');
+  const [selectedSportId, setSelectedSportId] = useState<string>('1');
   const [selectedDate, setSelectedDate] = useState<string>(search.date || DateTime.now().toISODate() || '');
   const [games, setGames] = useState<ScheduleGame[]>([]);
   const [existingThreads, setExistingThreads] = useState<GameThread[]>([]);
@@ -66,8 +72,8 @@ function RouteComponent() {
     ? subreddits.find((s) => s.id.toString() === selectedSubredditId)
     : null;
 
-  const loadGamesForDate = async (date: string) => {
-    if (!date || !selectedSubredditId) return;
+  const loadGamesForDate = async (date: string, sportId: string = selectedSportId) => {
+    if (!date || !selectedSubredditId || !sportId) return;
 
     setSelectedGame(null);
     setGames([]);
@@ -81,7 +87,7 @@ function RouteComponent() {
 
       // Fetch both games and existing threads in parallel
       const [fetchedGames, threadsData] = await Promise.all([
-        fetchGames(dateObj),
+        fetchGames(dateObj, Number.parseInt(sportId, 10)),
         fetchGameThreads({ date: dateTime }),
       ]);
 
@@ -126,6 +132,13 @@ function RouteComponent() {
     }
   };
 
+  const handleSportIdChange = async (sportId: string) => {
+    setSelectedSportId(sportId);
+    if (selectedDate && selectedSubredditId) {
+      await loadGamesForDate(selectedDate, sportId);
+    }
+  };
+
   const handleDateChange = async (date: string) => {
     setSelectedDate(date);
     if (date && selectedSubredditId) {
@@ -152,7 +165,7 @@ function RouteComponent() {
   };
 
   const handleCreate = async () => {
-    if (!selectedSubredditId || !selectedDate || !selectedGame) {
+    if (!selectedSubredditId || !selectedSportId || !selectedDate || !selectedGame) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -221,6 +234,8 @@ function RouteComponent() {
 
         {selectedSubredditId && (
           <>
+            <SportSelector selectedSportId={selectedSportId} handleSportIdChange={handleSportIdChange} />
+
             <DateSelector selectedDate={selectedDate} handleDateChange={handleDateChange} />
 
             {loading && <Text>Loading games...</Text>}
@@ -287,6 +302,29 @@ function RouteComponent() {
         )}
       </div>
     </>
+  );
+}
+
+function SportSelector({
+  selectedSportId,
+  handleSportIdChange,
+}: {
+  selectedSportId: string;
+  handleSportIdChange: (sportId: string) => void;
+}) {
+  return (
+    <Fieldset>
+      <Field>
+        <Label>Sport</Label>
+        <Select required value={selectedSportId} onChange={(e) => handleSportIdChange(e.target.value)}>
+          {SPORT_OPTIONS.map((sport) => (
+            <option key={sport.value} value={sport.value}>
+              {sport.label}
+            </option>
+          ))}
+        </Select>
+      </Field>
+    </Fieldset>
   );
 }
 
