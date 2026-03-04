@@ -270,7 +270,7 @@ function RouteComponent() {
                         <Label>Post At</Label>
                         <Input
                           type="datetime-local"
-                          value={postAt?.toISO() ?? ''}
+                          value={postAt?.toISO({ includeOffset: false }) ?? ''}
                           onChange={(e) => setPostAt(DateTime.fromISO(e.target.value))}
                           placeholder="Select a time"
                         />
