@@ -24,7 +24,7 @@ const SPORT_OPTIONS = [
 
 function adjustPostAt(startTime: DateTime, postAt: string): DateTime {
   if (postAt.startsWith('-')) {
-    return startTime.minus({ hour: Number.parseInt(postAt, 10) });
+    return startTime.plus({ hours: Number.parseInt(postAt, 10) });
   }
 
   const [hour, minute] = postAt.split(':').map(Number);
