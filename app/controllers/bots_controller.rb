@@ -21,20 +21,6 @@ class BotsController < ApplicationController
     wikiread
   ].freeze
 
-  # def index; end
-
-  # def show; end
-
-  # def new; end
-
-  # def edit; end
-
-  # def create; end
-
-  # def update; end
-
-  # def destroy; end
-
   def new
     redirect_to_reddit
   end
