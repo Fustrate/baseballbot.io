@@ -19,23 +19,21 @@ module Api
     def create
       @game_thread = GameThreads::Create.call
 
-      flash[:success] = t 'game_threads.created'
-
-      redirect_to game_threads_subreddit_path(@game_thread.subreddit)
+      render :show, status: :created
     rescue ActiveRecord::RecordInvalid => e
       @game_thread = e.record
 
-      render :new
+      render json: { error: @game_thread.errors.full_messages.to_sentence }, status: :unprocessable_content
     end
 
     def update
       GameThreads::Update.call @game_thread
 
-      flash[:success] = t 'game_threads.updated'
+      render :show
+    rescue ActiveRecord::RecordInvalid => e
+      @game_thread = e.record
 
-      redirect_to @game_thread
-    rescue ActiveRecord::RecordInvalid
-      render :new
+      render json: { error: @game_thread.errors.full_messages.to_sentence }, status: :unprocessable_content
     end
 
     def destroy
