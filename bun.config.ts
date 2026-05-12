@@ -43,7 +43,7 @@ const build = async (config: Bun.BuildConfig) => {
 
   if (process.argv.includes('--watch')) {
     fs.watch(path.join(process.cwd(), 'app/frontend'), { recursive: true }, (_eventType, filename) => {
-      if (filename.endsWith('.ts') || filename.endsWith('.tsx')) {
+      if (filename?.endsWith('.ts') || filename?.endsWith('.tsx')) {
         console.log(`File changed: ${filename}. Rebuilding...`);
         build(config);
       }
