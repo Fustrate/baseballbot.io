@@ -1,5 +1,6 @@
 import type { PaginatedData } from '@fustrate/rails/components/pagination';
 import { DateTime } from 'luxon';
+import { getJSON, patchJSON, postJSON } from '@/api/json';
 import type { Subreddit } from '@/api/subreddits';
 import type { GameThreadStatus } from '@/utilities/constants';
 import { apiGameThreadPath, apiGameThreadsPath, gameThreadsApiSubredditPath } from '@/utilities/routes';
@@ -37,7 +38,7 @@ function buildGameThread(data: GameThreadJSON): GameThread {
 }
 
 export async function fetchGameThreads({ date }: { date: DateTime }): Promise<PaginatedData<GameThread>> {
-  return fetch(apiGameThreadsPath({ date: date.toISODate() }))
+  return getJSON(apiGameThreadsPath({ date: date.toISODate() }))
     .then((res) => res.json())
     .then((data) => {
       return {
@@ -48,11 +49,13 @@ export async function fetchGameThreads({ date }: { date: DateTime }): Promise<Pa
 }
 
 export async function fetchGameThread(id: number): Promise<GameThread> {
-  return fetch(apiGameThreadPath(id)).then((res) => res.json());
+  return getJSON(apiGameThreadPath(id))
+    .then((res) => res.json())
+    .then((data) => buildGameThread(data));
 }
 
 export async function fetchSubredditGameThreads(subreddit: string | number): Promise<PaginatedData<GameThread>> {
-  return fetch(gameThreadsApiSubredditPath(subreddit)).then((res) => res.json());
+  return getJSON(gameThreadsApiSubredditPath(subreddit)).then((res) => res.json());
 }
 
 export async function createGameThread(data: {
@@ -61,14 +64,7 @@ export async function createGameThread(data: {
   title: string;
   postAt: DateTime;
 }): Promise<GameThread> {
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
-
-  const response = await fetch(apiGameThreadsPath(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': csrfToken,
-    },
+  const response = await postJSON(apiGameThreadsPath(), {
     body: JSON.stringify({
       game_thread: {
         subreddit_id: data.subredditId,

@@ -12,5 +12,6 @@ export interface SessionData {
 
 export async function fetchSession(): Promise<SessionData> {
   const response = await fetch('/api/session');
+
   return response.json();
 }

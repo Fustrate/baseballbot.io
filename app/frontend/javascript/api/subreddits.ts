@@ -1,3 +1,4 @@
+import { getJSON, patchJSON } from '@/api/json';
 import type { User } from '@/api/session';
 import { apiSubredditPath, apiSubredditsPath } from '@/utilities/routes';
 
@@ -86,22 +87,19 @@ export async function fetchSubreddit(nameOrId: string | number): Promise<Subredd
 }
 
 export async function updateSubreddit(nameOrId: string | number, options: SubredditOptions): Promise<Subreddit> {
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
-
-  const response = await fetch(apiSubredditPath(nameOrId), {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': csrfToken,
-    },
+  const response = await patchJSON(apiSubredditPath(nameOrId), {
     body: JSON.stringify({ subreddit: { options } }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to update subreddit.');
+    const error = await response.json().catch(() => ({ error: 'Failed to update subreddit' }));
+
+    throw new Error(error.error || 'Failed to update subreddit');
   }
 
-  return response.json();
+  const json = await response.json();
+
+  return json;
 }
 
 export function isModerator(user: User | null | undefined, subreddit: Subreddit): boolean {
