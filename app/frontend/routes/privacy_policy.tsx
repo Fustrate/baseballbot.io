@@ -15,8 +15,9 @@ function RouteComponent() {
       <Heading>Privacy Policy</Heading>
 
       <Text>
-        Baseballbot.io does not collect any personal information and does not track users. Your Reddit ID is used to
-        sync preferences regarding UI behavior, and is deleted 30 days after your last interaction with BaseballBot.
+        BaseballBot does not collect any personal information and does not track users. Your Reddit ID is used to sync
+        preferences regarding UI behavior, and is deleted 30 days after your last interaction with the BaseballBot
+        Reddit application.
       </Text>
     </div>
   );
