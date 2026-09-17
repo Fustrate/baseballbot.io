@@ -20,6 +20,9 @@ export const gameThreadsApiSubredditPath = (id: RequiredParameter, options: Rout
   buildRoute('/api/subreddits/:id/game_threads(.:format)', { id, ...options });
 export const newBotPath = (options: RouteOptions = {}) => buildRoute('/bots/new(.:format)', { ...options });
 export const newSessionPath = (options: RouteOptions = {}) => buildRoute('/session/new(.:format)', { ...options });
+export const redditPrivacyPath = (options: RouteOptions = {}) =>
+  buildRoute('/reddit/privacy(.:format)', { ...options });
+export const redditTermsPath = (options: RouteOptions = {}) => buildRoute('/reddit/terms(.:format)', { ...options });
 export const sessionPath = (options: RouteOptions = {}) => buildRoute('/session(.:format)', { ...options });
 export const templatesApiSubredditPath = (id: RequiredParameter, options: RouteOptions = {}) =>
   buildRoute('/api/subreddits/:id/templates(.:format)', { id, ...options });

@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as Sign_inRouteImport } from './routes/sign_in'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy_policy'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubredditsIndexRouteImport } from './routes/subreddits/index'
 import { Route as Game_threadsIndexRouteImport } from './routes/game_threads/index'
@@ -21,9 +23,19 @@ import { Route as SubredditsSubredditIdEditRouteImport } from './routes/subreddi
 import { Route as Game_threadsThreadIdEditRouteImport } from './routes/game_threads_/$threadId/edit'
 import { Route as SubredditsSubredditIdGame_threadsNewRouteImport } from './routes/subreddits_/$subredditId/game_threads/new'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Sign_inRoute = Sign_inRouteImport.update({
   id: '/sign_in',
   path: '/sign_in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy_policy',
+  path: '/privacy_policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -83,7 +95,9 @@ const SubredditsSubredditIdGame_threadsNewRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/privacy_policy': typeof PrivacyPolicyRoute
   '/sign_in': typeof Sign_inRoute
+  '/terms': typeof TermsRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
   '/game_threads/new': typeof Game_threadsNewRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
@@ -96,7 +110,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/privacy_policy': typeof PrivacyPolicyRoute
   '/sign_in': typeof Sign_inRoute
+  '/terms': typeof TermsRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
   '/game_threads/new': typeof Game_threadsNewRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
@@ -110,7 +126,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/privacy_policy': typeof PrivacyPolicyRoute
   '/sign_in': typeof Sign_inRoute
+  '/terms': typeof TermsRoute
   '/game_threads/$threadId': typeof Game_threadsThreadIdRoute
   '/game_threads/new': typeof Game_threadsNewRoute
   '/subreddits/$subredditId': typeof SubredditsSubredditIdRoute
@@ -125,7 +143,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/privacy_policy'
     | '/sign_in'
+    | '/terms'
     | '/game_threads/$threadId'
     | '/game_threads/new'
     | '/subreddits/$subredditId'
@@ -138,7 +158,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/privacy_policy'
     | '/sign_in'
+    | '/terms'
     | '/game_threads/$threadId'
     | '/game_threads/new'
     | '/subreddits/$subredditId'
@@ -151,7 +173,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/privacy_policy'
     | '/sign_in'
+    | '/terms'
     | '/game_threads/$threadId'
     | '/game_threads/new'
     | '/subreddits/$subredditId'
@@ -165,7 +189,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   Sign_inRoute: typeof Sign_inRoute
+  TermsRoute: typeof TermsRoute
   Game_threadsThreadIdRoute: typeof Game_threadsThreadIdRoute
   Game_threadsNewRoute: typeof Game_threadsNewRoute
   SubredditsSubredditIdRoute: typeof SubredditsSubredditIdRoute
@@ -178,11 +204,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sign_in': {
       id: '/sign_in'
       path: '/sign_in'
       fullPath: '/sign_in'
       preLoaderRoute: typeof Sign_inRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy_policy': {
+      id: '/privacy_policy'
+      path: '/privacy_policy'
+      fullPath: '/privacy_policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -275,7 +315,9 @@ const SubredditsSubredditIdGame_threadsRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
   Sign_inRoute: Sign_inRoute,
+  TermsRoute: TermsRoute,
   Game_threadsThreadIdRoute: Game_threadsThreadIdRoute,
   Game_threadsNewRoute: Game_threadsNewRoute,
   SubredditsSubredditIdRoute: SubredditsSubredditIdRoute,
